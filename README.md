@@ -3,7 +3,7 @@
 Formulaire web permettant la suggestion d'une manifestation sur Apidae par n'importe quel internaute.
 
 ## Démo
->http://apidae.allier-auvergne-tourisme.tech/ApidaeEvent/
+>http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/
 
 ## Utilisation
 ### 1) iframe
