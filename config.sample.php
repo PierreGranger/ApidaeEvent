@@ -6,7 +6,7 @@
 	*	
 	*	@param projet_consultation_projetId int 	Numéro de votre projet de consultation sur Apidae. Il peut s'agir d'un projet de consultation existant (celui de votre site web par exemple) : la seule chose importante est qu'il y existe une sélection de territoires.
 	*	@param projet_consultation_apiKey	string 	Clé du projet de consultation.
-	*	@param selection_territoires 	int 	Identifiant de la sélection qui contient toutes les fiches territoires des offices concernés
+	*	@param selection_territoires 	int 	Identifiant de la sélection qui contient toutes les fiches territoires des offices concernés (optionnel)
 	*	@param membres Array Tableau permettant le lien entre le membre Apidae concerné et la fiche territoire. Pour le membre M, il faut qu'il existe sur Apidae une fiche territoire T dont la liste des communes correspond à la zone de compétence du membre M. A l'enregistrement, on va rechercher sur quel territoire se trouve la commune saisie par l'utilisateur : on en déduira le membre concerné (ex: commune saisie 1425 (Moulins) => Territoire 3337048 (Zone compétence Moulins) => id_membre 1336 (Office du Tourisme de Moulins) ). Attention : si plusieurs territoires se chevauchent (ex: OT et CDT), saisissez dans l'ordre de "saisie" (par ex. on saisira d'abord les membres "offices, puis le membre "département" : si la commune est sur le territoire d'un office on lui donne, sinon on le donne au département)
 	Attention : pour chaque membre on PEUT présicer clientId et secret : il s'agit des projets d'écritures concernant ces membres. Si ces valeurs sont renseignées, le projet d'écriture utilisé sera celui-ci et non le projet par défaut (projet_ecriture_clientId ou projet_ecriture_secret) : le but est de palier à l'absence d'API d'écriture multimembre (qui devrait sortir seconde moitié 2017).
 	*	@param territoire int Identifiant du territoire proposé pour la saisie. Si ce paramètre est saisi, le paramètre communes sera inutilisé.
@@ -26,9 +26,9 @@
 		'projet_ecriture_clientId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
 		'projet_ecriture_secret' => 'xxxxx',
 		'projet_ecriture_multimembre' => false,
-		'communes' => '^03|15|63|43',
 		'territoire' => 711392, // Auvergne
-		'selection_territoires' => 53994,
+		//'communes' => '^03|15|63|43',
+		//'selection_territoires' => 53994,
 		'membres' => Array(
 			Array('id_membre'=>1366,		'id_territoire'=>4593560,	'clientId'=>null,	'secret'=>null), // Commentry - Néris
 			Array('id_membre'=>1538,		'id_territoire'=>4719368,	'clientId'=>null,	'secret'=>null), // Entr'Allier Besbre et Loire

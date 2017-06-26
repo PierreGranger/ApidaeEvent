@@ -19,7 +19,7 @@
 * @param string $example2 This is a second example.
 */
 
-	class PimpMyFMA {
+	class ApidaeEvent {
 
 		private $url_api = Array(
 			'preprod' => 'http://api.sitra2-vm-preprod.accelance.net/',
@@ -599,7 +599,6 @@
 		{
 			if ( $this->debugTime ) $start = microtime(true) ;
 
-			if ( $this->selection_territoires === null ) return false ;
 			$rq = $this->mysqli->query(' select count(*) as nb from apidae_territoires ') ;
 			if ( ! $rq )
 			{
@@ -624,12 +623,22 @@
 						$fields = array(
 							'apiKey' => $this->projet_consultation_apiKey,
 							'projetId' => $this->projet_consultation_projetId,
-							'selectionIds' => Array($this->selection_territoires),
 							'count' => 20,
-							'responseFields' => Array('id','localisation.perimetreGeographique.id',
-								//'localisation.perimetreGeographique.code','localisation.perimetreGeographique.nom','localisation.perimetreGeographique.codePostal'
-							)
+							'responseFields' => Array('id','localisation.perimetreGeographique.id')
 						);
+
+						if ( $this->selection_territoires !== null )
+							$fields['selectionIds'] = Array($this->selection_territoires) ;
+						else
+						{
+							$territoires = Array() ;
+							if ( isset($this->_config['territoire']) && is_numeric($this->_config['territoire']) ) $territoires[] = $this->_config['territoire'] ;
+							if ( isset($this->_config['membres']) )
+								foreach ( $this->_config['membres'] as $m )
+									if ( isset($m['id_territoire']) && is_numeric($m['id_territoire']) )
+										$territoires[] = $m['id_territoire'] ;
+							$fields['identifiants'] = $territoires ;
+						}
 
 						$url = $url.'?query='.json_encode($fields) ;
 						if ( ! ( $json = json_decode(file_get_contents($url),true) ) ) return false ;

@@ -8,9 +8,9 @@
 
 	require_once(realpath(dirname(__FILE__)).'/config.inc.php') ;
 	require_once(realpath(dirname(__FILE__)).'/fonctions.inc.php') ;
-	require_once(realpath(dirname(__FILE__)).'/PimpMyFMA.class.php') ;
+	require_once(realpath(dirname(__FILE__)).'/ApidaeEvent.class.php') ;
 
-	$pma = new PimpMyFMA($_config) ;
+	$pma = new ApidaeEvent($_config) ;
 
 	if ( isset($_GET['refresh']) )
 	{
