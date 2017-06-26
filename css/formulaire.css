@@ -1,0 +1,15 @@
+
+.required>label:after {
+	content: " *";
+	color:red ;
+}
+
+.ui-datepicker-trigger { display:none ; }
+
+input.date {
+	min-width:100px !important ;
+}
+
+input.time {
+	min-width:70px !important ;
+}
