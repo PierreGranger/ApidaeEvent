@@ -56,7 +56,6 @@ jQuery(document).on('submit','form.form',function(e){
 	else
 	{
 
-			console.log('firstError',firstError.attr('name')) ;
 		if ( firstError !== null )
 		{
 			var disp = firstError.is(':hidden') ;
@@ -66,7 +65,6 @@ jQuery(document).on('submit','form.form',function(e){
 		}
 		e.preventDefault() ;
 		e.stopImmediatePropagation();
-		console.log('Votre formulaire comporte des erreurs : merci de remplir tous les champs obligatoires') ;
 		alert('Votre formulaire comporte des erreurs : merci de remplir tous les champs obligatoires') ;
 		return false ;
 	}
@@ -156,11 +154,8 @@ function valideChamp(champ,type)
 	var val = champ.val() ;
 	if ( val == '' && ! champ.prop('required') ) return true ;
 
-	console.log(champ.attr('name')) ;
-
 	if ( val == '' && champ.prop('required') )
 	{
-		console.log(champ.attr('name')+' : ko') ;
 		champ.closest('.form-group').addClass('has-error') ;
 		return false ;
 	}
@@ -179,7 +174,6 @@ function valideChamp(champ,type)
 	{
 		champ.val(val.replace(/[^0-9]/g,'')) ;
 		var beautify = champ.val().match(/([0-9]{1,2})/g) ;
-		console.log(typeof beautify) ;
 		if ( ! champ.val().match(/^[0-9]{10}$/) )
 		{
 			champ.closest('.form-group').addClass('has-error') ;
