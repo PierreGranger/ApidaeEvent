@@ -276,8 +276,8 @@
 
 	if ( isset($_POST['gratuit']) )
 	{
-		$fieldlist[] = 'descriptionTarif.gratuit' ;
-		$root['descriptionTarif']['gratuit'] = true ;
+		$fieldlist[] = 'descriptionTarif.indicationTarif' ;
+		$root['descriptionTarif']['indicationTarif'] = 'GRATUIT' ;
 	}
 	
 	if ( isset($_POST['tarifs']) && is_array($_POST['tarifs']) )

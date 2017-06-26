@@ -595,7 +595,7 @@
 			return $er ;
 		}
 
-		function getTerritoires($force=false)
+		function getTerritoires($force=false,$append=null)
 		{
 			if ( $this->debugTime ) $start = microtime(true) ;
 
@@ -627,17 +627,22 @@
 							'responseFields' => Array('id','localisation.perimetreGeographique.id')
 						);
 
-						if ( $this->selection_territoires !== null )
+						if ( $this->selection_territoires !== null && $append == null )
 							$fields['selectionIds'] = Array($this->selection_territoires) ;
 						else
 						{
 							$territoires = Array() ;
+							if ( isset($append) && is_array($append) )
+								foreach ( $append as $t )
+									if ( is_numeric($t) )
+										$territoires[] = $t ;
 							if ( isset($this->_config['territoire']) && is_numeric($this->_config['territoire']) ) $territoires[] = $this->_config['territoire'] ;
 							if ( isset($this->_config['membres']) )
 								foreach ( $this->_config['membres'] as $m )
 									if ( isset($m['id_territoire']) && is_numeric($m['id_territoire']) )
 										$territoires[] = $m['id_territoire'] ;
 							$fields['identifiants'] = $territoires ;
+							pre($territoires) ;
 						}
 
 						$url = $url.'?query='.json_encode($fields) ;

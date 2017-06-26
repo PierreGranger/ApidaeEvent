@@ -60,6 +60,10 @@
 		<!-- Bootstrap DateTimepicker https://eonasdan.github.io/bootstrap-datetimepicker/ -->
 		<script src="./js/bootstrap-datetimepicker.js"></script>
 
+		<!-- Form validator -->
+		<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+		<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+
 		<?php } ?>
 
 	</head>
@@ -119,11 +123,13 @@
 
 			?>
 
-			<form class="form" method="post" enctype="multipart/form-data">
+			<form class="form" method="post" enctype="multipart/form-data" novalidate>
 
-				<fieldset class="form-group">
+				<fieldset class="form-group required">
 					<legend>Nom de la manifestation</legend>
-					<input class="form-control form-control-lg" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']) ; ?>" id="nom" required="required" />
+					<div class="controls">
+						<input class="form-control form-control-lg" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']) ; ?>" id="nom" required="required" />
+					</div>
 				</fieldset>
 					
 				<fieldset class="form-group">
@@ -202,6 +208,46 @@
 							<input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']) ; ?>" />
 						</div>
 					</div>
+					<?php
+
+						unset($rq) ;
+						if ( isset($_config['territoire']) )
+						{
+							$sql = ' select count(*) as nb from apidae_territoires where id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" ' ;
+							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
+							if ( $d = $rq->fetch_assoc() )
+							{
+								if ( $d['nb'] == 0 )
+								{
+									$pma->getTerritoires(true,Array($_config['territoire'])) ;
+								}
+							}
+
+							$sql = ' select distinct C.* from apidae_communes C
+							inner join apidae_territoires T on T.id_commune = C.id
+							where T.id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" ' ;
+							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
+						}
+						elseif ( isset($_config['communes']) )
+						{
+							$sql = ' select distinct * from apidae_communes where code regexp "'.$pma->mysqli->real_escape_string($_config['communes']).'" ' ;
+							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
+						}
+						if ( ! isset($rq) || $rq->num_rows == 0 )
+						{
+							$pma->alerte('Liste communes introuvable',$_GET) ;
+							?>
+								<div class="alert alert-danger" role="alert">
+								  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+								  <strong>Impossible de récupérer la liste de communes...</strong>
+								  <br />Veuillez nous excuser pour la gène occasionnée.
+								  <br />Vous pouvez prendre contact avec l'<a href="http://www.apidae-tourisme.com/cartographie-des-membres-apidae/cartographie-des-contributeurs/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.
+								</div>
+							<?php
+							die() ;
+						}
+
+					?>
 					<div class="form-group row required">
 						<label for="commune" class="<?php echo $class_label ; ?> col-form-label">Commune</label>
 						<div class="<?php echo $class_champ ; ?>">
@@ -209,17 +255,6 @@
 								<option value="">-</option>
 								<?php
 									
-									if ( isset($_config['territoire']) )
-									{
-										$pma->getTerritoires() ;
-										$sql = ' select distinct C.* from apidae_communes C
-										inner join apidae_territoires T on T.id_commune = C.id
-										where T.id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" ' ;
-									}
-									elseif ( isset($_config['communes']) )
-										$sql = ' select distinct * from apidae_communes where code regexp "'.$pma->mysqli->real_escape_string($_config['communes']).'" ' ;
-
-									$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
 									while ( $d = $rq->fetch_assoc() )
 									{
 										$cle = $d['id'].'|'.$d['codePostal'].'|'.$d['nom'] ;
@@ -248,8 +283,8 @@
 						<thead>
 							<tr>
 								<th></th>
-								<th>Début</th>
-								<th>Fin</th>
+								<th class="required">Début</th>
+								<th class="required">Fin</th>
 								<th>Heure de début</th>
 								<th>Heure de fin</th>
 								<th>Complément</th>
@@ -264,7 +299,7 @@
 								echo "\n\t\t\t\t\t\t".'<tr>' ;
 									echo '<td></td>' ;
 									echo '<td>' ;
-										echo '<div class="input-group date">' ;
+										echo '<div class="input-group form-group date">' ;
 											echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][debut]" value="'.htmlentities(@$post['date'][$i]['debut']).'" placeholder="jj/mm/aaaa" required="required" />' ;
                     						echo '<span class="input-group-addon">' ;
                         						echo '<span class="glyphicon glyphicon-calendar"></span>' ;
@@ -272,7 +307,7 @@
                 						echo '</div>' ;
 									echo '</td>' ;
 									echo '<td>' ;
-										echo '<div class="input-group date">' ;
+										echo '<div class="input-group form-group date">' ;
 											echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][fin]" value="'.htmlentities(@$post['date'][$i]['fin']).'" placeholder="jj/mm/aaaa" required="required" />' ;
                     						echo '<span class="input-group-addon">' ;
                         						echo '<span class="glyphicon glyphicon-calendar"></span>' ;
@@ -309,13 +344,19 @@
 				</fieldset>
 
 				<fieldset class="form-group">
+
 					<legend>Moyens de communication</legend>
+
+					<div class="alert alert-warning" role="alert">
+						Merci de préciser au moins un moyen de communication (Mail, téléphone...)
+					</div>
+
 					<table class="table mc">
 						<thead>
 							<tr>
 								<th></th>
-								<th>Type</th>
-								<th>Coordonnée</th>
+								<th class="required">Type</th>
+								<th class="required">Coordonnée</th>
 								<th>Complément</th>
 							</tr>
 						</thead>
@@ -332,33 +373,47 @@
 								echo "\n\t\t\t\t\t\t".'<tr>' ;
 									echo '<td></td>' ;
 									echo '<td>' ;
-										echo '<select class="form-control" name="mc['.$i.'][type]">' ;
-											echo '<option value="">-</option>' ;
-											foreach ( $types as $type )
-											{
-												echo '<option value="'.$type['id'].'"' ;
-													if ( isset($post['mc']) )
-													{
-														if ( @$post['mc'][$i]['type'] == $type['id'] )
-															echo ' selected="selected' ;
-													}
-													else
-													{
-														if ( 
-															( $i == 0 && $type['id'] == 201 ) // Téléphone
-															|| ( $i == 1 && $type['id'] == 204 ) // Mél
-															|| ( $i == 2 && $type['id'] == 205 ) // Site web
-														)
-														echo ' selected="selected" ' ;
-													}
-												echo '>' ;
-													echo $type['libelleFr'] ;
-												echo '</option>' ;
-											}
-										echo '</select>' ;
+										echo '<div class="form-group">' ;
+											echo '<select class="form-control" name="mc['.$i.'][type]"' ;
+												if ( $i == 0 ) echo ' required="required" ' ;
+											echo '>' ;
+												echo '<option value="">-</option>' ;
+												foreach ( $types as $type )
+												{
+													echo '<option value="'.$type['id'].'"' ;
+														if ( isset($post['mc']) )
+														{
+															if ( @$post['mc'][$i]['type'] == $type['id'] )
+																echo ' selected="selected' ;
+														}
+														else
+														{
+															if ( 
+																( $i == 0 && $type['id'] == 201 ) // Téléphone
+																|| ( $i == 1 && $type['id'] == 204 ) // Mél
+																|| ( $i == 2 && $type['id'] == 205 ) // Site web
+															)
+															echo ' selected="selected" ' ;
+														}
+													echo '>' ;
+														echo $type['libelleFr'] ;
+													echo '</option>' ;
+												}
+											echo '</select>' ;
+										echo '</div>' ;
 									echo '</td>' ;
-									echo '<td><input class="form-control" type="text" name="mc['.$i.'][coordonnee]" value="'.htmlentities(@$post['mc'][$i]['coordonnee']).'" /></td>' ;
-									echo '<td><input class="form-control" type="text" name="mc['.$i.'][observations]" value="'.htmlentities(@$post['mc'][$i]['observations']).'" /></td>' ;
+									echo '<td>' ;
+										echo '<div class="form-group">' ;
+											echo '<input class="form-control" type="text" name="mc['.$i.'][coordonnee]" value="'.htmlentities(@$post['mc'][$i]['coordonnee']).'" ' ;
+												if ( $i == 0 ) echo 'required="required" ' ;
+											echo '/>' ;
+										echo '</div>' ;
+									echo '</td>' ;
+									echo '<td>' ;
+										echo '<div class="form-group">' ;
+											echo '<input class="form-control" type="text" name="mc['.$i.'][observations]" value="'.htmlentities(@$post['mc'][$i]['observations']).'" />' ;
+										echo '</div>' ;
+									echo '</td>' ;
 								echo '</tr>' ;
 							}
 							echo '<tr>' ;
@@ -456,14 +511,14 @@
 													echo '</select>' ;
 												echo '</td>' ;
 												echo '<td>' ;
-													echo '<div class="input-group mb-2 mr-sm-2 mb-sm-0">' ;
-														echo '<input class="form-control" type="number" name="tarifs['.$i.'][mini]" value="'.htmlspecialchars(@$post['tarifs'][$i]['mini']).'" />' ;
+													echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
+														echo '<input class="form-control float" type="text" name="tarifs['.$i.'][mini]" value="'.htmlspecialchars(@$post['tarifs'][$i]['mini']).'" />' ;
     													echo '<div class="input-group-addon">€</div>' ;
 													echo '</div>' ;
 												echo '</td>' ;
 												echo '<td>' ;
-													echo '<div class="input-group mb-2 mr-sm-2 mb-sm-0">' ;
-														echo '<input class="form-control" type="number" name="tarifs['.$i.'][maxi]" value="'.htmlspecialchars(@$post['tarifs'][$i]['maxi']).'" />' ;
+													echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
+														echo '<input class="form-control float" type="text" name="tarifs['.$i.'][maxi]" value="'.htmlspecialchars(@$post['tarifs'][$i]['maxi']).'" />' ;
     													echo '<div class="input-group-addon">€</div>' ;
 													echo '</div>' ;
 												echo '</td>' ;

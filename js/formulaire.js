@@ -17,28 +17,63 @@ jQuery(document).ready(function(){
 
 }) ;
 
+
+
 jQuery(document).on('submit','form.form',function(e){
-	
-	//var ok = checkForm(jQuery(this)) ;
+
 	var ok = true ;
-		
+	var firstError = null ;
+
+	jQuery(this).find('input[required],select[required],textarea[required]').each(function(){
+		if ( ! valideChamp(jQuery(this)) )
+		{
+			ok = false ;
+			if ( firstError == null ) firstError = jQuery(this) ;
+		}
+	}) ;
+
+	jQuery(this).find('.mc [name$="\[coordonnee\]"]').each(function(){
+		if ( ! valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) )
+		{
+			ok = false ;
+			if ( firstError == null ) firstError = jQuery(this) ;
+		}
+	}) ;
+	jQuery(this).find('.float').each(function(){
+		if ( ! valideChamp(jQuery(this)) )
+		{
+			ok = false ;
+			if ( firstError == null ) firstError = jQuery(this) ;
+		}
+	}) ;
+
 	if ( ok === true )
 	{
-		jQuery('.submit').replaceWith('<div class="alert alert-warning loading">Formulaire en cours d\'enregistrement, veuillez patienter...</div>') ;
+		jQuery(this).css('opacity',0.5) ;
+		jQuery('input[type="submit"]').closest('div').replaceWith('<div class="alert alert-warning loading">Formulaire en cours d\'enregistrement, veuillez patienter...</div>') ;
+		return true ;
 	}
 	else
 	{
+
+			console.log('firstError',firstError.attr('name')) ;
+		if ( firstError !== null )
+		{
+			var disp = firstError.is(':hidden') ;
+			if ( disp ) firstError.show() ;
+			firstError.focus() ;
+			if ( disp ) firstError.hide() ;
+		}
 		e.preventDefault() ;
+		e.stopImmediatePropagation();
 		console.log('Votre formulaire comporte des erreurs : merci de remplir tous les champs obligatoires') ;
 		alert('Votre formulaire comporte des erreurs : merci de remplir tous les champs obligatoires') ;
-		jQuery('a#fiche').trigger('click') ;
-		e.stopImmediatePropagation();
 		return false ;
 	}
 
 }) ;
 
-jQuery(document).on('change','form.form input[type="date"]',function(){
+jQuery(document).on('change','form.form input.date',function(){
 
 	var reg = /date\[([0-9]+)\]\[(debut|fin)\]/i ;
 	var match = jQuery(this).attr('name').match(reg) ;
@@ -53,12 +88,14 @@ jQuery(document).on('change','form.form input[type="date"]',function(){
 	{
 		var fin = jQuery(this).closest('.form').find('input[name="date['+i+'][fin]"]') ;
 		if ( fin.val() == '' ) fin.val(v) ;
+		valideChamp(fin) ;
 		fin.datepicker( "option", "minDate", v ).attr('min',v) ;
 	}
 	else if ( t == 'fin' )
 	{
 		var debut = jQuery(this).closest('.form').find('input[name="date['+i+'][debut]"]') ;
 		if ( debut.val() == '' ) debut.val(v) ;
+		valideChamp(debut) ;
 		//debut.datepicker( "option", "maxDate", v ).attr('max',v) ;
 	}
 
@@ -104,6 +141,80 @@ jQuery(document).on('click','div.date span.input-group-addon',function(){
 jQuery(document).on('click','div.time span.input-group-addon',function(){
 	jQuery(this).closest('div').find('input').focus() ;
 }) ;
+
+jQuery(document).on('change','.mc [name$="\[coordonnee\]"]',function(){
+	valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
+}) ;
+
+jQuery(document).on('change','.float, select[required], textarea[required], input.date, input#nom',function(){
+	valideChamp(jQuery(this)) ;
+}) ;
+
+function valideChamp(champ,type)
+{
+	champ.closest('.form-group').removeClass('has-error') ;
+	var val = champ.val() ;
+	if ( val == '' && ! champ.prop('required') ) return true ;
+
+	console.log(champ.attr('name')) ;
+
+	if ( val == '' && champ.prop('required') )
+	{
+		console.log(champ.attr('name')+' : ko') ;
+		champ.closest('.form-group').addClass('has-error') ;
+		return false ;
+	}
+
+	if ( champ.hasClass('float') )
+	{
+		champ.val(val.replace(/[^0-9\.,]/g,'')) ;
+		if ( ! champ.val().match(/^-?\d*([\.,]{1}\d+)?$/) )
+		{
+			champ.closest('.form-group').addClass('has-error') ;
+			return false ;
+		}
+		return true ;
+	}
+	else if ( type == 201 ) // Téléphone
+	{
+		champ.val(val.replace(/[^0-9]/g,'')) ;
+		var beautify = champ.val().match(/([0-9]{1,2})/g) ;
+		console.log(typeof beautify) ;
+		if ( ! champ.val().match(/^[0-9]{10}$/) )
+		{
+			champ.closest('.form-group').addClass('has-error') ;
+			return false ;
+		}
+		if ( typeof beautify == 'object' && beautify != null ) champ.val(beautify.join(' ')) ;
+		return true ;
+	}
+	else if ( type == 204 ) // Mél
+	{
+		// https://stackoverflow.com/questions/46155/how-to-validate-email-address-in-javascript
+		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+		if ( ! re.test(val) )
+		{
+			champ.closest('.form-group').addClass('has-error') ;
+			return false ;
+		}
+		return true ;
+	}/*
+	else if ( t == 205 ) // Site web
+	{
+
+	}*/
+	return true ;
+}
+
+
+
+
+
+
+
+
+
+
 
 function checkTarifs() {
 	jQuery('form.form input[name="gratuit"]').each(function(){

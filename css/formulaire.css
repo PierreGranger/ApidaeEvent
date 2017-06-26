@@ -1,5 +1,7 @@
 
-.required>label:after {
+.required>label:after,
+fieldset.required>legend:after,
+th.required:after {
 	content: " *";
 	color:red ;
 }
@@ -12,4 +14,18 @@ input.date {
 
 input.time {
 	min-width:70px !important ;
+}
+
+input.float {
+	min-width:70px !important ;
+	text-align:right ;
+}
+
+.has-error .form-control {
+	background:#ffeceb ;
+}
+
+.has-error .chosen-single {
+	background:#ffeceb ;
+	border-color:#a94442 ;
 }
