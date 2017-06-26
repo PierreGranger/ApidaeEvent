@@ -47,6 +47,8 @@
 
 		<?php include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
 
+		<script src='https://www.google.com/recaptcha/api.js'></script>
+
 		<?php if ( false ) { ?>
 
 		<link rel="stylesheet" type="text/css" href="./css/form2015.css" media="all" />
@@ -583,6 +585,12 @@
 					</table>
 				</fieldset>
 
+				<?php if ( @$_config['recaptcha_secret'] != '' ) { ?>
+					<div class="form-group">
+						<div class="g-recaptcha" data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>"></div>
+					</div>
+				<?php } ?>
+
 				<div class="form-group">
 					<input type="submit" class="btn btn-success btn-lg btn-block" value="Enregistrer cet événement" />
 				</div>
@@ -592,6 +600,15 @@
 			<?php } ?>
 
 		</div>
+		
+		<?php if ( @$_config['recaptcha_secret'] != '' ) { ?>
+			<button
+			class="g-recaptcha"
+			data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>"
+			data-callback="YourOnSubmitFn">
+			Submit
+			</button>
+		<?php } ?>
 
 	</body>
 

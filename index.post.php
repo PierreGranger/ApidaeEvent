@@ -21,6 +21,29 @@
 
 	$pma->debug($_POST,'$_POST') ;
 
+	if ( $_config['recaptcha_secret'] != '' )
+	{
+		$fields = array( 'secret' => $_config['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
+		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+		curl_setopt($ch,CURLOPT_POST, count($fields));
+		curl_setopt($ch,CURLOPT_POSTFIELDS, http_build_query($fields));
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		//execute post
+		if ( ($result = curl_exec($ch)) === false )
+		{
+			var_dump(curl_error($ch)) ;
+			$ko[] = 'Vérification du captcha impossible' ;
+		}
+		else
+		{
+			$json_result = json_decode($result) ;
+			if ( ! $json_result->success ) $ko[] = 'L\'utilisateur n\'a pas coché la case "Je ne suis pas un robot"' ;
+		}
+	}
+
 	/*
 		Si on souhaite pouvoir écrire sur un membre différent en fonction de la commune saisie, alors dans la config on a renseigné $_config['membres'].
 	*/
