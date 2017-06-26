@@ -128,6 +128,7 @@ jQuery(document).on('change','select[name$="[type]"]',function(){
 	else if ( jQuery(this).val() == 204 ) coord.attr('type','email').attr('placeholder','xxx@yyyy.zz') ; // Mél
 	else if ( jQuery(this).val() == 205 ) coord.attr('type','url').attr('placeholder','http://www.xxx.zzz') ; // Url
 	else coord.attr('type','text').attr('placeholder','') ; // Standard
+	coord.trigger('change') ;
 }) ;
 
 jQuery(document).on('change','form.form input[name="gratuit"]',function(){checkTarifs();}) ;
