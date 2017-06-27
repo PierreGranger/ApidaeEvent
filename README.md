@@ -59,3 +59,4 @@ N'importe quel projet fait l'affaire : la consultation sert juste à récupérer
 	* Si le formulaire n'est pas en mesure de trouver le territoire concerné par la commune renseignée, la manifestation sera affectée au membre par défaut du formulaire (celui qui possède le projet projet_ecriture_clientId)
 * **`$_config['types_tarifs']`** : Liste des identifiants de tarifs Apidae
 * **`$_config['mail_admin']`** : Adresse mail où seront envoyées les erreurs (et les enregistrements OK si le formulaire est en `$_config['debug'] = true ;`)
+* **`$_config['recaptcha_secret']`** & **`$_config['recaptcha_sitekey']`** (optionnel) : Pour afficher un bouton "Je ne suis pas un robot" : https://www.google.com/recaptcha/

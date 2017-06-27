@@ -49,6 +49,11 @@
 
 		<script src='https://www.google.com/recaptcha/api.js'></script>
 
+		<?php
+			if ( isset($_GET['theme']) && preg_match('#^[a-z0-9]+$#',$_GET['theme']) )
+				echo '<link rel="stylesheet" type="text/css" href="./css/theme.'.$_GET['theme'].'.css" media="all" />' ;
+		?>
+		
 		<?php if ( false ) { ?>
 
 		<link rel="stylesheet" type="text/css" href="./css/form2015.css" media="all" />

@@ -9,7 +9,9 @@ jQuery(document).ready(function(){
 
 	initForm(jQuery('form.form')) ;
 
-	jQuery('select[name$="[type]"]').trigger('change') ;
+	jQuery('select[name$="[type]"]').each(function(){
+		selectChange(jQuery(this),true) ;
+	}) ;
 
 	checkTarifs() ;
 
@@ -123,12 +125,7 @@ jQuery(document).on('click','table td.moins',function(){
 }) ;
 
 jQuery(document).on('change','select[name$="[type]"]',function(){
-	var coord = jQuery(this).closest('tr').find('input[name$="[coordonnee]"]') ;
-	if ( jQuery(this).val() == 201 ) coord.attr('type','tel').attr('placeholder','00 00 00 00 00') ; // Tél
-	else if ( jQuery(this).val() == 204 ) coord.attr('type','email').attr('placeholder','xxx@yyyy.zz') ; // Mél
-	else if ( jQuery(this).val() == 205 ) coord.attr('type','url').attr('placeholder','http://www.xxx.zzz') ; // Url
-	else coord.attr('type','text').attr('placeholder','') ; // Standard
-	coord.trigger('change') ;
+	selectChange(jQuery(this)) ;
 }) ;
 
 jQuery(document).on('change','form.form input[name="gratuit"]',function(){checkTarifs();}) ;
@@ -151,6 +148,7 @@ jQuery(document).on('change','.float, select[required], textarea[required], inpu
 
 function valideChamp(champ,type)
 {
+	console.log('validateChamp('+champ.attr('name')+')') ;
 	champ.closest('.form-group').removeClass('has-error') ;
 	var val = champ.val() ;
 	if ( val == '' && ! champ.prop('required') ) return true ;
@@ -203,7 +201,18 @@ function valideChamp(champ,type)
 
 
 
+function selectChange(select,init=null)
+{
+	console.log('select[name$="[type]"].change') ;
+	var coord = select.closest('tr').find('input[name$="[coordonnee]"]') ;
+	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder','00 00 00 00 00') ; // Tél
+	else if ( select.val() == 204 ) coord.attr('type','email').attr('placeholder','xxx@yyyy.zz') ; // Mél
+	else if ( select.val() == 205 ) coord.attr('type','url').attr('placeholder','http://www.xxx.zzz') ; // Url
+	else coord.attr('type','text').attr('placeholder','') ; // Standard
 
+	// On ne trigger par le changement de coordonnée lors du chargement du formulaire pour éviter d'avoir une erreur sur les champs obligatoires.
+	if ( init !== true ) coord.trigger('change') ;
+}
 
 
 

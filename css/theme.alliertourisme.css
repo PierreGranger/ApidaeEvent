@@ -1,0 +1,46 @@
+form.form fieldset,
+form.form fieldset legend {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e0cfb8+0,f3eae0+100 */
+	background: rgb(224,207,184); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(224,207,184,1) 0%, rgba(224,207,184,0.6) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(224,207,184,1) 0%,rgba(224,207,184,0.6) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(224,207,184,1) 0%,rgba(224,207,184,0.6) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0cfb8', endColorstr='#f3eae0',GradientType=0 ); /* IE6-9 */
+	padding:10px ;
+	box-shadow: inset 0 0 6px #DED1C1;
+    -moz-box-shadow: inset 0 0 6px #ded1c1;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border:0 ;
+}
+
+form.form fieldset {
+	font-size:0.8em ;
+	margin-bottom:26px ;
+}
+
+form.form fieldset legend {
+	font-size:1.2em ;
+	font-weight:bold ;
+	padding:4px 10px ;
+	display:inline-block ;
+	width:auto ;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e0cfb8+0,f3eae0+100 */
+	background: rgb(224,207,184); /* Old browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0cfb8', endColorstr='#f3eae0',GradientType=0 ); /* IE6-9 */
+}
+
+form.form table.table td {
+	padding:2px 4px ;
+}
+
+form.form table.table td .form-group {
+	margin-bottom:5px ;
+}
+
+form.form fieldset input,
+form.form fieldset select,
+form.form fieldset textarea {
+	background:rgba(255,255,255,0.6) ;
+}
