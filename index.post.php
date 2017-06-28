@@ -18,6 +18,7 @@
 	*/
 	$clientId = null ;
 	$secret = null ;
+	$mail_membre = null ;
 
 	$pma->debug($_POST,'$_POST') ;
 
@@ -70,6 +71,7 @@
 				}
 				// Si on n'a pas de projet d'écriture multimembre, ce paramètre ne servira à rien (impossible de modifier gestion.membreProprietaire.type.id)
 				$id_membre = $m['id_membre'] ;
+				$mail_membre = @$m['mail'] ;
 				break ;
 			}
 		}
@@ -444,7 +446,15 @@
 
 	if ( $ko === true )
 	{
-		$alerte = $pma->alerte('enregistrement',$_POST) ;
+		$post_mail = $_POST ;
+		unset($post_mail['G-recaptcha-response']) ;
+
+		$alerte = $pma->alerte('enregistrement ApidaeEvent [admin]',$post_mail) ;
+		if ( $mail_membre != null )
+		{
+			if ( ! is_array($mail_membre) ) $pma->alerte('ApidaeEvent - Nouvel enregistrement',$post_mail,$mail_membre) ;
+			else foreach ( $mail_membre as $mt ) $pma->alerte('ApidaeEvent - Nouvel enregistrement',$post_mail,$mt) ;
+		}
 		$display_form = false ;
 		?>
 			<div class="alert alert-success" role="alert">
@@ -485,6 +495,7 @@
 			  	echo '</ul>' ;
 		  	}
 		  	$alerte = $pma->alerte('Erreur enregistrement',$ko) ;
+		  	$alerte = $pma->alerte('Erreur enregistrement',$_POST) ;
 		  ?>
 		  <?php if ( $alerte === true ) { ?><br />L'erreur a été envoyée à un administrateur.<?php } ?>
 		  <br />Veuillez nous excuser pour la gène occasionnée.

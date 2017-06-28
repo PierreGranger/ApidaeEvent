@@ -758,12 +758,15 @@
 			return (json_last_error() == JSON_ERROR_NONE);
 		}
 
-		public function alerte($sujet,$msg)
+		public function alerte($sujet,$msg,$mailto=null)
 		{
 			if ( ! filter_var($this->_config['mail_admin'], FILTER_VALIDATE_EMAIL) ) return false ;
 
 			$from = $this->_config['mail_admin'] ;
 			$to = $this->_config['mail_admin'] ;
+
+			if ( isset($mailto) && $mailto != null && filter_var($mailto, FILTER_VALIDATE_EMAIL) )
+				$to = $mailto ;
 
 			$endline = "\n" ;
 			$h1 = strip_tags(get_class($this).' - '.$sujet) ;
@@ -779,7 +782,11 @@
 						$tble .= '<th><strong>'.ucfirst($key).'</strong></th>' ;
 						$tble .= '<td>' ;
 							if ( ! is_array($value) ) $tble .= stripslashes(nl2br($value)) ;
-							else foreach ( $value as $k => $v ) $tble .= $k.' : '.stripslashes(@nl2br($v))."<br />" ;
+							else
+							{
+								//foreach ( $value as $k => $v ) $tble .= $k.' : '.stripslashes(@nl2br($v))."<br />" ;
+								$tble .= '<pre>'.print_r($value,true).'</pre>' ;
+							}
 						$tble .= '</td>' ;
 					$tble .= '</tr>' ;
 				}

@@ -21,6 +21,7 @@ Vous devez impérativement créer un projet d'écriture et en fournir les identi
 * Identifiant du territoire concerné (= zone de compétence du membre concerné)
 * clientId (fourni par Apidae lors de la création d'un projet d'écriture)
 * secret (fourni par Apidae lors de la création d'un projet d'écriture)
+* Une ou plusieurs adresses mails, qui seront prévenues à chaque nouvel enregistrement d'une offre sur ce territoire
 
 Sans ces informations, toutes les manifestations saisies sur le territoire seront affectées à Allier Tourisme **et seront supprimées**.
 

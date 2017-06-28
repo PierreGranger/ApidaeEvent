@@ -132,6 +132,10 @@
 
 			<form class="form" method="post" enctype="multipart/form-data" novalidate>
 
+				<?php $referer = ( isset($_POST['referer']) ) ? $_POST['referer'] : @$_SERVER['HTTP_REFERER'] ; ?>
+				<input type="hidden" name="referer" value="<?php echo htmlentities($referer) ; ?>" />
+				<input type="hidden" name="script_uri" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']) ; ?>" />
+
 				<fieldset class="form-group required">
 					<legend>Nom de la manifestation</legend>
 					<div class="controls">
@@ -606,15 +610,6 @@
 
 		</div>
 		
-		<?php if ( @$_config['recaptcha_secret'] != '' ) { ?>
-			<button
-			class="g-recaptcha"
-			data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>"
-			data-callback="YourOnSubmitFn">
-			Submit
-			</button>
-		<?php } ?>
-
 	</body>
 
 </html>
