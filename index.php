@@ -114,7 +114,7 @@
 									echo ' (territoire : <a href="https://base.apidae-tourisme.com/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>) ' ;
 									echo ' - ' ;
 									echo 'API écriture : ' ;
-									if ( $membre['clientId'] !== null ) echo 'Renseignée' ;
+									if ( @$membre['clientId'] !== null ) echo 'Renseignée' ;
 									else echo '<strong style="color:red;">Non renseignée</strong>' ;
 								echo '</li>' ;
 							}
@@ -125,7 +125,11 @@
 						<h3>[DEBUG] Remontée des bugs et évolutions :</h3>
 						<a href="https://docs.google.com/spreadsheets/u/0/d/1wSidT7V26kem9jyewHdN-KbfGAj8WaPTq8KAR50HUko/edit" target="_blank">https://docs.google.com/spreadsheets/u/0/d/1wSidT7V26kem9jyewHdN-KbfGAj8WaPTq8KAR50HUko/edit</a>
 					</div>
-					<?php
+					<?php if ( @$_config['projet_ecriture_multimembre'] == 1 ) { ?>
+					<div class="alert alert-success" role="alert">
+						<h3>[DEBUG] API écriture multimembre ON !!</h3>
+					</div>
+					<?php }
 				}
 
 			?>

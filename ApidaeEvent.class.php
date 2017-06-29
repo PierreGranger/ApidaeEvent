@@ -642,7 +642,6 @@
 									if ( isset($m['id_territoire']) && is_numeric($m['id_territoire']) )
 										$territoires[] = $m['id_territoire'] ;
 							$fields['identifiants'] = $territoires ;
-							pre($territoires) ;
 						}
 
 						$url = $url.'?query='.json_encode($fields) ;

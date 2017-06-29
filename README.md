@@ -12,32 +12,38 @@ Vous pouvez utiliser ce formulaire sans aucune installation, en utilisant une si
 <iframe src="http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:2000px;"></iframe>
 ```
 Dans ce cas, renseignez dans territoire=XXXXX un identifiant de fiche "Territoire" Apidae, afin de personnaliser la liste des communes du formulaire.
-Ex : pour n'afficher que les communes de la zone de compétence de l'OT de Moulins, on va utiliser la fiche [3337048](https://base.apidae-tourisme.com/consulter/objet-touristique/3337048)
+Ex : pour n'afficher que les communes de la zone de compétence de l'OT de Moulins, on va utiliser la fiche [3337048](https://base.apidae-tourisme.com/consulter/objet-touristique/3337048) :
 
 >http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=3337048
 
 Vous devez impérativement créer un projet d'écriture et en fournir les identifiants à p.granger@allier-tourisme.net en donnant notamment :
 * Identifiant du membre
-* Identifiant du territoire concerné (= zone de compétence du membre concerné)
-* clientId (fourni par Apidae lors de la création d'un projet d'écriture)
-* secret (fourni par Apidae lors de la création d'un projet d'écriture)
+* Identifiant du territoire concerné (correspond à la zone de compétence du membre concerné)
+* clientId (fourni par Apidae lors de la création d'un projet d'écriture) *
+* secret (fourni par Apidae lors de la création d'un projet d'écriture) *
 * Une ou plusieurs adresses mails, qui seront prévenues à chaque nouvel enregistrement d'une offre sur ce territoire
 
-Sans ces informations, toutes les manifestations saisies sur le territoire seront affectées à Allier Tourisme **et seront supprimées**.
+\* A la création du projet d'écriture, dans la rubrique "Liste des clients OAuth", cliquer sur le bouton "+" et rentrer le mail p.granger@allier-tourisme.net : Apidae enverra les codes clientId et secret automatiquement.
+
+**Sans ces informations, toutes les manifestations saisies sur le territoire seront affectées à Allier Tourisme et seront supprimées**.
 
 ### 2) installation sur un serveur
 Si vous préférez installer le formulaire sur votre site web, vous pouvez le télécharger et l'installer sur votre propre serveur (PHP/MySQL).
 Vous pourrez ainsi configurer plus finement le formulaire (ajout de champs, changement de couleurs...)
 Vous pouvez également contribuer au projet si vous souhaitez l'améliorer.
 
-## Projets d'écriture
+## Configuration dans le cas d'une installation sur un serveur
+
+> **Tout ce qui suit ne concerne que l'utilisation en "installation sur un serveur". Pour une utilisation par iframe vous n'avez pas besoin de la suite.**
+
+### Projets d'écriture
 Si votre formulaire est prévu pour affecter toutes les manifestations à 1 seule membre Apidae, vous n'avez qu'un seul projet d'écriture à créer (voir `projet_ecriture_clientId` et `projet_ecriture_secret`).
 En revanche si vous souhaitez que la manifestation saisie soit affectée à un autre membre, en fonction de la commune, chaque membre doit posséder son propre projet d'écriture (en attendant une API d'écriture multimembre) (voir `$_config['membres']`).
 
-## Projet de consultation
+### Projet de consultation
 N'importe quel projet fait l'affaire : la consultation sert juste à récupérer la liste des communes de chaque territoire. Vous pouvez donc tout à fait renseigner ici votre projet de site web par exemple.
 
-## Configuration (pour une installation sur serveur)
+### Configuration (pour une installation sur serveur)
 * Copiez le fichier config.sample.inc.php vers config.inc.php (à la racine du dossier)
 * Dans ce fichier, renseignez les informations essentielles
 

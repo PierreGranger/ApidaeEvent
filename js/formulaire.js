@@ -4,7 +4,8 @@ jQuery(document).ready(function(){
 
 	jQuery('form.form select.chosen').chosen({
 		include_group_label_in_selected : true,
-		search_contains:true
+		search_contains:true,
+		width:'100%'
 	}) ;
 
 	initForm(jQuery('form.form')) ;

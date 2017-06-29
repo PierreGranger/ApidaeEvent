@@ -86,8 +86,12 @@
 
 	if ( $_config['projet_ecriture_multimembre'] === true && $id_membre !== null )
 	{
+		/*
 		$fieldlist[] = 'gestion.membreProprietaire' ;	
 		$root['gestion']['membreProprietaire']['type']['id'] = $id_membre ;
+		*/
+		$fieldlist[] = 'membre.proprietaire.identifiant' ;	
+		$root['membre']['proprietaire']['identifiant'] = $id_membre ;
 	}
 
 	$fieldlist[] = 'nom' ;
