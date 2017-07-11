@@ -90,8 +90,11 @@
 		$fieldlist[] = 'gestion.membreProprietaire' ;	
 		$root['gestion']['membreProprietaire']['type']['id'] = $id_membre ;
 		*/
+		/*
 		$fieldlist[] = 'membre.proprietaire.identifiant' ;	
 		$root['membre']['proprietaire']['identifiant'] = $id_membre ;
+		*/
+		$proprietaireId = $id_membre ;
 	}
 
 	$fieldlist[] = 'nom' ;
@@ -443,7 +446,7 @@
 	
 	if ( sizeof($ko) == 0 )
 	{
-		$ko = $pma->enregistrer($fieldlist,$root,$medias,$clientId,$secret) ;
+		$ko = $pma->enregistrer($fieldlist,$root,$medias,$proprietaireId,$clientId,$secret) ;
 	}
 	
 	$pma->debug($ko,'$ko') ;

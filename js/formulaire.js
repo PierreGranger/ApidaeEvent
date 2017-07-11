@@ -287,3 +287,10 @@ function setIndent(table) {
 		i++ ;
 	}) ;
 }
+
+
+function recaptchaOk()
+{
+	jQuery('form.form input[type="submit"]').closest('div.form-group').show() ;
+	jQuery('form.form div#recaptcha p').hide() ;
+}

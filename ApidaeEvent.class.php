@@ -21,9 +21,14 @@
 
 	class ApidaeEvent {
 
-		private $url_api = Array(
+		private static $url_api = Array(
 			'preprod' => 'http://api.sitra2-vm-preprod.accelance.net/',
-			'prod' => 'http://api.sitra-tourisme.com/'
+			'prod' => 'http://api.apidae-tourisme.com/'
+		) ;
+
+		private static $url_base = Array(
+				'preprod' => 'http://sitra2-vm-preprod.accelance.net/',
+				'prod' => 'https://base.apidae-tourisme.com/'
 		) ;
 
 		public $mysqli ;
@@ -93,7 +98,11 @@
 		    return true ;
 		}
 
-		public function enregistrer($fieldlist,$root,$medias=null,$clientId=null,$secret=null) {
+		public function url_base() {
+			return self::$url_base[$this->type_prod] ;
+		}
+
+		public function enregistrer($fieldlist,$root,$medias=null,$proprietaireId=null,$clientId=null,$secret=null) {
 
 			$ko = Array() ;
 
@@ -106,6 +115,10 @@
 			$params['root'] = json_encode($root) ;
 			$params['fields'] = json_encode($fields) ;
 			$params['root.fieldList'] = json_encode($fieldlist) ;
+
+			if (!empty($proprietaireId))
+				$params['proprietaireId'] = $proprietaireId;
+
 			if ( isset($medias) && is_array($medias) )
 				foreach ( $medias as $k_media => $media )
 					$params[$k_media] = $media ;
@@ -140,7 +153,7 @@
 				
 				$ch = curl_init();
 				
-				curl_setopt($ch,CURLOPT_URL, $this->url_api[$this->type_prod].'api/v002/ecriture/');
+				curl_setopt($ch,CURLOPT_URL, self::$url_api[$this->type_prod].'api/v002/ecriture/');
 				
 				$header = Array() ;
 				$header[] = "Authorization: Bearer ".$token_ecriture->access_token ;
@@ -220,38 +233,6 @@
 				}
 			}
 			array_push($familles,Array('id'=>null)) ;
-
-			/*
-			$rq = $this->mysqli->query(' select distinct FC.id, FC.libelleFr, FC.ordre from apidae_elements_reference FC
-			where FC.id in ( select familleCritere from apidae_elements_reference ER where ER.elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" )
-			#inner join apidae_elements_reference ER on ER.elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" 
-			order by FC.ordre asc ') or die($this->mysqli->error) ;
-			while ( $famille = $rq->fetch_assoc() )
-				$familles[$famille['id']] = $famille ;
-			array_push($familles,Array('id'=>null)) ;
-
-			$sql2 = ' select id, libelleFr, parent from apidae_elements_reference ER where ' ;
-			$sql2 .= ' parent is not null and ER.elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" ' ;
-			$sql2 .= ' order by ordre asc ' ;
-			$rq2 = $this->mysqli->query($sql2) or die($this->mysqli->error) ;
-			if ( $rq2->num_rows > 0 )
-			{
-				while ( $d2 = $rq2->fetch_assoc() )
-				{
-					$enfants[$d2['parent']][] = $d2 ;
-				}
-			}
-
-			$sql = ' select * from apidae_elements_reference ER where ' ;
-			$sql .= ' ER.parent is null ' ;
-			$sql .= ' and ER.elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" ' ;
-			$sql .= ' order by ordre asc ' ;
-			$rq = $this->mysqli->query($sql) or die($this->mysqli->error) ;
-			while ( $parent = $rq->fetch_assoc() )
-			{
-				$parents[$parent['familleCritere']][] = $parent ;
-			}
-			*/
 
 			if ( $params['presentation'] == 'select' )
 			{
@@ -343,23 +324,6 @@
 			return $ret ;
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		/**
 		*	Récupère la liste des communes d'Apidae
 		*	
@@ -416,34 +380,6 @@
 					elseif ( $this->method_communes == 'api' )
 					{
 						return false ;
-						/*
-						$url = $this->url_api[$this->type_prod] . 'api/v002/referentiel/communes/';
-						$fields = array(
-							'apiKey' => $this->projet_consultation_apiKey,
-							'projetId' => $this->projet_consultation_projetId,
-							'communeIds' => Array(14762, 28713)
-						);
-						$fields_string = 'query='.json_encode($fields) ;
-
-						//open connection
-						$ch = curl_init();
-
-						//set the url, number of POST vars, POST data
-						curl_setopt($ch,CURLOPT_URL, $url);
-						curl_setopt($ch,CURLOPT_POST, count($fields));
-						curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-
-						//execute post
-						if ( ($result = curl_exec($ch)) === false )
-						{
-							var_dump(curl_error($ch)) ;
-						}
-
-						var_dump($result) ;
-
-						//close connection
-						curl_close($ch);
-						*/
 					}
 				}
 			}
@@ -533,37 +469,6 @@
 							$this->mysqli->query(' insert into apidae_elements_reference set '.implode(', ',$sets)) ;
 						}
 					}
-					/*
-					elseif ( $this->method_elementsReference == 'api' )
-					{
-						$url = $this->url_api[$this->type_prod] . 'api/v002/referentiel/elements-reference/';
-						$fields = array(
-							'apiKey' => $this->projet_consultation_apiKey,
-							'projetId' => $this->projet_consultation_projetId,
-							'communeIds' => Array(14762, 28713)
-						);
-						$fields_string = 'query='.json_encode($fields) ;
-
-						//open connection
-						$ch = curl_init();
-
-						//set the url, number of POST vars, POST data
-						curl_setopt($ch,CURLOPT_URL, $url);
-						curl_setopt($ch,CURLOPT_POST, count($fields));
-						curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-
-						//execute post
-						if ( ($result = curl_exec($ch)) === false )
-						{
-							var_dump(curl_error($ch)) ;
-						}
-
-						var_dump($result) ;
-
-						//close connection
-						curl_close($ch);
-					}
-					*/
 				}
 			}
 
@@ -619,7 +524,7 @@
 				{
 					if ( $this->method_territoires == 'api' )
 					{
-						$url = $this->url_api[$this->type_prod] . 'api/v002/recherche/list-objets-touristiques/';
+						$url = self::$url_api[$this->type_prod] . 'api/v002/recherche/list-objets-touristiques/';
 						$fields = array(
 							'apiKey' => $this->projet_consultation_apiKey,
 							'projetId' => $this->projet_consultation_projetId,
@@ -683,7 +588,7 @@
 
 			$ch = curl_init() ;
 			// http://stackoverflow.com/questions/15729167/paypal-api-with-php-and-curl
-			curl_setopt($ch,CURLOPT_URL, $this->url_api[$this->type_prod].'oauth/token');
+			curl_setopt($ch,CURLOPT_URL, self::$url_api[$this->type_prod].'oauth/token');
 			curl_setopt($ch, CURLOPT_HEADER, false);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -783,7 +688,6 @@
 							if ( ! is_array($value) ) $tble .= stripslashes(nl2br($value)) ;
 							else
 							{
-								//foreach ( $value as $k => $v ) $tble .= $k.' : '.stripslashes(@nl2br($v))."<br />" ;
 								$tble .= '<pre>'.print_r($value,true).'</pre>' ;
 							}
 						$tble .= '</td>' ;
@@ -805,19 +709,10 @@
 			
 			$entete = Array() ;
 			$entete['From'] = $from . '<'.$from.'>' ;
-			//if ( is_array($params) && isset($params['bcc']) && $params['bcc'] == 1 ) $entete['Bcc'] = config('mail_webmaster') ;
 			$entete['Date'] = @date("D, j M Y G:i:s O") ;
-			//$entete['X-Sender'] = $this->base_url_website ;
 			$entete['X-Mailer'] = 'PHP'.phpversion() ;
-			//$entete['X-auth-smtp-user'] = $this->mail_website ;
-			//$entete['X-abuse-contact'] = $this->mail_website ;
 			$entete['MIME-Version'] = '1.0' ;
 			$entete['Content-Type'] = 'multipart/alternative; boundary="'.$boundary.'"' ;
-			
-			/*
-			if ( isset($params) && is_array($params) && isset($params['entete_supp']) && is_array($params['entete_supp']) )
-				$entete = array_merge($params['entete_supp'],$entete) ;
-			*/
 			
 			$message = $endline ;
 			$message .= $endline."--".$boundary.$endline ;

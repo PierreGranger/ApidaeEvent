@@ -11,6 +11,8 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
 		<!-- jQuery -->
 		<script src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
@@ -42,7 +44,7 @@
 			var icon_plus = '<?php echo $icon_plus ; ?>' ;
 			var icon_moins = '<?php echo $icon_moins ; ?>' ;
 		</script>
-		<script src="./js/formulaire.js"></script>
+		<script src="./js/formulaire.js?v=2"></script>
 		<link rel="stylesheet" type="text/css" href="./css/formulaire.css" media="all" />
 
 		<?php include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
@@ -110,8 +112,11 @@
 							foreach ( $_config['membres'] as $membre )
 							{
 								echo '<li>' ;
-									echo '<a href="https://base.apidae-tourisme.com/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['nom'].'</a>' ;
-									echo ' (territoire : <a href="https://base.apidae-tourisme.com/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>) ' ;
+									echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['nom'].'</a> ' ;
+									if ( $membre['id_territoire'] !== null )
+										echo ' (territoire : <a href="'.$pma->url_base().'/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>) ' ;
+									else
+										echo '<strong style="color:red;">Non renseignée</strong>' ;
 									echo ' - ' ;
 									echo 'API écriture : ' ;
 									if ( @$membre['clientId'] !== null ) echo 'Renseignée' ;
@@ -598,15 +603,18 @@
 					</table>
 				</fieldset>
 
-				<?php if ( @$_config['recaptcha_secret'] != '' ) { ?>
-					<div class="form-group">
-						<div class="g-recaptcha" data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>"></div>
-					</div>
-				<?php } ?>
-
-				<div class="form-group">
+				<div class="form-group"<?php
+					if ( @$_config['recaptcha_secret'] != '' ) echo ' style="display:none;"' ;
+				?>>
 					<input type="submit" class="btn btn-success btn-lg btn-block" value="Enregistrer cet événement" />
 				</div>
+
+				<?php if ( @$_config['recaptcha_secret'] != '' ) { ?>
+					<div class="form-group" id="recaptcha">
+						<div class="g-recaptcha" data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>" data-callback="recaptchaOk"></div>
+					<p>Vous devez cocher la case "Je ne suis pas un robot" pour pouvoir enregistrer</p>
+					</div>
+				<?php } ?>
 
 			</form>
 
