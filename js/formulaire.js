@@ -40,10 +40,8 @@ jQuery(document).on('submit','form.form',function(e){
 	jQuery(this).find('select, input, textarea').each(function(){
 		var okChamp = valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
 		jQuery(this).closest('.form-group').toggleClass('has-error',!okChamp) ;
-		console.log('okChamp',okChamp) ;
 		if ( ! okChamp )
 		{
-			console.log(jQuery(this).attr('name')+' N\'est pas valide...',jQuery(this).val()) ;
 			ok = false ;
 			if ( firstError == null ) firstError = jQuery(this) ;
 		}
@@ -134,7 +132,6 @@ function valideChamp(champ)
 	if ( typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/) )
 		type = champ.closest('tr').find('select').val() ;
 
-	console.log('valideChamp',champ.attr('name'),champ,type) ;
 	var val = champ.val() ;
 	if ( val == '' && ! champ.prop('required') ) return true ;
 	if ( val == '' && champ.prop('required') ) return false ;
@@ -201,7 +198,6 @@ function valideChamp(champ)
 
 function selectChange(select,init=null)
 {
-	console.log('select[name$="[type]"].change') ;
 	var coord = select.closest('tr').find('input[name$="[coordonnee]"]') ;
 	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder','00 00 00 00 00') ; // Tél
 	else if ( select.val() == 204 ) coord.attr('type','email').attr('placeholder','xxx@yyyy.zz') ; // Mél
