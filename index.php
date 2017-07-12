@@ -571,7 +571,6 @@
 					</div>
 
 					<div class="champ tarifs">
-						<label>Tarifs détaillés</label>
 						<div class="block">
 							<table class="table">
 								<thead>

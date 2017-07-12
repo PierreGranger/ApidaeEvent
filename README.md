@@ -19,11 +19,17 @@ Ex : pour n'afficher que les communes de la zone de compétence de l'OT de Mouli
 Vous devez impérativement créer un projet d'écriture et en fournir les identifiants à p.granger@allier-tourisme.net en donnant notamment :
 * Identifiant du membre
 * Identifiant du territoire concerné (correspond à la zone de compétence du membre concerné)
+* Une ou plusieurs adresses mails, qui seront prévenues à chaque nouvel enregistrement d'une offre sur ce territoire
 * clientId (fourni par Apidae lors de la création d'un projet d'écriture) *
 * secret (fourni par Apidae lors de la création d'un projet d'écriture) *
-* Une ou plusieurs adresses mails, qui seront prévenues à chaque nouvel enregistrement d'une offre sur ce territoire
 
-\* A la création du projet d'écriture, dans la rubrique "Liste des clients OAuth", cliquer sur le bouton "+" et rentrer le mail p.granger@allier-tourisme.net : Apidae enverra les codes clientId et secret automatiquement.
+\* Après la création du projet d'écriture, dans votre projet, sur le premier onglet dans la rubrique "Liste des clients OAuth", cliquer sur le bouton "+" et rentrer le mail p.granger@allier-tourisme.net : Apidae enverra les codes clientId et secret automatiquement.
+
+Toujours dans votre projet, dans l'onglet "Configuration" vous devez préciser :
+* Actions autorisées : Création
+* Types d'objets autorisés : Fête et manifestation
+* Auteur des écritures : choisissez qui sera le propriétaire des brouillons
+* Autoriser la validation directe : ne pas cocher
 
 **Sans ces informations, toutes les manifestations saisies sur le territoire seront affectées à Allier Tourisme et seront supprimées**.
 
