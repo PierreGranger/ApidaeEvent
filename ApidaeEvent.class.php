@@ -237,11 +237,12 @@
 			if ( $params['presentation'] == 'select' )
 			{
 				$ret .= ' <select class="form-control chosen" ' ;
+				$ret .= ' data-placeholder=" " ' ;
 				if ( @$params['type'] == 'unique' ) $ret .= ' name="'.$type.'" ' ;
 				else $ret .= ' name="'.$type.'[]" multiple="multiple" ' ;
 				if ( isset($params['max_selected_options']) ) $ret .= ' data-max_selected_options="'.$params['max_selected_options'].'" ' ;
 				$ret .= '>' ;
-					$ret .= '<option value="">-</option>' ;
+					if ( @$params['type'] == 'unique' ) $ret .= '<option value="">-</option>' ;
 					foreach ( $familles as $f )
 					{
 						if ( ! isset($parents[$f['id']]) ) continue ;

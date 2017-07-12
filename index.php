@@ -14,11 +14,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<!-- jQuery -->
-		<script src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script src="./js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
 		<!-- Bootstrap -->
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<link href="./css/bootstrap.min.css" rel="stylesheet">
+		<script src="./js/bootstrap.min.js"></script>
 
 		<!-- Chosen -->
 		<script src="./chosen/chosen.jquery.min.js"></script>
@@ -27,14 +27,13 @@
 
 		<!-- jQuery.ui -->
 		<script
-		src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-		integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-		crossorigin="anonymous"></script>
-		<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" />
+		src="./js/jquery-ui.min.js"></script>
+		<script src="./js/datepicker-fr.js"></script>
+		<link rel="stylesheet" type="text/css" href="./css/jquery-ui.css" media="all" />
 
 		<!-- jQuery timepicker -->
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css" media="all" />
+		<script src="./js/jquery.timepicker.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="./css/jquery.timepicker.min.css" media="all" />
 
 		<?php
 			$icon_plus = '<span class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> <strong>Ajouter une ligne</strong></span>' ;
@@ -271,7 +270,7 @@
 					<div class="form-group row required">
 						<label for="commune" class="<?php echo $class_label ; ?> col-form-label">Commune</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<select name="commune" class="chosen" required="required">
+							<select name="commune" class="chosen" required="required" data-placeholder="">
 								<option value="">-</option>
 								<?php
 									
@@ -335,7 +334,7 @@
                 						echo '</div>' ;
 									echo '</td>' ;
 									echo '<td>' ;
-										echo '<div class="input-group time">' ;
+										echo '<div class="input-group form-group time">' ;
 											echo '<input class="form-control time" type="text" name="date['.$i.'][hdebut]" value="'.htmlentities(@$post['date'][$i]['hdebut']).'" placeholder="hh:mm" />' ;
                     						echo '<span class="input-group-addon">' ;
                         						echo '<span class="glyphicon glyphicon-time"></span>' ;
@@ -343,7 +342,7 @@
                 						echo '</div>' ;
 									echo '</td>' ;
 									echo '<td>' ;
-										echo '<div class="input-group time">' ;
+										echo '<div class="input-group form-group time">' ;
 											echo '<input class="form-control time" type="text" name="date['.$i.'][hfin]" value="'.htmlentities(@$post['date'][$i]['hfin']).'" placeholder="hh:mm" />' ;
                     						echo '<span class="input-group-addon">' ;
                         						echo '<span class="glyphicon glyphicon-time"></span>' ;
@@ -365,10 +364,57 @@
 
 				<fieldset class="form-group">
 
+					<legend>Description de votre manifestation</legend>
+
+					<div class="form-group row">
+						<label class="<?php echo $class_label ; ?> col-form-label">Types de manifestation</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<?php echo $pma->formHtmlCC('FeteEtManifestationType',Array('presentation'=>'select','type'=>'unique'),@$post['FeteEtManifestationType']) ; ?>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="<?php echo $class_label ; ?> col-form-label">Catégories de manifestation</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<?php echo $pma->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3),@$post['FeteEtManifestationCategorie']) ; ?>
+								<small class="form-text text-muted">3 catégories maximum</small>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="<?php echo $class_label ; ?> col-form-label">Thèmes de manifestation</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<?php echo $pma->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select'),@$post['FeteEtManifestationTheme']) ; ?>
+						</div>
+					</div>
+
+					<div class="form-group row required">
+						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifCourt">Descriptif court
+							<span class="glyphicon glyphicon-info-sign" title="Texte d'accroche permettant de comprendre la nature de votre prestation. Ne doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, de lieu... puisque ces informations existent par ailleurs, ce qui constitue une double saisie."></span>
+							<br /><small class="form-text text-muted">255 caractères max.</small>
+						</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<textarea class="form-control" name="descriptifCourt" id="descriptifCourt" maxlength="255" required="required"><?php echo htmlspecialchars(@$post['descriptifCourt']) ; ?></textarea>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifDetaille">Descriptif détaillé
+							<span class="glyphicon glyphicon-info-sign" title="Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite."></span>
+						</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<textarea class="form-control" name="descriptifDetaille" id="descriptifDetaille"><?php echo htmlspecialchars(@$post['descriptifDetaille']) ; ?></textarea>
+						</div>
+					</div>
+
+				</fieldset>
+
+				<fieldset class="form-group">
+
 					<legend>Moyens de communication</legend>
 
 					<div class="alert alert-warning" role="alert">
-						Merci de préciser au moins un moyen de communication (Mail, téléphone...)
+						Merci de préciser au moins un moyen de communication (Mail, téléphone...) : ils seront diffusés sur les supports de communications (sites web, brochures...)
 					</div>
 
 					<table class="table mc">
@@ -444,47 +490,75 @@
 					</table>
 				</fieldset>
 
-				<fieldset class="form-group">
+				<fieldset>
+					
+					<legend>Contacts</legend>
+					
+					<div class="alert alert-warning" role="alert">
+						Les contacts nous permettront de vous recontacter si besoin, mais ne seront pas diffusés.
+					</div>
 
-					<legend>Description de votre manifestation</legend>
+					<table class="table">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Fonction</th>
+								<th>Prénom</th>
+								<th>Nom</th>
+								<th>Téléphone</th>
+								<th>Mail</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+								$types = $pma->getElementsReference('ContactFonction',false) ;
+								for ( $i = 0 ; $i < 1 ; $i++ )
+								{
+									echo "\n\t\t\t\t\t\t".'<tr>' ;
+										echo '<td></td>' ;
+										echo '<td>' ;
+											echo '<select class="form-control" name="contact['.$i.'][fonction]">' ;
+												echo '<option value="">-</option>' ;
+												foreach ( $types as $type )
+												{
+													echo '<option value="'.$type['id'].'"' ;
+														if ( @$post['contact'][$i]['fonction'] == $type['id'] ) echo ' selected="selected" ' ;
+													echo '>' ;
+														echo $type['libelleFr'] ;
+													echo '</option>' ;
+												}
+											echo '</select>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="form-group">' ;
+												echo '<input class="form-control" type="text" name="contact['.$i.'][prenom]" value="'.htmlspecialchars(@$post['contact'][$i]['prenom']).'" />' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="form-group">' ;
+												echo '<input class="form-control col" type="text" name="contact['.$i.'][nom]" value="'.htmlspecialchars(@$post['contact'][$i]['nom']).'" />' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="form-group">' ;
+												echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="00 00 00 00 00" />' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="form-group">' ;
+												echo '<input class="form-control mail" type="text" name="contact['.$i.'][mail]" value="'.htmlspecialchars(@$post['contact'][$i]['mail']).'" placeholder="xxx@yyyy.zz" />' ;
+											echo '</div>' ;
+										echo '</td>' ;
+									echo '</tr>' ;
+								}
+								echo '<tr>' ;
+									echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
+								echo '</tr>' ;
+							?>
+						</tbody>
+					</table>
 
-						<div class="form-group row">
-							<label class="<?php echo $class_label ; ?> col-form-label">Types de manifestation</label>
-							<div class="<?php echo $class_champ ; ?>">
-								<?php echo $pma->formHtmlCC('FeteEtManifestationType',Array('presentation'=>'select','type'=>'unique'),@$post['FeteEtManifestationType']) ; ?>
-							</div>
-						</div>
-
-						<div class="form-group row">
-							<label class="<?php echo $class_label ; ?> col-form-label">Catégories de manifestation</label>
-							<div class="<?php echo $class_champ ; ?>">
-								<?php echo $pma->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3),@$post['FeteEtManifestationCategorie']) ; ?>
-									<small class="form-text text-muted">3 catégories maximum</small>
-							</div>
-						</div>
-
-						<div class="form-group row">
-							<label class="<?php echo $class_label ; ?> col-form-label">Thèmes de manifestation</label>
-							<div class="<?php echo $class_champ ; ?>">
-								<?php echo $pma->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select'),@$post['FeteEtManifestationTheme']) ; ?>
-							</div>
-						</div>
-
-						<div class="form-group row required">
-							<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifCourt">Descriptif court</label>
-							<div class="<?php echo $class_champ ; ?>">
-								<textarea class="form-control" name="descriptifCourt" id="descriptifCourt" maxlength="255" required="required"><?php echo htmlspecialchars(@$post['descriptifCourt']) ; ?></textarea>
-							</div>
-						</div>
-
-						<div class="form-group row">
-							<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifDetaille">Descriptif détaillé</label>
-							<div class="<?php echo $class_champ ; ?>">
-								<textarea class="form-control" name="descriptifDetaille" id="descriptifDetaille"><?php echo htmlspecialchars(@$post['descriptifDetaille']) ; ?></textarea>
-							</div>
-						</div>
-
-					</fieldset>
+				</fieldset>
 
 				<fieldset class="form-group">
 					<legend>Tarifs</legend>
@@ -496,7 +570,6 @@
 						</div>
 					</div>
 
-					<?php if ( true ) { ?>
 					<div class="champ tarifs">
 						<label>Tarifs détaillés</label>
 						<div class="block">
@@ -553,7 +626,6 @@
 							</table>
 						</div>
 					</div>
-					<?php } ?>
 
 					<div class="form-group row complement_tarif">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptionTarif_complement_libelleFr">Complément sur les tarifs</label>
@@ -604,12 +676,12 @@
 				</fieldset>
 
 				<div class="form-group"<?php
-					if ( @$_config['recaptcha_secret'] != '' ) echo ' style="display:none;"' ;
+					if ( @$_config['recaptcha_secret'] != '' && ! $_config['debug'] ) echo ' style="display:none;"' ;
 				?>>
-					<input type="submit" class="btn btn-success btn-lg btn-block" value="Enregistrer cet événement" />
+					<input type="button" class="btn btn-success btn-lg btn-block btn-submit" value="Enregistrer cet événement" />
 				</div>
 
-				<?php if ( @$_config['recaptcha_secret'] != '' ) { ?>
+				<?php if ( @$_config['recaptcha_secret'] != '' && ! $_config['debug'] ) { ?>
 					<div class="form-group" id="recaptcha">
 						<div class="g-recaptcha" data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>" data-callback="recaptchaOk"></div>
 					<p>Vous devez cocher la case "Je ne suis pas un robot" pour pouvoir enregistrer</p>

@@ -9,6 +9,9 @@
 	$commune = explode('|',$_POST['commune']) ;
 
 	$id_membre = null ;
+	
+	// Si on est en multimembre, il faut absolument passer un proprietaireId
+	if ( $_config['projet_ecriture_multimembre'] === true ) $id_membre = $_config['membre'] ;
 
 	/*
 	*	Par défait $clientId et $secret sont déjà définis en config.
@@ -22,7 +25,7 @@
 
 	$pma->debug($_POST,'$_POST') ;
 
-	if ( $_config['recaptcha_secret'] != '' )
+	if ( $_config['recaptcha_secret'] != '' && ! $_config['debug'] )
 	{
 		$fields = array( 'secret' => $_config['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
 		$ch = curl_init();
@@ -227,6 +230,106 @@
 		$fieldlist[] = 'informations.moyensCommunication' ;
 		$root['informations']['moyensCommunication'] = $mcs ;
 	}
+
+
+
+
+	/*
+		Contacts
+	*/
+	$contacts = Array() ;
+	if ( isset($_POST['contact']) && is_array($_POST['contact']) && sizeof($_POST['contact']) > 0 )
+	{
+		/*
+		   "contacts":[  
+		      {  
+		         "identifiant":13457507,
+		         "referent":true,
+		         "civilite":{  
+		            "elementReferenceType":"ContactCivilite",
+		            "id":443,
+		            "libelleFr":"Monsieur",
+		            "ordre":9
+		         },
+		         "nom":"BREGLIANO",
+		         "prenom":"Serge",
+		         "titre":{  
+		            "libelleFr":"Titre"
+		         },
+		         "fonction":{  
+		            "elementReferenceType":"ContactFonction",
+		            "id":456,
+		            "libelleFr":"Indéterminé",
+		            "ordre":10
+		         },
+		         "autresFonctions":[  
+		            {  
+		               "elementReferenceType":"ContactFonction",
+		               "id":459,
+		               "libelleFr":"Information",
+		               "ordre":11
+		            }
+		         ],
+		         "moyensCommunication":[  
+		            {  
+		               "identifiant":40052144,
+		               "type":{  
+		                  "elementReferenceType":"MoyenCommunicationType",
+		                  "id":204,
+		                  "libelleFr":"Mél",
+		                  "ordre":2
+		               },
+		               "coordonnees":{  
+		                  "fr":"serge.bregliano@crdt-auvergne.fr"
+		               },
+		               "observation":{  
+		                  "libelleFr":"Complément Mail"
+		               }
+		            },
+		            {  
+		               "identifiant":40052145,
+		               "type":{  
+		                  "elementReferenceType":"MoyenCommunicationType",
+		                  "id":201,
+		                  "libelleFr":"Téléphone",
+			// type / nom / prenom / mail / telephone
+		*/
+		foreach ( $_POST['contact'] as $post_contact )
+		{
+			if ( trim($post_contact['nom']) == '' && trim($post_contact['prenom']) == '' && trim($post_contact['fonction']) == '' ) continue ;
+			$contact = Array('fonction'=>Array('id'=>(int)$post_contact['fonction'],'elementReferenceType' => 'ContactFonction')) ;
+			$contact['referent'] = true ;
+			$contact['nom'] = $post_contact['nom'] ;
+			$contact['prenom'] = $post_contact['prenom'] ;
+			$mcs = Array() ;
+			if ( $post_contact['mail'] != '' ) $mcs[] = Array(
+				'type'=>Array('id'=>204,'elementReferenceType' => 'MoyenCommunicationType'),
+				'coordonnees' => Array('fr' => $post_contact['mail'])
+			) ;
+			if ( $post_contact['telephone'] != '' ) $mcs[] = Array(
+				'type'=>Array('id'=>201,'elementReferenceType' => 'MoyenCommunicationType'),
+				'coordonnees' => Array('fr' => $post_contact['telephone'])
+			) ;
+			if ( $mcs > 0 ) $contact['moyensCommunication'] = $mcs ;
+			$contacts[] = $contact ;
+		}
+	}
+	if ( sizeof($contacts) > 0 )
+	{
+		$fieldlist[] = 'contacts' ;
+		$root['contacts'] = $contacts ;
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 		Gestion des types catégories themes

@@ -2,10 +2,18 @@
 
 jQuery(document).ready(function(){
 
-	jQuery('form.form select.chosen').chosen({
-		include_group_label_in_selected : true,
-		search_contains:true,
-		width:'100%'
+	$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+
+	jQuery('form.form select.chosen').each(function(){
+		var params = {
+			include_group_label_in_selected : true,
+			search_contains:true,
+			width:'100%',
+			no_results_text:'Aucun résultat trouvé'
+		} ;
+		if ( typeof jQuery(this).data('max_selected_options') == 'number' )
+			params['max_selected_options'] = jQuery(this).data('max_selected_options') ;
+		jQuery(this).chosen(params) ;
 	}) ;
 
 	initForm(jQuery('form.form')) ;
@@ -20,31 +28,22 @@ jQuery(document).ready(function(){
 
 }) ;
 
-
+jQuery(document).on('click','form.form .btn-submit',function(){
+	jQuery(this).closest('form.form').submit() ;
+}) ;
 
 jQuery(document).on('submit','form.form',function(e){
 
 	var ok = true ;
 	var firstError = null ;
 
-	jQuery(this).find('input[required],select[required],textarea[required]').each(function(){
-		if ( ! valideChamp(jQuery(this)) )
+	jQuery(this).find('select, input, textarea').each(function(){
+		var okChamp = valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
+		jQuery(this).closest('.form-group').toggleClass('has-error',!okChamp) ;
+		console.log('okChamp',okChamp) ;
+		if ( ! okChamp )
 		{
-			ok = false ;
-			if ( firstError == null ) firstError = jQuery(this) ;
-		}
-	}) ;
-
-	jQuery(this).find('.mc [name$="\[coordonnee\]"]').each(function(){
-		if ( ! valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) )
-		{
-			ok = false ;
-			if ( firstError == null ) firstError = jQuery(this) ;
-		}
-	}) ;
-	jQuery(this).find('.float').each(function(){
-		if ( ! valideChamp(jQuery(this)) )
-		{
+			console.log(jQuery(this).attr('name')+' N\'est pas valide...',jQuery(this).val()) ;
 			ok = false ;
 			if ( firstError == null ) firstError = jQuery(this) ;
 		}
@@ -53,7 +52,7 @@ jQuery(document).on('submit','form.form',function(e){
 	if ( ok === true )
 	{
 		jQuery(this).css('opacity',0.5) ;
-		jQuery('input[type="submit"]').closest('div').replaceWith('<div class="alert alert-warning loading">Formulaire en cours d\'enregistrement, veuillez patienter...</div>') ;
+		jQuery('input.btn-submit').closest('div').replaceWith('<div class="alert alert-warning loading">Formulaire en cours d\'enregistrement, veuillez patienter...</div>') ;
 		return true ;
 	}
 	else
@@ -74,36 +73,10 @@ jQuery(document).on('submit','form.form',function(e){
 
 }) ;
 
-jQuery(document).on('change','form.form input.date',function(){
 
-	var reg = /date\[([0-9]+)\]\[(debut|fin)\]/i ;
-	var match = jQuery(this).attr('name').match(reg) ;
 
-	if ( match.length != 3 ) return false ;
 
-	var i = match[1] ;
-	var t = match[2] ; // debut|fin
-	var v = jQuery(this).val() ;
-
-	if ( t == 'debut' )
-	{
-		var fin = jQuery(this).closest('.form').find('input[name="date['+i+'][fin]"]') ;
-		if ( fin.val() == '' ) fin.val(v) ;
-		valideChamp(fin) ;
-		fin.datepicker( "option", "minDate", v ).attr('min',v) ;
-	}
-	else if ( t == 'fin' )
-	{
-		var debut = jQuery(this).closest('.form').find('input[name="date['+i+'][debut]"]') ;
-		if ( debut.val() == '' ) debut.val(v) ;
-		valideChamp(debut) ;
-		//debut.datepicker( "option", "maxDate", v ).attr('max',v) ;
-	}
-
-	jQuery(this).data('lastVal',v) ;
-
-}) ;
-
+// Clone une ligne d'une table.
 jQuery(document).on('click','table td.plus .btn',function(){
 	var ligne = jQuery(this).closest('tbody').find('tr').first().clone() ;
 	var tr = jQuery(this).closest('tr') ;
@@ -112,8 +85,9 @@ jQuery(document).on('click','table td.plus .btn',function(){
 	var champs = ligne.find('input, select') ;
 	champs.each(function(i,v){
 		jQuery(this).removeAttr('required') ;
-		jQuery(this)/*.removeAttr('class').removeAttr('id')*/.removeAttr('placeholder').val('') ;
-		jQuery(this).closest('div').removeClass('hasDatepicker') ;
+		jQuery(this).val('') ;
+		if ( jQuery(this).closest('table').hasClass('mc') ) jQuery(this).attr('placeholder','') ;
+		jQuery(this).removeClass('hasDatepicker hasTimepicker') ;
 	}) ;
 	setIndent(jQuery(this).closest('table')) ;
 	initForm(jQuery(this).closest('table')) ;
@@ -125,12 +99,6 @@ jQuery(document).on('click','table td.moins',function(){
 	initForm(jQuery(this).closest('table')) ;
 }) ;
 
-jQuery(document).on('change','select[name$="[type]"]',function(){
-	selectChange(jQuery(this)) ;
-}) ;
-
-jQuery(document).on('change','form.form input[name="gratuit"]',function(){checkTarifs();}) ;
-
 jQuery(document).on('click','div.date span.input-group-addon',function(){
 	jQuery(this).closest('div').find('button').trigger('click') ;
 }) ;
@@ -139,59 +107,88 @@ jQuery(document).on('click','div.time span.input-group-addon',function(){
 	jQuery(this).closest('div').find('input').focus() ;
 }) ;
 
-jQuery(document).on('change','.mc [name$="\[coordonnee\]"]',function(){
-	valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
+
+
+
+
+
+
+
+
+
+jQuery(document).on('change','select[name$="[type]"]',function(){
+	selectChange(jQuery(this)) ;
 }) ;
 
-jQuery(document).on('change','.float, select[required], textarea[required], input.date, input#nom',function(){
-	valideChamp(jQuery(this)) ;
+jQuery(document).on('change','form.form input[name="gratuit"]',function(){
+	checkTarifs();
 }) ;
 
-function valideChamp(champ,type)
+jQuery(document).on('change focusout','form.form select, form.form input, form.form textarea',function(){
+		jQuery(this).closest('.form-group').toggleClass('has-error',!valideChamp(jQuery(this))) ;
+}) ;
+
+function valideChamp(champ)
 {
-	console.log('validateChamp('+champ.attr('name')+')') ;
-	champ.closest('.form-group').removeClass('has-error') ;
+	var type = null ;
+	if ( typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/) )
+		type = champ.closest('tr').find('select').val() ;
+
+	console.log('valideChamp',champ.attr('name'),champ,type) ;
 	var val = champ.val() ;
 	if ( val == '' && ! champ.prop('required') ) return true ;
+	if ( val == '' && champ.prop('required') ) return false ;
 
-	if ( val == '' && champ.prop('required') )
+	if ( champ.hasClass('date') )
 	{
-		champ.closest('.form-group').addClass('has-error') ;
-		return false ;
-	}
+		var reg = /date\[([0-9]+)\]\[(debut|fin)\]/i ;
+		var match = champ.attr('name').match(reg) ;
 
-	if ( champ.hasClass('float') )
-	{
-		champ.val(val.replace(/[^0-9\.,]/g,'')) ;
-		if ( ! champ.val().match(/^-?\d*([\.,]{1}\d+)?$/) )
+		if ( match.length != 3 ) return false ;
+
+		var i = match[1] ;
+		var t = match[2] ; // debut|fin
+
+		if ( t == 'debut' )
 		{
-			champ.closest('.form-group').addClass('has-error') ;
-			return false ;
+			var fin = champ.closest('.form').find('input[name="date['+i+'][fin]"]') ;
+			if ( fin.val() == '' ) fin.val(val) ;
+			//valideChamp(fin) ;
+			fin.datepicker( "option", "minDate", val ).attr('min',val) ;
 		}
-		return true ;
+		else if ( t == 'fin' )
+		{
+			var debut = champ.closest('.form').find('input[name="date['+i+'][debut]"]') ;
+			if ( debut.val() == '' ) debut.val(val) ;
+			//valideChamp(debut) ;
+		}
+
+		champ.data('lastVal',val) ;
 	}
-	else if ( type == 201 ) // Téléphone
+	else if ( champ.hasClass('time') )
+	{
+		champ.val(champ.val().replace(/[;,.-]/g,':')) ;
+		champ.val(champ.val().replace(/[^0-9:]/g,'')) ;
+		if ( ! champ.val().match(/^[0-9]{1,2}:[0-9]{2}$/) ) return false ;
+	}
+	else if ( champ.hasClass('float') )
+	{
+		champ.val(champ.val().replace(/[;\.,\-]/g,'.')) ;
+		champ.val(champ.val().replace(/[^0-9\.]/g,'')) ;
+		if ( ! champ.val().match(/^-?\d*([\.]{1}\d+)?$/) ) return false ;
+	}
+	else if ( type == 201 || champ.hasClass('telephone') ) // Téléphone
 	{
 		champ.val(val.replace(/[^0-9]/g,'')) ;
 		var beautify = champ.val().match(/([0-9]{1,2})/g) ;
-		if ( ! champ.val().match(/^[0-9]{10}$/) )
-		{
-			champ.closest('.form-group').addClass('has-error') ;
-			return false ;
-		}
+		if ( ! champ.val().match(/^[0-9]{10}$/) ) return false ;
 		if ( typeof beautify == 'object' && beautify != null ) champ.val(beautify.join(' ')) ;
-		return true ;
 	}
-	else if ( type == 204 ) // Mél
+	else if ( type == 204 || champ.hasClass('mail') ) // Mél
 	{
 		// https://stackoverflow.com/questions/46155/how-to-validate-email-address-in-javascript
 		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
-		if ( ! re.test(val) )
-		{
-			champ.closest('.form-group').addClass('has-error') ;
-			return false ;
-		}
-		return true ;
+		if ( ! re.test(val) ) return false ;
 	}/*
 	else if ( t == 205 ) // Site web
 	{
@@ -238,8 +235,8 @@ function initForm(elem) {
 			'dateFormat' : 'dd/mm/yy',
 			'minDate' : '+1d',
 			'showOn' : 'button',
-			'buttonText' : ''
-
+			'buttonText' : '',
+			firstDay:1,
 		} ;
 		var optsTime = {
 			'scrollDefault': '09:00',
@@ -247,7 +244,7 @@ function initForm(elem) {
 		} ;
 
 		elem.find('input.date').not('.hasDatepicker').datepicker(optsDate).addClass('hasDatepicker').prop('min',today) ;
-		elem.find('input.time').not('.hasDatepicker').timepicker(optsTime).addClass('hasDatepicker') ;
+		elem.find('input.time').not('.hasTimepicker').timepicker(optsTime).addClass('hasTimepicker') ;
 	}
 	else if ( typeDatePicker == 'bootstrap' )
 	{
@@ -269,8 +266,11 @@ function initForm(elem) {
 		} ;
 
 		elem.find('input.date').closest('div').not('.hasDatepicker').datetimepicker(optsDate).addClass('hasDatepicker').find('input').prop('min',today) ;
-		elem.find('input.time').closest('div').not('.hasDatepicker').datetimepicker(optsTime).addClass('hasDatepicker') ;
+		elem.find('input.time').closest('div').not('.hasTimepicker').datetimepicker(optsTime).addClass('hasTimepicker') ;
 	}
+
+
+	jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
 
 }
 
@@ -291,6 +291,6 @@ function setIndent(table) {
 
 function recaptchaOk()
 {
-	jQuery('form.form input[type="submit"]').closest('div.form-group').show() ;
+	jQuery('form.form input.btn-submit').closest('div.form-group').show() ;
 	jQuery('form.form div#recaptcha p').hide() ;
 }
