@@ -58,6 +58,8 @@
 
 		public $debugTime = false ;
 
+		public $last_id = null ;
+
 		public function __construct($params=null) {
 			
 			if ( $this->debugTime ) $start = microtime(true) ;
@@ -169,6 +171,8 @@
 				if (FALSE === $result) throw new Exception(curl_error($ch), curl_errno($ch));
 				
 				$result = json_decode($result,true) ;
+				if ( isset($result['id']) )
+					$this->last_id = $result['id'] ;
 				
 			} catch(Exception $e) {
 				$msg = sprintf( 'Curl failed with error #%d: %s', $e->getCode(), $e->getMessage() ) ;
@@ -679,6 +683,12 @@
 			
 			if ( is_array($msg) )
 			{
+				$new_msg = null ;
+				if ( isset($msg['message']) )
+				{
+					$new_msg .= $msg['message'] ;
+					unset($msg['message']) ;
+				}
 				unset($msg['x']) ; unset($msg['y']) ;
 				$tble = '<table style="clear:both; background:#FFF ; font-size:11px ; margin-bottom:20px ;" border="1" cellspacing="0" cellpadding="6">' ;
 				foreach ( $msg as $key => $value )
@@ -695,7 +705,8 @@
 					$tble .= '</tr>' ;
 				}
 				$tble .= '</table>' ;
-				$msg = $tble ;
+				$new_msg .= $tble ;
+				$msg = $new_msg ;
 			}
 
 			$message_html = '<html style="text-align : center; margin : 0; padding:0 ; font-family:Verdana ;font-size:10px ;">'.$endline  ;

@@ -559,6 +559,26 @@
 		$post_mail = $_POST ;
 		unset($post_mail['G-recaptcha-response']) ;
 
+		$msg = 'Vous recevez ce mail parce qu\'un internaute a suggéré une manifestation sur ' ;
+		$msg .= ( @$post_mail['referer'] != '' ) ? $post_mail['referer'] : $post_mail['script_uri'] ;
+		$msg .= '.<br />' ;
+
+		$msg .= 'Une offre ('.$pma->last_id.') a été enregistrée comme brouillon sur Apidae.' ;
+		$msg .= '.<br />' ;
+
+		$msg .= '<ul>' ;
+		
+		if ( $pma->last_id != null )
+			$msg .= '<li>Vous pouvez <strong><a href="'.$pma->url_base.'gerer/objet-touristique/'.$pma->last_id.'/modifier/">consulter le brouillon ici</a></strong></li>' ;
+
+		$msg .= '<li>Vous pouvez également consulter la liste des offres en attente :<br />
+		<strong>Gérer > Demandes API écriture > <a href="'.$pma->url_base.'gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Demandes d\'écriture à valider</a></strong>.</li>' ;
+
+		$msg .= '</ul>' ;
+
+		$msg .= 'Vous trouverez ci-dessous un résumé brut des informations qui ont été enregistrées sur Apidae.<br /><br />' ;
+		$post_mail['message'] = $msg ;
+
 		$alerte = $pma->alerte('enregistrement ApidaeEvent [admin]',$post_mail) ;
 		if ( $mail_membre != null )
 		{
