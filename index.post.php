@@ -569,10 +569,10 @@
 		$msg .= '<ul>' ;
 		
 		if ( $pma->last_id != null )
-			$msg .= '<li>Vous pouvez <strong><a href="'.$pma->url_base.'gerer/objet-touristique/'.$pma->last_id.'/modifier/">consulter le brouillon ici</a></strong></li>' ;
+			$msg .= '<li>Vous pouvez <strong><a href="'.$pma->url_base().'gerer/objet-touristique/'.$pma->last_id.'/modifier/">consulter le brouillon ici</a></strong></li>' ;
 
 		$msg .= '<li>Vous pouvez également consulter la liste des offres en attente :<br />
-		<strong>Gérer > Demandes API écriture > <a href="'.$pma->url_base.'gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Demandes d\'écriture à valider</a></strong>.</li>' ;
+		<strong>Gérer > Demandes API écriture > <a href="'.$pma->url_base().'gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Demandes d\'écriture à valider</a></strong>.</li>' ;
 
 		$msg .= '</ul>' ;
 
@@ -589,7 +589,7 @@
 		?>
 			<div class="alert alert-success" role="alert">
 				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-				<strong class="sr-only">Offre enregistrée :</strong>
+				<strong>Offre enregistrée :</strong>
 				<p>Votre offre a bien été enregistrée : elle a été envoyée en validation et devrait apparaître d'ici 24 à 48h sur les différents supports de communication alimentés par Apidae.</p>
 				<p>Plus d'informations ici : <a href="http://www.apidae-tourisme.com" target="_blank">http://www.apidae-tourisme.com</a></p>
 			</div>
@@ -600,7 +600,7 @@
 			?>
 			<div class="alert alert-success" role="alert">
 				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-				<strong class="sr-only">[DEBUG] Offre enregistrée en attente de validation dans Apidae :</strong>
+				<strong>[DEBUG] Offre enregistrée en attente de validation dans Apidae :</strong>
 				<p>On la retrouve dans <a href="https://base.apidae-tourisme.com/gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Gérer > Demandes API écriture > Demandes d'écritures à valider</a></p>
 				<p>L'offre a été enregistrée grâce au clientId "<?php echo $clientId ; ?>" du projet d'écriture. Elle a été rattachée au membre <a href="https://base.apidae-tourisme.com/echanger/membre-sitra/1147" target="_blank"><?php echo $id_membre ; ?></a></p>
 			</div>
