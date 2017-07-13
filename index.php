@@ -43,7 +43,7 @@
 			var icon_plus = '<?php echo $icon_plus ; ?>' ;
 			var icon_moins = '<?php echo $icon_moins ; ?>' ;
 		</script>
-		<script src="./js/formulaire.js?v=2"></script>
+		<script src="./js/formulaire.js?v=3"></script>
 		<link rel="stylesheet" type="text/css" href="./css/formulaire.css" media="all" />
 
 		<?php include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
