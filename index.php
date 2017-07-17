@@ -244,12 +244,13 @@
 
 							$sql = ' select distinct C.* from apidae_communes C
 							inner join apidae_territoires T on T.id_commune = C.id
-							where T.id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" ' ;
+							where T.id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" 
+							order by C.nom asc ' ;
 							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
 						}
 						elseif ( isset($_config['communes']) )
 						{
-							$sql = ' select distinct * from apidae_communes where code regexp "'.$pma->mysqli->real_escape_string($_config['communes']).'" ' ;
+							$sql = ' select distinct * from apidae_communes where code regexp "'.$pma->mysqli->real_escape_string($_config['communes']).'" order by nom asc ' ;
 							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
 						}
 						if ( ! isset($rq) || $rq->num_rows == 0 )
@@ -429,7 +430,7 @@
 						<tbody>
 						<?php
 							
-							$types = $pma->getElementsReference('MoyenCommunicationType') ;
+							$types = $pma->getElementsReference('MoyenCommunicationType',false,$_config['types_mcs']) ;
 							
 							$nb = 3 ;
 							if ( isset($post['mc']) ) $nb = sizeof($post['mc']) ;

@@ -41,6 +41,7 @@
 			Array('id_membre'=>1,			'id_territoire'=>711392,	'clientId'=>null,	'secret'=>null), // Auvergne Rhône Alpes
 		),
 		'types_tarifs' => Array(5239,5240,1754,4204,1755,4123,4134,4102,4099,4100,4101),
+		'types_mcs' => Array(201,204,205,206,207,3755),
 		'mail_admin' => 'p.granger@allier-tourisme.net',
 		'recaptcha_secret' => '',
 		'recaptcha_sitekey' => ''
