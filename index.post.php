@@ -297,7 +297,8 @@
 		foreach ( $_POST['contact'] as $post_contact )
 		{
 			if ( trim($post_contact['nom']) == '' && trim($post_contact['prenom']) == '' && trim($post_contact['fonction']) == '' ) continue ;
-			$contact = Array('fonction'=>Array('id'=>(int)$post_contact['fonction'],'elementReferenceType' => 'ContactFonction')) ;
+			$contact = Array() ;
+
 			$contact['referent'] = true ;
 			$contact['nom'] = $post_contact['nom'] ;
 			$contact['prenom'] = $post_contact['prenom'] ;
@@ -311,6 +312,11 @@
 				'coordonnees' => Array('fr' => $post_contact['telephone'])
 			) ;
 			if ( $mcs > 0 ) $contact['moyensCommunication'] = $mcs ;
+
+			if ( isset($post_contact['fonction']) && $post_contact['fonction'] != '' && $post_contact['fonction'] != 0 )
+				$contact['fonction'] = Array('id'=>(int)$post_contact['fonction'],'elementReferenceType' => 'ContactFonction') ;
+			
+
 			$contacts[] = $contact ;
 		}
 	}

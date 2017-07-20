@@ -218,7 +218,7 @@
 			$parents = Array() ;
 			$enfants = Array() ;
 
-			$rq = $this->mysqli->query(' select id, libelleFr, ordre, parent, familleCritere from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" order by ordre asc ') or die($this->mysqli->error) ;
+			$rq = $this->mysqli->query(' select id, libelleFr, ordre, parent, familleCritere, description from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" order by ordre asc ') or die($this->mysqli->error) ;
 			while ( $e = $rq->fetch_assoc() )
 			{
 				if ( $e['parent'] == null )
