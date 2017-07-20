@@ -284,6 +284,10 @@ function setIndent(table) {
 	}) ;
 }
 
+function recaptchaKo(){
+	jQuery('form.form input.btn-submit').closest('div.form-group').hide() ;
+	jQuery('form.form div#recaptcha p').show() ;
+}
 
 function recaptchaOk()
 {

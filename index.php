@@ -683,7 +683,7 @@
 
 				<?php if ( @$_config['recaptcha_secret'] != '' && ! $_config['debug'] ) { ?>
 					<div class="form-group" id="recaptcha">
-						<div class="g-recaptcha" data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>" data-callback="recaptchaOk"></div>
+						<div class="g-recaptcha" data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>" data-callback="recaptchaOk" data-expired-callback="recaptchaKo"></div>
 					<p>Vous devez cocher la case "Je ne suis pas un robot" pour pouvoir enregistrer</p>
 					</div>
 				<?php } ?>
