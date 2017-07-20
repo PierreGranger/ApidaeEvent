@@ -13,7 +13,7 @@ Vous pouvez utiliser ce formulaire sans aucune installation, en utilisant une si
 ```
 Sur Wordpress vous pouvez inclure l'iframe avec un shortcode :
 ```
-[iframe src="http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" width="100%" height="2000px" frameborder="0"]
+[iframe src="http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" width="100%" height="3300" frameborder="0"]
 ```
 Dans ce cas, renseignez dans territoire=XXXXX un identifiant de fiche "Territoire" Apidae, afin de personnaliser la liste des communes du formulaire.
 Ex : pour n'afficher que les communes de la zone de compétence de l'OT de Moulins, on va utiliser la fiche [3337048](https://base.apidae-tourisme.com/consulter/objet-touristique/3337048) :
