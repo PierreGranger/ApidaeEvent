@@ -47,12 +47,16 @@
 
 		private $ressources_path ;
 
+		private $skipValidation = 'false' ;
+
 		private $method_elementsReference = 'json' ; // json (impossible via API pour l'instant)
 		private $method_communes = 'json' ; // json|sql (impossible via API pour l'instant)
 		private $method_territoires = 'api' ; // api
 
 		public $debug ;
 		public $statuts_api_ecriture = Array('CREATION_VALIDATION_SKIPPED','CREATION_VALIDATION_ASKED','MODIFICATION_VALIDATION_SKIPPED','MODIFICATION_VALIDATION_ASKED','MODIFICATION_NO_DIFF','DEMANDE_SUPPRESSION_SENT','NO_ACTION') ;
+
+		private static $modes = Array('CREATION','MODIFICATION','DEMANDE_SUPPRESSION') ;
 
 		private $_config ;
 
@@ -104,26 +108,39 @@
 			return self::$url_base[$this->type_prod] ;
 		}
 
-		public function enregistrer($fieldlist,$root,$medias=null,$proprietaireId=null,$clientId=null,$secret=null) {
+		public function enregistrer($fieldlist,$root,$medias=null,$proprietaireId=null,$clientId=null,$secret=null,$action='CREATION',$idFiche=null,$token=null) {
 
 			$ko = Array() ;
 
 			$fields = Array('root') ;
 			$params = Array() ;
+
+			if ( ! in_array($action,self::$modes) )
+			{
+				throw new Exception('Action '.$action.' invalide') ;	
+				return false ;
+			}
 			
-			$params['mode'] = 'CREATION' ;
-			$params['skipValidation'] = 'false' ;
-			$params['type'] = $root['type'] ;
-			$params['root'] = json_encode($root) ;
-			$params['fields'] = json_encode($fields) ;
-			$params['root.fieldList'] = json_encode($fieldlist) ;
+			$params['mode'] = $action ;
+			if ($params['mode']=='MODIFICATION' || $params['mode']=='DEMANDE_SUPPRESSION') {
+				$params['id'] = $idFiche;
+			}
+			$params['skipValidation'] = $this->skipValidation ;
 
-			if (!empty($proprietaireId))
-				$params['proprietaireId'] = $proprietaireId;
+			if ($params['mode'] != 'DEMANDE_SUPPRESSION')
+			{
+				$params['type'] = $root['type'] ;
+				$params['root'] = json_encode($root) ;
+				$params['fields'] = json_encode($fields) ;
+				$params['root.fieldList'] = json_encode($fieldlist) ;
 
-			if ( isset($medias) && is_array($medias) )
-				foreach ( $medias as $k_media => $media )
-					$params[$k_media] = $media ;
+				if (!empty($proprietaireId))
+					$params['proprietaireId'] = $proprietaireId;
+
+				if ( isset($medias) && is_array($medias) )
+					foreach ( $medias as $k_media => $media )
+						$params[$k_media] = $media ;
+			}
 			
 			$this->debug($fieldlist,'$fieldList') ;
 			$this->debug($root,'$root') ;
@@ -197,7 +214,18 @@
 			return true ;
 		}
 
-		
+		public function ajouter($fieldlist,$root,$medias=null,$clientId=null,$secret=null,$token=null) {
+			return $this->enregistrer($fieldlist,$root,$medias,$clientId,$secret,$action='CREATION',null,$token);
+		}
+
+		public function modifier($fieldlist,$root,$idFiche,$medias=null,$clientId=null,$secret=null,$token=null) {
+			return $this->enregistrer($fieldlist,$root,$medias,$clientId,$secret,$action='MODIFICATION',$idFiche,$token);
+		}
+
+		public function supprimer($idFiche,$clientId=null,$secret=null,$token=null) {
+			return $this->enregistrer(null,null,null,$clientId,$secret,$action='DEMANDE_SUPPRESSION',$idFiche,$token);
+		}
+
 		/**
 		*	Génère le code HTML pour un type d'élément de référence
 		*
