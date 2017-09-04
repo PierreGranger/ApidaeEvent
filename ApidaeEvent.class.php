@@ -516,7 +516,7 @@
 				return false ;
 			}
 
-			$sql = ' select * from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'"' ;
+			$sql = ' select * from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" order by ordre asc ' ;
 			if ( is_array($filtres) )
 			{
 				$filtres_ok = array_filter($filtres,'is_numeric') ;
