@@ -516,12 +516,15 @@
 				return false ;
 			}
 
-			$sql = ' select * from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" order by ordre asc ' ;
+			$sql = ' select * from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" ' ;
 			if ( is_array($filtres) )
 			{
 				$filtres_ok = array_filter($filtres,'is_numeric') ;
 				if ( sizeof($filtres_ok) > 0 ) $sql .= ' and id in ('.implode(',',$filtres_ok).') ' ;
 			}
+			
+			$sql .= ' order by ordre asc ' ;
+
 			$rq = $this->mysqli->query($sql) ;
 			if ( ! $rq ) return false ;
 			if ( $rq->num_rows == 0 ) return false ;

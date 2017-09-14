@@ -90,13 +90,17 @@
 	if ( $_config['projet_ecriture_multimembre'] === true && $id_membre !== null )
 	{
 		/*
-		$fieldlist[] = 'gestion.membreProprietaire' ;	
-		$root['gestion']['membreProprietaire']['type']['id'] = $id_membre ;
+		*	Pour permettre l'utilisation conjointe des projets API écriture classique avec le projet API écriture global,
+		*	on va regarder si on a trouvé un clientId:secret dans la config concernant le membre.
+		*	Si on a rien trouvé, on est dans une API multi membre : on doit donc prendre le clientId:secret du projet API écriture global.
+		*	Si clientId:secret sont renseignés, c'est qu'on est sur un membre ayant son propre projet d'écriture et n'étant pas abonné au projet API écriture multimembre : on utilise alors son clientId:secret.
 		*/
-		/*
-		$fieldlist[] = 'membre.proprietaire.identifiant' ;	
-		$root['membre']['proprietaire']['identifiant'] = $id_membre ;
-		*/
+		if ( $clientId == null && $secret == null )
+		{
+			// On n'a rien trouvé dans la config du membre : on prend le global
+			$clientId = $_config['projet_ecriture_clientId'] ;
+			$secret = $_config['projet_ecriture_secret'] ;
+		}
 		$proprietaireId = $id_membre ;
 	}
 
@@ -137,32 +141,6 @@
 		$fieldlist[] = 'informationsFeteEtManifestation.nbVisiteursAttendu' ;
 	}
 
-	/*
-	"periodesOuvertures": [
-		{
-			"identifiant": 13090232,
-			"dateDebut": "2016-07-02",
-			"dateFin": "2016-08-13",
-			"complementHoraire": {
-				"libelleFr": "Complément horaires"
-			},
-			"horaireOuverture": "09:00:00",
-			"horaireFermeture": "16:00:00",
-			"type": "OUVERTURE_SAUF",
-			"tousLesAns": false,
-			"ouverturesJournalieres": [
-				{
-					"jour": "SAMEDI"
-				}
-			]
-		},
-
-		[debut] => 2017-06-16
-	    [fin] => 2017-06-16
-	    [hdebut] => 07:30
-	    [hfin] => 20:30
-	*/
-
 	$periodesOuvertures = Array() ;
 	foreach ( $_POST['date'] as $i => $date )
 	{
@@ -196,26 +174,6 @@
 	$mcs = Array() ;
 	if ( isset($_POST['mc']) && is_array($_POST['mc']) && sizeof($_POST['mc']) > 0 )
 	{
-		// type / coordonnee / observations
-		/*
-		"informations": {
-			"moyensCommunication": [
-				{
-					"identifiant": 40052146,
-					"type": {
-						"elementReferenceType": "MoyenCommunicationType",
-						"id": 204,
-						"libelleFr": "Mél",
-						"ordre": 2
-					},
-					"coordonnees": {
-						"fr": "serge.bregliano@crdt-auvergne.fr"
-					},
-					"observation": {
-						"libelleFr": "Complément Mél"
-					}
-				},
-		*/
 		foreach ( $_POST['mc'] as $post_mc )
 		{
 			if ( trim($post_mc['coordonnee']) == '' ) continue ;
@@ -240,60 +198,7 @@
 	$contacts = Array() ;
 	if ( isset($_POST['contact']) && is_array($_POST['contact']) && sizeof($_POST['contact']) > 0 )
 	{
-		/*
-		   "contacts":[  
-		      {  
-		         "identifiant":13457507,
-		         "referent":true,
-		         "civilite":{  
-		            "elementReferenceType":"ContactCivilite",
-		            "id":443,
-		            "libelleFr":"Monsieur",
-		            "ordre":9
-		         },
-		         "nom":"BREGLIANO",
-		         "prenom":"Serge",
-		         "titre":{  
-		            "libelleFr":"Titre"
-		         },
-		         "fonction":{  
-		            "elementReferenceType":"ContactFonction",
-		            "id":456,
-		            "libelleFr":"Indéterminé",
-		            "ordre":10
-		         },
-		         "autresFonctions":[  
-		            {  
-		               "elementReferenceType":"ContactFonction",
-		               "id":459,
-		               "libelleFr":"Information",
-		               "ordre":11
-		            }
-		         ],
-		         "moyensCommunication":[  
-		            {  
-		               "identifiant":40052144,
-		               "type":{  
-		                  "elementReferenceType":"MoyenCommunicationType",
-		                  "id":204,
-		                  "libelleFr":"Mél",
-		                  "ordre":2
-		               },
-		               "coordonnees":{  
-		                  "fr":"serge.bregliano@crdt-auvergne.fr"
-		               },
-		               "observation":{  
-		                  "libelleFr":"Complément Mail"
-		               }
-		            },
-		            {  
-		               "identifiant":40052145,
-		               "type":{  
-		                  "elementReferenceType":"MoyenCommunicationType",
-		                  "id":201,
-		                  "libelleFr":"Téléphone",
-			// type / nom / prenom / mail / telephone
-		*/
+		
 		foreach ( $_POST['contact'] as $post_contact )
 		{
 			if ( trim($post_contact['nom']) == '' && trim($post_contact['prenom']) == '' && trim($post_contact['fonction']) == '' ) continue ;

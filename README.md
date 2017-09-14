@@ -20,22 +20,19 @@ Ex : pour n'afficher que les communes de la zone de compétence de l'OT de Mouli
 
 >http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=3337048
 
-Vous devez impérativement créer un projet d'écriture et en fournir les identifiants à p.granger@allier-tourisme.net en donnant notamment :
-* Identifiant du membre
-* Identifiant du territoire concerné (correspond à la zone de compétence du membre concerné)
-* Une ou plusieurs adresses mails, qui seront prévenues à chaque nouvel enregistrement d'une offre sur ce territoire
-* clientId (fourni par Apidae lors de la création d'un projet d'écriture) *
-* secret (fourni par Apidae lors de la création d'un projet d'écriture) *
+Pour que les événements saisis par l'internaute soient bien rattachés à votre fiche membre, vous devez vous abonner au projet d'API d'écriture multimembre ApidaeEvent (Diffuser > Projets > S'abonner, puis rechercher "ApidaeEvent" et cliquer sur le bouton "Abonner" à droite) :
 
-\* Après la création du projet d'écriture, dans votre projet, sur le premier onglet dans la rubrique "Liste des clients OAuth", cliquer sur le bouton "+" et rentrer le mail p.granger@allier-tourisme.net : Apidae enverra les codes clientId et secret automatiquement.
+>https://base.apidae-tourisme.com/diffuser/projet/2792
 
-Toujours dans votre projet, dans l'onglet "Configuration" vous devez préciser :
-* Actions autorisées : Création
-* Types d'objets autorisés : Fête et manifestation
-* Auteur des écritures : choisissez qui sera le propriétaire des brouillons
-* Autoriser la validation directe : ne pas cocher
+Vous devez impérativement fournir un ou plusieurs identifiants de territoire(s), ou à défaut une liste de communes (identifiants Apidae) et les envoyer à p.granger@allier-tourisme.net avec l'identifiant de votre membre.
 
-**Sans ces informations, toutes les manifestations saisies sur le territoire seront affectées à Allier Tourisme et seront supprimées**.
+Par exemple pour Moulins :
+
+* ID membre : **1336** ([Fiche Apidae du membre](https://base.apidae-tourisme.com/administrer/membre-sitra/1336))
+* Territoire : **3337048** ([Fiche Apidae du territoire](https://base.apidae-tourisme.com/consulter/objet-touristique/3337048))
+
+En effet actuellement il ne nous est pas possible de déterminer automatiquement quel membre couvre quel territoire.
+> **A défaut de territoire défini, même si vous êtes abonné au projet, ApidaeEvent sera incapable de déterminer à quel membre il doit rattacher l'événement créé sur une commune donnée : la manifestation sera alors attribuée par défaut à Allier Tourisme (et supprimée).**
 
 ### 2) installation sur un serveur
 Si vous préférez installer le formulaire sur votre site web, vous pouvez le télécharger et l'installer sur votre propre serveur (PHP/MySQL).
