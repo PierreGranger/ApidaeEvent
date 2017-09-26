@@ -47,7 +47,7 @@
 
 		private $ressources_path ;
 
-		private $skipValidation = 'false' ;
+		public $skipValidation = 'false' ;
 
 		private $method_elementsReference = 'json' ; // json (impossible via API pour l'instant)
 		private $method_communes = 'json' ; // json|sql (impossible via API pour l'instant)
@@ -92,6 +92,8 @@
 			if ( isset($params['projet_ecriture_clientId']) ) $this->projet_ecriture_clientId = $params['projet_ecriture_clientId'] ; else throw new Exception('missing projet_ecriture_clientId') ;
 			if ( isset($params['projet_ecriture_secret']) ) $this->projet_ecriture_secret = $params['projet_ecriture_secret'] ; else throw new Exception('missing projet_ecriture_secret') ;
 
+			if ( isset($params['skipValidation']) ) $this->skipValidation = ( $params['skipValidation'] ) ? true : false ;
+
 			$this->_config = $params ;
 
 			if ( $this->debugTime ) $this->debug('construct '.(microtime(true)-$start)) ;
@@ -125,7 +127,7 @@
 			if ($params['mode']=='MODIFICATION' || $params['mode']=='DEMANDE_SUPPRESSION') {
 				$params['id'] = $idFiche;
 			}
-			$params['skipValidation'] = $this->skipValidation ;
+			$params['skipValidation'] = $this->skipValidation ? 'true' : 'false' ;
 
 			if ($params['mode'] != 'DEMANDE_SUPPRESSION')
 			{
@@ -224,6 +226,96 @@
 
 		public function supprimer($idFiche,$clientId=null,$secret=null,$token=null) {
 			return $this->enregistrer(null,null,null,$clientId,$secret,$action='DEMANDE_SUPPRESSION',$idFiche,$token);
+		}
+
+		public function enregistrerDonneesPrivees($idFiche,$cle,$valeur,$lng='fr')
+		{
+			$donneesPrivees = Array('objetsTouristiques'=>Array()) ;
+
+			/* Pour chaque objet touristique à modifer on peut avoir 1 ou plusieurs descriptifs privés à modifier. On va les stocker dans $descriptifsPrives. */
+			$descriptifsPrives = Array() ;
+
+			$descriptifsPrives[] = Array(
+				'nomTechnique' => $cle,
+				'descriptif' => Array(
+					'libelle'.ucfirst($lng) => $valeur
+				)
+			) ;
+
+			/* Pour chaque objet à modifier on ajoute une entrée dans $donneesPrivees['objetsTouristiques'] */
+			$donneesPrivees['objetsTouristiques'][] = Array(
+				'id' => $idFiche,
+				'donneesPrivees' => $descriptifsPrives
+			) ;
+
+			/* On a construit notre tableau en php : on l'encode en json pour l'envoyer à l'API. */
+			$POSTFIELDS = Array('donneesPrivees'=>json_encode($donneesPrivees)) ;
+
+			try {
+				$token_ecriture = null ;
+
+				$token_ecriture = $this->gimme_token() ;
+				$this->debug($token_ecriture,'$token_ecriture') ;
+
+				if ( ! $token_ecriture )
+				{
+					throw new Exception('Impossible de récupérer le token d\'écriture') ;
+				}
+
+				if ( ! isset($token_ecriture->access_token) )
+				{
+					throw new Exception('Le token d\'écriture n\'a pas pu être récupéré pour') ;	
+				}
+			}
+			catch(Exception $e) {
+				$msg = sprintf( 'Curl failed with error #%d: %s', $e->getCode(), $e->getMessage() ) ;
+				if ( $this->debug ) echo '<div class="alert alert-warning">'.$msg.'</div>' ;
+				return Array('errorCode'=>$e->getCode(),'message'=>$e->getMessage()) ;
+			}
+
+			try {
+
+				$ch = curl_init() ;
+				curl_setopt($ch,CURLOPT_URL, self::$url_api[$this->type_prod].'api/v002/donnees-privees/');
+				$header = Array() ;
+				$header[] = "Authorization: Bearer ".$token_ecriture->access_token ;
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+				curl_setopt($ch,CURLOPT_POSTFIELDS, $POSTFIELDS);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+				curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
+				
+				$result = curl_exec($ch);
+			
+				if (FALSE === $result) throw new Exception(curl_error($ch), curl_errno($ch));
+				
+				$json_result = json_decode($result) ;
+		 		$is_json =  ( json_last_error() == JSON_ERROR_NONE ) ;
+		 		
+				if ( ! $is_json )
+				{
+					return false ;
+				}
+
+				if ( $json_result->status == 'MODIFICATION_DONNEES_PRIVEES' )
+				{
+					return true ;
+				}
+				else
+					return $json_result->status.' - '.$json_result->message ;
+
+				curl_close($ch);
+
+				return true ;
+				
+			} catch(Exception $e) {
+
+				trigger_error(sprintf(
+					'Curl failed with error #%d: %s',
+					$e->getCode(), $e->getMessage()),
+					E_USER_ERROR);
+
+			}
 		}
 
 		/**

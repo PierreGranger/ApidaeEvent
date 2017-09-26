@@ -5,6 +5,10 @@
 	$class_label = 'col-md-2 col-sm-2' ;
 	$class_champ = 'col-md-10 col-sm-10' ;
 
+	$http_path = './' ;
+	if ( isset($_config['http_path']) && $_config['http_path'] != '' )
+		$http_path = $_config['http_path'] ;
+
 ?><!DOCTYPE html>
 <html lang="fr">
 	<head>
@@ -14,26 +18,26 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<!-- jQuery -->
-		<script src="./js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script src="<?php echo $http_path ; ?>js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
 		<!-- Bootstrap -->
-		<link href="./css/bootstrap.min.css" rel="stylesheet">
-		<script src="./js/bootstrap.min.js"></script>
+		<link href="<?php echo $http_path ; ?>css/bootstrap.min.css" rel="stylesheet">
+		<script src="<?php echo $http_path ; ?>js/bootstrap.min.js"></script>
 
 		<!-- Chosen -->
-		<script src="./chosen/chosen.jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="./chosen/chosen.min.css" media="all" />
-		<link rel="stylesheet" type="text/css" href="./css/bootstrap.chosen.css" media="all" />
+		<script src="<?php echo $http_path ; ?>chosen/chosen.jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>chosen/chosen.min.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/bootstrap.chosen.css" media="all" />
 
 		<!-- jQuery.ui -->
 		<script
-		src="./js/jquery-ui.min.js"></script>
-		<script src="./js/datepicker-fr.js"></script>
-		<link rel="stylesheet" type="text/css" href="./css/jquery-ui.css" media="all" />
+		src="<?php echo $http_path ; ?>js/jquery-ui.min.js"></script>
+		<script src="<?php echo $http_path ; ?>js/datepicker-fr.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/jquery-ui.css" media="all" />
 
 		<!-- jQuery timepicker -->
-		<script src="./js/jquery.timepicker.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="./css/jquery.timepicker.min.css" media="all" />
+		<script src="<?php echo $http_path ; ?>js/jquery.timepicker.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/jquery.timepicker.min.css" media="all" />
 
 		<?php
 			$icon_plus = '<span class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> <strong>Ajouter une ligne</strong></span>' ;
@@ -43,36 +47,12 @@
 			var icon_plus = '<?php echo $icon_plus ; ?>' ;
 			var icon_moins = '<?php echo $icon_moins ; ?>' ;
 		</script>
-		<script src="./js/formulaire.js?v=3"></script>
-		<link rel="stylesheet" type="text/css" href="./css/formulaire.css" media="all" />
+		<script src="<?php echo $http_path ; ?>js/formulaire.js?v=3"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/formulaire.css" media="all" />
 
 		<?php include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
 
 		<script src='https://www.google.com/recaptcha/api.js'></script>
-
-		<?php
-			if ( isset($_GET['theme']) && preg_match('#^[a-z0-9]+$#',$_GET['theme']) )
-				echo '<link rel="stylesheet" type="text/css" href="./css/theme.'.$_GET['theme'].'.css" media="all" />' ;
-		?>
-		
-		<?php if ( false ) { ?>
-
-		<link rel="stylesheet" type="text/css" href="./css/form2015.css" media="all" />
-		<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyCM3vctoV2OclI__GzcHFel1eJw06OU8as&callback=initAutocomplete"></script>
-		<script src="./ressources/dropzone.js"></script>
-
-		<!-- Moment -->
-		<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/fr.js"></script>
-		
-		<!-- Bootstrap DateTimepicker https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-		<script src="./js/bootstrap-datetimepicker.js"></script>
-
-		<!-- Form validator -->
-		<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
-		<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
-
-		<?php } ?>
 
 	</head>
 	<body>
