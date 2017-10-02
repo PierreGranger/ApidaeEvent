@@ -102,8 +102,8 @@
 		private function mysqli_connect() {
 			$this->mysqli = new mysqli('localhost', $this->mysqli_user, $this->mysqli_password, $this->mysqli_db) ;
 			if ($this->mysqli->connect_error) throw new Exception('mysqli_connect failed') ;
-		    $this->mysqli->set_charset('utf8') ;
-		    return true ;
+			$this->mysqli->set_charset('utf8') ;
+			return true ;
 		}
 
 		public function url_base() {
@@ -290,8 +290,8 @@
 				if (FALSE === $result) throw new Exception(curl_error($ch), curl_errno($ch));
 				
 				$json_result = json_decode($result) ;
-		 		$is_json =  ( json_last_error() == JSON_ERROR_NONE ) ;
-		 		
+				$is_json =  ( json_last_error() == JSON_ERROR_NONE ) ;
+				
 				if ( ! $is_json )
 				{
 					return false ;
@@ -442,7 +442,7 @@
 
 					if ( $f['id'] !== null ) $ret .= '</fieldset>' ;
 				}
-			}	
+			}
 
 			if ( $this->debugTime ) $this->debug('formHtmlCC('.$type.') '.(microtime(true)-$start)) ;
 
@@ -705,10 +705,7 @@
 
 			if ( $this->debugTime ) $this->debug('getTerritoires '.(microtime(true)-$start)) ;
 		}
-
-
-
-
+		
 		function gimme_token($clientId=null,$secret=null)
 		{
 			$clientId = ( $clientId != null ) ? $clientId : $this->projet_ecriture_clientId ;
