@@ -9,16 +9,16 @@ Formulaire web permettant la suggestion d'une manifestation sur Apidae par n'imp
 ### 1) iframe
 Vous pouvez utiliser ce formulaire sans aucune installation, en utilisant une simple iframe :
 ```
-<iframe src="http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:2000px;"></iframe>
+<iframe src="//www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:2000px;"></iframe>
 ```
 Sur Wordpress vous pouvez inclure l'iframe avec un shortcode :
 ```
-[iframe src="http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" width="100%" height="3300" frameborder="0"]
+[iframe src="//www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" width="100%" height="3300" frameborder="0"]
 ```
 Dans ce cas, renseignez dans territoire=XXXXX un identifiant de fiche "Territoire" Apidae, afin de personnaliser la liste des communes du formulaire.
 Ex : pour n'afficher que les communes de la zone de compétence de l'OT de Moulins, on va utiliser la fiche [3337048](https://base.apidae-tourisme.com/consulter/objet-touristique/3337048) :
 
->http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=3337048
+>https://www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=3337048
 
 Pour que les événements saisis par l'internaute soient bien rattachés à votre fiche membre, vous devez vous abonner au projet d'API d'écriture multimembre ApidaeEvent (Diffuser > Projets > S'abonner, puis rechercher "ApidaeEvent" et cliquer sur le bouton "Abonner" à droite) :
 
