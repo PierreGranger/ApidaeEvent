@@ -1,8 +1,22 @@
 
 
+	var optsDate = {
+		'dateFormat' : 'dd/mm/yy',
+		'minDate' : '+1d',
+		'showOn' : 'button',
+		'buttonText' : '',
+		firstDay:1,
+	} ;
+	var optsTime = {
+		'scrollDefault': '09:00',
+		'timeFormat': 'H:i'
+	} ;
+
+	var today = new Date() ;
+
 jQuery(document).ready(function(){
 
-	$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+	jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
 
 	jQuery('form.form select.chosen').each(function(){
 		var params = {
@@ -85,7 +99,7 @@ jQuery(document).on('click','table td.plus .btn',function(){
 		jQuery(this).removeAttr('required') ;
 		jQuery(this).val('') ;
 		if ( jQuery(this).closest('table').hasClass('mc') ) jQuery(this).attr('placeholder','') ;
-		jQuery(this).removeClass('hasDatepicker hasTimepicker') ;
+		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
 	}) ;
 	setIndent(jQuery(this).closest('table')) ;
 	initForm(jQuery(this).closest('table')) ;
@@ -148,19 +162,22 @@ function valideChamp(champ)
 
 		if ( t == 'debut' )
 		{
-			var fin = champ.closest('.form').find('input[name="date['+i+'][fin]"]') ;
+			var fin = champ.closest('.form').find('input[name="date\['+i+'\]\[fin\]"]') ;
 			if ( fin.val() == '' ) fin.val(val) ;
-			//valideChamp(fin) ;
-			fin.datepicker( "option", "minDate", val ).attr('min',val) ;
+			fin.datepicker("destroy") ;
+			var newOptDate = jQuery.extend({},optsDate,{'minDate':val}) ;
+			fin.datepicker(newOptDate) ;
+
+			if ( champ.datepicker('getDate') > fin.datepicker('getDate') )
+				fin.datepicker('setDate',val) ;
 		}
 		else if ( t == 'fin' )
 		{
-			var debut = champ.closest('.form').find('input[name="date['+i+'][debut]"]') ;
+			var debut = champ.closest('.form').find('input[name="date\['+i+'\]\[debut\]"]') ;
 			if ( debut.val() == '' ) debut.val(val) ;
-			//valideChamp(debut) ;
 		}
 
-		champ.data('lastVal',val) ;
+		//champ.data('lastVal',val) ;
 	}
 	else if ( champ.hasClass('time') )
 	{
@@ -223,49 +240,8 @@ function checkTarifs() {
 
 function initForm(elem) {
 
-	var typeDatePicker = 'jQuery' ; // jQuery|bootstrap
-	
-	if ( typeDatePicker == 'jQuery' )
-	{
-		var optsDate = {
-			'dateFormat' : 'dd/mm/yy',
-			'minDate' : '+1d',
-			'showOn' : 'button',
-			'buttonText' : '',
-			firstDay:1,
-		} ;
-		var optsTime = {
-			'scrollDefault': '09:00',
-			'timeFormat': 'H:i'
-		} ;
-
-		elem.find('input.date').not('.hasDatepicker').datepicker(optsDate).addClass('hasDatepicker').prop('min',today) ;
-		elem.find('input.time').not('.hasTimepicker').timepicker(optsTime).addClass('hasTimepicker') ;
-	}
-	else if ( typeDatePicker == 'bootstrap' )
-	{
-		var d = new Date() ;
-		var month = d.getMonth()+1;
-		var day = d.getDate();
-		var today = d.getFullYear() + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
-
-		var optsDate = {
-			'locale' : 'fr',
-			'format' : 'DD/MM/YYYY',
-			'minDate' : today,
-			'useCurrent' : false,
-		} ;
-		var optsTime = {
-			'locale' : 'fr',
-			'format' : 'HH:mm',
-			'useCurrent' : false
-		} ;
-
-		elem.find('input.date').closest('div').not('.hasDatepicker').datetimepicker(optsDate).addClass('hasDatepicker').find('input').prop('min',today) ;
-		elem.find('input.time').closest('div').not('.hasTimepicker').datetimepicker(optsTime).addClass('hasTimepicker') ;
-	}
-
-
+	elem.find('input.date').not('.hasDatepicker').datepicker(optsDate).addClass('hasDatepicker').prop('min',today) ;
+	elem.find('input.time').not('.hasTimepicker').timepicker(optsTime).addClass('hasTimepicker') ;
 	jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
 
 }
