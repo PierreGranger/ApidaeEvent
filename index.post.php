@@ -501,7 +501,7 @@
 			<div class="alert alert-success" role="alert">
 				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 				<strong>Offre enregistrée :</strong>
-				<p>Votre événement a bien été enregistré, nous vous remercions pour votre contribution.</p>
+				<p>/!\ Votre événement a bien été enregistré, nous vous remercions pour votre contribution.</p>
 				<p>Il a été envoyé en validation et devrait apparaître d'ici 24 à 48h sur les différents supports de communication alimentés par Apidae.</p>
 				<p>Plus d'informations ici : <a href="http://www.apidae-tourisme.com" target="_blank">http://www.apidae-tourisme.com</a></p>
 			</div>

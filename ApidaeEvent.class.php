@@ -791,7 +791,7 @@
 		{
 			if ( ! filter_var($this->_config['mail_admin'], FILTER_VALIDATE_EMAIL) ) return false ;
 
-			$from = $this->_config['mail_admin'] ;
+			$from = ( isset($this->_config['mail_expediteur']) && filter_var($this->_config['mail_expediteur'], FILTER_VALIDATE_EMAIL) ) ? $this->_config['mail_expediteur'] : $this->_config['mail_admin'] ;
 			$to = $this->_config['mail_admin'] ;
 
 			if ( isset($mailto) && $mailto != null && filter_var($mailto, FILTER_VALIDATE_EMAIL) )
@@ -841,6 +841,7 @@
 			
 			$entete = Array() ;
 			$entete['From'] = $from . '<'.$from.'>' ;
+			$entete['Bcc'] = $this->_config['mail_admin'] ;
 			$entete['Date'] = @date("D, j M Y G:i:s O") ;
 			$entete['X-Mailer'] = 'PHP'.phpversion() ;
 			$entete['MIME-Version'] = '1.0' ;
@@ -862,9 +863,13 @@
 			{
 				$header .= $key . ' : ' . $value . $endline ;
 			}
-			
+
 			if ( ! preg_match("#\r#i",$to) && ! preg_match("#\n\r#i",$to) && ! preg_match("#\r#i",$from) && ! preg_match("#\n\r#i",$from) )
+			{
 				$ret = @mail($to,$sujet,$message,$header) ;
+				if ( ! $ret )
+					echo 'Erreur : '.print_r(error_get_last(),true) ;
+			}
 			else
 				$ret = false ;
 			
