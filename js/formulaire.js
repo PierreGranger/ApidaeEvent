@@ -273,6 +273,8 @@ function initForm(elem) {
 	elem.find('input.time').not('.hasTimepicker').timepicker(optsTime).addClass('hasTimepicker') ;
 	jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
 
+	checkTarifs() ;
+
 }
 
 function setIndent(table) {
