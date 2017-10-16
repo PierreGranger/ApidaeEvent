@@ -553,13 +553,18 @@
 
 					<div class="champ tarifs">
 						<div class="block">
+
+							<div class="alert alert-warning" role="alert">
+								<p><strong>Attention</strong> : chaque type de tarif n'est utilisable qu'une fois. Si vous avez plusieurs "pleins tarifs", précisez la plage mini-maxi sur une seule ligne.</p>
+							</div>
+
 							<table class="table">
 								<thead>
 									<tr>
 										<th></th>
 										<th>Type de tarif</th>
 										<th>Mini € (à partir de...)</th>
-										<th>Maxi € (jusqu'à...)</th>
+										<th>Maxi € (jusqu'à...)</th>
 										<th>Précisions tarifs</th>
 									</tr>
 								</thead>

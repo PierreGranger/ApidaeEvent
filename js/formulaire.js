@@ -61,6 +61,12 @@ jQuery(document).on('submit','form.form',function(e){
 		}
 	}) ;
 
+	var erreurTarif = checkTypeTarifs() ;
+	if ( erreurTarif !== true )
+	{
+		alert(erreurTarif) ;
+	}
+
 	if ( ok === true )
 	{
 		jQuery(this).css('opacity',0.5) ;
@@ -137,7 +143,11 @@ jQuery(document).on('change','form.form input[name="gratuit"]',function(){
 }) ;
 
 jQuery(document).on('change focusout','form.form select, form.form input, form.form textarea',function(){
-		jQuery(this).closest('.form-group').toggleClass('has-error',!valideChamp(jQuery(this))) ;
+	jQuery(this).closest('.form-group').toggleClass('has-error',!valideChamp(jQuery(this))) ;
+}) ;
+
+jQuery(document).on('change','div.tarifs select[name^="tarifs"]',function(){
+	valideTarifUnique() ;
 }) ;
 
 function valideChamp(champ)
@@ -228,7 +238,26 @@ function selectChange(select,init=null)
 
 
 
-
+function checkTypeTarifs() {
+	var trs = jQuery('form.form div.tarifs table tbody tr') ;
+	var erreurs = [] ;
+	trs.each(function(){
+		var inputs = jQuery(this).find('input') ;
+		var select = jQuery(this).find('select') ;
+		select.removeClass('has-error') ;
+		var inputsRenseignes = false ;
+		inputs.each(function(){
+			if ( jQuery(this).val() != '' ) inputsRenseignes = true ;
+		}) ;
+		if ( inputsRenseignes && select.val() == '' )
+		{
+			erreurs.push('Vous devez renseigner le type de tarif') ;
+			select.closest('.form-group').addClass('has-error') ;
+		}
+	}) ;
+	if ( erreurs.length == 0 ) return true ;
+	return erreurs ;
+}
 
 
 function checkTarifs() {
@@ -269,4 +298,31 @@ function recaptchaOk()
 {
 	jQuery('form.form input.btn-submit').closest('div.form-group').show() ;
 	jQuery('form.form div#recaptcha p').hide() ;
+}
+
+function valideTarifUnique()
+{
+	var selects = jQuery('form.form div.tarifs table tbody tr select[name^="tarifs"]') ;
+	var used = [] ;
+	selects.each(function(){
+		if ( jQuery(this).val() != '' )
+		{
+			if ( used.indexOf(jQuery(this).val()) >= 0 )
+				jQuery(this).val('') ;
+			else
+				used.push(jQuery(this).val()) ;
+		}
+	}) ;
+	selects.each(function(){
+		var options = jQuery(this).find('option') ;
+		var select = jQuery(this) ;
+		options.each(function(){
+			var optVal = jQuery(this).attr('value') ;
+			if ( optVal == select.val() ) ;
+			else if ( used.indexOf(optVal) >= 0 )
+				jQuery(this).attr('disabled','disabled') ;
+			else
+				jQuery(this).removeAttr('disabled') ;
+		}) ;
+	}) ;
 }
