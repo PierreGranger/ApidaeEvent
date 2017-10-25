@@ -5,8 +5,8 @@ Formulaire web permettant la suggestion d'une manifestation sur Apidae par n'imp
 ## Démo
 >http://apidae.allier-auvergne-tourisme.com/ApidaeEvent/
 
-## Utilisation
-### 1) iframe
+_____
+## Utilisation en iframe
 Vous pouvez utiliser ce formulaire sans aucune installation, en utilisant une simple iframe :
 ```
 <iframe src="//www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:2000px;"></iframe>
@@ -34,27 +34,43 @@ Par exemple pour Moulins :
 En effet actuellement il ne nous est pas possible de déterminer automatiquement quel membre couvre quel territoire.
 > **A défaut de territoire défini, même si vous êtes abonné au projet, ApidaeEvent sera incapable de déterminer à quel membre il doit rattacher l'événement créé sur une commune donnée : la manifestation sera alors attribuée par défaut à Allier Tourisme (et supprimée).**
 
-### 2) installation sur un serveur
+_______
+
+## installation sur un serveur
+
 Si vous préférez installer le formulaire sur votre site web, vous pouvez le télécharger et l'installer sur votre propre serveur (PHP/MySQL).
 Vous pourrez ainsi configurer plus finement le formulaire (ajout de champs, changement de couleurs...)
 Vous pouvez également contribuer au projet si vous souhaitez l'améliorer.
 
-## Configuration dans le cas d'une installation sur un serveur
+### Configuration dans le cas d'une installation sur un serveur
 
 > **Tout ce qui suit ne concerne que l'utilisation en "installation sur un serveur". Pour une utilisation par iframe vous n'avez pas besoin de la suite.**
 
-### Projets d'écriture
+#### Installation sur serveur
+Clonez/téléchargez le projet sur votre serveur
+
+```
+git clone https://github.com/PGranger/ApidaeEvent.git
+```
+
+Installez les dépendances avec Composer
+
+```
+composer install
+```
+
+#### Projets d'écriture
 Si votre formulaire est prévu pour affecter toutes les manifestations à 1 seule membre Apidae, vous n'avez qu'un seul projet d'écriture à créer (voir `projet_ecriture_clientId` et `projet_ecriture_secret`).
 En revanche si vous souhaitez que la manifestation saisie soit affectée à un autre membre, en fonction de la commune, chaque membre doit posséder son propre projet d'écriture (en attendant une API d'écriture multimembre) (voir `$_config['membres']`).
 
-### Projet de consultation
+#### Projet de consultation
 N'importe quel projet fait l'affaire : la consultation sert juste à récupérer la liste des communes de chaque territoire. Vous pouvez donc tout à fait renseigner ici votre projet de site web par exemple.
 
-### Configuration (pour une installation sur serveur)
+#### Configuration (pour une installation sur serveur)
 * Copiez le fichier config.sample.inc.php vers config.inc.php (à la racine du dossier)
 * Dans ce fichier, renseignez les informations essentielles
 
-### config.inc.php
+#### config.inc.php
 * **`$_config['mysqli_*']`** : Informations nécessaires à la création de 3 tables SQL. L'utilisateur configuré doit avoir les droits de création (CREATE, ALTER, INDEX)
 * **`$_config['projet_consultation_apiKey']`** & **`$_config['projet_consultation_secret']`** : un projet de consultation créé sur Apidae. Vous pouvez tout à fait réutiliser les codes de votre site Internet si vous avez déjà un projet.
 * **`$_config['territoire']`** (*optionnel*) : définition des communes proposées dans le formulaire : identifiant du territoire correspondant à la liste des communes proposées dans le formulaire.
