@@ -85,29 +85,55 @@
 
 			<?php
 
-				if ( $_config['debug'] )
+				if ( $_config['debug'] || isset($_GET['showAbonnes']) )
 				{
 					?>
 					<div class="alert alert-success" role="alert">
 						<h3>[DEBUG] Membres sur lesquels on peut saisir :</h3>
-						<?php
-							echo '<ul>' ;
-							foreach ( $_config['membres'] as $membre )
-							{
-								echo '<li>' ;
-									echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['nom'].'</a> ' ;
-									if ( $membre['id_territoire'] !== null )
-										echo ' (territoire : <a href="'.$pma->url_base().'/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>) ' ;
-									else
-										echo '<strong style="color:red;">Non renseignée</strong>' ;
-									echo ' - ' ;
-									echo 'API écriture : ' ;
-									if ( @$membre['clientId'] !== null ) echo 'Renseignée' ;
-									else echo '<strong style="color:red;">Non renseignée</strong>' ;
-								echo '</li>' ;
-							}
-							echo '</ul>' ;
-						?>
+
+						<p>Les membres qui n'ont pas de projet d'écriture individuel renseigné doivent être <a href="https://base.apidae-tourisme.com/diffuser/projet/2792?25" target="_blank">abonnés au projet d'écriture multi-membre ApidaeEvent</a>.</p>
+					
+						<table class="table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Nom</th>
+									<th>Terr.</th>
+									<th>Projet</th>
+									<th>Mails alertés</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+								foreach ( $_config['membres'] as $membre )
+								{
+									echo '<tr>' ;
+										echo '<th>' ;
+											echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['id_membre'].'</a> ' ;
+										echo '</th>' ;
+										echo '<th>' ;
+											echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['nom'].'</a> ' ;
+										echo '</th>' ;
+										echo '<td>' ;
+											if ( $membre['id_territoire'] !== null )
+												echo '<a href="'.$pma->url_base().'/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>' ;
+											else
+												echo '<strong style="color:red;">Non renseignée</strong>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											if ( @$membre['clientId'] !== null ) echo 'Projet&nbsp;indiv' ;
+											else echo 'Multimembre&nbsp;?' ;
+											echo '</td>' ;
+											echo '<td>' ;
+												if ( is_array($membre['mail']) ) echo implode(', ',$membre['mail']) ; else echo $membre['mail'] ;
+											echo '</td>' ;
+									echo '</tr>' ;
+								}
+								echo '</ul>' ;
+								?>
+							</tbody>
+						</table>
+
 					</div>
 					<div class="alert alert-info" role="alert">
 						<h3>[DEBUG] Remontée des bugs et évolutions :</h3>
