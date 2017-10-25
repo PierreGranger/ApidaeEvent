@@ -122,7 +122,7 @@
 										echo '</td>' ;
 										echo '<td>' ;
 											if ( @$membre['clientId'] !== null ) echo 'Projet&nbsp;indiv' ;
-											else echo 'Multimembre&nbsp;?' ;
+											else echo '<strong style="color:orange;">Multimembre&nbsp;?</strong>' ;
 											echo '</td>' ;
 											echo '<td>' ;
 												if ( is_array($membre['mail']) ) echo implode(', ',$membre['mail']) ; else echo $membre['mail'] ;
@@ -133,6 +133,10 @@
 								?>
 							</tbody>
 						</table>
+
+			<?php } ?>
+
+			<?php if ( $_config['debug'] ) { ?>
 
 					</div>
 					<div class="alert alert-info" role="alert">
