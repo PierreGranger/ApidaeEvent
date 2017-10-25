@@ -429,7 +429,7 @@
 	if ( sizeof($illustrations) > 0 ) $root['illustrations'] = Array() ;
 	foreach ( $illustrations as $i => $illus )
 	{
-		$medias['multimedia.illustration-'.($i+1)] = getCurlValue($illus['tempfile'],$illus['mime'],$illus['basename']) ;
+		$medias['multimedia.illustration-'.($i+1)] = $pma->getCurlValue($illus['tempfile'],$illus['mime'],$illus['basename']) ;
 		$illustration = Array() ;
 		$illustration['link'] = false ;
 		$illustration['type'] = 'IMAGE' ;
@@ -443,7 +443,7 @@
 	if ( sizeof($multimedias) > 0 ) $root['multimedias'] = Array() ;
 	foreach ( $multimedias as $i => $mm )
 	{
-		$medias['multimedia.multimedia-'.($i+1)] = getCurlValue($mm['tempfile'],$mm['mime'],$mm['basename']) ;
+		$medias['multimedia.multimedia-'.($i+1)] = $pma->getCurlValue($mm['tempfile'],$mm['mime'],$mm['basename']) ;
 		$multimedia = Array() ;
 		$multimedia['link'] = false ;
 		$multimedia['type'] = 'PLAN' ;
@@ -460,7 +460,15 @@
 	
 	if ( sizeof($ko) == 0 )
 	{
-		$ko = $pma->enregistrer($fieldlist,$root,$medias,$proprietaireId,$clientId,$secret) ;
+		$enregistrer = Array(
+			'fieldlist' => $fieldlist,
+			'root' => $root,
+			'medias' => $medias,
+			'proprietaireId' => $proprietaireId,
+			'clientId' => $clientId,
+			'secret' => $secret
+		) ;
+		$ko = $pma->ajouter($enregistrer) ;
 	}
 	
 	$pma->debug($ko,'$ko') ;

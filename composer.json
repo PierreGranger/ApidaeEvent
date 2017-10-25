@@ -1,0 +1,18 @@
+{
+	"require" : {
+		"pierre-granger/apidae-ecriture": "^0.1",
+		"robloach/component-installer": "^0.2.3",
+		"components/jquery": "^3.2",
+		"components/bootstrap": "^3.0",
+		"components/chosen": "^1.8",
+		"components/jqueryui": "^1.12"
+	},
+	"config": {
+	    "component-dir": "assets"
+	},
+	"autoload": {
+        "psr-4": {
+            "PierreGranger\\": "src/"
+        }
+    }
+}

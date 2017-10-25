@@ -4,13 +4,13 @@
 	error_reporting(E_ALL) ;
 	date_default_timezone_set('Europe/Paris') ;
 
-	$modes = Array('CREATION','MODIFICATION','DEMANDE_SUPPRESSION') ;
-
+	$autoloader = require realpath(dirname(__FILE__)).'/vendor/autoload.php' ;
+	
 	require_once(realpath(dirname(__FILE__)).'/config.inc.php') ;
-	require_once(realpath(dirname(__FILE__)).'/fonctions.inc.php') ;
-	require_once(realpath(dirname(__FILE__)).'/ApidaeEvent.class.php') ;
 
-	$pma = new ApidaeEvent($_config) ;
+	require_once(realpath(dirname(__FILE__)).'/src/ApidaeEvent.php') ;
+
+	$pma = new \PierreGranger\ApidaeEvent($_config) ;
 
 	if ( isset($_GET['refresh']) )
 	{

@@ -9,50 +9,54 @@
 	if ( isset($_config['http_path']) && $_config['http_path'] != '' )
 		$http_path = $_config['http_path'] ;
 
+	$assets = Array(
+		'jquery/jquery.min.js',
+		'bootstrap/js/bootstrap.min.js',
+		'bootstrap/css/bootstrap.min.css',
+		'chosen/chosen.jquery.min.js',
+		'chosen/chosen.min.css',
+		'jquery-ui/jquery-ui.min.js',
+		'jquery-ui/themes/base/jquery-ui.min.css',
+		'jquery-ui/ui/widgets/datepicker.js',
+		'jquery-ui/ui/i18n/datepicker-fr.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css',
+		'https://www.google.com/recaptcha/api.js'
+	) ;
+
 ?><!DOCTYPE html>
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		<!-- jQuery -->
-		<script src="<?php echo $http_path ; ?>js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-
-		<!-- Bootstrap -->
-		<link href="<?php echo $http_path ; ?>css/bootstrap.min.css" rel="stylesheet">
-		<script src="<?php echo $http_path ; ?>js/bootstrap.min.js"></script>
-
-		<!-- Chosen -->
-		<script src="<?php echo $http_path ; ?>chosen/chosen.jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>chosen/chosen.min.css" media="all" />
-		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/bootstrap.chosen.css" media="all" />
-
-		<!-- jQuery.ui -->
-		<script
-		src="<?php echo $http_path ; ?>js/jquery-ui.min.js"></script>
-		<script src="<?php echo $http_path ; ?>js/datepicker-fr.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/jquery-ui.css" media="all" />
-
-		<!-- jQuery timepicker -->
-		<script src="<?php echo $http_path ; ?>js/jquery.timepicker.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/jquery.timepicker.min.css" media="all" />
-
 		<?php
+			foreach ( $assets as $asset )
+			{
+				$type = substr($asset, strrpos($asset, '.')+1) ;
+				$local = ( substr( $asset, 0, 4 ) !== "http" ) ;
+
+				echo "\n\t\t" ;
+
+				if ( $type == 'js' )
+					echo '<script src="'.($local?'./assets/':'').$asset.'"></script>'  ;
+				else
+					echo '<link rel="stylesheet" type="text/css" href="'.($local?'./assets/':'').$asset.'" media="all" />'  ;
+
+			}
+
 			$icon_plus = '<span class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> <strong>Ajouter une ligne</strong></span>' ;
 			$icon_moins = '<span class="btn btn-warning"><span class="glyphicon glyphicon-minus"></span></span>' ;
 		?>
+		
 		<script>
 			var icon_plus = '<?php echo $icon_plus ; ?>' ;
 			var icon_moins = '<?php echo $icon_moins ; ?>' ;
 		</script>
-		<script src="<?php echo $http_path ; ?>js/formulaire.js?v=3"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>css/formulaire.css" media="all" />
+		<script src="<?php echo $http_path ; ?>formulaire.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>formulaire.css" media="all" />
 
 		<?php include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
-
-		<script src='https://www.google.com/recaptcha/api.js'></script>
 
 	</head>
 	<body>
