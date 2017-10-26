@@ -9,7 +9,7 @@ _____
 ## Utilisation en iframe
 Vous pouvez utiliser ce formulaire sans aucune installation, en utilisant une simple iframe :
 ```
-<iframe src="//www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:2000px;"></iframe>
+<iframe src="//www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:3300px;"></iframe>
 ```
 Sur Wordpress vous pouvez inclure l'iframe avec un shortcode :
 ```
