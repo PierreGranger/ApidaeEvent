@@ -56,6 +56,9 @@
 		<script src="<?php echo $http_path ; ?>formulaire.js"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>formulaire.css" media="all" />
 
+		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/css/ajax-bootstrap-select.min.css" media="all" />
+		<script src="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js"></script>
+
 		<?php include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
 
 	</head>
@@ -164,7 +167,18 @@
 						<input class="form-control form-control-lg" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']) ; ?>" id="nom" required="required" />
 					</div>
 				</fieldset>
-					
+				
+				<?php if ( false ) { ?>
+				<fieldset class="form-group">
+					<legend>Organisateur</legend>
+					<div class="controls">
+						<select class="form-control" name="organisateur" id="organisateur">
+							<option value="">-</option>
+						</select>
+					</div>
+				</fieldset>
+				<?php } ?>
+
 				<fieldset class="form-group">
 
 					<legend>Importance de votre événement</legend>
@@ -252,7 +266,7 @@
 							{
 								if ( $d['nb'] == 0 )
 								{
-									$pma->getTerritoires(true,Array($_config['territoire'])) ;
+									$pma->setTerritoires(true,Array($_config['territoire'])) ;
 								}
 							}
 

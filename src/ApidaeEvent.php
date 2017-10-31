@@ -382,7 +382,7 @@
 			return $er ;
 		}
 
-		function getTerritoires($force=false,$append=null)
+		function setTerritoires($force=false,$append=null)
 		{
 			if ( $this->debugTime ) $start = microtime(true) ;
 
@@ -410,7 +410,7 @@
 						$fields = array(
 							'apiKey' => $this->projet_consultation_apiKey,
 							'projetId' => $this->projet_consultation_projetId,
-							'count' => 20,
+							'count' => 200,
 							'responseFields' => Array('id','localisation.perimetreGeographique.id')
 						);
 
@@ -457,7 +457,7 @@
 				}
 			}
 
-			if ( $this->debugTime ) $this->debug('getTerritoires '.(microtime(true)-$start)) ;
+			if ( $this->debugTime ) $this->debug('setTerritoires '.(microtime(true)-$start)) ;
 		}
 		
 		public function dateUs($dateFr)

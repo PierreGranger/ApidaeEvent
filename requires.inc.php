@@ -15,6 +15,6 @@
 	if ( isset($_GET['refresh']) )
 	{
 		$pma->getCommunes(true) ;
-		$pma->getTerritoires(true) ;
+		$pma->setTerritoires(true) ;
 		$pma->getElementsReference(null,true) ;
 	}

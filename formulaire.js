@@ -40,6 +40,11 @@ jQuery(document).ready(function(){
 
 	jQuery('span.glyphicon[title]').tooltip() ;
 
+	if ( jQuery('select[name="organisateur"]').length > 0 )
+	{
+		
+	}
+
 }) ;
 
 jQuery(document).on('click','form.form .btn-submit',function(){
