@@ -89,7 +89,7 @@
 				{
 					?>
 					<div class="alert alert-success" role="alert">
-						<h3>[DEBUG] Membres sur lesquels on peut saisir :</h3>
+						<h3>Membres sur lesquels on peut saisir :</h3>
 
 						<p>Les membres qui n'ont pas de projet d'écriture individuel renseigné doivent être <a href="https://base.apidae-tourisme.com/diffuser/projet/2792?25" target="_blank">abonnés au projet d'écriture multi-membre ApidaeEvent</a>.</p>
 					
