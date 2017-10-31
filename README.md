@@ -9,7 +9,7 @@ _____
 ## Utilisation en iframe
 Vous pouvez utiliser ce formulaire sans aucune installation, en utilisant une simple iframe :
 ```
-<iframe src="//www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:2000px;"></iframe>
+<iframe src="//www.allier-auvergne-tourisme.com/ApidaeEvent/?territoire=XXXXX" frameborder="0" style="width:100%;height:3300px;"></iframe>
 ```
 Sur Wordpress vous pouvez inclure l'iframe avec un shortcode :
 ```
@@ -61,7 +61,7 @@ composer install
 
 #### Projets d'écriture
 Si votre formulaire est prévu pour affecter toutes les manifestations à 1 seule membre Apidae, vous n'avez qu'un seul projet d'écriture à créer (voir `projet_ecriture_clientId` et `projet_ecriture_secret`).
-En revanche si vous souhaitez que la manifestation saisie soit affectée à un autre membre, en fonction de la commune, chaque membre doit posséder son propre projet d'écriture (en attendant une API d'écriture multimembre) (voir `$_config['membres']`).
+En revanche si vous souhaitez que la manifestation saisie soit affectée à un autre membre, en fonction de la commune, vous devez créer un projet d'écriture multi-membre et demander aux membres concernés de s'abonner (voir `$_config['membres']`).
 
 #### Projet de consultation
 N'importe quel projet fait l'affaire : la consultation sert juste à récupérer la liste des communes de chaque territoire. Vous pouvez donc tout à fait renseigner ici votre projet de site web par exemple.
@@ -84,8 +84,6 @@ N'importe quel projet fait l'affaire : la consultation sert juste à récupérer
 	* Chaque membre auquel on souhaite affecter la manifestation enregistré doit avoir :
 		* `id_membre` : Identifiant du membre Apidae possédant le projet d'écriture
 		* `id_territoire` : Identifiant d'une fiche territoire correspondant à la zone de compétence de ce membre. A l'enregistrement, pour la commune C, faisant partie du territoire `id_territoire`, on affecte la manifestation au membre `id_membre`(grâce au projet d'écriture `clientId`+`secret`)
-		* `clientId` : Code fourni lors de la création du projet d'écriture du membre id_membre
-		* `secret` : Code fourni lors de la création du projet d'écriture du membre id_membre
 	* Si le formulaire n'est pas en mesure de trouver le territoire concerné par la commune renseignée, la manifestation sera affectée au membre par défaut du formulaire (celui qui possède le projet projet_ecriture_clientId)
 * **`$_config['types_tarifs']`** : Liste des identifiants de tarifs Apidae
 * **`$_config['mail_admin']`** : Adresse mail où seront envoyées les erreurs (et les enregistrements OK si le formulaire est en `$_config['debug'] = true ;`)
