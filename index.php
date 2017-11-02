@@ -56,6 +56,8 @@
 		<script src="<?php echo $http_path ; ?>formulaire.js"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>formulaire.css" media="all" />
 
+		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>bootstrap-chosen.css" media="all" />
+
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/css/ajax-bootstrap-select.min.css" media="all" />
 		<script src="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js"></script>
 
