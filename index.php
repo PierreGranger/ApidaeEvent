@@ -83,6 +83,22 @@
 				$post = $_POST ;
 				if ( ! is_array($post) ) $post = Array() ;
 
+				$token_test = $pma->gimme_token() ;
+
+				if ( ! $token_test )
+				{
+					$display_form = false ;
+					?>
+					<div class="alert alert-danger" role="alert">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only">Formulaire indisponible :</span>
+					  <strong>Un problème technique empêche l'utilisation du formulaire actuellement.</strong>
+					  <br />Veuillez nous excuser pour la gène occasionnée.
+					  <br />Vous pouvez prendre contact avec l'Office du Tourisme concernée par votre manifestation, ou revenir sur cette page plus tard.
+					</div>
+					<?php
+				}
+
 			?>
 
 
@@ -291,7 +307,7 @@
 								  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 								  <strong>Impossible de récupérer la liste de communes...</strong>
 								  <br />Veuillez nous excuser pour la gène occasionnée.
-								  <br />Vous pouvez prendre contact avec l'<a href="http://www.apidae-tourisme.com/cartographie-des-membres-apidae/cartographie-des-contributeurs/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.
+								  <br />Vous pouvez prendre contact avec l'<a href="https://www.apidae-tourisme.com/apidae-tourisme/carte-du-reseau/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.
 								</div>
 							<?php
 							die() ;
@@ -676,7 +692,7 @@
 					<div class="alert alert-warning" role="alert">
 						Vos photos doivent être libres de droit et de bonne qualité. Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...).
 						<br />
-						<a href="http://www.apidae-tourisme.com/prestataires-de-loisirs/" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Plus d'informations ici.</a>
+						<a href="https://www.apidae-tourisme.com/communautes/professionnels-tourisme-loisirs/" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Plus d'informations ici.</a>
 					</div>
 					<table class="table photos">
 						<thead>
