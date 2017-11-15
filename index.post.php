@@ -498,11 +498,10 @@
 		$msg .= 'Vous trouverez ci-dessous un résumé brut des informations qui ont été enregistrées sur Apidae.<br /><br />' ;
 		$post_mail['message'] = $msg ;
 
-		$alerte = $pma->alerte('enregistrement [admin]',$post_mail) ;
+		//$alerte = $pma->alerte('enregistrement [admin]',$post_mail) ;
 		if ( $mail_membre != null )
 		{
-			if ( ! is_array($mail_membre) ) $pma->alerte('Nouvel enregistrement',$post_mail,$mail_membre) ;
-			else foreach ( $mail_membre as $mt ) $pma->alerte('Nouvel enregistrement',$post_mail,$mt) ;
+			$pma->alerte('Nouvel enregistrement',$post_mail,$mail_membre) ;
 		}
 		$display_form = false ;
 		?>
