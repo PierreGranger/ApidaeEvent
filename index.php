@@ -61,7 +61,8 @@
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/css/ajax-bootstrap-select.min.css" media="all" />
 		<script src="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js"></script>
 
-		<?php include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
+		<?php if ( file_exists(realpath(dirname(__FILE__)).'/../analytics.php') )
+			include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
 
 	</head>
 	<body>
