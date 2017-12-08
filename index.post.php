@@ -476,7 +476,7 @@
 	if ( $ko === true )
 	{
 		$post_mail = $_POST ;
-		unset($post_mail['G-recaptcha-response']) ;
+		unset($post_mail['g-recaptcha-response']) ;
 
 		$msg = 'Vous recevez ce mail parce qu\'un internaute a suggéré une manifestation sur ' ;
 		$msg .= ( @$post_mail['referer'] != '' ) ? $post_mail['referer'] : $post_mail['script_uri'] ;
