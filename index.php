@@ -176,9 +176,7 @@
 
 			<form class="form" method="post" enctype="multipart/form-data" novalidate>
 
-				<?php $referer = ( isset($_POST['referer']) ) ? $_POST['referer'] : @$_SERVER['HTTP_REFERER'] ; ?>
-				<input type="hidden" name="referer" value="<?php echo htmlentities($referer) ; ?>" />
-				<input type="hidden" name="script_uri" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']) ; ?>" />
+				<input type="hidden" name="url_formulaire" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']) ; ?>" />
 
 				<fieldset class="form-group required">
 					<legend>Nom de la manifestation</legend>
@@ -727,6 +725,9 @@
 					</table>
 				</fieldset>
 
+				<?php $referer = ( isset($_POST['referer']) ) ? $_POST['referer'] : @$_SERVER['HTTP_REFERER'] ; ?>
+				<input type="hidden" name="referer" value="<?php echo htmlentities($referer) ; ?>" />
+				
 				<div class="form-group"<?php
 					if ( @$_config['recaptcha_secret'] != '' && ! $_config['debug'] ) echo ' style="display:none;"' ;
 				?>>
