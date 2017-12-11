@@ -159,7 +159,7 @@
 		if ( $pma->verifTime($date['hdebut']) ) $periode['horaireOuverture'] = $date['hdebut'].":00" ;
 		if ( $pma->verifTime($date['hfin']) ) $periode['horaireFermeture'] = $date['hfin'].":00" ;
 		$periode['tousLesAns'] = false ;
-		$periode['type'] = 'OUVERTURE_SAUF' ;
+		$periode['type'] = 'OUVERTURE_TOUS_LES_JOURS' ;
 		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = Array('libelleFr' => trim($date['complementHoraire'])) ;
 
 		$periodesOuvertures[] = $periode ;
