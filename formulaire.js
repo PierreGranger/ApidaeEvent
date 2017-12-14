@@ -226,7 +226,7 @@ function valideChamp(champ)
 
 
 
-function selectChange(select,init=null)
+function selectChange(select)
 {
 	var coord = select.closest('tr').find('input[name$="[coordonnee]"]') ;
 	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder','00 00 00 00 00') ; // Tél
