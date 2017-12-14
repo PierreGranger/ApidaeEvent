@@ -226,7 +226,7 @@ function valideChamp(champ)
 
 
 
-function selectChange(select)
+function selectChange(select,init)
 {
 	var coord = select.closest('tr').find('input[name$="[coordonnee]"]') ;
 	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder','00 00 00 00 00') ; // Tél
@@ -235,7 +235,7 @@ function selectChange(select)
 	else coord.attr('type','text').attr('placeholder','') ; // Standard
 
 	// On ne trigger par le changement de coordonnée lors du chargement du formulaire pour éviter d'avoir une erreur sur les champs obligatoires.
-	if ( init !== true ) coord.trigger('change') ;
+	if ( typeof init !== true ) coord.trigger('change') ;
 }
 
 
