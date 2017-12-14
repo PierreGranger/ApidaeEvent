@@ -235,7 +235,7 @@ function selectChange(select,init)
 	else coord.attr('type','text').attr('placeholder','') ; // Standard
 
 	// On ne trigger par le changement de coordonnée lors du chargement du formulaire pour éviter d'avoir une erreur sur les champs obligatoires.
-	if ( typeof init !== true ) coord.trigger('change') ;
+	if ( init !== true ) coord.trigger('change') ;
 }
 
 
