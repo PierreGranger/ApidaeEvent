@@ -97,8 +97,6 @@ jQuery(document).on('submit','form.form',function(e){
 }) ;
 
 
-
-
 // Clone une ligne d'une table.
 jQuery(document).on('click','table td.plus .btn',function(){
 	var ligne = jQuery(this).closest('tbody').find('tr').first().clone() ;
