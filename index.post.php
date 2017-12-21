@@ -332,7 +332,12 @@
 		foreach ( $_POST['tarifs'] as $tarif )
 		{
 			if ( $tarif['mini'] == '' && $tarif['maxi'] == '' ) continue ;
-			$t = Array('devise' =>'EUR') ;
+			
+			$t = Array('devise' =>$_POST['devise']) ;
+			/* TODO si on veut permettre le choix de la devise tarif par tarif par l'internaute : décommenter ci dessous */
+			/* ATTENTION ce critère a l'air d'être ignoré par l'API d'écriture, qui semble se servir uniquement de descriptionTarif.devise */
+			// $t = Array('devise' =>$tarif['devise']) ;
+			
 			$t['minimum'] = $tarif['mini'] ;
 			$t['maximum'] = $tarif['maxi'] ;
 			if ( isset($tarif['precisions']) ) $t['precisionTarif']['libelleFr'] = $tarif['precisions'] ;
@@ -367,6 +372,8 @@
 					'tarifs' => $tarifs,
 					'type' => Array('elementReferenceType' => 'TarifTypePeriode', 'id' => 1304)
 			)) ;
+			$fieldlist[] = 'descriptionTarif.devise' ;
+			$root['descriptionTarif']['devise'] = $_POST['devise'] ;
 		}
 	}
 
@@ -471,6 +478,10 @@
 		$ko = $pma->ajouter($enregistrer) ;
 	}
 	
+	echo '<pre>' ;
+		print_r($enregistrer) ;
+	echo '</pre>' ;
+
 	$pma->debug($ko,'$ko') ;
 
 	if ( $ko === true )

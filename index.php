@@ -24,6 +24,17 @@
 		'https://www.google.com/recaptcha/api.js'
 	) ;
 
+	$devises = Array('EUR'=>'€','CHF'=>'CHF') ;
+
+	if ( isset($_GET['devise']) && isset($devises[$_GET['devise']]) ) {
+		$devise_lib = $devises[$_GET['devise']] ;
+		$devise_apidae = $_GET['devise'] ;
+	}
+	else {
+		$devise_lib = '€' ;
+		$devise_apidae = 'EUR' ;
+	}
+
 ?><!DOCTYPE html>
 <html lang="fr">
 	<head>
@@ -178,6 +189,8 @@
 
 				<?php $referer = ( isset($_POST['referer']) ) ? $_POST['referer'] : @$_SERVER['HTTP_REFERER'] ; ?>
 				<input type="hidden" name="referer" value="<?php echo htmlentities($referer) ; ?>" />
+
+				<input type="hidden" name="devise" value="<?php echo htmlentities($devise_apidae) ; ?>" />
 
 				<fieldset class="form-group required">
 					<legend>Nom de la manifestation</legend>
@@ -629,8 +642,8 @@
 									<tr>
 										<th></th>
 										<th>Type de tarif</th>
-										<th>Mini € (à partir de...)</th>
-										<th>Maxi € (jusqu'à...)</th>
+										<th>Mini <?php echo $devise_lib ; ?> (à partir de...)</th>
+										<th>Maxi <?php echo $devise_lib ; ?> (jusqu'à...)</th>
 										<th>Précisions tarifs</th>
 									</tr>
 								</thead>
@@ -642,6 +655,11 @@
 											echo "\n\t\t\t\t\t\t".'<tr>' ;
 												echo '<td></td>' ;
 												echo '<td>' ;
+												/*
+												TODO si on veut permettre le choix des tarifs à l'internaute : penser à dupliquer le tarif ci-dessous lors de l'ajout d'une ligne de tarif en javascript, et traiter dans index.post.php la devise tarif par tarif.
+												$devise_tarif = ( isset($post['tarifs'][$i]['devise']) ) ? $post['tarifs'][$i]['devise'] : $devise_apidae ;
+												echo '<input type="hidden" name="tarifs['.$i.'][devise]" value="'.htmlspecialchars($devise_tarif).'" />' ;
+												*/
 													echo '<select class="form-control" name="tarifs['.$i.'][type]">' ;
 														echo '<option value="">-</option>' ;
 														foreach ( $types as $type )
@@ -657,13 +675,13 @@
 												echo '<td>' ;
 													echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
 														echo '<input class="form-control float" type="text" name="tarifs['.$i.'][mini]" value="'.htmlspecialchars(@$post['tarifs'][$i]['mini']).'" />' ;
-    													echo '<div class="input-group-addon">€</div>' ;
+    													echo '<div class="input-group-addon">'.$devise_lib.'</div>' ;
 													echo '</div>' ;
 												echo '</td>' ;
 												echo '<td>' ;
 													echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
 														echo '<input class="form-control float" type="text" name="tarifs['.$i.'][maxi]" value="'.htmlspecialchars(@$post['tarifs'][$i]['maxi']).'" />' ;
-    													echo '<div class="input-group-addon">€</div>' ;
+    													echo '<div class="input-group-addon">'.$devise_lib.'</div>' ;
 													echo '</div>' ;
 												echo '</td>' ;
 												echo '<td><input class="form-control" type="text" name="tarifs['.$i.'][precisions]" value="'.htmlspecialchars(@$post['tarifs'][$i]['precisions']).'" /></td>' ;
