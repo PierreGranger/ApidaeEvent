@@ -478,10 +478,6 @@
 		$ko = $pma->ajouter($enregistrer) ;
 	}
 	
-	echo '<pre>' ;
-		print_r($enregistrer) ;
-	echo '</pre>' ;
-
 	$pma->debug($ko,'$ko') ;
 
 	if ( $ko === true )
