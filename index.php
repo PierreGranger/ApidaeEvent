@@ -72,6 +72,14 @@
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/css/ajax-bootstrap-select.min.css" media="all" />
 		<script src="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js"></script>
 
+		<script>
+			jQuery(document).ready(function(){
+				jQuery('.chosen-select').chosen({
+					disable_search_threshold:10
+				}) ;
+			}) ;
+		</script>
+
 		<?php if ( file_exists(realpath(dirname(__FILE__)).'/../analytics.php') )
 			include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
 
@@ -131,7 +139,7 @@
 								<tr>
 									<th>ID</th>
 									<th>Nom</th>
-									<th>Terr.</th>
+									<th>Terr. ou COM</th>
 									<th>Projet</th>
 									<th>Mails alertés</th>
 								</tr>
@@ -148,30 +156,33 @@
 											echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['nom'].'</a> ' ;
 										echo '</th>' ;
 										echo '<td>' ;
-											if ( $membre['id_territoire'] !== null )
-												echo '<a href="'.$pma->url_base().'/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>' ;
+											if ( @$membre['id_territoire'] !== null )
+												echo 'TERR. : <a href="'.$pma->url_base().'/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>' ;
+											elseif ( @$membre['id_commune'] !== null )
+												echo 'COM. : '.$membre['id_commune'] ;
 											else
 												echo '<strong style="color:red;">Non renseignée</strong>' ;
 										echo '</td>' ;
 										echo '<td>' ;
 											if ( @$membre['clientId'] !== null ) echo 'Projet&nbsp;indiv' ;
 											else echo '<strong style="color:orange;">Multimembre&nbsp;?</strong>' ;
-											echo '</td>' ;
-											echo '<td>' ;
-												if ( is_array($membre['mail']) ) echo implode(', ',$membre['mail']) ; else echo $membre['mail'] ;
-											echo '</td>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											if ( is_array($membre['mail']) ) echo implode(', ',$membre['mail']) ; else echo $membre['mail'] ;
+										echo '</td>' ;
 									echo '</tr>' ;
 								}
-								echo '</ul>' ;
 								?>
 							</tbody>
 						</table>
+
+					</div>
 
 			<?php } ?>
 
 			<?php if ( $_config['debug'] ) { ?>
 
-					</div>
+					
 					<div class="alert alert-info" role="alert">
 						<h3>[DEBUG] Remontée des bugs et évolutions :</h3>
 						<a href="https://docs.google.com/spreadsheets/u/0/d/1wSidT7V26kem9jyewHdN-KbfGAj8WaPTq8KAR50HUko/edit" target="_blank">https://docs.google.com/spreadsheets/u/0/d/1wSidT7V26kem9jyewHdN-KbfGAj8WaPTq8KAR50HUko/edit</a>
@@ -289,7 +300,12 @@
 					<?php
 
 						unset($rq) ;
-						if ( isset($_config['territoire']) )
+						if ( isset($_GET['communes']) )
+						{
+							$sql = ' select distinct * from apidae_communes where code regexp "'.$pma->mysqli->real_escape_string($_GET['communes']).'" order by nom asc ' ;
+							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
+						}
+						elseif ( isset($_config['territoire']) )
 						{
 							$sql = ' select count(*) as nb from apidae_territoires where id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" ' ;
 							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
@@ -330,13 +346,15 @@
 					<div class="form-group row required">
 						<label for="commune" class="<?php echo $class_label ; ?> col-form-label">Commune</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<select name="commune" class="chosen" required="required" data-placeholder="">
+							<select name="commune" class="chosen-select" required="required" data-placeholder="">
+								<?php if ( $rq->num_rows > 1 ) { ?>
 								<option value="">-</option>
+								<?php } ?>
 								<?php
 									
 									while ( $d = $rq->fetch_assoc() )
 									{
-										$cle = $d['id'].'|'.$d['codePostal'].'|'.$d['nom'] ;
+										$cle = $d['id'].'|'.$d['codePostal'].'|'.$d['nom'].'|'.$d['code'] ;
 										echo '<option value="'.htmlentities($cle).'"' ;
 											if ( @$post['commune'] == $cle ) echo ' selected="selected"' ;
 										echo '>' ;

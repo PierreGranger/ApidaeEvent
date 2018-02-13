@@ -114,7 +114,7 @@
 
 			if ( $params['presentation'] == 'select' )
 			{
-				$ret .= ' <select class="form-control chosen" ' ;
+				$ret .= ' <select class="form-control chosen-select" ' ;
 				$ret .= ' data-placeholder=" " ' ;
 				if ( @$params['type'] == 'unique' ) $ret .= ' name="'.$type.'" ' ;
 				else $ret .= ' name="'.$type.'[]" multiple="multiple" ' ;

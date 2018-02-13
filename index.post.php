@@ -60,11 +60,13 @@
 		{
 			$territoires[] = $d['id_territoire'] ;
 		}
-		
 		/* Au cas où la commune serait concernée par plusieurs territoires, on parcourt les membres dans l'ordre saisi pour choisir le premier dans la liste. */
 		foreach ( $_config['membres'] as $m )
 		{
-			if ( in_array($m['id_territoire'],$territoires) )
+			if (
+				( isset($m['id_territoire']) && in_array($m['id_territoire'],$territoires) ) ||
+				( isset($m['insee_commune']) && $m['insee_commune'] == $commune[3] )
+			)
 			{
 				// Si on n'a pas de projet d'écriture multimembre, on a besoin du clientId:secret du projet d'écriture du membre trouvé.
 				if ( isset($m['secret']) && $m['secret'] !== null )
