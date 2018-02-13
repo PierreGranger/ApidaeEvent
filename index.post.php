@@ -65,7 +65,8 @@
 		{
 			if (
 				( isset($m['id_territoire']) && in_array($m['id_territoire'],$territoires) ) ||
-				( isset($m['insee_commune']) && $m['insee_commune'] == $commune[3] )
+				( isset($m['insee_commune']) && $m['insee_commune'] == $commune[3] ) ||
+				( isset($m['insee_communes']) && in_array($commune[3],$m['insee_communes']) )
 			)
 			{
 				// Si on n'a pas de projet d'écriture multimembre, on a besoin du clientId:secret du projet d'écriture du membre trouvé.

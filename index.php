@@ -302,7 +302,12 @@
 						unset($rq) ;
 						if ( isset($_GET['communes']) )
 						{
-							$sql = ' select distinct * from apidae_communes where code regexp "'.$pma->mysqli->real_escape_string($_GET['communes']).'" order by nom asc ' ;
+							$tmp = explode(',',$_GET['communes']) ;
+							$coms = Array() ;
+							foreach ( $tmp as $k => $v )
+								if ( preg_match('#^[0-9]+$#',$v) )
+									$coms[] = $pma->mysqli->real_escape_string($v) ;
+							$sql = ' select distinct * from apidae_communes where code in ("'.implode('","',$coms).'") order by nom asc ' ;
 							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
 						}
 						elseif ( isset($_config['territoire']) )
