@@ -266,14 +266,6 @@
 				<fieldset class="form-group">
 					<legend>Adresse</legend>
 					<div class="form-group row">
-						<label for="lieu" class="<?php echo $class_label ; ?> col-form-label">Lieu de la manifestation
-							<span class="glyphicon glyphicon-info-sign" title="Saisir le lieu précis (ne correspond pas à une adresse postale) où se déroule l’événement (Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...)."></span>
-						</label>
-						<div class="<?php echo $class_champ ; ?>">
-							<input class="form-control" type="text" name="lieu" value="<?php echo htmlentities(@$post['lieu']) ; ?>" id="lieu">
-						</div>
-					</div>
-					<div class="form-group row">
 						<label for="adresse1" class="<?php echo $class_label ; ?> col-form-label">Adresse 1
 							<span class="glyphicon glyphicon-info-sign" title="Voie et bâtiment. Exemple : 60 rue des Lilas – Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue."></span>
 						</label>
@@ -371,6 +363,19 @@
 							</select>
 						</div>
 					</div>
+
+					<div class="alert alert-info" role="alert">
+						<p>Saisir le lieu précis où se déroule l’événement <strong>seulement si nécessaire</strong> (si l'adresse n'est pas suffisante).<br />
+						  Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...</p>
+					</div>
+
+					<div class="form-group row">
+						<label for="lieu" class="<?php echo $class_label ; ?> col-form-label">Lieu précis</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<input class="form-control" type="text" name="lieu" value="<?php echo htmlentities(@$post['lieu']) ; ?>" id="lieu">
+						</div>
+					</div>
+
 				</fieldset>
 
 				<fieldset class="form-group">
