@@ -112,6 +112,7 @@ jQuery(document).on('click','table td.plus .btn',function(){
 	}) ;
 	setIndent(jQuery(this).closest('table')) ;
 	initForm(jQuery(this).closest('table')) ;
+	valideTarifUnique() ;
 }) ;
 
 jQuery(document).on('click','table td.moins',function(){
@@ -308,6 +309,7 @@ function recaptchaOk()
 function valideTarifUnique()
 {
 	var selects = jQuery('form.form div.tarifs table tbody tr select[name^="tarifs"]') ;
+	console.log(selects.length) ;
 	var used = [] ;
 	selects.each(function(){
 		if ( jQuery(this).val() != '' )
@@ -325,7 +327,9 @@ function valideTarifUnique()
 			var optVal = jQuery(this).attr('value') ;
 			if ( optVal == select.val() ) ;
 			else if ( used.indexOf(optVal) >= 0 )
+			{
 				jQuery(this).attr('disabled','disabled') ;
+			}
 			else
 				jQuery(this).removeAttr('disabled') ;
 		}) ;
