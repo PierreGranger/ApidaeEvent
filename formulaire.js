@@ -174,6 +174,9 @@ function valideChamp(champ)
 		var i = match[1] ;
 		var t = match[2] ; // debut|fin
 
+		if ( ! champ.val().match(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/i) )
+			return false ;
+
 		if ( t == 'debut' )
 		{
 			var fin = champ.closest('.form').find('input[name="date\['+i+'\]\[fin\]"]') ;
