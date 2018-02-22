@@ -386,68 +386,70 @@
 						Merci de préciser au minimum une date.
 					</div>
 
-					<table class="table dates">
-						<thead>
-							<tr>
-								<th></th>
-								<th class="required">Début</th>
-								<th class="required">Fin</th>
-								<th>Heure de début</th>
-								<th>Heure de fin</th>
-								<th>Complément</th>
-							</tr>
-						</thead>
-						<tbody>
-						<?php
-							$nb = 1 ;
-							if ( isset($post['date']) ) $nb = sizeof($post['date']) ;
-							for ( $i = 0 ; $i < $nb ; $i++ )
-							{
-								echo "\n\t\t\t\t\t\t".'<tr>' ;
-									echo '<td></td>' ;
-									echo '<td>' ;
-										echo '<div class="input-group form-group date">' ;
-											echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][debut]" value="'.htmlentities(@$post['date'][$i]['debut']).'" placeholder="jj/mm/aaaa" required="required" />' ;
-                    						echo '<span class="input-group-addon">' ;
-                        						echo '<span class="glyphicon glyphicon-calendar"></span>' ;
-                    						echo '</span>' ;
-                						echo '</div>' ;
-									echo '</td>' ;
-									echo '<td>' ;
-										echo '<div class="input-group form-group date">' ;
-											echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][fin]" value="'.htmlentities(@$post['date'][$i]['fin']).'" placeholder="jj/mm/aaaa" required="required" />' ;
-                    						echo '<span class="input-group-addon">' ;
-                        						echo '<span class="glyphicon glyphicon-calendar"></span>' ;
-                    						echo '</span>' ;
-                						echo '</div>' ;
-									echo '</td>' ;
-									echo '<td>' ;
-										echo '<div class="input-group form-group time">' ;
-											echo '<input class="form-control time" type="text" name="date['.$i.'][hdebut]" value="'.htmlentities(@$post['date'][$i]['hdebut']).'" placeholder="hh:mm" />' ;
-                    						echo '<span class="input-group-addon">' ;
-                        						echo '<span class="glyphicon glyphicon-time"></span>' ;
-                    						echo '</span>' ;
-                						echo '</div>' ;
-									echo '</td>' ;
-									echo '<td>' ;
-										echo '<div class="input-group form-group time">' ;
-											echo '<input class="form-control time" type="text" name="date['.$i.'][hfin]" value="'.htmlentities(@$post['date'][$i]['hfin']).'" placeholder="hh:mm" />' ;
-                    						echo '<span class="input-group-addon">' ;
-                        						echo '<span class="glyphicon glyphicon-time"></span>' ;
-                    						echo '</span>' ;
-                						echo '</div>' ;
-									echo '</td>' ;
-									echo '<td>' ;
-										echo '<input class="form-control" type="text" name="date['.$i.'][complementHoraire]" value="'.htmlentities(@$post['date'][$i]['complementHoraire']).'" />' ;
-									echo '</td>' ;
+					<div class="table-responsive">
+						<table class="table dates">
+							<thead>
+								<tr>
+									<th></th>
+									<th class="required">Début</th>
+									<th class="required">Fin</th>
+									<th>Heure de début</th>
+									<th>Heure de fin</th>
+									<th>Complément</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+								$nb = 1 ;
+								if ( isset($post['date']) ) $nb = sizeof($post['date']) ;
+								for ( $i = 0 ; $i < $nb ; $i++ )
+								{
+									echo "\n\t\t\t\t\t\t".'<tr>' ;
+										echo '<td></td>' ;
+										echo '<td>' ;
+											echo '<div class="input-group form-group date">' ;
+												echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][debut]" value="'.htmlentities(@$post['date'][$i]['debut']).'" placeholder="jj/mm/aaaa" required="required" />' ;
+												echo '<span class="input-group-addon">' ;
+													echo '<span class="glyphicon glyphicon-calendar"></span>' ;
+												echo '</span>' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="input-group form-group date">' ;
+												echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][fin]" value="'.htmlentities(@$post['date'][$i]['fin']).'" placeholder="jj/mm/aaaa" required="required" />' ;
+												echo '<span class="input-group-addon">' ;
+													echo '<span class="glyphicon glyphicon-calendar"></span>' ;
+												echo '</span>' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="input-group form-group time">' ;
+												echo '<input class="form-control time" type="text" name="date['.$i.'][hdebut]" value="'.htmlentities(@$post['date'][$i]['hdebut']).'" placeholder="hh:mm" />' ;
+												echo '<span class="input-group-addon">' ;
+													echo '<span class="glyphicon glyphicon-time"></span>' ;
+												echo '</span>' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="input-group form-group time">' ;
+												echo '<input class="form-control time" type="text" name="date['.$i.'][hfin]" value="'.htmlentities(@$post['date'][$i]['hfin']).'" placeholder="hh:mm" />' ;
+												echo '<span class="input-group-addon">' ;
+													echo '<span class="glyphicon glyphicon-time"></span>' ;
+												echo '</span>' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<input class="form-control" type="text" name="date['.$i.'][complementHoraire]" value="'.htmlentities(@$post['date'][$i]['complementHoraire']).'" />' ;
+										echo '</td>' ;
+									echo '</tr>' ;
+								}
+								echo '<tr>' ;
+									echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
 								echo '</tr>' ;
-							}
-							echo '<tr>' ;
-								echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
-							echo '</tr>' ;
-						?>
-						</tbody>
-					</table>
+							?>
+							</tbody>
+						</table>
+					</div>
 				</fieldset>
 
 				<fieldset class="form-group">
@@ -505,77 +507,79 @@
 						Merci de préciser au moins un moyen de communication (Mail, téléphone...) : ils seront diffusés sur les supports de communications (sites web, brochures...)
 					</div>
 
-					<table class="table mc">
-						<thead>
-							<tr>
-								<th></th>
-								<th class="required">Type</th>
-								<th class="required">Coordonnée</th>
-								<th>Complément</th>
-							</tr>
-						</thead>
-						<tbody>
-						<?php
-							
-							$types = $pma->getElementsReference('MoyenCommunicationType',false,$_config['types_mcs']) ;
-							
-							$nb = 3 ;
-							if ( isset($post['mc']) ) $nb = sizeof($post['mc']) ;
+					<div class="table-responsive">
+						<table class="table mc">
+							<thead>
+								<tr>
+									<th></th>
+									<th class="required">Type</th>
+									<th class="required">Coordonnée</th>
+									<th>Complément</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+								
+								$types = $pma->getElementsReference('MoyenCommunicationType',false,$_config['types_mcs']) ;
+								
+								$nb = 3 ;
+								if ( isset($post['mc']) ) $nb = sizeof($post['mc']) ;
 
-							for ( $i = 0 ; $i < $nb ; $i++ )
-							{
-								echo "\n\t\t\t\t\t\t".'<tr>' ;
-									echo '<td></td>' ;
-									echo '<td>' ;
-										echo '<div class="form-group">' ;
-											echo '<select class="form-control" name="mc['.$i.'][type]"' ;
-												if ( $i == 0 ) echo ' required="required" ' ;
-											echo '>' ;
-												echo '<option value="">-</option>' ;
-												foreach ( $types as $type )
-												{
-													echo '<option value="'.$type['id'].'"' ;
-														if ( isset($post['mc']) )
-														{
-															if ( @$post['mc'][$i]['type'] == $type['id'] )
-																echo ' selected="selected' ;
-														}
-														else
-														{
-															if ( 
-																( $i == 0 && $type['id'] == 201 ) // Téléphone
-																|| ( $i == 1 && $type['id'] == 204 ) // Mél
-																|| ( $i == 2 && $type['id'] == 205 ) // Site web
-															)
-															echo ' selected="selected" ' ;
-														}
-													echo '>' ;
-														echo $type['libelleFr'] ;
-													echo '</option>' ;
-												}
-											echo '</select>' ;
-										echo '</div>' ;
-									echo '</td>' ;
-									echo '<td>' ;
-										echo '<div class="form-group">' ;
-											echo '<input class="form-control" type="text" name="mc['.$i.'][coordonnee]" value="'.htmlentities(@$post['mc'][$i]['coordonnee']).'" ' ;
-												if ( $i == 0 ) echo 'required="required" ' ;
-											echo '/>' ;
-										echo '</div>' ;
-									echo '</td>' ;
-									echo '<td>' ;
-										echo '<div class="form-group">' ;
-											echo '<input class="form-control" type="text" name="mc['.$i.'][observations]" value="'.htmlentities(@$post['mc'][$i]['observations']).'" />' ;
-										echo '</div>' ;
-									echo '</td>' ;
+								for ( $i = 0 ; $i < $nb ; $i++ )
+								{
+									echo "\n\t\t\t\t\t\t".'<tr>' ;
+										echo '<td></td>' ;
+										echo '<td>' ;
+											echo '<div class="form-group">' ;
+												echo '<select class="form-control" name="mc['.$i.'][type]"' ;
+													if ( $i == 0 ) echo ' required="required" ' ;
+												echo '>' ;
+													echo '<option value="">-</option>' ;
+													foreach ( $types as $type )
+													{
+														echo '<option value="'.$type['id'].'"' ;
+															if ( isset($post['mc']) )
+															{
+																if ( @$post['mc'][$i]['type'] == $type['id'] )
+																	echo ' selected="selected' ;
+															}
+															else
+															{
+																if ( 
+																	( $i == 0 && $type['id'] == 201 ) // Téléphone
+																	|| ( $i == 1 && $type['id'] == 204 ) // Mél
+																	|| ( $i == 2 && $type['id'] == 205 ) // Site web
+																)
+																echo ' selected="selected" ' ;
+															}
+														echo '>' ;
+															echo $type['libelleFr'] ;
+														echo '</option>' ;
+													}
+												echo '</select>' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="form-group">' ;
+												echo '<input class="form-control" type="text" name="mc['.$i.'][coordonnee]" value="'.htmlentities(@$post['mc'][$i]['coordonnee']).'" ' ;
+													if ( $i == 0 ) echo 'required="required" ' ;
+												echo '/>' ;
+											echo '</div>' ;
+										echo '</td>' ;
+										echo '<td>' ;
+											echo '<div class="form-group">' ;
+												echo '<input class="form-control" type="text" name="mc['.$i.'][observations]" value="'.htmlentities(@$post['mc'][$i]['observations']).'" />' ;
+											echo '</div>' ;
+										echo '</td>' ;
+									echo '</tr>' ;
+								}
+								echo '<tr>' ;
+									echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
 								echo '</tr>' ;
-							}
-							echo '<tr>' ;
-								echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
-							echo '</tr>' ;
-						?>
-						</tbody>
-					</table>
+							?>
+							</tbody>
+						</table>
+					</div>
 				</fieldset>
 
 				<fieldset>
@@ -586,65 +590,67 @@
 						Les contacts nous permettront de vous recontacter si besoin, mais ne seront pas diffusés.
 					</div>
 
-					<table class="table">
-						<thead>
-							<tr>
-								<th></th>
-								<th>Fonction</th>
-								<th>Prénom</th>
-								<th>Nom</th>
-								<th>Téléphone</th>
-								<th>Mail</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-								$types = $pma->getElementsReference('ContactFonction',false) ;
-								for ( $i = 0 ; $i < 1 ; $i++ )
-								{
-									echo "\n\t\t\t\t\t\t".'<tr>' ;
-										echo '<td></td>' ;
-										echo '<td>' ;
-											echo '<select class="form-control" name="contact['.$i.'][fonction]">' ;
-												echo '<option value="">-</option>' ;
-												foreach ( $types as $type )
-												{
-													echo '<option value="'.$type['id'].'"' ;
-														if ( @$post['contact'][$i]['fonction'] == $type['id'] ) echo ' selected="selected" ' ;
-													echo '>' ;
-														echo $type['libelleFr'] ;
-													echo '</option>' ;
-												}
-											echo '</select>' ;
-										echo '</td>' ;
-										echo '<td>' ;
-											echo '<div class="form-group">' ;
-												echo '<input class="form-control" type="text" name="contact['.$i.'][prenom]" value="'.htmlspecialchars(@$post['contact'][$i]['prenom']).'" />' ;
-											echo '</div>' ;
-										echo '</td>' ;
-										echo '<td>' ;
-											echo '<div class="form-group">' ;
-												echo '<input class="form-control col" type="text" name="contact['.$i.'][nom]" value="'.htmlspecialchars(@$post['contact'][$i]['nom']).'" />' ;
-											echo '</div>' ;
-										echo '</td>' ;
-										echo '<td>' ;
-											echo '<div class="form-group">' ;
-												echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="00 00 00 00 00" />' ;
-											echo '</div>' ;
-										echo '</td>' ;
-										echo '<td>' ;
-											echo '<div class="form-group">' ;
-												echo '<input class="form-control mail" type="text" name="contact['.$i.'][mail]" value="'.htmlspecialchars(@$post['contact'][$i]['mail']).'" placeholder="xxx@yyyy.zz" />' ;
-											echo '</div>' ;
-										echo '</td>' ;
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Fonction</th>
+									<th>Prénom</th>
+									<th>Nom</th>
+									<th>Téléphone</th>
+									<th>Mail</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+									$types = $pma->getElementsReference('ContactFonction',false) ;
+									for ( $i = 0 ; $i < 1 ; $i++ )
+									{
+										echo "\n\t\t\t\t\t\t".'<tr>' ;
+											echo '<td></td>' ;
+											echo '<td>' ;
+												echo '<select class="form-control" name="contact['.$i.'][fonction]">' ;
+													echo '<option value="">-</option>' ;
+													foreach ( $types as $type )
+													{
+														echo '<option value="'.$type['id'].'"' ;
+															if ( @$post['contact'][$i]['fonction'] == $type['id'] ) echo ' selected="selected" ' ;
+														echo '>' ;
+															echo $type['libelleFr'] ;
+														echo '</option>' ;
+													}
+												echo '</select>' ;
+											echo '</td>' ;
+											echo '<td>' ;
+												echo '<div class="form-group">' ;
+													echo '<input class="form-control" type="text" name="contact['.$i.'][prenom]" value="'.htmlspecialchars(@$post['contact'][$i]['prenom']).'" />' ;
+												echo '</div>' ;
+											echo '</td>' ;
+											echo '<td>' ;
+												echo '<div class="form-group">' ;
+													echo '<input class="form-control col" type="text" name="contact['.$i.'][nom]" value="'.htmlspecialchars(@$post['contact'][$i]['nom']).'" />' ;
+												echo '</div>' ;
+											echo '</td>' ;
+											echo '<td>' ;
+												echo '<div class="form-group">' ;
+													echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="00 00 00 00 00" />' ;
+												echo '</div>' ;
+											echo '</td>' ;
+											echo '<td>' ;
+												echo '<div class="form-group">' ;
+													echo '<input class="form-control mail" type="text" name="contact['.$i.'][mail]" value="'.htmlspecialchars(@$post['contact'][$i]['mail']).'" placeholder="xxx@yyyy.zz" />' ;
+												echo '</div>' ;
+											echo '</td>' ;
+										echo '</tr>' ;
+									}
+									echo '<tr>' ;
+										echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
 									echo '</tr>' ;
-								}
-								echo '<tr>' ;
-									echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
-								echo '</tr>' ;
-							?>
-						</tbody>
-					</table>
+								?>
+							</tbody>
+						</table>
+					</div>
 
 				</fieldset>
 
@@ -665,62 +671,64 @@
 								<p><strong>Attention</strong> : chaque type de tarif n'est utilisable qu'une fois. Si vous avez plusieurs "pleins tarifs", précisez la plage mini-maxi sur une seule ligne.</p>
 							</div>
 
-							<table class="table">
-								<thead>
-									<tr>
-										<th></th>
-										<th>Type de tarif</th>
-										<th>Mini <?php echo $devise_lib ; ?> (à partir de...)</th>
-										<th>Maxi <?php echo $devise_lib ; ?> (jusqu'à...)</th>
-										<th>Précisions tarifs</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php
-										$types = $pma->getElementsReference('TarifType',false,$_config['types_tarifs']) ;
-										for ( $i = 0 ; $i < 1 ; $i++ )
-										{
-											echo "\n\t\t\t\t\t\t".'<tr>' ;
-												echo '<td></td>' ;
-												echo '<td>' ;
-												/*
-												TODO si on veut permettre le choix des tarifs à l'internaute : penser à dupliquer le tarif ci-dessous lors de l'ajout d'une ligne de tarif en javascript, et traiter dans index.post.php la devise tarif par tarif.
-												$devise_tarif = ( isset($post['tarifs'][$i]['devise']) ) ? $post['tarifs'][$i]['devise'] : $devise_apidae ;
-												echo '<input type="hidden" name="tarifs['.$i.'][devise]" value="'.htmlspecialchars($devise_tarif).'" />' ;
-												*/
-													echo '<select class="form-control" name="tarifs['.$i.'][type]">' ;
-														echo '<option value="">-</option>' ;
-														foreach ( $types as $type )
-														{
-															echo '<option value="'.$type['id'].'"' ;
-																if ( @$post['tarifs'][$i]['type'] == $type['id'] ) echo ' selected="selected" ' ;
-															echo '>' ;
-																echo $type['libelleFr'] ;
-															echo '</option>' ;
-														}
-													echo '</select>' ;
-												echo '</td>' ;
-												echo '<td>' ;
-													echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
-														echo '<input class="form-control float" type="text" name="tarifs['.$i.'][mini]" value="'.htmlspecialchars(@$post['tarifs'][$i]['mini']).'" />' ;
-    													echo '<div class="input-group-addon">'.$devise_lib.'</div>' ;
-													echo '</div>' ;
-												echo '</td>' ;
-												echo '<td>' ;
-													echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
-														echo '<input class="form-control float" type="text" name="tarifs['.$i.'][maxi]" value="'.htmlspecialchars(@$post['tarifs'][$i]['maxi']).'" />' ;
-    													echo '<div class="input-group-addon">'.$devise_lib.'</div>' ;
-													echo '</div>' ;
-												echo '</td>' ;
-												echo '<td><input class="form-control" type="text" name="tarifs['.$i.'][precisions]" value="'.htmlspecialchars(@$post['tarifs'][$i]['precisions']).'" /></td>' ;
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Type de tarif</th>
+											<th>Mini <?php echo $devise_lib ; ?> (à partir de...)</th>
+											<th>Maxi <?php echo $devise_lib ; ?> (jusqu'à...)</th>
+											<th>Précisions tarifs</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php
+											$types = $pma->getElementsReference('TarifType',false,$_config['types_tarifs']) ;
+											for ( $i = 0 ; $i < 1 ; $i++ )
+											{
+												echo "\n\t\t\t\t\t\t".'<tr>' ;
+													echo '<td></td>' ;
+													echo '<td>' ;
+													/*
+													TODO si on veut permettre le choix des tarifs à l'internaute : penser à dupliquer le tarif ci-dessous lors de l'ajout d'une ligne de tarif en javascript, et traiter dans index.post.php la devise tarif par tarif.
+													$devise_tarif = ( isset($post['tarifs'][$i]['devise']) ) ? $post['tarifs'][$i]['devise'] : $devise_apidae ;
+													echo '<input type="hidden" name="tarifs['.$i.'][devise]" value="'.htmlspecialchars($devise_tarif).'" />' ;
+													*/
+														echo '<select class="form-control" name="tarifs['.$i.'][type]">' ;
+															echo '<option value="">-</option>' ;
+															foreach ( $types as $type )
+															{
+																echo '<option value="'.$type['id'].'"' ;
+																	if ( @$post['tarifs'][$i]['type'] == $type['id'] ) echo ' selected="selected" ' ;
+																echo '>' ;
+																	echo $type['libelleFr'] ;
+																echo '</option>' ;
+															}
+														echo '</select>' ;
+													echo '</td>' ;
+													echo '<td>' ;
+														echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
+															echo '<input class="form-control float" type="text" name="tarifs['.$i.'][mini]" value="'.htmlspecialchars(@$post['tarifs'][$i]['mini']).'" />' ;
+															echo '<div class="input-group-addon">'.$devise_lib.'</div>' ;
+														echo '</div>' ;
+													echo '</td>' ;
+													echo '<td>' ;
+														echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
+															echo '<input class="form-control float" type="text" name="tarifs['.$i.'][maxi]" value="'.htmlspecialchars(@$post['tarifs'][$i]['maxi']).'" />' ;
+															echo '<div class="input-group-addon">'.$devise_lib.'</div>' ;
+														echo '</div>' ;
+													echo '</td>' ;
+													echo '<td><input class="form-control" type="text" name="tarifs['.$i.'][precisions]" value="'.htmlspecialchars(@$post['tarifs'][$i]['precisions']).'" /></td>' ;
+												echo '</tr>' ;
+											}
+											echo '<tr>' ;
+												echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
 											echo '</tr>' ;
-										}
-										echo '<tr>' ;
-											echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
-										echo '</tr>' ;
-									?>
-								</tbody>
-							</table>
+										?>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 
@@ -740,36 +748,38 @@
 						<br />
 						<a href="https://www.apidae-tourisme.com/communautes/professionnels-tourisme-loisirs/" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Plus d'informations ici.</a>
 					</div>
-					<table class="table photos">
-						<thead>
-							<tr>
-								<th></th>
-								<th>Votre photo</th>
-								<th>Légende photo</th>
-								<th>Copyright</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-								for ( $i = 0 ; $i < 1 ; $i++ )
-								{
-									echo "\n\t\t\t\t\t\t".'<tr>' ;
-										echo '<td></td>' ;
-										echo '<td>' ;
+					<div class="table-responsive">
+						<table class="table photos">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Votre photo</th>
+									<th>Légende photo</th>
+									<th>Copyright</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+									for ( $i = 0 ; $i < 1 ; $i++ )
+									{
+										echo "\n\t\t\t\t\t\t".'<tr>' ;
+											echo '<td></td>' ;
+											echo '<td>' ;
 
-											//echo '<div class="dropzone dz-clickable"><div class="dz-default dz-message"><span>Ajouter une photo (3 Mo Max)</span></div></div>' ;
-												echo '<input class="form-control" type="file" name="medias['.$i.']" value="'.htmlspecialchars(@$post['photos'][$i]).'" />' ;
-										echo '</td>' ;
-										echo '<td><input class="form-control" type="text" name="medias['.$i.'][legende]" value="'.htmlspecialchars(@$post['medias'][$i]['legende']).'" /></td>' ;
-										echo '<td><input class="form-control" type="text" name="medias['.$i.'][copyright]" value="'.htmlspecialchars(@$post['medias'][$i]['copyright']).'" /></td>' ;
-									echo '</tr>' ;
-								}
-							?>
-							<tr>
-								<td class="plus" colspan="99"><?php echo $icon_plus ; ?></td>
-							</tr>
-						</tbody>
-					</table>
+												//echo '<div class="dropzone dz-clickable"><div class="dz-default dz-message"><span>Ajouter une photo (3 Mo Max)</span></div></div>' ;
+													echo '<input class="form-control" type="file" name="medias['.$i.']" value="'.htmlspecialchars(@$post['photos'][$i]).'" />' ;
+											echo '</td>' ;
+											echo '<td><input class="form-control" type="text" name="medias['.$i.'][legende]" value="'.htmlspecialchars(@$post['medias'][$i]['legende']).'" /></td>' ;
+											echo '<td><input class="form-control" type="text" name="medias['.$i.'][copyright]" value="'.htmlspecialchars(@$post['medias'][$i]['copyright']).'" /></td>' ;
+										echo '</tr>' ;
+									}
+								?>
+								<tr>
+									<td class="plus" colspan="99"><?php echo $icon_plus ; ?></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</fieldset>
 
 				<input type="hidden" name="script_uri" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']) ; ?>" />

@@ -312,7 +312,7 @@ function recaptchaOk()
 function valideTarifUnique()
 {
 	var selects = jQuery('form.form div.tarifs table tbody tr select[name^="tarifs"]') ;
-	console.log(selects.length) ;
+	
 	var used = [] ;
 	selects.each(function(){
 		if ( jQuery(this).val() != '' )
