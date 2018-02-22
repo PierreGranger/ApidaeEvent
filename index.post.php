@@ -391,8 +391,6 @@
 	$illustrations = Array() ;
 	$multimedias = Array() ;
 
-	$mimes = Array('jpg' => 'image/jpeg','png' => 'image/png','gif' => 'image/gif',) ;
-
 	$key_files = 'medias' ;
 	if ( isset($_FILES[$key_files]) )
 	{
@@ -409,7 +407,7 @@
 			if ( $media['error'] == UPLOAD_ERR_OK )
 			{
 				$finfo = new finfo(FILEINFO_MIME_TYPE) ;
-				$ext = array_search( $finfo->file($media['tmp_name']),$mimes,true ) ;
+				$ext = array_search( $finfo->file($media['tmp_name']),$_config['mimes_illustrations'],true ) ;
 			    if ( $ext !== false ) {
 			        $legende = @$_POST[$key_files][$i]['legende'] ;
 					$copyright = @$_POST[$key_files][$i]['copyright'] ;
@@ -418,7 +416,7 @@
 						'copyright'=>$copyright,
 						'legende'=>$legende,
 						'basename'=>basename($media['name']),
-						'mime'=>$mimes[$ext],
+						'mime'=>$_config['mimes_illustrations'][$ext],
 						'tempfile'=>$media['tmp_name']
 					) ;
 			    }

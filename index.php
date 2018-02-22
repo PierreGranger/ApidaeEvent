@@ -765,9 +765,7 @@
 										echo "\n\t\t\t\t\t\t".'<tr>' ;
 											echo '<td></td>' ;
 											echo '<td>' ;
-
-												//echo '<div class="dropzone dz-clickable"><div class="dz-default dz-message"><span>Ajouter une photo (3 Mo Max)</span></div></div>' ;
-													echo '<input class="form-control" type="file" name="medias['.$i.']" value="'.htmlspecialchars(@$post['photos'][$i]).'" />' ;
+													echo '<input class="form-control" type="file" name="medias['.$i.']" value="'.htmlspecialchars(@$post['photos'][$i]).'" accept="image/*" />' ;
 											echo '</td>' ;
 											echo '<td><input class="form-control" type="text" name="medias['.$i.'][legende]" value="'.htmlspecialchars(@$post['medias'][$i]['legende']).'" /></td>' ;
 											echo '<td><input class="form-control" type="text" name="medias['.$i.'][copyright]" value="'.htmlspecialchars(@$post['medias'][$i]['copyright']).'" /></td>' ;
