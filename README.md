@@ -79,7 +79,7 @@ N'importe quel projet fait l'affaire : la consultation sert juste à récupérer
 	* Ex pour toutes les communes du 03 : `$_config['communes'] = '^03' ;`
 	* Ex pour toutes les communes d'Auvergne : `$_config['communes'] = '^03|15|63|43' ;`
 * **`$_config['projet_ecriture_clientId']`** & **`$_config['projet_ecriture_secret']`** : codes d'accès fournis par Apidae lors de la création de votre projet d'écriture
-* **`$_config['projet_ecriture_multimembre']`** : actuellement (au 26/06/2017) l'API multimembre n'est pas disponible, ce paramètre doit donc rester à `false`.
+* **`$_config['projet_ecriture_multimembre']`** : Si votre projet est multimembre vous pouvez autoriser ce paramètre. Attention, par défaut ApidaeEvent donnera la propriété de l'offre au propriétaire du projet. Pour que les offres créées soient bien affectées au membre abonné concerné, vous devez renseigner $_config['membres'] en donnant id_membre et id_territoire : dans ce cas, à l'enregistrement on va chercher si la commune de l'offre enregistrée se trouve sur un id_territoire connu : si oui on l'affectera à id_membre, si non on l'affectera au propriétaire du projet.
 * **`$_config['membres']`** (*optionnel*) : Si vous souhaitez permettre au formulaire d'enregistrer les manifestations sur différents membres (en fonction du territoire), vous devez remplir ce tableau. En revanche si votre projet est destiné à renseigner des manifestations pour 1 seul membre Apidae, les infos contenues dans projet_ecriture_* sont suffisantes.
 	* Chaque membre auquel on souhaite affecter la manifestation enregistré doit avoir :
 		* `id_membre` : Identifiant du membre Apidae possédant le projet d'écriture
