@@ -472,10 +472,10 @@
 			'fieldlist' => $fieldlist,
 			'root' => $root,
 			'medias' => $medias,
-			'proprietaireId' => $proprietaireId,
 			'clientId' => $clientId,
 			'secret' => $secret
 		) ;
+		if ( isset($proprietaireId) ) $enregistrer['proprietaireId'] = $proprietaireId ;
 		$ko = $pma->ajouter($enregistrer) ;
 	}
 	
