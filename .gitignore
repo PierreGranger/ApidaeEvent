@@ -4,3 +4,4 @@ config.surcharge.inc.php
 composer.phar
 /vendor/
 /assets/
+/config/
