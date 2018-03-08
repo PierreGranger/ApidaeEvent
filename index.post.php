@@ -8,20 +8,9 @@
 
 	$commune = explode('|',$_POST['commune']) ;
 
-	$id_membre = null ;
-	
-	// Si on est en multimembre, il faut absolument passer un proprietaireId
-	if ( $_config['projet_ecriture_multimembre'] === true ) $id_membre = $_config['membre'] ;
-
-	/*
-	*	Par défait $clientId et $secret sont déjà définis en config.
-	*	Cependant lors de la recherche du territoire concerné, on va regarder si pour le membre trouvé, on a un clientId et un secret de renseignés.
-	*	Si c'est le cas, on va les préférer au clientId/secret défini par défaut dans $_config.
-	*	L'objectif est de parer à l'absence d'API d'écriture multimembre, en attendant sa livraison. au 21/06/2017, on ne peut pas spécifier le membre propriétaire d'une fiche via l'API d'écriture, il faut donc une API d'écriture par membre, et donc un clientId/secret par membre.
-	*/
-	$clientId = null ;
-	$secret = null ;
-	$mail_membre = null ;
+	$mail_membre = $_config['mail_admin'] ;
+	$structure_validatrice = $_config['nom_membre'] ;
+	$url_structure_validatrice = $_config['url_membre'] ;
 
 	$pma->debug($_POST,'$_POST') ;
 
@@ -51,61 +40,49 @@
 	/*
 		Si on souhaite pouvoir écrire sur un membre différent en fonction de la commune saisie, alors dans la config on a renseigné $_config['membres'].
 	*/
-	if ( isset($_config['membres']) )
+	unset($proprietaireId) ;
+	if ( $_config['projet_ecriture_multimembre'] === true )
 	{
-		$territoires = Array() ;
-		/* Dans ce cas, on va rechercher à quels territoires correspond la commune saisie. */
-		$rq = $pma->mysqli->query(' select id_territoire from apidae_territoires T where id_commune = "'.$pma->mysqli->real_escape_string($commune[0]).'" ') or die($pma->mysqli->error) ;
-		while ( $d = $rq->fetch_assoc() )
+		if ( isset($_config['membres']) )
 		{
-			$territoires[] = $d['id_territoire'] ;
-		}
-		/* Au cas où la commune serait concernée par plusieurs territoires, on parcourt les membres dans l'ordre saisi pour choisir le premier dans la liste. */
-		foreach ( $_config['membres'] as $m )
-		{
-			if (
-				( isset($m['id_territoire']) && in_array($m['id_territoire'],$territoires) ) ||
-				( isset($m['insee_commune']) && $m['insee_commune'] == $commune[3] ) ||
-				( isset($m['insee_communes']) && in_array($commune[3],$m['insee_communes']) )
-			)
+			$territoires = Array() ;
+			/* Dans ce cas, on va rechercher à quels territoires correspond la commune saisie. */
+			$rq = $pma->mysqli->query(' select id_territoire from apidae_territoires T where id_commune = "'.$pma->mysqli->real_escape_string($commune[0]).'" ') or die($pma->mysqli->error) ;
+			while ( $d = $rq->fetch_assoc() )
 			{
-				// Si on n'a pas de projet d'écriture multimembre, on a besoin du clientId:secret du projet d'écriture du membre trouvé.
-				if ( isset($m['secret']) && $m['secret'] !== null )
+				$territoires[] = $d['id_territoire'] ;
+			}
+			/* Au cas où la commune serait concernée par plusieurs territoires, on parcourt les membres dans l'ordre saisi pour choisir le premier dans la liste. */
+			foreach ( $_config['membres'] as $m )
+			{
+				if (
+					( isset($m['id_territoire']) && in_array($m['id_territoire'],$territoires) ) ||
+					( isset($m['insee_commune']) && $m['insee_commune'] == $commune[3] ) ||
+					( isset($m['insee_communes']) && in_array($commune[3],$m['insee_communes']) )
+				)
 				{
-					$clientId = $m['clientId'] ;
-					$secret = $m['secret'] ;
+					$proprietaireId = $m['id_membre'] ;
+					$mail_membre = @$m['mail'] ;
+					$structure_validatrice = $m['nom'] ;
+					$url_structure_validatrice = $m['site'] ;
+					break ;
 				}
-				// Si on n'a pas de projet d'écriture multimembre, ce paramètre ne servira à rien (impossible de modifier gestion.membreProprietaire.type.id)
-				$id_membre = $m['id_membre'] ;
-				$mail_membre = @$m['mail'] ;
-				break ;
 			}
 		}
+
+		if ( ! jsset($proprietaireId) )
+		{
+			$proprietaireId = $m['id_membre'] ;
+			$mail_membre = @$m['mail'] ;
+			$structure_validatrice = $m['nom'] ;
+			$url_structure_validatrice = $m['site'] ;
+		}
 	}
-	elseif ( isset($_config['membre']) )
-		$id_membre = $_config['membre'] ;
 
 	$root = Array() ;
 	$fieldlist = Array() ;
 	
 	$root['type'] = 'FETE_ET_MANIFESTATION' ;
-
-	if ( $_config['projet_ecriture_multimembre'] === true && $id_membre !== null )
-	{
-		/*
-		*	Pour permettre l'utilisation conjointe des projets API écriture classique avec le projet API écriture global,
-		*	on va regarder si on a trouvé un clientId:secret dans la config concernant le membre.
-		*	Si on a rien trouvé, on est dans une API multi membre : on doit donc prendre le clientId:secret du projet API écriture global.
-		*	Si clientId:secret sont renseignés, c'est qu'on est sur un membre ayant son propre projet d'écriture et n'étant pas abonné au projet API écriture multimembre : on utilise alors son clientId:secret.
-		*/
-		if ( $clientId == null && $secret == null )
-		{
-			// On n'a rien trouvé dans la config du membre : on prend le global
-			$clientId = $_config['projet_ecriture_clientId'] ;
-			$secret = $_config['projet_ecriture_secret'] ;
-		}
-		$proprietaireId = $id_membre ;
-	}
 
 	$fieldlist[] = 'nom' ;
 	$root['nom']['libelleFr'] = $_POST['nom'] ;
@@ -472,8 +449,8 @@
 			'fieldlist' => $fieldlist,
 			'root' => $root,
 			'medias' => $medias,
-			'clientId' => $clientId,
-			'secret' => $secret
+			'clientId' => $_config['projet_ecriture_clientId'],
+			'secret' => $_config['projet_ecriture_secret']
 		) ;
 		if ( isset($proprietaireId) ) $enregistrer['proprietaireId'] = $proprietaireId ;
 		$ko = $pma->ajouter($enregistrer) ;
@@ -517,7 +494,11 @@
 				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 				<strong>Offre enregistrée :</strong>
 				<p>/!\ Votre événement a bien été enregistré, nous vous remercions pour votre contribution.</p>
-				<p>Il a été envoyé en validation et devrait apparaître d'ici 24 à 48h sur les différents supports de communication alimentés par Apidae.</p>
+				<p><strong>Attention :</strong> Il a été envoyé en validation, et ne n'apparapitra que <strong>24 à 48h après sa validation</strong>, sur les différents supports de communication alimentés par Apidae.</p>
+				<p>La validation est en cours auprès de : <?php echo $structure_validatrice ; ?><?php
+					if ( isset($url_structure_validatrice) && $url_structure_validatrice != '' )
+						echo ' (<a href="'.$url_structure_validatrice.'" target="_blank">'.$url_structure_validatrice.'</a>)' ;
+				?></p>
 				<p>Plus d'informations ici : <a href="http://www.apidae-tourisme.com" target="_blank">http://www.apidae-tourisme.com</a></p>
 			</div>
 		<?php
@@ -529,7 +510,6 @@
 				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 				<strong>[DEBUG] Offre enregistrée en attente de validation dans Apidae :</strong>
 				<p>On la retrouve dans <a href="https://base.apidae-tourisme.com/gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Gérer > Demandes API écriture > Demandes d'écritures à valider</a></p>
-				<p>L'offre a été enregistrée grâce au clientId "<?php echo $clientId ; ?>" du projet d'écriture. Elle a été rattachée au membre <a href="https://base.apidae-tourisme.com/echanger/membre-sitra/1147" target="_blank"><?php echo $id_membre ; ?></a></p>
 			</div>
 			<?php
 		}

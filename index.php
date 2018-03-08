@@ -140,7 +140,6 @@
 									<th>ID</th>
 									<th>Nom</th>
 									<th>Terr. ou COM</th>
-									<th>Projet</th>
 									<th>Mails alertés</th>
 								</tr>
 							</thead>
@@ -154,6 +153,8 @@
 										echo '</th>' ;
 										echo '<th>' ;
 											echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['nom'].'</a> ' ;
+											echo '<br />' ;
+											echo '&rsaquo; <a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['site'].'" target="_blank">'.$membre['site'].'</a> ' ;
 										echo '</th>' ;
 										echo '<td>' ;
 											if ( @$membre['id_territoire'] !== null )
@@ -162,10 +163,6 @@
 												echo 'COM. : '.$membre['id_commune'] ;
 											else
 												echo '<strong style="color:red;">Non renseignée</strong>' ;
-										echo '</td>' ;
-										echo '<td>' ;
-											if ( @$membre['clientId'] !== null ) echo 'Projet&nbsp;indiv' ;
-											else echo '<strong style="color:orange;">Multimembre&nbsp;?</strong>' ;
 										echo '</td>' ;
 										echo '<td>' ;
 											if ( is_array($membre['mail']) ) echo implode(', ',$membre['mail']) ; else echo $membre['mail'] ;
