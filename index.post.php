@@ -70,7 +70,7 @@
 			}
 		}
 
-		if ( ! jsset($proprietaireId) )
+		if ( ! isset($proprietaireId) )
 		{
 			$proprietaireId = $m['id_membre'] ;
 			$mail_membre = @$m['mail'] ;
