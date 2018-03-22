@@ -57,7 +57,7 @@
 			if ( isset($params['selection_territoires']) ) $this->selection_territoires = $params['selection_territoires'] ;
 
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
-			else $this->ressources_path = realpath(dirname(__FILE__)).'/ressources/' ;
+			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
 			if ( ! $this->getCommunes() ) throw new \Exception('Impossible de récupérer la liste des communes Apidae') ;
 			if ( ! $this->getElementsReference() ) throw new \Exception('Impossible de récupérer la liste des ElementsReference') ;
@@ -441,8 +441,11 @@
 							if ( $r['type'] !== 'TERRITOIRE' ) continue ;
 							if ( isset($r['localisation']['perimetreGeographique']) )
 							{
+								$this->mysqli->query(' delete from apidae_territoires where id_territoire = "'.$this->mysqli->real_escape_string($r['id']).'" ') ;
+								$ids_communes = Array() ;
 								foreach ( $r['localisation']['perimetreGeographique'] as $c )
 								{
+									$ids_communes[] = $c['id'] ;
 									$sets = Array() ;
 									$sets[] = ' id_territoire = "'.$this->mysqli->real_escape_string($r['id']).'" ' ;
 									$sets[] = ' id_commune = "'.$this->mysqli->real_escape_string($c['id']).'" ' ;

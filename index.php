@@ -305,7 +305,7 @@
 							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
 							if ( $d = $rq->fetch_assoc() )
 							{
-								if ( $d['nb'] == 0 )
+								if ( $d['nb'] == 0 || isset($_GET['force']) )
 								{
 									$pma->setTerritoires(true,Array($_config['territoire'])) ;
 								}
@@ -315,6 +315,7 @@
 							inner join apidae_territoires T on T.id_commune = C.id
 							where T.id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" 
 							order by C.nom asc ' ;
+							
 							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
 						}
 						elseif ( isset($_config['communes']) )
