@@ -56,7 +56,7 @@
 
 			}
 
-			$icon_plus = '<span class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> <strong>Ajouter une ligne</strong></span>' ;
+			$icon_plus = '<span class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> <strong>##LIBELLE##</strong></span>' ;
 			$icon_moins = '<span class="btn btn-warning"><span class="glyphicon glyphicon-minus"></span></span>' ;
 		?>
 		
@@ -442,7 +442,7 @@
 									echo '</tr>' ;
 								}
 								echo '<tr>' ;
-									echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
+									echo '<td class="plus" colspan="99">'.preg_replace('/##LIBELLE##/','Ajouter une date',$icon_plus).'</td>' ;
 								echo '</tr>' ;
 							?>
 							</tbody>
@@ -572,7 +572,7 @@
 									echo '</tr>' ;
 								}
 								echo '<tr>' ;
-									echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
+									echo '<td class="plus" colspan="99">'.preg_replace('/##LIBELLE##/','Ajouter une ligne',$icon_plus).'</td>' ;
 								echo '</tr>' ;
 							?>
 							</tbody>
@@ -643,7 +643,7 @@
 										echo '</tr>' ;
 									}
 									echo '<tr>' ;
-										echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
+										echo '<td class="plus" colspan="99">'.preg_replace('/##LIBELLE##/','Ajouter un contact',$icon_plus).'</td>' ;
 									echo '</tr>' ;
 								?>
 							</tbody>
@@ -721,7 +721,7 @@
 												echo '</tr>' ;
 											}
 											echo '<tr>' ;
-												echo '<td class="plus" colspan="99">'.$icon_plus.'</td>' ;
+												echo '<td class="plus" colspan="99">'.preg_replace('/##LIBELLE##/','Ajouter un tarif',$icon_plus).'</td>' ;
 											echo '</tr>' ;
 										?>
 									</tbody>
@@ -771,7 +771,7 @@
 									}
 								?>
 								<tr>
-									<td class="plus" colspan="99"><?php echo $icon_plus ; ?></td>
+									<td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/','Ajouter une photo',$icon_plus) ; ?></td>
 								</tr>
 							</tbody>
 						</table>
