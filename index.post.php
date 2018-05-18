@@ -494,7 +494,7 @@
 				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 				<strong>Offre enregistrée :</strong>
 				<p>/!\ Votre événement a bien été enregistré, nous vous remercions pour votre contribution.</p>
-				<p><strong>Attention :</strong> Il a été envoyé en validation, et ne n'apparapitra que <strong>24 à 48h après sa validation</strong>, sur les différents supports de communication alimentés par Apidae.</p>
+				<p><strong>Attention :</strong> Il a été envoyé en validation, et n'apparaîtra que <strong>24 à 48h après sa validation</strong>, sur les différents supports de communication alimentés par Apidae.</p>
 				<p>La validation est en cours auprès de : <?php echo $structure_validatrice ; ?><?php
 					if ( isset($url_structure_validatrice) && $url_structure_validatrice != '' )
 						echo ' (<a href="'.$url_structure_validatrice.'" target="_blank">'.$url_structure_validatrice.'</a>)' ;
