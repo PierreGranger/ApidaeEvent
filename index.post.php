@@ -606,11 +606,12 @@
 		$texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
 		
 		?>
+			<?php $alert = addslashes(strip_tags($texte_offre_enregistree)) ; ?>
 			<div class="alert alert-success" role="alert">
-				<?php echo $texte_offre_enregistree ; ?>
+				<div id="texte_offre_enregistree"><?php echo $texte_offre_enregistree ; ?></div>
 				<p>Plus d'informations ici : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
 				<script>
-					alert('<?php echo addslashes(strip_tags($texte_offre_enregistree)) ; ?>') ;
+					alert(jQuery('div#texte_offre_enregistree').text()) ;
 				</script>
 			</div>
 		<?php
