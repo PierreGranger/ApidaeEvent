@@ -51,6 +51,10 @@ jQuery(document).on('click','form.form .btn-submit',function(){
 	jQuery(this).closest('form.form').submit() ;
 }) ;
 
+/**
+ * à l'enregistrement on va parcourir tous les champs pour les vérifier.
+ * 
+ */
 jQuery(document).on('submit','form.form',function(e){
 
 	var ok = true ;
@@ -69,7 +73,13 @@ jQuery(document).on('submit','form.form',function(e){
 	var erreurTarif = checkTypeTarifs() ;
 	if ( erreurTarif !== true )
 	{
-		alert(erreurTarif) ;
+		//alert(erreurTarif) ;
+	}
+
+	var erreurContacts = checkContacts() ;
+	if ( erreurContacts !== true )
+	{
+		ok = false ;
 	}
 
 	if ( ok === true )
@@ -80,7 +90,6 @@ jQuery(document).on('submit','form.form',function(e){
 	}
 	else
 	{
-
 		if ( firstError !== null )
 		{
 			var disp = firstError.is(':hidden') ;
@@ -90,7 +99,7 @@ jQuery(document).on('submit','form.form',function(e){
 		}
 		e.preventDefault() ;
 		e.stopImmediatePropagation();
-		alert('Votre formulaire comporte des erreurs : merci de remplir tous les champs obligatoires') ;
+		alert('Votre formulaire comporte des erreurs : merci de vérifier les champs encadrés en rouge') ;
 		return false ;
 	}
 
@@ -244,6 +253,9 @@ function selectChange(select,init)
 
 
 
+/**
+ * 
+ */
 
 function checkTypeTarifs() {
 	var trs = jQuery('form.form div.tarifs table tbody tr') ;
@@ -251,7 +263,7 @@ function checkTypeTarifs() {
 	trs.each(function(){
 		var inputs = jQuery(this).find('input') ;
 		var select = jQuery(this).find('select') ;
-		select.removeClass('has-error') ;
+		select.closest('.form-group').removeClass('has-error') ;
 		var inputsRenseignes = false ;
 		inputs.each(function(){
 			if ( jQuery(this).val() != '' ) inputsRenseignes = true ;
@@ -265,12 +277,15 @@ function checkTypeTarifs() {
 	if ( erreurs.length == 0 ) return true ;
 	return erreurs ;
 }
+jQuery(document).on('change','form.form div.tarifs table tbody tr',checkTypeTarifs) ;
+
 
 
 function checkTarifs() {
 	jQuery('form.form input[name="gratuit"]').each(function(){
 		jQuery(this).closest('form').find('div.champ.tarifs').toggle(( jQuery(this).is(':checked') !== true )) ;
 		jQuery(this).closest('form').find('div.complement_tarif').toggle(( jQuery(this).is(':checked') !== true )) ;
+		jQuery(this).closest('form').find('div.modes_paiement').toggle(( jQuery(this).is(':checked') !== true )) ;
 	}) ;
 }
 
@@ -338,3 +353,38 @@ function valideTarifUnique()
 		}) ;
 	}) ;
 }
+
+/**
+ * Optionnellement à l'intégration on peut rendre un contact obligatoire.
+ * Dans ce cas on va contrôler à l'enregistrement si le contact est renseigné (à minima mail ou tel)
+ */
+function checkContacts() {
+	
+	var contacts = jQuery('fieldset.contacts') ;
+	if ( ! contacts.hasClass('required') ) return true ;
+	
+	var ret = false ;
+
+	contacts.find('input.telephone').each(function(){
+		if ( jQuery(this).val() != "" ) ret = true ;
+	}) ;
+
+	contacts.find('input.mail').each(function(){
+		if ( jQuery(this).val() != "" ) ret = true ;
+	}) ;
+
+	console.log('checkContacts',ret) ;
+
+	// Aucun MC de contact trouvé...
+	if ( ret == false )
+	{
+		console.log(contacts.find('input.telephone').first()) ;
+		console.log(contacts.find('input.mail').first()) ;
+		contacts.find('input.telephone').first().closest('.form-group').addClass('has-error') ;
+		contacts.find('input.mail').first().closest('.form-group').addClass('has-error') ;
+	}
+
+	return ret ;
+
+}
+jQuery(document).on('change','fieldset.contacts',checkContacts) ;

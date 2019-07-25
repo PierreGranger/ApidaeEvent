@@ -5,8 +5,8 @@
 	$url = 'http://api.apidae-tourisme.com/api/v002/recherche/list-objets-touristiques/' ;
 
 	$query = Array(
-		'apiKey' => $_config['projet_consultation_apiKey'],
-		'projetId' => $_config['projet_consultation_projetId'],
+		'apiKey' => $configApidaeEvent['projet_consultation_apiKey'],
+		'projetId' => $configApidaeEvent['projet_consultation_projetId'],
 		'searchFields' => 'NOM',
 		'searchQuery' => $_GET['search'],
 		'responseFields' => Array('id','nom','localisation.adresse.codePostal','localisation.adresse.commune.nom')

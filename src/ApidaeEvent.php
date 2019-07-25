@@ -19,16 +19,9 @@
 *
 * @since 1.0
 *
-* @param int    $example  This is an example function/method parameter description.
-* @param string $example2 This is a second example.
 */
 
 	class ApidaeEvent extends ApidaeEcriture {
-
-		public $mysqli ;
-		private $mysqli_user ;
-		private $mysqli_password ;
-		private $mysqli_db ;
 
 		private $projet_consultation_apiKey ;
 		private $projet_consultation_projetId ;
@@ -40,17 +33,13 @@
 		private $method_communes = 'json' ; // json|sql (impossible via API pour l'instant)
 		private $method_territoires = 'api' ; // api
 
+		private $mc ;
 
 		public function __construct($params=null) {
 			
 			parent::__construct($params) ;
 
 			if ( ! is_array($params) ) throw new \Exception('$params is not an array') ;
-
-			if ( isset($params['mysqli_user']) ) $this->mysqli_user = $params['mysqli_user'] ; else throw new \Exception('missing mysqli_user') ;
-			if ( isset($params['mysqli_password']) ) $this->mysqli_password = $params['mysqli_password'] ; else throw new \Exception('missing mysqli_password') ;
-			if ( isset($params['mysqli_db']) ) $this->mysqli_db = $params['mysqli_db'] ; else throw new \Exception('missing mysqli_db') ;
-			if ( ! $this->mysqli_connect() ) throw new \Exception('unabled to connect to mysqli') ;
 			
 			if ( isset($params['projet_consultation_apiKey']) ) $this->projet_consultation_apiKey = $params['projet_consultation_apiKey'] ; //else throw new \Exception('missing projet_consultation_apiKey') ;
 			if ( isset($params['projet_consultation_projetId']) ) $this->projet_consultation_projetId = $params['projet_consultation_projetId'] ; //else throw new \Exception('missing projet_consultation_projetId') ;
@@ -59,17 +48,12 @@
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
-			if ( ! $this->getCommunes() ) throw new \Exception('Impossible de récupérer la liste des communes Apidae') ;
-			if ( ! $this->getElementsReference() ) throw new \Exception('Impossible de récupérer la liste des ElementsReference') ;
+			if ( ! class_exists('Memcached') ) throw new \Exception('Classe Memcached introuvable sur le serveur') ;
+			$this->mc = new \Memcached() ;
+			$this->mc->addServer("localhost", 11211) ;
+			if ( ! $this->mc ) throw new \Exception('Memcached fail') ;
 
 			if ( $this->debugTime ) $this->debug('construct '.(microtime(true)-$start)) ;
-		}
-
-		private function mysqli_connect() {
-			$this->mysqli = new \mysqli('localhost', $this->mysqli_user, $this->mysqli_password, $this->mysqli_db) ;
-			if ($this->mysqli->connect_error) throw new \Exception('mysqli_connect failed') ;
-			$this->mysqli->set_charset('utf8') ;
-			return true ;
 		}
 
 		/**
@@ -86,31 +70,15 @@
 
 			if ( $this->debugTime ) $start = microtime(true) ;
 
-			if ( ! in_array(@$params['presentation'],Array('kilometre','select')) ) $params['presentation'] = 'kilometre' ;
+			if ( ! in_array(@$params['presentation'],Array('checkbox','select')) ) $params['presentation'] = 'checkbox' ;
 
-			$familles = Array() ;
-			$parents = Array() ;
-			$enfants = Array() ;
+			$params_er = Array() ;
+			if ( isset($params['exclude']) ) $params_er['exclude'] = $params['exclude'] ;
+			if ( isset($params['include']) ) $params_er['include'] = $params['include'] ;
+			if ( isset($params['force']) ) $params_er['force'] = $params['force'] ;
 
-			$rq = $this->mysqli->query(' select id, libelleFr, ordre, parent, familleCritere, description from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" order by ordre asc ') or die($this->mysqli->error) ;
-			while ( $e = $rq->fetch_assoc() )
-			{
-				if ( $e['parent'] == null )
-					$parents[$e['familleCritere']][] = $e ;
-				else
-					$enfants[$e['parent']][] = $e ;
-				if ( $e['familleCritere'] != null ) $familles[$e['familleCritere']] = null ;
-			}
-
-			if ( sizeof($familles) > 0 )
-			{
-				$rq = $this->mysqli->query(' select id, libelleFr, ordre from apidae_elements_reference where id in ('.implode(',',array_keys($familles)).') order by ordre asc ') or die($this->mysqli->error) ;
-				while ( $e = $rq->fetch_assoc() )
-				{
-					$familles[$e['id']] = $e ;
-				}
-			}
-			array_push($familles,Array('id'=>null)) ;
+			$ers = $this->getElementsReferenceByType($type,$params_er) ;
+			$familles = $this->getFamillesElementsReference($ers) ;
 
 			if ( $params['presentation'] == 'select' )
 			{
@@ -121,81 +89,63 @@
 				if ( isset($params['max_selected_options']) ) $ret .= ' data-max_selected_options="'.$params['max_selected_options'].'" ' ;
 				$ret .= '>' ;
 					if ( @$params['type'] == 'unique' ) $ret .= '<option value="">-</option>' ;
-					foreach ( $familles as $f )
+					$famillePrec = null ;
+					foreach ( $ers as $erp )
 					{
-						if ( ! isset($parents[$f['id']]) ) continue ;
-						if ( $f['id'] != null ) $ret .= '<optgroup label="'.htmlspecialchars($f['libelleFr']).'">' ;
-							foreach ( $parents[$f['id']] as $p )
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] && $famillePrec != null ) $ret .= '</optgroup>' ;
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= '<optgroup label="'.htmlspecialchars($familles[$erp['familleCritere']]['libelleFr']).'">' ;
+						// TODO : on change le fonctionnement de la boucle. On a un tableau avec les parents ($erp) et des enants possibles ($erp['enfants']).
+						
+						$ret .= '<option value="'.$erp['id'].'"' ;
+						//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
+							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= 'title="'.htmlspecialchars($erp['description']).'" ' ;
+							if ( isset($post) && is_array($post) && in_array($p['id'],$post) ) $ret .= ' selected="selected"' ;
+						$ret .= '>'.$erp['libelleFr'].'</option>' ;
+						if ( isset($erp['enfants']) )
+						{
+							foreach ( $erp['enfants'] as $e )
 							{
-								$ret .= '<option value="'.$p['id'].'"' ;
-								//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
-									if ( isset($p['description']) && $p['description'] != '' ) $ret .= 'title="'.htmlspecialchars($p['description']).'" ' ;
-									if ( isset($post) && is_array($post) && in_array($p['id'],$post) ) $ret .= ' selected="selected"' ;
-								$ret .= '>'.$p['libelleFr'].'</option>' ;
-								if ( isset($enfants[$p['id']]) )
-								{
-									foreach ( $enfants[$p['id']] as $e )
-									{
-										$ret .= '<option value="'.$e['id'].'"' ;
-										if ( isset($e['description']) && $e['description'] != '' ) $ret .= 'title="'.htmlspecialchars($e['description']).'" ' ;
-										if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
-										$ret .= '>'.$p['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
-									}
-								}
+								$ret .= '<option value="'.$e['id'].'"' ;
+								if ( isset($e['description']) && $e['description'] != '' ) $ret .= 'title="'.htmlspecialchars($e['description']).'" ' ;
+								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
+								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
 							}
-						if ( $f['id'] != null ) $ret .= '</optgroup>' ;
+						}
+
+						$famillePrec = @$erp['familleCritere'] ;
 					}
 				$ret .= '</select>' ;
 			}
-			elseif ( $params['presentation'] == 'kilometre' )
+			elseif ( $params['presentation'] == 'checkbox' )
 			{
-				foreach ( $familles as $f )
-				{
-					if ( ! isset($parents[$f['id']]) ) continue ;
-					if ( $f['id'] !== null )
+				$ret .= ' <div class="form-group">' ;
+					if ( @$params['type'] == 'unique' ) $ret .= '<option value="">-</option>' ;
+					$famillePrec = null ;
+					foreach ( $ers as $erp )
 					{
-						$ret .= '<fieldset>' ;
-							$ret .= '<legend>'.$f['libelleFr'].'</legend>' ;
-					}
-
-					foreach ( $parents[$f['id']] as $p )
-					{
-						$ret .= '<label class="label"' ;
-							if ( isset($p['description']) ) $ret .= ' title="'.htmlentities($p['description']).'" ' ;
+						$ret .= '<label class="checkbox-inline" for="'.$type.$erp['id'].'"' ;
+							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'" ' ;
 						$ret .= '>' ;
-							$ret .= '<input type="checkbox" name="'.$type.'['.$p['id'].']" value="'.$p['id'].'" ' ;
-							if ( isset($post) && is_array($post) && in_array($p['id'],$post) ) $ret .= ' checked="checked" ' ;
-							$ret .= '/> '.$p['libelleFr'] ;
+							$ret .= '<input class="form-check-input" type="checkbox" name="'.$type.'[]" id="'.$type.$erp['id'].'" value="'.$erp['id'].'" ' ;
+								if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' checked="checked"' ;
+							$ret .= ' />' ;
+							$ret .= $erp['libelleFr'] ;
 						$ret .= '</label>' ;
-						if ( isset($enfants[$p['id']]) )
+						
+						/*if ( isset($erp['enfants']) )
 						{
-							$ret .= '<fieldset>' ;
-							foreach ( $enfants[$p['id']] as $e )
+							foreach ( $erp['enfants'] as $e )
 							{
-								$ret .= '<label class="label"' ;
-									if ( isset($e['description']) ) $ret .= ' title="'.htmlentities($e['description']).'" ' ;
-								$ret .= '>' ;
-									if ( @$params['type'] == 'unique' )
-									{
-										$ret .= '<input type="radio" name="'.$type.'['.$e['id'].']" value="'.$e['id'].'" ' ;
-										if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' checked="checked" ' ;
-										$ret .= ' />' ;
-									}
-									else
-									{
-										$ret .= '<input type="checkbox" name="'.$type.'['.$e['id'].']" value="'.$e['id'].'" ' ;
-										if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' checked="checked" ' ;
-										$ret .= ' />' ;
-									}
-									$ret .= ' '.$p['libelleFr'].' > '.$e['libelleFr'] ;
-								$ret .= '</label>' ;
+								$ret .= '<option value="'.$e['id'].'"' ;
+								if ( isset($e['description']) && $e['description'] != '' ) $ret .= 'title="'.htmlspecialchars($e['description']).'" ' ;
+								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
+								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
 							}
-							$ret .= '</fieldset>' ;
-						}
-					}
+						}*/
 
-					if ( $f['id'] !== null ) $ret .= '</fieldset>' ;
-				}
+						$famillePrec = @$erp['familleCritere'] ;
+					}
+				$ret .= '</div>' ;
 			}
 
 			if ( $this->debugTime ) $this->debug('formHtmlCC('.$type.') '.(microtime(true)-$start)) ;
@@ -203,73 +153,56 @@
 			return $ret ;
 		}
 
-		/**
-		*	Récupère la liste des communes d'Apidae
-		*	
-		*	On préfère récupérer la liste complète, même si c'est un peu gros, pour ne pas avoir à tester plus tard si telle ou telle commune est présente en fonction des besoins du formulaire.
-		*
-		*	Problème : actuellement, l'API ne permet de récupérer les communes que par lots de 500, et en passant en paramètre leur ID ou leur code INSEE.
-		*	Pour l'instant on se base donc sur un export fixe parce qu'il serait démesuré de créer un projet de consultation, avec un export et une notification juste pour récupérer les communes.
-		*	
-		**/
-		public function getCommunes($force=false) {
-
-			if ( $this->debugTime ) $start = microtime(true) ;
-
-			$rq = $this->mysqli->query(' select count(*) as nb from apidae_communes ') ;
-
-			if ( ! $rq )
+		public function getCommunesById(array $ids)
+		{
+			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
+			$cachekey = 'communesById'.md5($coms) ;
+			if ( ! $ret = $this->mc->get($cachekey) )
 			{
-				$this->mysqli->query('
-					CREATE TABLE `apidae_communes` (
-					  `id` int(11) PRIMARY KEY NOT NULL,
-					  `code` varchar(20) NOT NULL,
-					  `nom` varchar(255) NOT NULL,
-					  `pays_id` int(11) NOT NULL,
-					  `codePostal` varchar(10) NOT NULL
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-				') ;
-				$rq = $this->mysqli->query(' select count(*) as nb from apidae_communes ') ;
+				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
+				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'communeIds'=>$coms) ;
+				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
+				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
+				$this->mc->set($cachekey,$tmp) ;
 			}
-			if ( $d = $rq->fetch_assoc() )
+			return $ret ;
+		}
+
+		public function getCommunesByTerritoire($id_territoire)
+		{
+			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new \Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
+			$cachekey = 'territoire'.$id_territoire ;
+			if ( ! $ret = $this->mc->get($cachekey) )
 			{
-				if ( $d['nb'] < 10 || $force )
-				{
-					$this->mysqli->query(' truncate table apidae_communes ') ;
-					if ( $this->method_communes == 'json' )
-					{
-						$json = json_decode(file_get_contents($this->ressources_path.'/communes.json'),true) ;
-						foreach ( $json as $element )
-						{
-							$sets = Array() ;
-							$sets[] = ' id = "'.$this->mysqli->real_escape_string($element['id']).'" ' ;
-							$sets[] = ' code = "'.$this->mysqli->real_escape_string($element['code']).'" ' ;
-							$sets[] = ' nom = "'.$this->mysqli->real_escape_string($element['nom']).'" ' ;
-							$sets[] = ' pays_id = "'.$this->mysqli->real_escape_string($element['pays']['id']).'" ' ;
-							$sets[] = ' codePostal = "'.$this->mysqli->real_escape_string($element['codePostal']).'" ' ;
-							$sql = ' insert into apidae_communes set '.implode(', ',$sets) ;
-							$this->mysqli->query($sql) ;
-						}
-					}
-					elseif ( $this->method_communes == 'sql' )
-					{
-						$sql = file_get_contents($this->ressources_path.'/apidae_communes.sql') ;
-						$rq = $this->mysqli->multi_query($sql) or die($this->mysqli->error) ;
-					}
-					elseif ( $this->method_communes == 'api' )
-					{
-						return false ;
-					}
-				}
+				$this->debug(__METHOD__.__LINE__.'mc->get failed...') ;
+				$parameters = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'responseFields'=>'localisation.perimetreGeographique') ;
+				$tmp = $this->curlApi('objet-touristique/get-by-id','GET',$parameters,$id_territoire) ;
+				if ( ! is_array($tmp) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+				if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+				$ret = Array() ;
+				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
+					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code']) ;
+				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
+				$this->mc->set($cachekey,$ret) ;
 			}
+			return $ret ;
+		}
 
-			if ( $this->debugTime ) $this->debug('getCommunes '.(microtime(true)-$start)) ;
-
-			$rq = $this->mysqli->query(' select count(*) as nb from apidae_communes ') ;
-			if ( $d = $rq->fetch_assoc() )
-				if ( $d['nb'] > 10 ) return true ;
-
-			return false ;
+		public function getOffre($id_offre,$responseFields=null) {
+			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new \Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
+			$cachekey = 'offre'.$id_offre ;
+			if ( ! $ret = $this->mc->get($cachekey) )
+			{
+				$this->debug(__METHOD__.__LINE__.'mc->get failed...') ;
+				$parameters = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'responseFields'=>$responseFields) ;
+				$tmp = $this->curlApi('objet-touristique/get-by-id','GET',$parameters,$id_offre) ;
+				if ( ! is_array($tmp) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer l\'offre') ;
+				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
+				$ret = $tmp ;
+				$this->mc->set($cachekey,$ret) ;
+			}
+			return $ret ;
 		}
 
 		/**
@@ -278,191 +211,158 @@
 		*
 		*	Chaque élément du tableau renvoyé comporte les champs contenus dans le json ou dans la bdd :
 		*	id
-			elementReferenceType
-			libelleFr
-			ordre
-			description
-			familleCritere
-			familleCritere_elementReferenceType
-			parent
-			parent_elementReferenceType
+		*	elementReferenceType
+		*	libelleFr
+		*	ordre
+		*	description
+		*	familleCritere
+		*	familleCritere_elementReferenceType
+		*	parent
+		*	parent_elementReferenceType
 		*
 		*	@param 		$type 	string Nom du type d'élément recherché (colonne elementReferenceType en base de donnée)
 		*
 		*	@return 	array 	Liste des élements (Chaque élément étant un array associatif issu de la base de donnée)
 		*
 		**/
-		public function getElementsReference($type=null,$force=false,$filtres=null)
+		public function getElementsReferenceByType($type,$params=null)
 		{
 			if ( $this->debugTime ) $start = microtime(true) ;
 
-			$rq = $this->mysqli->query(' select count(*) as nb from apidae_elements_reference ') ;
-			if ( ! $rq )
-			{
-				$this->mysqli->query('
-					CREATE TABLE IF NOT EXISTS `apidae_elements_reference` (
-					  `id` int(11) NOT NULL,
-					  `elementReferenceType` varchar(255) NOT NULL,
-					  `libelleFr` varchar(255) NOT NULL,
-					  `ordre` int(11) NOT NULL,
-					  `description` varchar(255) DEFAULT NULL,
-					  `familleCritere` int(11) DEFAULT NULL,
-					  `familleCritere_elementReferenceType` varchar(255) DEFAULT NULL,
-					  `parent` int(11) DEFAULT NULL,
-					  `parent_elementReferenceType` varchar(255) DEFAULT NULL,
-					  PRIMARY KEY (`id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-				') or die($this->mysqli->error) ;
-				$rq = $this->mysqli->query(' ALTER TABLE  `apidae_elements_reference` ADD INDEX (  `elementReferenceType` ) ') or die($this->mysqli->error) ;
-				$rq = $this->mysqli->query(' select count(*) as nb from apidae_elements_reference ') or die($this->mysqli->error) ;
-			}
-			if ( $d = $rq->fetch_assoc() )
-			{
-				if ( $d['nb'] == 0 || $force )
-				{
-					$this->mysqli->query(' truncate table apidae_elements_reference ') ;
-					if ( $this->method_elementsReference == 'json' )
-					{
-						$json = json_decode(file_get_contents($this->ressources_path.'/elements_reference.json'),true) ;
-						foreach ( $json as $element )
-						{
-							if ( $element['actif'] !== true ) continue ;
-							$sets = Array() ;
-							$sets[] = ' elementReferenceType = "'.$this->mysqli->real_escape_string($element['elementReferenceType']).'" ' ;
-							$sets[] = ' id = "'.$this->mysqli->real_escape_string($element['id']).'" ' ;
-							$sets[] = ' libelleFr = "'.$this->mysqli->real_escape_string($element['libelleFr']).'" ' ;
+			/**
+			 *	TODO : trouver un moyen de récupérer par elementReferenceType en API
+			 *	Actuellement on récupère les élements dans le fichier ressources/elements_reference.json, c'est crade et c'est plus à jour.
+			 *
+			**/
 
-							$sets[] = ' ordre = "'.$this->mysqli->real_escape_string($element['ordre']).'" ' ;
-							if ( isset($element['description']) ) $sets[] = ' description = "'.$this->mysqli->real_escape_string($element['description']).'" ' ;
-							if ( isset($element['parent']) )
-							{
-								$sets[] = ' parent = "'.$this->mysqli->real_escape_string($element['parent']['id']).'" ' ;
-								$sets[] = ' parent_elementReferenceType = "'.$this->mysqli->real_escape_string($element['parent']['elementReferenceType']).'" ' ;
-							}
-							if ( isset($element['familleCritere']) )
-							{
-								$sets[] = ' familleCritere = "'.$this->mysqli->real_escape_string($element['familleCritere']['id']).'" ' ;
-								$sets[] = ' familleCritere_elementReferenceType = "'.$this->mysqli->real_escape_string($element['familleCritere']['elementReferenceType']).'" ' ;
-							}
-							
-							$this->mysqli->query(' insert into apidae_elements_reference set '.implode(', ',$sets)) ;
-						}
+			if ( ! isset($params) || ! is_array($params) )
+			{
+				$params['force'] = false ;
+			}
+
+			$cachekey = 'elements_reference_'.$type.'_'.json_encode($params) ;
+
+			//if ( ! $ret = $this->mc->get($cachekey) )
+			{
+				$full = file_get_contents($this->ressources_path.'/elements_reference.json') ;
+				$full_array = json_decode($full,true) ;
+				if ( json_last_error() !== JSON_ERROR_NONE ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les élements de référence (ressource)') ;
+
+				$ret = Array() ;
+				foreach ( $full_array as $er )
+				{
+					if ( $er['actif'] != true ) continue ;
+					if ( $er['elementReferenceType'] != $type ) continue ;
+					if ( isset($params['include']) && is_array($params['include']) && ! in_array($er['id'],$params['include']) ) continue ;
+					if ( isset($params['exclude']) && is_array($params['exclude']) && in_array($er['id'],$params['exclude']) ) continue ;
+					
+					$newEr = Array(
+						'id' => $er['id'],
+						'libelleFr' => $er['libelleFr'],
+						'ordre' => $er['ordre']
+					) ;
+					if ( isset($er['description']) ) $newEr['description'] = $er['description'] ;
+					if ( isset($er['familleCritere']['id']) ) $newEr['familleCritere'] = $er['familleCritere']['id'] ;
+					
+					if ( isset($er['parent']['id']) )
+					{
+						if ( ! isset($ret[$er['parent']['id']]) )
+							$ret[$er['parent']['id']] = Array('enfants'=>Array()) ;
+						$ret[$er['parent']['id']]['enfants'][$er['id']] = $newEr ;
 					}
+					else
+						$ret[$er['id']] = $newEr ;
+				}
+				
+				foreach ( $ret as $k => $v )
+				{
+					uasort($ret,Array($this,'ersort')) ;
+					if ( isset($ret['enfants']) ) uasort($ret['enfants'],$this,'ersort') ;
 				}
 			}
+			return $ret ;
+		}
 
-			if ( $this->debugTime ) $this->debug('getElementsReference '.(microtime(true)-$start)) ;
+		private static function ersort($a,$b) { return $a['ordre'] > $b['ordre'] ; }
 
-			if ( $type == null )
-			{
-				$rq = $this->mysqli->query(' select count(*) as nb from apidae_elements_reference ') ;
-				if ( $d = $rq->fetch_assoc() )
-					if ( $d['nb'] > 10 ) return true ;
+		private function getFamillesElementsReference($ers) {
+			$cles_Familles = Array() ;
+			foreach ($ers as $er )
+				if ( isset($er['familleCritere']) ) $cles_Familles[] = $er['familleCritere'] ;
+			if ( sizeof($cles_Familles) > 0 ) return $this->getElementsReferenceByType('FamilleCritere',Array('include'=>$cles_Familles)) ;
+			return null ;
+		}
 
-				return false ;
-			}
-
-			$sql = ' select * from apidae_elements_reference where elementReferenceType = "'.$this->mysqli->real_escape_string($type).'" ' ;
-			if ( is_array($filtres) )
-			{
-				$filtres_ok = array_filter($filtres,'is_numeric') ;
-				if ( sizeof($filtres_ok) > 0 ) $sql .= ' and id in ('.implode(',',$filtres_ok).') ' ;
-			}
+		private function curlApi(string $service,string $method='POST',array $params=null,string $page=null) {
 			
-			$sql .= ' order by ordre asc ' ;
+			$debug = $this->debug ;
+			if ( ! in_array($method,Array('GET','POST')) )
+				throw new \Exception(__LINE__." Invalid method for ".__METHOD__." : ".$method) ;
 
-			$rq = $this->mysqli->query($sql) ;
-			if ( ! $rq ) return false ;
-			if ( $rq->num_rows == 0 ) return false ;
-			$er = Array() ;
-			while ( $d = $rq->fetch_assoc() )
-			{
-				$er[$d['id']] = $d ;
-			}
-			return $er ;
-		}
-
-		function setTerritoires($force=false,$append=null)
-		{
-			if ( $this->debugTime ) $start = microtime(true) ;
-
-			$rq = $this->mysqli->query(' select count(*) as nb from apidae_territoires ') ;
-			if ( ! $rq )
-			{
-				$this->mysqli->free_result() ;
-				$this->mysqli->multi_query('
-					CREATE TABLE `apidae_territoires` (
-					  `id_territoire` int(11) NOT NULL,
-					  `id_commune` int(11) NOT NULL
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-					ALTER TABLE `apidae_territoires`
-  					ADD PRIMARY KEY (`id_territoire`,`id_commune`);
-				') or die($this->mysqli->error) ;
-				$rq = $this->mysqli->query(' select count(*) as nb from apidae_territoires ') or die($this->mysqli->error) ;
-			}
-			if ( $d = $rq->fetch_assoc() )
-			{
-				if ( $d['nb'] == 0 || $force )
+			try {
+				$ch = curl_init();
+				
+				curl_setopt($ch, CURLOPT_HTTPHEADER, Array('Content-Type: application/json')); // Erreur 415 sans cette ligne
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				//curl_setopt($ch, CURLOPT_HEADER, 1) ;
+				
+				$url_base = $this->url_api().'api/v002/'.$service.'/' ;
+				$url = $url_base ;
+				if ( $page !== null && preg_match('#^[a-zA-Z0-9\@\.-]+$#',$page) ) $url .= $page ;
+				else echo $page ;
+				
+				if ( $method == 'GET' ) $url .= '?'.http_build_query($params) ;
+				curl_setopt($ch,CURLOPT_URL, $url) ;
+				
+				if ( $method == 'POST' )
 				{
-					if ( $this->method_territoires == 'api' )
-					{
-						$url = self::$url_api[$this->type_prod] . 'api/v002/recherche/list-objets-touristiques/';
-						$fields = array(
-							'apiKey' => $this->projet_consultation_apiKey,
-							'projetId' => $this->projet_consultation_projetId,
-							'count' => 200,
-							'responseFields' => Array('id','localisation.perimetreGeographique.id')
-						);
-
-						if ( $this->selection_territoires !== null && $append == null )
-							$fields['selectionIds'] = Array($this->selection_territoires) ;
-						else
-						{
-							$territoires = Array() ;
-							if ( isset($append) && is_array($append) )
-								foreach ( $append as $t )
-									if ( is_numeric($t) )
-										$territoires[] = $t ;
-							if ( isset($this->_config['territoire']) && is_numeric($this->_config['territoire']) ) $territoires[] = $this->_config['territoire'] ;
-							if ( isset($this->_config['membres']) )
-								foreach ( $this->_config['membres'] as $m )
-									if ( isset($m['id_territoire']) && is_numeric($m['id_territoire']) )
-										$territoires[] = $m['id_territoire'] ;
-							$fields['identifiants'] = $territoires ;
-						}
-
-						$url = $url.'?query='.json_encode($fields) ;
-						if ( ! ( $json = json_decode(file_get_contents($url),true) ) ) return false ;
-						
-						if ( ! isset($json['objetsTouristiques']) ) return false ;
-						
-						foreach ( $json['objetsTouristiques'] as $r )
-						{
-							if ( $r['type'] !== 'TERRITOIRE' ) continue ;
-							if ( isset($r['localisation']['perimetreGeographique']) )
-							{
-								$this->mysqli->query(' delete from apidae_territoires where id_territoire = "'.$this->mysqli->real_escape_string($r['id']).'" ') ;
-								$ids_communes = Array() ;
-								foreach ( $r['localisation']['perimetreGeographique'] as $c )
-								{
-									$ids_communes[] = $c['id'] ;
-									$sets = Array() ;
-									$sets[] = ' id_territoire = "'.$this->mysqli->real_escape_string($r['id']).'" ' ;
-									$sets[] = ' id_commune = "'.$this->mysqli->real_escape_string($c['id']).'" ' ;
-									$this->mysqli->query(' insert into apidae_territoires set '.implode(', ',$sets).' on duplicate key update '.implode(', ',$sets)) ;
-								}
-							}
-						}
-
-						//close connection
-						//curl_close($ch);
-					}
+					curl_setopt($ch, CURLOPT_POST, 1) ;
+					$postfields = json_encode($params) ;
+					curl_setopt($ch,CURLOPT_POSTFIELDS, $postfields);
 				}
-			}
-
-			if ( $this->debugTime ) $this->debug('setTerritoires '.(microtime(true)-$start)) ;
-		}
+				
+				$response = curl_exec($ch);
+				$info = curl_getinfo($ch);
+				$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		
+				if ( $debug )
+				{
+					if ( $method =='POST' )
+					{
+						$this->debug(__METHOD__.__LINE__,$url_base) ;
+						$this->debug(__METHOD__.__LINE__,json_encode($params)) ;
+					}
+					else
+						$this->debug(__METHOD__.__LINE__,$url) ;
+				}
+				if (FALSE === $response) throw new \Exception(curl_error($ch), curl_errno($ch));
+				//$header = substr($response, 0, $info['header_size']);
+				//$body = substr($response, -$info['download_content_length']);
+				$body = $response ;
+				if ( $httpcode != 200 ) 
+				{
+					if ( $this->debug )
+						throw new \Exception($url_base."\n".json_encode($params)."\n".$body, $httpcode);
+					else
+						throw new \Exception($url_base, $httpcode);
+				}
+				
+				$ret = json_decode($body,true) ;
+				$json_last_error = json_last_error() ;
+				if ( $json_last_error !== JSON_ERROR_NONE )
+				{
+					if ( $this->debug )
+						throw new \Exception('cURL Return is not JSON ['.$json_last_error.'] : '.$url_base."\n".json_encode($params)."\n".$body);
+					else
+						throw new \Exception('cURL Return is not JSON');
+				}
+				return $ret ;
+			} catch(\Exception $e) {
+				$msg = sprintf( 'Curl failed with error #%d: %s', $e->getCode(), $e->getMessage() ) ;
+				echo '<div class="alert alert-warning">'.$msg.'</div>' ;
+			}
+		}
+
 		public function dateUs($dateFr)
 		{
 			if (\DateTime::createFromFormat('Y-m-d', $dateFr)) return $dateFr ;

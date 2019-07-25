@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6357480cb1bd410300e649abc8fada3c",
+    "content-hash": "742cc7732c22b4b55fda6686b6dad77f",
     "packages": [
         {
             "name": "components/bootstrap",
@@ -393,6 +393,36 @@
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "time": "2017-11-04T09:26:05+00:00"
+        },
+        {
+            "name": "pierre-granger/apidae-droits",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PGranger/ApidaeMembres.git",
+                "reference": "575ab33731898c82938263c76df183da7d1773e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PGranger/ApidaeMembres/zipball/575ab33731898c82938263c76df183da7d1773e0",
+                "reference": "575ab33731898c82938263c76df183da7d1773e0",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "require-dev": {
+                "victorjonsson/markdowndocs": "^1.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PierreGranger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Classe d'utilisation des API membres & utilisateurs d'Apidae ",
+            "time": "2019-02-21T16:11:29+00:00"
         },
         {
             "name": "pierre-granger/apidae-ecriture",

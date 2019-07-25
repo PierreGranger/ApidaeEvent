@@ -8,15 +8,24 @@
 
 	$commune = explode('|',$_POST['commune']) ;
 
-	$mail_membre = $_config['mail_admin'] ;
-	$structure_validatrice = $_config['nom_membre'] ;
-	$url_structure_validatrice = $_config['url_membre'] ;
+	/**
+	 * Fail over : si on a trouvé aucun propriétaire dans la liste 
+	 */
 
-	$pma->debug($_POST,'$_POST') ;
+	$infos_proprietaire = Array(
+		'mail_membre' => $configApidaeEvent['mail_admin'],
+		'structure_validatrice' => $configApidaeEvent['nom_membre'],
+		'url_structure_validatrice' => $configApidaeEvent['url_membre'],
+		'proprietaireId' => $configApidaeEvent['membre']
+	) ;
 
-	if ( $_config['recaptcha_secret'] != '' && ! $_config['debug'] )
+	$infos_orga = Array() ;
+
+	$ApidaeEvent->debug($_POST,'$_POST') ;
+
+	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $ApidaeEvent->debug )
 	{
-		$fields = array( 'secret' => $_config['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
+		$fields = array( 'secret' => $configApidaeEvent['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
 		$ch = curl_init();
 		curl_setopt($ch,CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
 		curl_setopt($ch,CURLOPT_POST, count($fields));
@@ -28,56 +37,88 @@
 		if ( ($result = curl_exec($ch)) === false )
 		{
 			var_dump(curl_error($ch)) ;
-			$ko[] = 'Vérification du captcha impossible' ;
+			$ko['Captcha'] = 'Vérification du captcha impossible' ;
 		}
 		else
 		{
 			$json_result = json_decode($result) ;
-			if ( ! $json_result->success ) $ko[] = 'L\'utilisateur n\'a pas coché la case "Je ne suis pas un robot"' ;
+			if ( ! $json_result->success ) $ko['Captcha'] = 'L\'utilisateur n\'a pas coché la case "Je ne suis pas un robot"' ;
 		}
 	}
 
-	/*
-		Si on souhaite pouvoir écrire sur un membre différent en fonction de la commune saisie, alors dans la config on a renseigné $_config['membres'].
+	/**
+	*	Si on souhaite pouvoir écrire sur un membre différent en fonction de la commune saisie, alors dans la config on a renseigné $configApidaeEvent['membres'].
+	*	TODO 06/2019 : EN attente recherche getMembres fonctionnelle sur communeCode pour retrouver les abonnés concernés par la commune.
 	*/
-	unset($proprietaireId) ;
-	if ( $_config['projet_ecriture_multimembre'] === true )
+
+	if ( $configApidaeEvent['projet_ecriture_multimembre'] === true )
 	{
-		if ( isset($_config['membres']) )
+		/**
+		 * On commence par récupérer la liste des membres abonnés au projet d'écriture et qui ont les droits sur la commune concernée.
+		*/
+		$membresCommune = $ApidaeMembres->getMembres(
+			Array(
+					'communeCode'=>$commune[1],
+					"idProjet" => $configApidaeEvent['projet_ecriture_projetId']
+			),
+			Array("COMMUNES")
+		) ;
+		
+		/**
+		 * Deux problèmes :
+		 * 1) On peut avoir plusieurs membres abonnés. Il faut trouver auquel affecter la manifestation
+		 * 	a. On affecte au membre qui a le moins de communes
+		 *  b. On affecte au premier membre trouvé dans la config
+		 * 2) Au 23/07/2019 il y a un bug sur la récupération des membres par communeCode : la recherche porte sur le code postal ET insee et peut donc renvoyer de faux positifs.
+		 * 	Il faut donc pour l'instant vérifier la liste des communes de chaque membre...
+		 */
+
+		/** Fix temporaire pour le cas 2) */
+		$temp = Array() ;
+		foreach ( $membresCommune as $k => $mc )
 		{
-			$territoires = Array() ;
-			/* Dans ce cas, on va rechercher à quels territoires correspond la commune saisie. */
-			$rq = $pma->mysqli->query(' select id_territoire from apidae_territoires T where id_commune = "'.$pma->mysqli->real_escape_string($commune[0]).'" ') or die($pma->mysqli->error) ;
-			while ( $d = $rq->fetch_assoc() )
+			$communeTrouvee = false ;
+			foreach ( $mc['communes'] as $c )
 			{
-				$territoires[] = $d['id_territoire'] ;
-			}
-			/* Au cas où la commune serait concernée par plusieurs territoires, on parcourt les membres dans l'ordre saisi pour choisir le premier dans la liste. */
-			foreach ( $_config['membres'] as $m )
-			{
-				if (
-					( isset($m['id_territoire']) && in_array($m['id_territoire'],$territoires) ) ||
-					( isset($m['insee_commune']) && $m['insee_commune'] == $commune[3] ) ||
-					( isset($m['insee_communes']) && in_array($commune[3],$m['insee_communes']) )
-				)
+				if ( $c['id'] == $commune[0] )
 				{
-					$proprietaireId = $m['id_membre'] ;
-					$mail_membre = @$m['mail'] ;
-					$structure_validatrice = $m['nom'] ;
-					$url_structure_validatrice = $m['site'] ;
+					$communeTrouvee = true ;
+					break ;
+				}
+			}
+			if ( $communeTrouvee ) $temp[$mc['id']] = $mc ;
+		}
+		$membresCommune = $temp ;
+		
+		/** Fix 1.a */
+		/*
+		$membreTrouve = null ;
+		foreach ( $membresCommune as $mc )
+		{
+			if ( $membreTrouve == null || sizeof($mc['communes']) < $membreTrouve['communes'] )
+				$membreTrouve = $mc ;
+		}
+		*/
+
+		/** Fix 1.b */
+		if ( isset($configApidaeEvent['membres']) )
+		{
+			/* Au cas où la commune serait concernée par plusieurs territoires, on parcourt les membres dans l'ordre saisi pour choisir le premier dans la liste. */
+			foreach ( $configApidaeEvent['membres'] as $m )
+			{
+				if ( isset($membresCommune[$m['id_membre']]) )
+				{
+					$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
+					$infos_proprietaire['mail_membre'] = @$m['mail'] ;
+					$infos_proprietaire['structure_validatrice'] = $m['nom'] ;
+					$infos_proprietaire['url_structure_validatrice'] = $m['site'] ;
 					break ;
 				}
 			}
 		}
-
-		if ( ! isset($proprietaireId) )
-		{
-			$proprietaireId = $m['id_membre'] ;
-			$mail_membre = @$m['mail'] ;
-			$structure_validatrice = $m['nom'] ;
-			$url_structure_validatrice = $m['site'] ;
-		}
 	}
+
+	$ApidaeEvent->debug($infos_proprietaire) ;
 
 	$root = Array() ;
 	$fieldlist = Array() ;
@@ -125,19 +166,19 @@
 	foreach ( $_POST['date'] as $i => $date )
 	{
 		if ( sizeof($date) <= 4 ) continue ;
-		if ( ! $pma->verifDate($date['debut']) ) continue ;
+		if ( ! $ApidaeEvent->verifDate($date['debut']) ) continue ;
 
-		$date['debut'] = $pma->dateUs($date['debut']) ;
-		$date['fin'] = $pma->dateUs($date['fin']) ;
+		$date['debut'] = $ApidaeEvent->dateUs($date['debut']) ;
+		$date['fin'] = $ApidaeEvent->dateUs($date['fin']) ;
 
 		$db = new DateTime($date['debut']) ;
 		
 		$periode = Array() ;
 		$periode['identifiantTemporaire'] = ( $i + 1 ) ;
 		$periode['dateDebut'] = $date['debut'] ;
-		$periode['dateFin'] = $pma->verifDate($date['fin']) ? $date['fin'] : $date['debut'] ;
-		if ( $pma->verifTime($date['hdebut']) ) $periode['horaireOuverture'] = $date['hdebut'].":00" ;
-		if ( $pma->verifTime($date['hfin']) ) $periode['horaireFermeture'] = $date['hfin'].":00" ;
+		$periode['dateFin'] = $ApidaeEvent->verifDate($date['fin']) ? $date['fin'] : $date['debut'] ;
+		if ( $ApidaeEvent->verifTime($date['hdebut']) ) $periode['horaireOuverture'] = $date['hdebut'].":00" ;
+		if ( $ApidaeEvent->verifTime($date['hfin']) ) $periode['horaireFermeture'] = $date['hfin'].":00" ;
 		$periode['tousLesAns'] = false ;
 		$periode['type'] = 'OUVERTURE_TOUS_LES_JOURS' ;
 		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = Array('libelleFr' => trim($date['complementHoraire'])) ;
@@ -150,7 +191,72 @@
 		$fieldlist[] = 'ouverture.periodesOuvertures' ;
 		$root['ouverture']['periodesOuvertures'] = $periodesOuvertures ;
 	}
+	
 
+
+
+	/**
+	*	Contacts
+	*/
+	$contacts = Array() ;
+	if ( isset($_POST['contact']) && is_array($_POST['contact']) && sizeof($_POST['contact']) > 0 )
+	{
+		$mc_trouve = false ;
+		foreach ( $_POST['contact'] as $post_contact )
+		{
+			if ( sizeof(array_filter($post_contact)) == 0 ) continue ;
+			$contact = Array() ;
+
+			$contact['referent'] = true ;
+			$contact['nom'] = $post_contact['nom'] ;
+			$contact['prenom'] = $post_contact['prenom'] ;
+			$mcs = Array() ;
+			if ( $post_contact['mail'] != '' )
+			{
+				$mcs[] = Array(
+					'type'=>Array('id'=>204,'elementReferenceType' => 'MoyenCommunicationType'),
+					'coordonnees' => Array('fr' => $post_contact['mail'])
+				) ;
+				$mail_orga = filter_var($post_contact['mail'], FILTER_VALIDATE_EMAIL) ;
+				if ( $mail_orga != '' ) $infos_orga['mail'] = $mail_orga ;
+			}
+			if ( $post_contact['telephone'] != '' ) $mcs[] = Array(
+				'type'=>Array('id'=>201,'elementReferenceType' => 'MoyenCommunicationType'),
+				'coordonnees' => Array('fr' => $post_contact['telephone'])
+			) ;
+			if ( sizeof($mcs) > 0 )
+			{
+				$mc_trouve = true ;
+				$contact['moyensCommunication'] = $mcs ;
+			}
+			
+			if ( isset($post_contact['fonction']) && $post_contact['fonction'] != '' && $post_contact['fonction'] != 0 )
+				$contact['fonction'] = Array('id'=>(int)$post_contact['fonction'],'elementReferenceType' => 'ContactFonction') ;
+			
+			$contacts[] = $contact ;
+		}
+		
+		if ( isset($_GET['contactObligatoire']) && $_GET['contactObligatoire'] == 1 && ! $mc_trouve )
+		{
+			$ko['Contact obligatoire'] = 'merci de préciser au moins 1 mail ou 1 numéro de téléphone dans la ligne "contact".' ;
+		}
+
+	}
+	elseif ( isset($_GET['contactObligatoire']) && $_GET['contactObligatoire'] == 1 )
+		$ko['Contact obligatoire'] = 'merci de préciser au moins 1 contact' ;
+
+	if ( sizeof($contacts) > 0 )
+	{
+		$fieldlist[] = 'contacts' ;
+		$root['contacts'] = $contacts ;
+	}
+
+
+
+	/**
+	 * Moyens de communication
+	 */
+	
 	$mcs = Array() ;
 	if ( isset($_POST['mc']) && is_array($_POST['mc']) && sizeof($_POST['mc']) > 0 )
 	{
@@ -161,6 +267,13 @@
 			$mc['coordonnees']['fr'] = $post_mc['coordonnee'] ;
 			$mc['observation']['libelleFr'] = $post_mc['observations'] ;
 			$mcs[] = $mc ;
+
+			/** Récupération des infos orga pour envoi d'un mail de notif */
+			if ( ! isset($infos_orga['mail']) && (int)$post_mc['type'] == 204 )
+			{
+				$mail_orga = filter_var($post_mc['coordonnee'], FILTER_VALIDATE_EMAIL) ;
+				if ( $mail_orga != '' ) $infos_orga['mail'] = $mail_orga ;
+			}
 		}
 	}
 	if ( sizeof($mcs) > 0 )
@@ -172,50 +285,6 @@
 
 
 
-	/*
-		Contacts
-	*/
-	$contacts = Array() ;
-	if ( isset($_POST['contact']) && is_array($_POST['contact']) && sizeof($_POST['contact']) > 0 )
-	{
-		
-		foreach ( $_POST['contact'] as $post_contact )
-		{
-			if ( trim($post_contact['nom']) == '' && trim($post_contact['prenom']) == '' && trim($post_contact['fonction']) == '' ) continue ;
-			$contact = Array() ;
-
-			$contact['referent'] = true ;
-			$contact['nom'] = $post_contact['nom'] ;
-			$contact['prenom'] = $post_contact['prenom'] ;
-			$mcs = Array() ;
-			if ( $post_contact['mail'] != '' ) $mcs[] = Array(
-				'type'=>Array('id'=>204,'elementReferenceType' => 'MoyenCommunicationType'),
-				'coordonnees' => Array('fr' => $post_contact['mail'])
-			) ;
-			if ( $post_contact['telephone'] != '' ) $mcs[] = Array(
-				'type'=>Array('id'=>201,'elementReferenceType' => 'MoyenCommunicationType'),
-				'coordonnees' => Array('fr' => $post_contact['telephone'])
-			) ;
-			if ( $mcs > 0 ) $contact['moyensCommunication'] = $mcs ;
-
-			if ( isset($post_contact['fonction']) && $post_contact['fonction'] != '' && $post_contact['fonction'] != 0 )
-				$contact['fonction'] = Array('id'=>(int)$post_contact['fonction'],'elementReferenceType' => 'ContactFonction') ;
-			
-
-			$contacts[] = $contact ;
-		}
-	}
-	if ( sizeof($contacts) > 0 )
-	{
-		$fieldlist[] = 'contacts' ;
-		$root['contacts'] = $contacts ;
-	}
-
-
-
-
-
-
 
 
 
@@ -223,8 +292,8 @@
 
 
 	/**
-		Gestion des types catégories themes
-	**/
+	*	Gestion des types catégories themes
+	*/
 	if ( isset($_POST['FeteEtManifestationType']) )
 	{
 		$fieldlist[] = 'informationsFeteEtManifestation.typesManifestation' ;
@@ -278,8 +347,8 @@
 
 
 	/**
-		Gestion des descriptifs
-	**/
+	*	Gestion des descriptifs
+	*/
 	if ( isset($_POST['descriptifCourt']) && trim($_POST['descriptifCourt']) != "" )
 	{
 		$fieldlist[] = 'presentation.descriptifCourt' ;
@@ -292,8 +361,8 @@
 	}
 
 	/**
-		Gestion des tarifs
-	**/
+	*	Gestion des tarifs
+	*/
 	if ( isset($_POST['descriptionTarif_complement_libelleFr']) )
 	{
 		$fieldlist[] = 'descriptionTarif.complement' ;
@@ -357,9 +426,21 @@
 		}
 	}
 
-
-
-
+	/**
+	 * Gestion des modes de paiement
+	 */
+	if ( isset($_POST['ModePaiement']) && is_array($_POST['ModePaiement']) && sizeof($_POST['ModePaiement']) > 0 )
+	{
+		$fieldlist[] = 'descriptionTarif.modesPaiement' ;
+		$root['descriptionTarif']['modesPaiement'] = Array() ;
+		foreach ( $_POST['ModePaiement'] as $id )
+		{
+			$root['descriptionTarif']['modesPaiement'][] = Array(
+				'elementReferenceType' => 'ModePaiement',
+				'id' => $id
+			) ;
+		}
+	}
 
 	/**
 	* Gestion des multimédias
@@ -384,7 +465,7 @@
 			if ( $media['error'] == UPLOAD_ERR_OK )
 			{
 				$finfo = new finfo(FILEINFO_MIME_TYPE) ;
-				$ext = array_search( $finfo->file($media['tmp_name']),$_config['mimes_illustrations'],true ) ;
+				$ext = array_search( $finfo->file($media['tmp_name']),$configApidaeEvent['mimes_illustrations'],true ) ;
 			    if ( $ext !== false ) {
 			        $legende = @$_POST[$key_files][$i]['legende'] ;
 					$copyright = @$_POST[$key_files][$i]['copyright'] ;
@@ -393,18 +474,18 @@
 						'copyright'=>$copyright,
 						'legende'=>$legende,
 						'basename'=>basename($media['name']),
-						'mime'=>$_config['mimes_illustrations'][$ext],
+						'mime'=>$configApidaeEvent['mimes_illustrations'][$ext],
 						'tempfile'=>$media['tmp_name']
 					) ;
 			    }
 				else
 				{
-					$ko[] = 'Type de fichier interdit pour la photo '.($i+1).' : '.$ext ;
+					$ko['Photo '.($i+1)] = 'Type de fichier interdit pour la photo '.($i+1).' : '.$ext ;
 				}
 			}
 			else
 			{
-				$ko[] = 'Erreur sur la photo '.($i+1).' : '.$media['error'] ;
+				$ko['Photo '.($i+1)] = 'Erreur sur la photo '.($i+1).' : '.$media['error'] ;
 			}
 		}
 	}
@@ -414,7 +495,7 @@
 	if ( sizeof($illustrations) > 0 ) $root['illustrations'] = Array() ;
 	foreach ( $illustrations as $i => $illus )
 	{
-		$medias['multimedia.illustration-'.($i+1)] = $pma->getCurlValue($illus['tempfile'],$illus['mime'],$illus['basename']) ;
+		$medias['multimedia.illustration-'.($i+1)] = $ApidaeEvent->getCurlValue($illus['tempfile'],$illus['mime'],$illus['basename']) ;
 		$illustration = Array() ;
 		$illustration['link'] = false ;
 		$illustration['type'] = 'IMAGE' ;
@@ -428,7 +509,7 @@
 	if ( sizeof($multimedias) > 0 ) $root['multimedias'] = Array() ;
 	foreach ( $multimedias as $i => $mm )
 	{
-		$medias['multimedia.multimedia-'.($i+1)] = $pma->getCurlValue($mm['tempfile'],$mm['mime'],$mm['basename']) ;
+		$medias['multimedia.multimedia-'.($i+1)] = $ApidaeEvent->getCurlValue($mm['tempfile'],$mm['mime'],$mm['basename']) ;
 		$multimedia = Array() ;
 		$multimedia['link'] = false ;
 		$multimedia['type'] = 'PLAN' ;
@@ -437,26 +518,32 @@
 		$root['multimedias'][] = $multimedia ;
 	}
 	
-	$pma->debug($illustrations,'$illustrations') ;
-	$pma->debug($medias,'$medias') ;
+	$ApidaeEvent->debug($illustrations,'$illustrations') ;
+	$ApidaeEvent->debug($medias,'$medias') ;
 
 	if ( isset($root['illustrations']) && sizeof($root['illustrations']) > 0 ) $fieldlist[] = 'illustrations' ;
 	if ( isset($root['multimedias']) && sizeof($root['multimedias']) > 0 ) $fieldlist[] = 'multimedias' ;
 	
-	if ( sizeof($ko) == 0 )
+	if ( sizeof($ko) == 0 && ! ( isset($_POST['nosend']) && $ApidaeEvent->debug ) )
 	{
 		$enregistrer = Array(
 			'fieldlist' => $fieldlist,
 			'root' => $root,
 			'medias' => $medias,
-			'clientId' => $_config['projet_ecriture_clientId'],
-			'secret' => $_config['projet_ecriture_secret']
+			'clientId' => $configApidaeEvent['projet_ecriture_clientId'],
+			'secret' => $configApidaeEvent['projet_ecriture_secret']
 		) ;
-		if ( isset($proprietaireId) ) $enregistrer['proprietaireId'] = $proprietaireId ;
-		$ko = $pma->ajouter($enregistrer) ;
+		if ( isset($infos_proprietaire['proprietaireId']) ) $enregistrer['proprietaireId'] = $infos_proprietaire['proprietaireId'] ;
+		
+		$ko = $ApidaeEvent->ajouter($enregistrer) ;
 	}
 	
-	$pma->debug($ko,'$ko') ;
+	$ApidaeEvent->debug($ko,'$ko') ;
+
+	/**
+	 * Si on est en debug, même si l'enregistrement n'est pas parti, on va quand même réaliser les étapes d'envoi de mail (qui partiront au mail admin puisque debug=1)
+	 * */
+	if ( sizeof($ko) == 0 && isset($_POST['nosend']) && $ApidaeEvent->debug ) $ko = true ;
 
 	if ( $ko === true )
 	{
@@ -467,51 +554,108 @@
 		$msg .= ( @$post_mail['referer'] != '' ) ? $post_mail['referer'] : $post_mail['script_uri'] ;
 		$msg .= '.<br />' ;
 
-		$msg .= 'Une offre ('.$pma->last_id.') a été enregistrée comme brouillon sur Apidae.' ;
-		$msg .= '.<br />' ;
+		$msg .= 'Une offre ('.$ApidaeEvent->last_id.') a été enregistrée comme brouillon sur Apidae.' ;
+		$msg .= '<br />' ;
 
 		$msg .= '<ul>' ;
 		
-		if ( $pma->last_id != null )
-			$msg .= '<li>Vous pouvez <strong><a href="'.$pma->url_base().'gerer/objet-touristique/'.$pma->last_id.'/modifier/">consulter le brouillon ici</a></strong></li>' ;
+		if ( $ApidaeEvent->last_id != null )
+			$msg .= '<li>Vous pouvez <strong><a href="'.$ApidaeEvent->url_base().'gerer/objet-touristique/'.$ApidaeEvent->last_id.'/modifier/">consulter le brouillon ici</a></strong></li>' ;
 
 		$msg .= '<li>Vous pouvez également consulter la liste des offres en attente :<br />
-		<strong>Gérer > Demandes API écriture > <a href="'.$pma->url_base().'gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Demandes d\'écriture à valider</a></strong>.</li>' ;
+		<strong>Gérer > Demandes API écriture > <a href="'.$ApidaeEvent->url_base().'gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Demandes d\'écriture à valider</a></strong>.</li>' ;
 
 		$msg .= '</ul>' ;
+		
+		if ( isset($_POST['commentaire']) && trim($_POST['commentaire']) != '' )
+		{
+			$msg .= '<p style="color:#31708f;background:#d9edf7;border-color:#bce8f1;padding:10px;font-size:14px;">' ;
+			$msg .= '<strong>La personne qui a saisi le formulaire a souhaité vous laisser un message (qui ne sera pas repris sur Apidae) :</strong><br />' ;
+			$msg .= '<em>'.strip_tags(htmlentities($_POST['commentaire'])).'</em>' ;
+			$msg .= '</p>' ;
+		}
 
-		$msg .= 'Vous trouverez ci-dessous un résumé brut des informations qui ont été enregistrées sur Apidae.<br /><br />' ;
+		$msg .= 'Vous trouverez ci-dessous un résumé brut des informations qui ont été enregistrées sur Apidae.<br />' ;
+
 		$post_mail['message'] = $msg ;
 
-		//$alerte = $pma->alerte('enregistrement [admin]',$post_mail) ;
-		if ( $mail_membre != null )
+		if ( $infos_proprietaire['mail_membre'] != null )
 		{
-			$pma->alerte('Nouvel enregistrement',$post_mail,$mail_membre) ;
+			$objet = ( $ApidaeEvent->debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
+			$to = $ApidaeEvent->debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
+			$ApidaeEvent->alerte($objet,$post_mail,$to) ;
+			unset($to) ;
+			unset($objet) ;
 		}
 		$display_form = false ;
+
+		$texte_offre_enregistree = '<p><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <strong>Votre événement a bien été enregistré</strong>, nous vous remercions pour votre contribution.</p>
+		<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>Attention :</strong> Il a été envoyé en validation, et devrait être visible 24 à 48h <strong>après sa validation</strong>, sur les différents supports de communication alimentés par Apidae.</p>' ;
+		
+		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
+		{
+			$texte_offre_enregistree .= '<p>La validation est en cours auprès de : '.$infos_proprietaire['structure_validatrice'] ;
+			$texte_offre_enregistree .= ' (<a href="'.$infos_proprietaire['url_structure_validatrice'].'" target="_blank">'.$infos_proprietaire['url_structure_validatrice'].'</a>)' ;
+			$texte_offre_enregistree .= '</p>' ;
+		}
+
+		if ( isset($_POST['commentaire']) && trim($_POST['commentaire']) != '' )
+			$texte_offre_enregistree .= '<p>Votre commentaire a également été transmis : "<em>'.htmlentities($_POST['commentaire']).'</em>"</p>' ;
+
+		$url_consulter = 'https://base.apidae-tourisme.com/consulter/objet-touristique/'.$ApidaeEvent->last_id ;
+		$texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
+		
 		?>
 			<div class="alert alert-success" role="alert">
-				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-				<strong>Offre enregistrée :</strong>
-				<p>/!\ Votre événement a bien été enregistré, nous vous remercions pour votre contribution.</p>
-				<p><strong>Attention :</strong> Il a été envoyé en validation, et n'apparaîtra que <strong>24 à 48h après sa validation</strong>, sur les différents supports de communication alimentés par Apidae.</p>
-				<p>La validation est en cours auprès de : <?php echo $structure_validatrice ; ?><?php
-					if ( isset($url_structure_validatrice) && $url_structure_validatrice != '' )
-						echo ' (<a href="'.$url_structure_validatrice.'" target="_blank">'.$url_structure_validatrice.'</a>)' ;
-				?></p>
-				<p>Plus d'informations ici : <a href="http://www.apidae-tourisme.com" target="_blank">http://www.apidae-tourisme.com</a></p>
+				<?php echo $texte_offre_enregistree ; ?>
+				<p>Plus d'informations ici : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
+				<script>
+					alert('<?php echo addslashes(strip_tags($texte_offre_enregistree)) ; ?>') ;
+				</script>
 			</div>
 		<?php
-		
-		if ( $pma->debug )
+
+		if ( $ApidaeEvent->debug )
 		{
+			if ( isset($_POST['nosend']) ) {
+			?>
+			<div class="alert alert-warning" role="alert">
+				<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>[debug + nosend] en réalité l'offre n'a pas été envoyée en enregistrement Apidae. Le debug + nosend traite cependant les envois de mail, qui seront uniquement envoyés au mail admin.</p>
+			</div>
+			<?php
+			} else {
 			?>
 			<div class="alert alert-success" role="alert">
-				<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-				<strong>[DEBUG] Offre enregistrée en attente de validation dans Apidae :</strong>
+				<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+				<strong>[debug]</strong> Offre enregistrée en attente de validation dans Apidae :
 				<p>On la retrouve dans <a href="https://base.apidae-tourisme.com/gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Gérer > Demandes API écriture > Demandes d'écritures à valider</a></p>
 			</div>
 			<?php
+			}
+		}
+
+		/**
+		 * Envoi d'une notification au mail de contact ou de moyen de com'
+		 */
+		if ( isset($infos_orga['mail']) && $infos_orga['mail'] != '' && filter_var($infos_orga['mail'], FILTER_VALIDATE_EMAIL) )
+		{
+			$objet = 'Votre suggestion de manifestation' ;
+			$message = $texte_offre_enregistree ;
+			$to = $ApidaeEvent->debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
+			$ApidaeEvent->alerte($objet,$message,$to) ;
+			if ( $ApidaeEvent->debug )
+			{
+				?>
+				<div class="alert alert-success" role="alert">
+					<strong>[debug]</strong> Un mail organisateur a été trouvé : <?php echo $infos_orga['mail'] ; ?>
+					<ul>
+						<li><strong>Objet</strong> : <?php echo $objet ; ?></li>
+						<li><strong>Message</strong> : <?php echo $message ; ?></li>
+						<li><strong>To</strong> : <strike><?php echo $infos_orga['mail'] ; ?></strike> [debug] => <?php echo print_r($to,true) ; ?></li>
+					</ul>
+				</div>
+				<?php
+			}
 		}
 	}
 	else
@@ -531,14 +675,19 @@
 				  	}
 			  	echo '</ul>' ;
 		  	}
-		  	$alerte = $pma->alerte('Erreur enregistrement',$ko) ;
-		  	$alerte = $pma->alerte('Erreur enregistrement',$_POST) ;
+		  	$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$ko) ;
+		  	$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$_POST) ;
 		  ?>
 		  <?php if ( $alerte === true ) { ?><br />L'erreur a été envoyée à un administrateur.<?php } ?>
 		  <br />Veuillez nous excuser pour la gène occasionnée.
-		  <br />Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact avec l'Office du Tourisme concernée par votre manifestation.
+		  <br />Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact avec l'Office du Tourisme concernée par votre manifestation :
+		  <ul>
+			<li><?php echo $infos_proprietaire['structure_validatrice'] ; ?></li>
+			<li><?php echo '<a href="'.$infos_proprietaire['url_structure_validatrice'].'" onclick="window.open(this.href);return false;">'.$infos_proprietaire['url_structure_validatrice'] ; ?></a></li>
+			<li><?php echo '<a href="mailto:'.implode(',',$infos_proprietaire['mail_membre']).'">'.implode(', ',$infos_proprietaire['mail_membre']) ; ?></a></li>
+		  </ul>
 		</div>
 		<?php
-		$pma->debug($ko) ;
+		$ApidaeEvent->debug($ko) ;
 	}
 	

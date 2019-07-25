@@ -6,22 +6,27 @@
 	$class_champ = 'col-md-10 col-sm-10' ;
 
 	$http_path = './' ;
-	if ( isset($_config['http_path']) && $_config['http_path'] != '' )
-		$http_path = $_config['http_path'] ;
+	if ( isset($configApidaeEvent['http_path']) && $configApidaeEvent['http_path'] != '' )
+		$http_path = $configApidaeEvent['http_path'] ;
 
 	$assets = Array(
-		'jquery/jquery.min.js',
-		'bootstrap/js/bootstrap.min.js',
-		'bootstrap/css/bootstrap.min.css',
-		'chosen/chosen.jquery.min.js',
-		'chosen/chosen.min.css',
-		'jquery-ui/jquery-ui.min.js',
-		'jquery-ui/themes/base/jquery-ui.min.css',
-		'jquery-ui/ui/widgets/datepicker.js',
-		'jquery-ui/ui/i18n/datepicker-fr.js',
+		'assets/jquery/jquery.min.js',
+		'assets/bootstrap/js/bootstrap.min.js',
+		'assets/bootstrap/css/bootstrap.min.css',
+		'assets/chosen/chosen.jquery.min.js',
+		'assets/chosen/chosen.min.css',
+		'assets/jquery-ui/jquery-ui.min.js',
+		'assets/jquery-ui/themes/base/jquery-ui.min.css',
+		'assets/jquery-ui/ui/widgets/datepicker.js',
+		'assets/jquery-ui/ui/i18n/datepicker-fr.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css',
-		'https://www.google.com/recaptcha/api.js'
+		'https://www.google.com/recaptcha/api.js',
+		'formulaire.js',
+		'formulaire.css',
+		'bootstrap-chosen.css',
+		'https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/css/ajax-bootstrap-select.min.css',
+		'https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js'
 	) ;
 
 	$devises = Array('EUR'=>'€','CHF'=>'CHF') ;
@@ -50,9 +55,9 @@
 				echo "\n\t\t" ;
 
 				if ( $type == 'js' )
-					echo '<script src="'.($local?'./assets/':'').$asset.'"></script>'  ;
+					echo '<script src="'.($local?'./':'').$asset.'"></script>'  ;
 				else
-					echo '<link rel="stylesheet" type="text/css" href="'.($local?'./assets/':'').$asset.'" media="all" />'  ;
+					echo '<link rel="stylesheet" type="text/css" href="'.($local?'./':'').$asset.'" media="all" />'  ;
 
 			}
 
@@ -63,16 +68,7 @@
 		<script>
 			var icon_plus = '<?php echo $icon_plus ; ?>' ;
 			var icon_moins = '<?php echo $icon_moins ; ?>' ;
-		</script>
-		<script src="<?php echo $http_path ; ?>formulaire.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>formulaire.css" media="all" />
-
-		<link rel="stylesheet" type="text/css" href="<?php echo $http_path ; ?>bootstrap-chosen.css" media="all" />
-
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/css/ajax-bootstrap-select.min.css" media="all" />
-		<script src="//cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js"></script>
-
-		<script>
+		
 			jQuery(document).ready(function(){
 				jQuery('.chosen-select').chosen({
 					disable_search_threshold:10
@@ -103,7 +99,7 @@
 				$post = $_POST ;
 				if ( ! is_array($post) ) $post = Array() ;
 
-				$token_test = $pma->gimme_token() ;
+				$token_test = $ApidaeEvent->gimme_token() ;
 
 				if ( ! $token_test )
 				{
@@ -125,79 +121,14 @@
 			<?php if ( $display_form ) { ?>
 
 			<?php
-
-				if ( $_config['debug'] || isset($_GET['showAbonnes']) )
-				{
-					?>
-					<div class="alert alert-success" role="alert">
-						<h3>Membres sur lesquels on peut saisir :</h3>
-
-						<p>Les membres qui n'ont pas de projet d'écriture individuel renseigné doivent être <a href="https://base.apidae-tourisme.com/diffuser/projet/2792?25" target="_blank">abonnés au projet d'écriture multi-membre ApidaeEvent</a>.</p>
-					
-						<table class="table">
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>Nom</th>
-									<th>Terr. ou COM</th>
-									<th>Mails alertés</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php
-								foreach ( $_config['membres'] as $membre )
-								{
-									echo '<tr>' ;
-										echo '<th>' ;
-											echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['id_membre'].'</a> ' ;
-										echo '</th>' ;
-										echo '<th>' ;
-											echo '<a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['id_membre'].'" target="_blank">'.$membre['nom'].'</a> ' ;
-											echo '<br />' ;
-											echo '&rsaquo; <a href="'.$pma->url_base().'/echanger/membre-sitra/'.$membre['site'].'" target="_blank">'.$membre['site'].'</a> ' ;
-										echo '</th>' ;
-										echo '<td>' ;
-											if ( @$membre['id_territoire'] !== null )
-												echo 'TERR. : <a href="'.$pma->url_base().'/consulter/objet-touristique/'.$membre['id_territoire'].'" target="_blank">'.$membre['id_territoire'].'</a>' ;
-											elseif ( @$membre['id_commune'] !== null )
-												echo 'COM. : '.$membre['id_commune'] ;
-											else
-												echo '<strong style="color:red;">Non renseignée</strong>' ;
-										echo '</td>' ;
-										echo '<td>' ;
-											if ( is_array($membre['mail']) ) echo implode(', ',$membre['mail']) ; else echo $membre['mail'] ;
-										echo '</td>' ;
-									echo '</tr>' ;
-								}
-								?>
-							</tbody>
-						</table>
-
-					</div>
-
-			<?php } ?>
-
-			<?php if ( $_config['debug'] ) { ?>
-
-					
-					<div class="alert alert-info" role="alert">
-						<h3>[DEBUG] Remontée des bugs et évolutions :</h3>
-						<a href="https://docs.google.com/spreadsheets/u/0/d/1wSidT7V26kem9jyewHdN-KbfGAj8WaPTq8KAR50HUko/edit" target="_blank">https://docs.google.com/spreadsheets/u/0/d/1wSidT7V26kem9jyewHdN-KbfGAj8WaPTq8KAR50HUko/edit</a>
-					</div>
-					<?php if ( @$_config['projet_ecriture_multimembre'] == 1 ) { ?>
-					<div class="alert alert-success" role="alert">
-						<h3>[DEBUG] API écriture multimembre ON !!</h3>
-					</div>
-					<?php }
-				}
-
+				if ( $configApidaeEvent['debug'] && isset($_GET['showAbonnes']) )
+					include(realpath(dirname(__FILE__)).'/showAbonnes.inc.php') ;
 			?>
 
 			<form class="form" method="post" enctype="multipart/form-data" novalidate>
 
 				<?php $referer = ( isset($_POST['referer']) ) ? $_POST['referer'] : @$_SERVER['HTTP_REFERER'] ; ?>
 				<input type="hidden" name="referer" value="<?php echo htmlentities($referer) ; ?>" />
-
 				<input type="hidden" name="devise" value="<?php echo htmlentities($devise_apidae) ; ?>" />
 
 				<fieldset class="form-group required">
@@ -207,17 +138,6 @@
 					</div>
 				</fieldset>
 				
-				<?php if ( false ) { ?>
-				<fieldset class="form-group">
-					<legend>Organisateur</legend>
-					<div class="controls">
-						<select class="form-control" name="organisateur" id="organisateur">
-							<option value="">-</option>
-						</select>
-					</div>
-				</fieldset>
-				<?php } ?>
-
 				<fieldset class="form-group">
 
 					<legend>Importance de votre événement</legend>
@@ -233,7 +153,7 @@
 								<option value="">-</option>
 								<?php
 									
-									$FeteEtManifestationPortees = $pma->getElementsReference('FeteEtManifestationPortee') ;
+									$FeteEtManifestationPortees = $ApidaeEvent->getElementsReferenceByType('FeteEtManifestationPortee') ;
 									foreach ( $FeteEtManifestationPortees as $option )
 									{
 										echo '<option value="'.$option['id'].'"' ;
@@ -288,44 +208,19 @@
 					</div>
 					<?php
 
-						unset($rq) ;
+						$communes = null ;
 						if ( isset($_GET['communes']) )
 						{
-							$tmp = explode(',',$_GET['communes']) ;
-							$coms = Array() ;
-							foreach ( $tmp as $k => $v )
-								if ( preg_match('#^[0-9]+$#',$v) )
-									$coms[] = $pma->mysqli->real_escape_string($v) ;
-							$sql = ' select distinct * from apidae_communes where code in ("'.implode('","',$coms).'") order by nom asc ' ;
-							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
+							$communes = $ApidaeEvent->getCommunesById(explode(',',$_GET['communes'])) ;
 						}
-						elseif ( isset($_config['territoire']) )
+						elseif ( isset($configApidaeEvent['territoire']) )
 						{
-							$sql = ' select count(*) as nb from apidae_territoires where id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" ' ;
-							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
-							if ( $d = $rq->fetch_assoc() )
-							{
-								if ( $d['nb'] == 0 || isset($_GET['force']) )
-								{
-									$pma->setTerritoires(true,Array($_config['territoire'])) ;
-								}
-							}
+							$communes = $ApidaeEvent->getCommunesByTerritoire($configApidaeEvent['territoire']) ;
+						}
 
-							$sql = ' select distinct C.* from apidae_communes C
-							inner join apidae_territoires T on T.id_commune = C.id
-							where T.id_territoire = "'.$pma->mysqli->real_escape_string($_config['territoire']).'" 
-							order by C.nom asc ' ;
-							
-							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
-						}
-						elseif ( isset($_config['communes']) )
+						if ( ! is_array($communes) || sizeof($communes) == 0 )
 						{
-							$sql = ' select distinct * from apidae_communes where code regexp "'.$pma->mysqli->real_escape_string($_config['communes']).'" order by nom asc ' ;
-							$rq = $pma->mysqli->query($sql) or die($pma->mysqli->error) ;
-						}
-						if ( ! isset($rq) || $rq->num_rows == 0 )
-						{
-							$pma->alerte('Liste communes introuvable',$_GET) ;
+							//$ApidaeEvent->alerte('Liste communes introuvable',$_GET) ;
 							?>
 								<div class="alert alert-danger" role="alert">
 								  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -337,17 +232,26 @@
 							die() ;
 						}
 
+						uasort($communes,function($a,$b) {
+							$unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+							return strtr( $a['nom'], $unwanted_array ) > strtr( $b['nom'], $unwanted_array ) ;
+						}) ;
+
 					?>
 					<div class="form-group row required">
 						<label for="commune" class="<?php echo $class_label ; ?> col-form-label">Commune</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<select name="commune" class="chosen-select" required="required" data-placeholder="">
-								<?php if ( $rq->num_rows > 1 ) { ?>
+								<?php if ( sizeof($communes) > 1 ) { ?>
 								<option value="">-</option>
 								<?php } ?>
 								<?php
 									
-									while ( $d = $rq->fetch_assoc() )
+									foreach ( $communes as $d )
 									{
 										$cle = $d['id'].'|'.$d['codePostal'].'|'.$d['nom'].'|'.$d['code'] ;
 										echo '<option value="'.htmlentities($cle).'"' ;
@@ -457,14 +361,14 @@
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label">Types de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<?php echo $pma->formHtmlCC('FeteEtManifestationType',Array('presentation'=>'select','type'=>'unique'),@$post['FeteEtManifestationType']) ; ?>
+							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationType',Array('presentation'=>'select','type'=>'unique'),@$post['FeteEtManifestationType']) ; ?>
 						</div>
 					</div>
 
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label">Catégories de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<?php echo $pma->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3),@$post['FeteEtManifestationCategorie']) ; ?>
+							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3),@$post['FeteEtManifestationCategorie']) ; ?>
 								<small class="form-text text-muted">3 catégories maximum</small>
 						</div>
 					</div>
@@ -472,7 +376,7 @@
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label">Thèmes de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<?php echo $pma->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select'),@$post['FeteEtManifestationTheme']) ; ?>
+							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select'),@$post['FeteEtManifestationTheme']) ; ?>
 						</div>
 					</div>
 
@@ -518,7 +422,7 @@
 							<tbody>
 							<?php
 								
-								$types = $pma->getElementsReference('MoyenCommunicationType',false,$_config['types_mcs']) ;
+								$types = $ApidaeEvent->getElementsReferenceByType('MoyenCommunicationType',Array('include'=>$configApidaeEvent['types_mcs'])) ;
 								
 								$nb = 3 ;
 								if ( isset($post['mc']) ) $nb = sizeof($post['mc']) ;
@@ -580,12 +484,13 @@
 					</div>
 				</fieldset>
 
-				<fieldset>
+				<fieldset class="contacts<?php if ( isset($_GET['contactObligatoire']) && $_GET['contactObligatoire'] ) echo ' required' ; ?>">
 					
-					<legend>Contacts</legend>
+					<legend>Contacts organisateurs</legend>
 					
 					<div class="alert alert-warning" role="alert">
-						Les contacts nous permettront de vous recontacter si besoin, mais ne seront pas diffusés.
+						Les contacts ci-dessous ne seront pas diffusés.<br />
+						<strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone</strong> : en cas de questions, nous pourrons prendre contact avec l'organisateur grâce à ces informations.
 					</div>
 
 					<div class="table-responsive">
@@ -596,13 +501,13 @@
 									<th>Fonction</th>
 									<th>Prénom</th>
 									<th>Nom</th>
-									<th>Téléphone</th>
 									<th>Mail</th>
+									<th>Téléphone</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php
-									$types = $pma->getElementsReference('ContactFonction',false) ;
+									$types = $ApidaeEvent->getElementsReferenceByType('ContactFonction') ;
 									for ( $i = 0 ; $i < 1 ; $i++ )
 									{
 										echo "\n\t\t\t\t\t\t".'<tr>' ;
@@ -632,12 +537,12 @@
 											echo '</td>' ;
 											echo '<td>' ;
 												echo '<div class="form-group">' ;
-													echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="00 00 00 00 00" />' ;
+													echo '<input class="form-control mail" type="text" name="contact['.$i.'][mail]" value="'.htmlspecialchars(@$post['contact'][$i]['mail']).'" placeholder="xxx@yyyy.zz" />' ;
 												echo '</div>' ;
 											echo '</td>' ;
 											echo '<td>' ;
 												echo '<div class="form-group">' ;
-													echo '<input class="form-control mail" type="text" name="contact['.$i.'][mail]" value="'.htmlspecialchars(@$post['contact'][$i]['mail']).'" placeholder="xxx@yyyy.zz" />' ;
+													echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="00 00 00 00 00" />' ;
 												echo '</div>' ;
 											echo '</td>' ;
 										echo '</tr>' ;
@@ -682,7 +587,7 @@
 									</thead>
 									<tbody>
 										<?php
-											$types = $pma->getElementsReference('TarifType',false,$_config['types_tarifs']) ;
+											$types = $ApidaeEvent->getElementsReferenceByType('TarifType',Array('include'=>$configApidaeEvent['types_tarifs'])) ;
 											for ( $i = 0 ; $i < 1 ; $i++ )
 											{
 												echo "\n\t\t\t\t\t\t".'<tr>' ;
@@ -693,17 +598,19 @@
 													$devise_tarif = ( isset($post['tarifs'][$i]['devise']) ) ? $post['tarifs'][$i]['devise'] : $devise_apidae ;
 													echo '<input type="hidden" name="tarifs['.$i.'][devise]" value="'.htmlspecialchars($devise_tarif).'" />' ;
 													*/
-														echo '<select class="form-control" name="tarifs['.$i.'][type]">' ;
-															echo '<option value="">-</option>' ;
-															foreach ( $types as $type )
-															{
-																echo '<option value="'.$type['id'].'"' ;
-																	if ( @$post['tarifs'][$i]['type'] == $type['id'] ) echo ' selected="selected" ' ;
-																echo '>' ;
-																	echo $type['libelleFr'] ;
-																echo '</option>' ;
-															}
-														echo '</select>' ;
+														echo '<div class="form-group">' ;
+															echo '<select class="form-control" name="tarifs['.$i.'][type]">' ;
+																echo '<option value="">-</option>' ;
+																foreach ( $types as $type )
+																{
+																	echo '<option value="'.$type['id'].'"' ;
+																		if ( @$post['tarifs'][$i]['type'] == $type['id'] ) echo ' selected="selected" ' ;
+																	echo '>' ;
+																		echo $type['libelleFr'] ;
+																	echo '</option>' ;
+																}
+															echo '</select>' ;
+														echo '</div>' ;
 													echo '</td>' ;
 													echo '<td>' ;
 														echo '<div class="input-group form-group mb-2 mr-sm-2 mb-sm-0">' ;
@@ -737,14 +644,50 @@
 						</div>
 					</div>
 
+					<?php
+						$params_paiement = Array(
+							'presentation' => 'checkbox',
+							'exclude' => Array(
+								1265, // American Express
+								1266, // Bons CAF
+								//1268, // Carte bancaire/crédit
+								1269, // Carte JCB
+								1286, // Pass’Région
+								//1271, // Chèque
+								4136, // Chèque cadeau Gîtes de France
+								4139, // Chèques cadeaux
+								1284, // Chèque Culture
+								1273, // Chèque de voyage
+								5646, // Chéquier Jeunes
+								//1274, // Chèque Vacances
+								1275, // Devise étrangère
+								1276, // Diners Club
+								//1277, // Espèces
+								4098, // Moneo resto
+								5408, // Monnaie locale
+								5558, // Paiement en ligne
+								1287, // Paypal
+								1285, // Titre Restaurant
+								1281, // Virement
+							)
+						) ;
+					?>
+					<div class="form-group row modes_paiement">
+						<label class="<?php echo $class_label ; ?> col-form-label">Modes de paiement</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<?php echo $ApidaeEvent->formHtmlCC('ModePaiement',$params_paiement,@$post['ModePaiement']) ; ?>
+						</div>
+					</div>
+
 				</fieldset>
 
 				<fieldset class="form-group">
 					<legend>Photos</legend>
 					<div class="alert alert-warning" role="alert">
-						Vos photos doivent être libres de droit et de bonne qualité. Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...).
+						Vos photos doivent être libres de droit et de bonne qualité (<strong>si possible, 1200px de largeur minimum</strong>).
+						<br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
 						<br />
-						<a href="https://www.apidae-tourisme.com/communautes/professionnels-tourisme-loisirs/" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Plus d'informations ici.</a>
+						<a href="https://aide.apidae-tourisme.com/hc/fr/articles/360000825391-Saisie-l-onglet-multimédias-Zoom-sur-les-illustrations#tailleimages" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Plus d'informations ici.</a>
 					</div>
 					<div class="table-responsive">
 						<table class="table photos">
@@ -778,17 +721,40 @@
 					</div>
 				</fieldset>
 
+				<fieldset class="form-group">
+					<legend>Organisateur</legend>
+					<div class="alert alert-info" role="alert">
+						Vous pouvez laisser un message ci-dessous : il sera communiqué à votre office de tourisme, mais ne sera pas publié.<br />
+						Merci de préciser <strong>l'organisateur de la manifestation</strong> (association ABC...).
+					</div>
+					<div class="form-group row complement_tarif">
+						<label class="<?php echo $class_label ; ?> col-form-label" for="commentaire">Commentaire privé</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<textarea class="form-control" name="commentaire" id="commentaire"><?php echo htmlspecialchars(@$post['commentaire']) ; ?></textarea>
+						</div>
+					</div>
+				</fieldset>
+
+				<?php if ( $ApidaeEvent->debug ) { ?>
+					<div class="form-group row">
+						<label class="<?php echo $class_label ; ?> col-form-label" for="nosend">[Debug] Ne pas enregistrer sur Apidae</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<input type="checkbox" name="nosend" id="nosend" value="1"<?php if ( @$post['nosend'] == 1 ) echo ' checked="checked" ' ; ?> />
+						</div>
+					</div>
+				<?php } ?>
+
 				<input type="hidden" name="script_uri" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']) ; ?>" />
 
 				<div class="form-group"<?php
-					if ( @$_config['recaptcha_secret'] != '' && ! $_config['debug'] ) echo ' style="display:none;"' ;
+					if ( @$configApidaeEvent['recaptcha_secret'] != '' && ! $configApidaeEvent['debug'] ) echo ' style="display:none;"' ;
 				?>>
 					<input type="button" class="btn btn-success btn-lg btn-block btn-submit" value="Enregistrer cet événement" />
 				</div>
 
-				<?php if ( @$_config['recaptcha_secret'] != '' && ! $_config['debug'] ) { ?>
+				<?php if ( @$configApidaeEvent['recaptcha_secret'] != '' && ! $configApidaeEvent['debug'] ) { ?>
 					<div class="form-group" id="recaptcha">
-						<div class="g-recaptcha" data-sitekey="<?php echo $_config['recaptcha_sitekey'] ; ?>" data-callback="recaptchaOk" data-expired-callback="recaptchaKo"></div>
+						<div class="g-recaptcha" data-sitekey="<?php echo $configApidaeEvent['recaptcha_sitekey'] ; ?>" data-callback="recaptchaOk" data-expired-callback="recaptchaKo"></div>
 					<p>Vous devez cocher la case "Je ne suis pas un robot" pour pouvoir enregistrer</p>
 					</div>
 				<?php } ?>
