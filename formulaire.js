@@ -151,6 +151,10 @@ jQuery(document).on('change','select[name$="[type]"]',function(){
 	selectChange(jQuery(this)) ;
 }) ;
 
+jQuery(document).on('change','input[type="url"]',function(){
+	selectChange(jQuery(this).closest('tr').find('select[name$="[type]"]',true)) ;
+}) ;
+
 jQuery(document).on('change','form.form input[name="gratuit"]',function(){
 	checkTarifs();
 }) ;
@@ -229,11 +233,12 @@ function valideChamp(champ)
 		// https://stackoverflow.com/questions/46155/how-to-validate-email-address-in-javascript
 		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
 		if ( ! re.test(val) ) return false ;
-	}/*
-	else if ( t == 205 ) // Site web
+	}
+	else if ( type == 205 ) // Site web
 	{
-
-	}*/
+		var re = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/ ;
+		if ( ! re.test(val) ) return false ;
+	}
 	return true ;
 }
 
@@ -242,13 +247,19 @@ function valideChamp(champ)
 function selectChange(select,init)
 {
 	var coord = select.closest('tr').find('input[name$="[coordonnee]"]') ;
+	coord.closest('tr').find('small.h205').hide() ;
+
 	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder','00 00 00 00 00') ; // Tél
 	else if ( select.val() == 204 ) coord.attr('type','email').attr('placeholder','xxx@yyyy.zz') ; // Mél
-	else if ( select.val() == 205 ) coord.attr('type','url').attr('placeholder','http://www.xxx.zzz') ; // Url
+	else if ( select.val() == 205 )
+	{
+		coord.attr('type','url').attr('placeholder','http://www.xxx.zzz') ; // Url
+		if ( coord.val() != '' ) coord.closest('tr').find('small.h205').show() ;
+	}
 	else coord.attr('type','text').attr('placeholder','') ; // Standard
 
 	// On ne trigger par le changement de coordonnée lors du chargement du formulaire pour éviter d'avoir une erreur sur les champs obligatoires.
-	if ( init !== true ) coord.trigger('change') ;
+	if ( ! init ) valideChamp(coord) ;
 }
 
 
@@ -373,13 +384,9 @@ function checkContacts() {
 		if ( jQuery(this).val() != "" ) ret = true ;
 	}) ;
 
-	console.log('checkContacts',ret) ;
-
 	// Aucun MC de contact trouvé...
 	if ( ret == false )
 	{
-		console.log(contacts.find('input.telephone').first()) ;
-		console.log(contacts.find('input.mail').first()) ;
 		contacts.find('input.telephone').first().closest('.form-group').addClass('has-error') ;
 		contacts.find('input.mail').first().closest('.form-group').addClass('has-error') ;
 	}

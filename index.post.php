@@ -100,6 +100,9 @@
 		}
 		*/
 
+		echo '<pre>'.print_r($membresCommune,true).'</pre>' ;
+		echo '<pre>'.print_r($configApidaeEvent['membres'],true).'</pre>' ;
+
 		/** Fix 1.b */
 		if ( isset($configApidaeEvent['membres']) )
 		{
@@ -603,7 +606,7 @@
 			$texte_offre_enregistree .= '<p>Votre commentaire a également été transmis : "<em>'.htmlentities($_POST['commentaire']).'</em>"</p>' ;
 
 		$url_consulter = 'https://base.apidae-tourisme.com/consulter/objet-touristique/'.$ApidaeEvent->last_id ;
-		$texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
+		//$texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
 		
 		?>
 			<?php $alert = addslashes(strip_tags($texte_offre_enregistree)) ; ?>

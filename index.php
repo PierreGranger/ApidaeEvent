@@ -466,6 +466,7 @@
 												echo '<input class="form-control" type="text" name="mc['.$i.'][coordonnee]" value="'.htmlentities(@$post['mc'][$i]['coordonnee']).'" ' ;
 													if ( $i == 0 ) echo 'required="required" ' ;
 												echo '/>' ;
+												echo '<small style="display:none;" class="help h205">http(s)://...</small>' ;
 											echo '</div>' ;
 										echo '</td>' ;
 										echo '<td>' ;
