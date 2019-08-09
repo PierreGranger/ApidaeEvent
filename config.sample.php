@@ -46,5 +46,6 @@
 		'mail_admin' => 'p.granger@allier-tourisme.net',
 		'recaptcha_secret' => '',
 		'recaptcha_sitekey' => '',
-		'http_path' => ''
+		'http_path' => '',
+		'mimes_illustrations' => Array('jpg' => 'image/jpeg','png' => 'image/png','gif' => 'image/gif'),
 	) ;

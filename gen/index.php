@@ -87,7 +87,9 @@
 						</div>
 
 						<div class="form-group row">
-							<label class="col-4 col-form-label" for="contactObligatoire">Contact obligatoire ?</label>
+							<label class="col-4 col-form-label" for="contactObligatoire">Contact obligatoire ?
+								<br /><small>1 Mail ou 1 téléphone minimum dans la zone "Contact"</small>
+							</label>
 							<div class="col-8">
 								<input type="checkbox" id="contactObligatoire" name="contactObligatoire" value="1" />
 							</div>
