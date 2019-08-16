@@ -399,6 +399,24 @@
 						</div>
 					</div>
 
+					<?php if ( isset($_GET['TourismeAdapte']) && $_GET['TourismeAdapte'] == 1 ) { ?>
+
+						<?php
+						// https://apidae-tourisme.zendesk.com/agent/tickets/5997
+						$params = Array(
+							'presentation' => 'checkbox',
+							'include' => Array(3651,3653,3652,3674,3675,3943,3676,1191,1196,4217,3666,1199,4219)
+						) ;
+						?>
+						<div class="form-group row TourismeAdapte">
+							<label class="<?php echo $class_label ; ?> col-form-label">Accessibilité</label>
+							<div class="<?php echo $class_champ ; ?>">
+								<?php echo $ApidaeEvent->formHtmlCC('TourismeAdapte',$params,@$post['TourismeAdapte']) ; ?>
+							</div>
+						</div>
+
+					<?php } ?>
+
 				</fieldset>
 
 				<fieldset class="form-group">

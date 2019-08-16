@@ -446,6 +446,22 @@
 	}
 
 	/**
+	 * Tourisme adapté / Handicap
+	 */
+	if ( isset($_POST['TourismeAdapte']) && is_array($_POST['TourismeAdapte']) && sizeof($_POST['TourismeAdapte']) > 0 )
+	{
+		$fieldlist[] = 'prestations.tourismesAdaptes' ;
+		$root['prestations']['tourismesAdaptes'] = Array() ;
+		foreach ( $_POST['TourismeAdapte'] as $id )
+		{
+			$root['prestations']['tourismesAdaptes'][] = Array(
+				'elementReferenceType' => 'TourismeAdapte',
+				'id' => $id
+			) ;
+		}
+	}
+
+	/**
 	* Gestion des multimédias
 	**/
 
