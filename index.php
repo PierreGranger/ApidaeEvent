@@ -5,6 +5,12 @@
 	$class_label = 'col-md-2 col-sm-2' ;
 	$class_champ = 'col-md-10 col-sm-10' ;
 
+	if ( preg_match('#Event1\.1#',$_SERVER['SCRIPT_NAME']) && preg_match('#grenoble#',$_SERVER['HTTP_REFERER']) )
+	{
+		header('location:https://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire='.$_GET['territoire']) ;
+		die() ;
+	}
+	
 	$http_path = './' ;
 	if ( isset($configApidaeEvent['http_path']) && $configApidaeEvent['http_path'] != '' )
 		$http_path = $configApidaeEvent['http_path'] ;
@@ -359,7 +365,7 @@
 					<legend>Description de votre manifestation</legend>
 
 					<div class="form-group row">
-						<label class="<?php echo $class_label ; ?> col-form-label">Types de manifestation</label>
+						<label class="<?php echo $class_label ; ?> col-form-label">Type de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationType',Array('presentation'=>'select','type'=>'unique'),@$post['FeteEtManifestationType']) ; ?>
 						</div>
@@ -409,7 +415,10 @@
 						) ;
 						?>
 						<div class="form-group row TourismeAdapte">
-							<label class="<?php echo $class_label ; ?> col-form-label">Accessibilité</label>
+							<label class="<?php echo $class_label ; ?> col-form-label">
+								Accessibilité
+								<br /><small class="form-text text-muted">Accueil des personnes en situation de handicap</small>
+							</label>
 							<div class="<?php echo $class_champ ; ?>">
 								<?php echo $ApidaeEvent->formHtmlCC('TourismeAdapte',$params,@$post['TourismeAdapte']) ; ?>
 							</div>
@@ -508,7 +517,6 @@
 					<legend>Contacts organisateurs</legend>
 					
 					<div class="alert alert-warning" role="alert">
-						Les contacts ci-dessous ne seront pas diffusés.<br />
 						<strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone</strong> : en cas de questions, nous pourrons prendre contact avec l'organisateur grâce à ces informations.
 					</div>
 

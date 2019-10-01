@@ -383,7 +383,7 @@
 		$tarifs = Array() ;
 		foreach ( $_POST['tarifs'] as $tarif )
 		{
-			if ( $tarif['mini'] == '' && $tarif['maxi'] == '' ) continue ;
+			if ( $tarif['mini'] == '' && $tarif['maxi'] == '' && trim($tarif['precisions']) == '' ) continue ;
 			
 			$t = Array('devise' =>$_POST['devise']) ;
 			/* TODO si on veut permettre le choix de la devise tarif par tarif par l'internaute : décommenter ci dessous */
