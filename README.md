@@ -30,7 +30,7 @@ Par exemple pour Moulins :
 * Territoire : **3337048** ([Fiche Apidae du territoire](https://base.apidae-tourisme.com/consulter/objet-touristique/3337048))
 * ID membre : **1336** ([Fiche Apidae du membre](https://base.apidae-tourisme.com/administrer/membre-sitra/1336))
 * Adresse mails : contact@moulins-tourisme.fr, agenda@moulins-tourisme.fr
-* * Site web utilisé : https://www.moulins-tourisme.com
+* Site web utilisé : https://www.moulins-tourisme.com
 
 En effet actuellement il ne nous est pas possible de déterminer automatiquement quel membre couvre quel territoire.
 > **A défaut de territoire défini, même si vous êtes abonné au projet, ApidaeEvent sera incapable de déterminer à quel membre il doit rattacher l'événement créé sur une commune donnée : la manifestation sera alors attribuée par défaut à Rhône-Alpes Tourisme (et supprimée).**
