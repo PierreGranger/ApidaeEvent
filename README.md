@@ -17,16 +17,20 @@ Vous pouvez générer le code html correspondant à votre territoire en vous ren
 Pour que les événements saisis par l'internaute soient bien rattachés à votre fiche membre, vous devez vous abonner au projet d'API d'écriture multimembre ApidaeEvent (Diffuser > Projets > S'abonner, puis rechercher "ApidaeEvent" et cliquer sur le bouton "Abonner" à droite) :
 >https://base.apidae-tourisme.com/diffuser/projet/2792
 
-Vous devez fournir :
-* un identifiant de territoire, ou à défaut une liste de communes (identifiants Apidae) et les envoyer à event@apidae-tourisme.zendesk.com :
+Votre animateur Apidae devra également configurer ApidaeEvent. Vous devez fournir les informations suivantes à event@apidae-tourisme.zendesk.com :
+* un identifiant de territoire, ou à défaut une liste de communes (identifiants Apidae)
 * l'identifiant de votre membre
 * les adresses mails à prévenir lorsqu'une suggestion est faîte par un internaute
 * l'url du site Internet sur lequel sera ajouté le formulaire
 
-Par exemple pour Moulins :
+Le générateur peut également vous aider à retrouver ces informations :
+>https://event.apidae-tourisme.com/gen/
 
-* ID membre : **1336** ([Fiche Apidae du membre](https://base.apidae-tourisme.com/administrer/membre-sitra/1336))
+Par exemple pour Moulins :
 * Territoire : **3337048** ([Fiche Apidae du territoire](https://base.apidae-tourisme.com/consulter/objet-touristique/3337048))
+* ID membre : **1336** ([Fiche Apidae du membre](https://base.apidae-tourisme.com/administrer/membre-sitra/1336))
+* Adresse mails : contact@moulins-tourisme.fr, agenda@moulins-tourisme.fr
+* * Site web utilisé : https://www.moulins-tourisme.com
 
 En effet actuellement il ne nous est pas possible de déterminer automatiquement quel membre couvre quel territoire.
 > **A défaut de territoire défini, même si vous êtes abonné au projet, ApidaeEvent sera incapable de déterminer à quel membre il doit rattacher l'événement créé sur une commune donnée : la manifestation sera alors attribuée par défaut à Rhône-Alpes Tourisme (et supprimée).**
