@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "742cc7732c22b4b55fda6686b6dad77f",
+    "content-hash": "29a20c4e5da2bd765d0f5fe4e6ae9dfc",
     "packages": [
         {
             "name": "components/bootstrap",
@@ -451,6 +451,33 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Classe de simplification pour l'écriture sur Apidae",
             "time": "2017-11-15T13:34:33+00:00"
+        },
+        {
+            "name": "pierre-granger/apidae-sso",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PGranger/ApidaeSso.git",
+                "reference": "23272b00959253354111a6fd5657a043d463d412"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PGranger/ApidaeSso/zipball/23272b00959253354111a6fd5657a043d463d412",
+                "reference": "23272b00959253354111a6fd5657a043d463d412",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PierreGranger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Classe d'utilisation des API de SSO d'Apidae ",
+            "time": "2019-04-19T07:00:33+00:00"
         },
         {
             "name": "robloach/component-installer",

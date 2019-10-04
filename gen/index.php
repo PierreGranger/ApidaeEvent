@@ -1,22 +1,59 @@
 <?php
 
+	if (session_status() == PHP_SESSION_NONE) session_start() ;
+
 	ini_set('display_errors',1) ;
 	error_reporting(E_ALL) ;
 
-	require_once(realpath(dirname(__FILE__)).'/../../require/auth/auth.inc.php') ;
 	require_once(realpath(dirname(__FILE__)).'/../requires.inc.php') ;
+    require_once(realpath(dirname(__FILE__)).'/../vendor/autoload.php') ;
+    require_once(realpath(dirname(__FILE__)).'/vendor/autoload.php') ;
 
-	ini_set('display_errors',1) ;
-	error_reporting(E_ALL) ;
+    $ApidaeSso = new \PierreGranger\ApidaeSso($configApidaeSso,$_SESSION['ApidaeSso']) ;
+    if ( isset($_GET['logout']) ) $ApidaeSso->logout() ;
+    if ( isset($_GET['code']) && ! $ApidaeSso->connected() ) $ApidaeSso->getSsoToken($_GET['code']) ;
+    
+    if ( ! $ApidaeSso->connected() )
+    {
+        $ssoUrl = $ApidaeSso->getSsoUrl() ;
+        
+        ?><html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+                    <script>
+                        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                        <?php
+                            $uid = isset($utilisateurApidae) ? ',{userId:'.$utilisateurApidae['id'].'}' : '' ;
+                        ?>
+                        ga('create', 'UA-101563357-1', 'auto'<?php echo $uid ; ?>);
+                        ga('send', 'pageview');
+                    </script>
+                    <script
+                    src="https://code.jquery.com/jquery-3.4.1.min.js"
+                    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+                    crossorigin="anonymous"></script>
+                </head>
+            <body>
+                
+                <div class="container theme-showcase">
+                    <div class="jumbotron">
+                        <h1>Espace réservé</h1>
+                        <p>Cet espace est réservé : vous pouvez y accéder en vous authentifiant sur Apidae.</p>
+                        <p><a class="btn btn-primary btn-lg" role="button" href="<?php echo $ssoUrl ; ?>">S'authentifier sur Apidae</a></p>
+                    </div>
+                </div>
+            </body>
+        </html><?php die() ; // Assure qu'il ne se passera plus rien après, parce que l'utilisateur n'est pas identifié.
+	}
+	
+	$utilisateurApidae = $ApidaeSso->getUserProfile() ;
 
-	require(realpath(dirname(__FILE__)).'/../../ApidaeMembres/vendor/autoload.php') ;
-    require(realpath(dirname(__FILE__)).'/../../ApidaeMembres/config.inc.php') ;
-
-	ini_set('display_errors',1) ;
-	error_reporting(E_ALL) ;
-
-	if ( ! isset($ApidaeEvent) ) $ApidaeEvent = $pma ;
-
+	if ( ! isset($ApidaeEvent) ) die('no $ApidaeEvent') ;
 	$siteweb = null ;
     $ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
 	$membre = $ApidaeMembres->getMembreById($utilisateurApidae['membre']['id']) ;
@@ -140,7 +177,7 @@
 
 			<div class="alert alert-primary" style="display:none;">
 				<h3>URL de démo</h3>
-				<div id="url" data-base="https://apidae.allier-auvergne-tourisme.com/ApidaeEvent/"></div>
+				<div id="url" data-base="https://event.apidae-tourisme.com/"></div>
 			</div>
 
 			<div class="alert alert-primary">

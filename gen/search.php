@@ -1,7 +1,10 @@
 <?php
 
-    require_once(realpath(dirname(__FILE__)).'/../../require/auth/auth.inc.php') ;
-    require_once(realpath(dirname(__FILE__)).'/../config.inc.php') ;
+	require_once(realpath(dirname(__FILE__)).'/../requires.inc.php') ;
+    require_once(realpath(dirname(__FILE__)).'/../vendor/autoload.php') ;
+    require_once(realpath(dirname(__FILE__)).'/vendor/autoload.php') ;
+
+    $ApidaeSso = new \PierreGranger\ApidaeSso($configApidaeSso,$_SESSION['ApidaeSso']) ;
 
     header('Content-Type: application/json');
 

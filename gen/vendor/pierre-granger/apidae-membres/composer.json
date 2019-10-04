@@ -1,0 +1,15 @@
+{
+    "name": "pierre-granger/apidae-membres",
+    "description": "Classe d'utilisation des API membres & utilisateurs d'Apidae ",
+    "require": {
+        "php": "^5.3.3 || ^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PierreGranger\\": "src/"
+        }
+    },
+    "require-dev": {
+        "victorjonsson/markdowndocs": "^1.3"
+    }
+}

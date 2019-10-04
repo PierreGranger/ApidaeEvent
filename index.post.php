@@ -58,58 +58,38 @@
 		*/
 		$membresCommune = $ApidaeMembres->getMembres(
 			Array(
-					'communeCode'=>$commune[1],
-					"idProjet" => $configApidaeEvent['projet_ecriture_projetId']
+					'communeCode'=>$commune[3],
+					//"idProjet" => $configApidaeEvent['projet_ecriture_projetId']
 			),
-			Array("COMMUNES")
+			//Array("COMMUNES")
 		) ;
-		
+		$membresConcernes = Array() ;
+		foreach ( $membresCommune as $mb )
+			$membresConcernes[$mb['id']] = $mb ;
+			
 		/**
-		 * Deux problèmes :
-		 * 1) On peut avoir plusieurs membres abonnés. Il faut trouver auquel affecter la manifestation
-		 * 	a. On affecte au membre qui a le moins de communes
-		 *  b. On affecte au premier membre trouvé dans la config
-		 * 2) Au 23/07/2019 il y a un bug sur la récupération des membres par communeCode : la recherche porte sur le code postal ET insee et peut donc renvoyer de faux positifs.
-		 * 	Il faut donc pour l'instant vérifier la liste des communes de chaque membre...
-		 */
+		 * On peut avoir plusieurs membres abonnés. Il faut trouver auquel affecter la manifestation
+		 * 	1. On affecte au membre qui a le moins de communes
+		 *  2. On affecte au premier membre trouvé dans la config
+		*/
 
-		/** Fix temporaire pour le cas 2) */
-		$temp = Array() ;
-		foreach ( $membresCommune as $k => $mc )
-		{
-			$communeTrouvee = false ;
-			foreach ( $mc['communes'] as $c )
-			{
-				if ( $c['id'] == $commune[0] )
-				{
-					$communeTrouvee = true ;
-					break ;
-				}
-			}
-			if ( $communeTrouvee ) $temp[$mc['id']] = $mc ;
-		}
-		$membresCommune = $temp ;
-		
-		/** Fix 1.a */
+		/** Cas 1 */
 		/*
 		$membreTrouve = null ;
-		foreach ( $membresCommune as $mc )
+		foreach ( $membresConcernes as $mc )
 		{
 			if ( $membreTrouve == null || sizeof($mc['communes']) < $membreTrouve['communes'] )
 				$membreTrouve = $mc ;
 		}
 		*/
 
-		echo '<pre>'.print_r($membresCommune,true).'</pre>' ;
-		echo '<pre>'.print_r($configApidaeEvent['membres'],true).'</pre>' ;
-
-		/** Fix 1.b */
+		/** Cas 2 */
 		if ( isset($configApidaeEvent['membres']) )
 		{
 			/* Au cas où la commune serait concernée par plusieurs territoires, on parcourt les membres dans l'ordre saisi pour choisir le premier dans la liste. */
 			foreach ( $configApidaeEvent['membres'] as $m )
 			{
-				if ( isset($membresCommune[$m['id_membre']]) )
+				if ( isset($membresConcernes[$m['id_membre']]) )
 				{
 					$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
 					$infos_proprietaire['mail_membre'] = @$m['mail'] ;
