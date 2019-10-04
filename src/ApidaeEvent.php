@@ -156,11 +156,27 @@
 		public function getCommunesById(array $ids)
 		{
 			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
-			$cachekey = 'communesById'.md5($coms) ;
+			$cachekey = 'communesById'.md5(implode('-',$coms)) ;
 			if ( ! $ret = $this->mc->get($cachekey) )
 			{
 				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
 				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'communeIds'=>$coms) ;
+				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
+				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
+				$this->mc->set($cachekey,$tmp) ;
+			}
+			return $ret ;
+		}
+
+		public function getCommunesByInsee(array $ids)
+		{
+			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
+			$cachekey = 'getCommunesByInsee'.md5(implode('-',$coms)) ;
+			if ( ! $ret = $this->mc->get($cachekey) )
+			{
+				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
+				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'codesInsee'=>$coms) ;
 				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
 				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;

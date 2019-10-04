@@ -18,7 +18,7 @@ Pour que les événements saisis par l'internaute soient bien rattachés à votr
 >https://base.apidae-tourisme.com/diffuser/projet/2792
 
 Votre animateur Apidae devra également configurer ApidaeEvent. Vous devez fournir les informations suivantes à event@apidae-tourisme.zendesk.com :
-* un identifiant de territoire, ou à défaut une liste de communes (identifiants Apidae)
+* un identifiant de territoire, ou à défaut une liste de communes (codes INSEE)
 * l'identifiant de votre membre
 * les adresses mails à prévenir lorsqu'une suggestion est faîte par un internaute
 * l'url du site Internet sur lequel sera ajouté le formulaire
@@ -43,7 +43,7 @@ _______
 
 ## installation sur un serveur
 
-Si vous préférez installer le formulaire sur votre site web, vous pouvez le télécharger et l'installer sur votre propre serveur (PHP/MySQL).
+Si vous préférez installer le formulaire sur votre site web, vous pouvez le télécharger et l'installer sur votre propre serveur (PHP).
 Vous pourrez ainsi configurer plus finement le formulaire (ajout de champs, changement de couleurs...)
 Vous pouvez également contribuer au projet si vous souhaitez l'améliorer.
 
@@ -76,7 +76,6 @@ N'importe quel projet fait l'affaire : la consultation sert juste à récupérer
 * Dans ce fichier, renseignez les informations essentielles
 
 #### config.inc.php
-* **`$configApidaeEvent['mysqli_*']`** : Informations nécessaires à la création de 3 tables SQL. L'utilisateur configuré doit avoir les droits de création (CREATE, ALTER, INDEX)
 * **`$configApidaeEvent['projet_consultation_apiKey']`** & **`$configApidaeEvent['projet_consultation_secret']`** : un projet de consultation créé sur Apidae. Vous pouvez tout à fait réutiliser les codes de votre site Internet si vous avez déjà un projet.
 * **`$configApidaeEvent['territoire']`** (*optionnel*) : définition des communes proposées dans le formulaire : identifiant du territoire correspondant à la liste des communes proposées dans le formulaire.
 	* Ex pour l'Auvergne : `$configApidaeEvent['territoire'] = 711392 ;` (fiche Territoire "Auvergne" sur Apidae)

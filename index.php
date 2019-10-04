@@ -217,7 +217,7 @@
 						$communes = null ;
 						if ( isset($_GET['communes']) )
 						{
-							$communes = $ApidaeEvent->getCommunesById(explode(',',$_GET['communes'])) ;
+							$communes = $ApidaeEvent->getCommunesByInsee(explode(',',$_GET['communes'])) ;
 						}
 						elseif ( isset($configApidaeEvent['territoire']) )
 						{
