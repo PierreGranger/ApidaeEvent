@@ -60,7 +60,7 @@
 			Array(
 					'communeCode'=>$commune[3],
 					//"idProjet" => $configApidaeEvent['projet_ecriture_projetId']
-			),
+			)
 			//Array("COMMUNES")
 		) ;
 		$membresConcernes = Array() ;

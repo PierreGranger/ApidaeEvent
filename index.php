@@ -1,5 +1,6 @@
 <?php
 
+
 	require_once(realpath(dirname(__FILE__)).'/requires.inc.php') ;
 
 	$class_label = 'col-md-2 col-sm-2' ;
@@ -82,8 +83,12 @@
 			}) ;
 		</script>
 
-		<?php if ( file_exists(realpath(dirname(__FILE__)).'/../analytics.php') )
-			include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
+		<?php
+			if ( file_exists(realpath(dirname(__FILE__)).'/../analytics.php') )
+				include(realpath(dirname(__FILE__)).'/../analytics.php') ;
+			elseif ( file_exists(realpath(dirname(__FILE__)).'/analytics.php') )
+				include(realpath(dirname(__FILE__)).'/analytics.php') ;
+		?>
 
 	</head>
 	<body>
@@ -754,7 +759,7 @@
 						Vous pouvez laisser un message ci-dessous : il sera communiqué à votre office de tourisme, mais ne sera pas publié.<br />
 						Merci de préciser <strong>l'organisateur de la manifestation</strong> (association ABC...).
 					</div>
-					<div class="form-group row complement_tarif">
+					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="commentaire">Commentaire privé</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<textarea class="form-control" name="commentaire" id="commentaire"><?php echo htmlspecialchars(@$post['commentaire']) ; ?></textarea>
