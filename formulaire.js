@@ -223,10 +223,18 @@ function valideChamp(champ)
 	}
 	else if ( type == 201 || champ.hasClass('telephone') ) // Téléphone
 	{
-		champ.val(val.replace(/[^0-9]/g,'')) ;
-		var beautify = champ.val().match(/([0-9]{1,2})/g) ;
-		if ( ! champ.val().match(/^[0-9]{10}$/) ) return false ;
-		if ( typeof beautify == 'object' && beautify != null ) champ.val(beautify.join(' ')) ;
+		var devise = jQuery('form.form').find('input[name="devise"]').val() ;
+		if ( devise == 'EUR' )
+		{
+			champ.val(val.replace(/[^0-9]/g,'')) ;
+			if ( ! champ.val().match(/^[0-9]{10}$/) ) return false ;
+			var beautify = champ.val().match(/([0-9+]{1,2})/g) ;
+			if ( typeof beautify == 'object' && beautify != null ) champ.val(beautify.join(' ')) ;
+		}
+		else if ( devise == 'CHF' || devise == 'CFP' )
+		{
+			if ( ! champ.val().match(/^[0-9+]{6,12}$/) ) return false ;
+		}
 	}
 	else if ( type == 204 || champ.hasClass('mail') ) // Mél
 	{

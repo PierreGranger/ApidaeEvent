@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29a20c4e5da2bd765d0f5fe4e6ae9dfc",
+    "content-hash": "a5cd4bba22015dd041b3a27b0500151d",
     "packages": [
         {
             "name": "components/bootstrap",
-            "version": "3.3.7",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/bootstrap.git",
-                "reference": "fe6e7683be66ba45a725816efdb51d4566733043"
+                "reference": "427f4d414fc6ae8385aee02b7efc8e391eb141ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/bootstrap/zipball/fe6e7683be66ba45a725816efdb51d4566733043",
-                "reference": "fe6e7683be66ba45a725816efdb51d4566733043",
+                "url": "https://api.github.com/repos/components/bootstrap/zipball/427f4d414fc6ae8385aee02b7efc8e391eb141ad",
+                "reference": "427f4d414fc6ae8385aee02b7efc8e391eb141ad",
                 "shasum": ""
             },
             "require": {
@@ -72,7 +72,7 @@
                 "responsive",
                 "web"
             ],
-            "time": "2016-07-26T05:59:20+00:00"
+            "time": "2019-05-08T19:36:29+00:00"
         },
         {
             "name": "components/chosen",
@@ -115,16 +115,16 @@
         },
         {
             "name": "components/jquery",
-            "version": "3.2.1",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/jquery.git",
-                "reference": "e5534d4ab8e80c159553d507e358ed20a806d3bf"
+                "reference": "901828b7968b18319e377dc23d466f28426ee083"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/jquery/zipball/e5534d4ab8e80c159553d507e358ed20a806d3bf",
-                "reference": "e5534d4ab8e80c159553d507e358ed20a806d3bf",
+                "url": "https://api.github.com/repos/components/jquery/zipball/901828b7968b18319e377dc23d466f28426ee083",
+                "reference": "901828b7968b18319e377dc23d466f28426ee083",
                 "shasum": ""
             },
             "type": "component",
@@ -153,7 +153,7 @@
             ],
             "description": "jQuery JavaScript Library",
             "homepage": "http://jquery.com",
-            "time": "2017-03-21T07:01:49+00:00"
+            "time": "2019-10-23T05:15:13+00:00"
         },
         {
             "name": "components/jqueryui",
@@ -319,69 +319,54 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v5.2.26",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "70362997bda4376378be7d92d81e2200550923f7"
+                "reference": "c5e61d0729507049cec9673aa1a679f9adefd683"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/70362997bda4376378be7d92d81e2200550923f7",
-                "reference": "70362997bda4376378be7d92d81e2200550923f7",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/c5e61d0729507049cec9673aa1a679f9adefd683",
+                "reference": "c5e61d0729507049cec9673aa1a679f9adefd683",
                 "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
-                "php": ">=5.0.0"
+                "ext-filter": "*",
+                "php": ">=5.5.0"
             },
             "require-dev": {
-                "doctrine/annotations": "1.2.*",
-                "jms/serializer": "0.16.*",
-                "phpdocumentor/phpdocumentor": "2.*",
-                "phpunit/phpunit": "4.8.*",
-                "symfony/debug": "2.8.*",
-                "symfony/filesystem": "2.8.*",
-                "symfony/translation": "2.8.*",
-                "symfony/yaml": "2.8.*",
-                "zendframework/zend-cache": "2.5.1",
-                "zendframework/zend-config": "2.5.1",
-                "zendframework/zend-eventmanager": "2.5.1",
-                "zendframework/zend-filter": "2.5.1",
-                "zendframework/zend-i18n": "2.5.1",
-                "zendframework/zend-json": "2.5.1",
-                "zendframework/zend-math": "2.5.1",
-                "zendframework/zend-serializer": "2.5.*",
-                "zendframework/zend-servicemanager": "2.5.*",
-                "zendframework/zend-stdlib": "2.5.1"
+                "doctrine/annotations": "^1.2",
+                "friendsofphp/php-cs-fixer": "^2.2",
+                "phpunit/phpunit": "^4.8 || ^5.7"
             },
             "suggest": {
-                "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
+                "ext-mbstring": "Needed to send email in multibyte encoding charset",
+                "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
+                "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
+                "psr/log": "For optional PSR-3 debug logging",
+                "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
+                "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "class.phpmailer.php",
-                    "class.phpmaileroauth.php",
-                    "class.phpmaileroauthgoogle.php",
-                    "class.smtp.php",
-                    "class.pop3.php",
-                    "extras/EasyPeasyICS.php",
-                    "extras/ntlm_sasl_client.php"
-                ]
+                "psr-4": {
+                    "PHPMailer\\PHPMailer\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-2.1"
+                "LGPL-2.1-only"
             ],
             "authors": [
                 {
-                    "name": "Jim Jagielski",
-                    "email": "jimjag@gmail.com"
-                },
-                {
                     "name": "Marcus Bointon",
                     "email": "phpmailer@synchromedia.co.uk"
+                },
+                {
+                    "name": "Jim Jagielski",
+                    "email": "jimjag@gmail.com"
                 },
                 {
                     "name": "Andy Prevost",
@@ -392,20 +377,48 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-11-04T09:26:05+00:00"
+            "time": "2019-12-10T11:17:38+00:00"
         },
         {
-            "name": "pierre-granger/apidae-droits",
-            "version": "v1.0",
+            "name": "pierre-granger/apidae-ecriture",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PGranger/ApidaeMembres.git",
-                "reference": "575ab33731898c82938263c76df183da7d1773e0"
+                "url": "https://github.com/PGranger/ApidaeEcriture.git",
+                "reference": "b837ddc227592b0294ee6ce403d1e3db692f444b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PGranger/ApidaeMembres/zipball/575ab33731898c82938263c76df183da7d1773e0",
-                "reference": "575ab33731898c82938263c76df183da7d1773e0",
+                "url": "https://api.github.com/repos/PGranger/ApidaeEcriture/zipball/b837ddc227592b0294ee6ce403d1e3db692f444b",
+                "reference": "b837ddc227592b0294ee6ce403d1e3db692f444b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0",
+                "phpmailer/phpmailer": "^5.2 || ^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PierreGranger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Classe de simplification pour l'écriture sur Apidae",
+            "time": "2018-10-23T12:41:16+00:00"
+        },
+        {
+            "name": "pierre-granger/apidae-membres",
+            "version": "v1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PGranger/ApidaeMembres.git",
+                "reference": "d255049df5516a03d257e3a5b52a27d3cf2d23cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PGranger/ApidaeMembres/zipball/d255049df5516a03d257e3a5b52a27d3cf2d23cb",
+                "reference": "d255049df5516a03d257e3a5b52a27d3cf2d23cb",
                 "shasum": ""
             },
             "require": {
@@ -422,62 +435,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Classe d'utilisation des API membres & utilisateurs d'Apidae ",
-            "time": "2019-02-21T16:11:29+00:00"
-        },
-        {
-            "name": "pierre-granger/apidae-ecriture",
-            "version": "v0.1.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PGranger/ApidaeEcriture.git",
-                "reference": "d8d00edabb0e868528acadd57b8870fb3577c9cc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PGranger/ApidaeEcriture/zipball/d8d00edabb0e868528acadd57b8870fb3577c9cc",
-                "reference": "d8d00edabb0e868528acadd57b8870fb3577c9cc",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3.3 || ^7.0",
-                "phpmailer/phpmailer": "^5.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PierreGranger\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "Classe de simplification pour l'écriture sur Apidae",
-            "time": "2017-11-15T13:34:33+00:00"
-        },
-        {
-            "name": "pierre-granger/apidae-sso",
-            "version": "v1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PGranger/ApidaeSso.git",
-                "reference": "23272b00959253354111a6fd5657a043d463d412"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PGranger/ApidaeSso/zipball/23272b00959253354111a6fd5657a043d463d412",
-                "reference": "23272b00959253354111a6fd5657a043d463d412",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3.3 || ^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PierreGranger\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "Classe d'utilisation des API de SSO d'Apidae ",
-            "time": "2019-04-19T07:00:33+00:00"
+            "time": "2019-09-27T14:13:16+00:00"
         },
         {
             "name": "robloach/component-installer",
@@ -529,16 +487,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.3.12",
+            "version": "v3.4.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "a56a3989fb762d7b19a0cf8e7693ee99a6ffb78d"
+                "reference": "5b9d2bcffe4678911a4c941c00b7c161252cf09a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/a56a3989fb762d7b19a0cf8e7693ee99a6ffb78d",
-                "reference": "a56a3989fb762d7b19a0cf8e7693ee99a6ffb78d",
+                "url": "https://api.github.com/repos/symfony/process/zipball/5b9d2bcffe4678911a4c941c00b7c161252cf09a",
+                "reference": "5b9d2bcffe4678911a4c941c00b7c161252cf09a",
                 "shasum": ""
             },
             "require": {
@@ -547,7 +505,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -574,7 +532,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-13T15:31:11+00:00"
+            "time": "2020-01-01T11:03:25+00:00"
         }
     ],
     "packages-dev": [],

@@ -9,6 +9,9 @@
     require_once(realpath(dirname(__FILE__)).'/../vendor/autoload.php') ;
     require_once(realpath(dirname(__FILE__)).'/vendor/autoload.php') ;
 
+	ini_set('display_errors',1) ;
+	error_reporting(E_ALL) ;
+
     $ApidaeSso = new \PierreGranger\ApidaeSso($configApidaeSso,$_SESSION['ApidaeSso']) ;
     if ( isset($_GET['logout']) ) $ApidaeSso->logout() ;
     if ( isset($_GET['code']) && ! $ApidaeSso->connected() ) $ApidaeSso->getSsoToken($_GET['code']) ;
@@ -141,6 +144,16 @@
 							</div>
 						</div>
 
+						<div class="form-group row">
+							<label class="col-4 col-form-label" for="devise">Devise</label>
+							<div class="col-8">
+								<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
+								<label><input type="radio" id="devise_chf" name="devise" value="CHF" /> Franc suisse (CHF)</label>
+								<label><input type="radio" id="devise_cfp" name="devise" value="CFP" /> Franc pacifique (CFP)</label>
+
+							</div>
+						</div>
+
 					</form>
 
 					<div class="form-group row">
@@ -220,7 +233,7 @@
 
 			function gen(e){
 				var form = jQuery('.form form') ;
-				var params = form.serialize() ;
+				var params = form.find('select, input[value!=""]').serialize() ;
 				console.log(params) ;
 				
 				var url = jQuery('div#url').data('base')+'?'+params ;

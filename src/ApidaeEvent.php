@@ -88,25 +88,25 @@
 				else $ret .= ' name="'.$type.'[]" multiple="multiple" ' ;
 				if ( isset($params['max_selected_options']) ) $ret .= ' data-max_selected_options="'.$params['max_selected_options'].'" ' ;
 				$ret .= '>' ;
-					if ( @$params['type'] == 'unique' ) $ret .= '<option value="">-</option>' ;
+					if ( @$params['type'] == 'unique' ) $ret .= "\n\t\t\t\t\t\t\t\t".'<option value="">-</option>' ;
 					$famillePrec = null ;
 					foreach ( $ers as $erp )
 					{
-						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] && $famillePrec != null ) $ret .= '</optgroup>' ;
-						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= '<optgroup label="'.htmlspecialchars($familles[$erp['familleCritere']]['libelleFr']).'">' ;
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] && $famillePrec != null ) $ret .= "\n\t\t\t\t\t\t\t\t".'</optgroup>' ;
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= "\n\t\t\t\t\t\t\t\t".'<optgroup label="'.htmlspecialchars($familles[$erp['familleCritere']]['libelleFr']).'">' ;
 						// TODO : on change le fonctionnement de la boucle. On a un tableau avec les parents ($erp) et des enants possibles ($erp['enfants']).
 						
-						$ret .= '<option value="'.$erp['id'].'"' ;
+						$ret .= "\n\t\t\t\t\t\t\t\t\t".'<option value="'.$erp['id'].'"' ;
 						//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
-							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= 'title="'.htmlspecialchars($erp['description']).'" ' ;
+							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'"' ;
 							if ( isset($post) && is_array($post) && in_array($p['id'],$post) ) $ret .= ' selected="selected"' ;
 						$ret .= '>'.$erp['libelleFr'].'</option>' ;
 						if ( isset($erp['enfants']) )
 						{
 							foreach ( $erp['enfants'] as $e )
 							{
-								$ret .= '<option value="'.$e['id'].'"' ;
-								if ( isset($e['description']) && $e['description'] != '' ) $ret .= 'title="'.htmlspecialchars($e['description']).'" ' ;
+								$ret .= "\n\t\t\t\t\t\t\t\t\t\t".'<option value="'.$e['id'].'"' ;
+								if ( isset($e['description']) && $e['description'] != '' ) $ret .= ' title="'.htmlspecialchars($e['description']).'"' ;
 								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
 								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
 							}
@@ -321,6 +321,7 @@
 				curl_setopt($ch, CURLOPT_HTTPHEADER, Array('Content-Type: application/json')); // Erreur 415 sans cette ligne
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				//curl_setopt($ch, CURLOPT_HEADER, 1) ;
+				curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
 				
 				$url_base = $this->url_api().'api/v002/'.$service.'/' ;
 				$url = $url_base ;

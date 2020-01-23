@@ -36,16 +36,34 @@
 		'https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js'
 	) ;
 
-	$devises = Array('EUR'=>'€','CHF'=>'CHF') ;
+	$devises = Array('EUR'=>'€','CHF'=>'CHF','CFP'=>'CFP') ;
+	$phone_placeholder = '00 00 00 00 00' ;
+	
+	$theme_exclude = Array() ;
+	$categorie_exclude = Array() ;
 
 	if ( isset($_GET['devise']) && isset($devises[$_GET['devise']]) ) {
 		$devise_lib = $devises[$_GET['devise']] ;
 		$devise_apidae = $_GET['devise'] ;
+		/**
+		 * Exceptions pour Nouvelle-Calédonie
+		 */
+		if ( $_GET['devise'] == 'CFP' )
+		{
+			$phone_placeholder = '00 00 00' ;
+			$theme_exclude = Array(
+				2155,2311,2312,2313,2315,2316,2317,2318,2319,2320,2329,2321,2322,2323,2324,4584,4968 // Ski
+				,2182,2330,2331,2332 // Sports de glace
+				,2259,2341,2342,4104 // Sports d'hiver
+			) ;
+		}
 	}
 	else {
 		$devise_lib = '€' ;
 		$devise_apidae = 'EUR' ;
 	}
+
+	
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -379,7 +397,7 @@
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label">Catégories de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3),@$post['FeteEtManifestationCategorie']) ; ?>
+							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3,'exclude'=>$categorie_exclude),@$post['FeteEtManifestationCategorie']) ; ?>
 								<small class="form-text text-muted">3 catégories maximum</small>
 						</div>
 					</div>
@@ -387,7 +405,7 @@
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label">Thèmes de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select'),@$post['FeteEtManifestationTheme']) ; ?>
+							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select','exclude'=>$theme_exclude),@$post['FeteEtManifestationTheme']) ; ?>
 						</div>
 					</div>
 
@@ -574,7 +592,7 @@
 											echo '</td>' ;
 											echo '<td>' ;
 												echo '<div class="form-group">' ;
-													echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="00 00 00 00 00" />' ;
+													echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="'.$phone_placeholder.'" />' ;
 												echo '</div>' ;
 											echo '</td>' ;
 										echo '</tr>' ;

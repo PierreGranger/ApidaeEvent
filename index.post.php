@@ -589,7 +589,7 @@
 		$display_form = false ;
 
 		$texte_offre_enregistree = '<p><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <strong>Votre événement a bien été enregistré</strong>, nous vous remercions pour votre contribution.</p>
-		<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>Attention :</strong> Il a été envoyé en validation, et devrait être visible 24 à 48h <strong>après sa validation</strong>, sur les différents supports de communication alimentés par Apidae.</p>' ;
+		<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>Attention :</strong> Il a été envoyé en validation, et devrait être visible 24 à 48h <strong>après sa validation</strong> par votre office de tourisme, sur les différents supports de communication alimentés par Apidae.</p>' ;
 		
 		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
 		{
