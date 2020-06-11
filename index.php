@@ -429,6 +429,15 @@
 						</div>
 					</div>
 
+					<div class="form-group row">
+						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifsThematises_6143">Dispositions spéciales COVID 19
+							<span class="glyphicon glyphicon-info-sign" title="Offre de services confinement et post confinement."></span>
+						</label>
+						<div class="<?php echo $class_champ ; ?>">
+							<textarea class="form-control" name="descriptifsThematises[6143]" id="descriptifsThematises_6143"><?php echo htmlspecialchars(@$post['descriptifsThematises'][6143]) ; ?></textarea>
+						</div>
+					</div>
+
 					<?php if ( isset($_GET['TourismeAdapte']) && $_GET['TourismeAdapte'] == 1 ) { ?>
 
 						<?php

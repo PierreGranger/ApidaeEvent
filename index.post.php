@@ -344,6 +344,34 @@
 	}
 
 	/**
+	 * Descriptifs thématisés
+	 */
+	$dts = Array() ;
+	if ( isset($_POST['descriptifsThematises']) )
+	{
+		foreach ( $_POST['descriptifsThematises'] as $id => $libelleFr )
+		{
+			if ( trim($libelleFr) != '' )
+			{
+				$dts[] = Array(
+					'theme' => Array(
+						'elementReferenceType' => 'DescriptifTheme',
+						'id' => $id
+					),
+					'description' => Array(
+						'libelleFr' => trim($libelleFr)
+					)
+				) ;
+			}
+		}
+	}
+	if ( sizeof($dts) > 0 )
+	{
+		$fieldlist[] = 'presentation.descriptifsThematises' ;
+		$root['presentation']['descriptifsThematises'] = $dts ;
+	}
+
+	/**
 	*	Gestion des tarifs
 	*/
 	if ( isset($_POST['descriptionTarif_complement_libelleFr']) )
