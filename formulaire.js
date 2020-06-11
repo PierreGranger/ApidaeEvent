@@ -223,10 +223,18 @@ function valideChamp(champ)
 	}
 	else if ( type == 201 || champ.hasClass('telephone') ) // Téléphone
 	{
-		champ.val(val.replace(/[^0-9]/g,'')) ;
-		var beautify = champ.val().match(/([0-9]{1,2})/g) ;
-		if ( ! champ.val().match(/^[0-9]{10}$/) ) return false ;
-		if ( typeof beautify == 'object' && beautify != null ) champ.val(beautify.join(' ')) ;
+		var devise = jQuery('form.form').find('input[name="devise"]').val() ;
+		if ( devise == 'EUR' )
+		{
+			champ.val(val.replace(/[^0-9]/g,'')) ;
+			if ( ! champ.val().match(/^[0-9]{10}$/) ) return false ;
+			var beautify = champ.val().match(/([0-9+]{1,2})/g) ;
+			if ( typeof beautify == 'object' && beautify != null ) champ.val(beautify.join(' ')) ;
+		}
+		else if ( devise == 'CHF' || devise == 'CFP' )
+		{
+			if ( ! champ.val().match(/^[0-9+]{6,12}$/) ) return false ;
+		}
 	}
 	else if ( type == 204 || champ.hasClass('mail') ) // Mél
 	{
@@ -249,7 +257,7 @@ function selectChange(select,init)
 	var coord = select.closest('tr').find('input[name$="[coordonnee]"]') ;
 	coord.closest('tr').find('small.h205').hide() ;
 
-	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder','00 00 00 00 00') ; // Tél
+	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder',phone_placeholder) ; // Tél
 	else if ( select.val() == 204 ) coord.attr('type','email').attr('placeholder','xxx@yyyy.zz') ; // Mél
 	else if ( select.val() == 205 )
 	{

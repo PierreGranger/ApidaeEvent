@@ -88,25 +88,25 @@
 				else $ret .= ' name="'.$type.'[]" multiple="multiple" ' ;
 				if ( isset($params['max_selected_options']) ) $ret .= ' data-max_selected_options="'.$params['max_selected_options'].'" ' ;
 				$ret .= '>' ;
-					if ( @$params['type'] == 'unique' ) $ret .= '<option value="">-</option>' ;
+					if ( @$params['type'] == 'unique' ) $ret .= "\n\t\t\t\t\t\t\t\t".'<option value="">-</option>' ;
 					$famillePrec = null ;
 					foreach ( $ers as $erp )
 					{
-						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] && $famillePrec != null ) $ret .= '</optgroup>' ;
-						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= '<optgroup label="'.htmlspecialchars($familles[$erp['familleCritere']]['libelleFr']).'">' ;
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] && $famillePrec != null ) $ret .= "\n\t\t\t\t\t\t\t\t".'</optgroup>' ;
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= "\n\t\t\t\t\t\t\t\t".'<optgroup label="'.htmlspecialchars($familles[$erp['familleCritere']]['libelleFr']).'">' ;
 						// TODO : on change le fonctionnement de la boucle. On a un tableau avec les parents ($erp) et des enants possibles ($erp['enfants']).
 						
-						$ret .= '<option value="'.$erp['id'].'"' ;
+						$ret .= "\n\t\t\t\t\t\t\t\t\t".'<option value="'.$erp['id'].'"' ;
 						//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
-							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= 'title="'.htmlspecialchars($erp['description']).'" ' ;
+							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'"' ;
 							if ( isset($post) && is_array($post) && in_array($p['id'],$post) ) $ret .= ' selected="selected"' ;
 						$ret .= '>'.$erp['libelleFr'].'</option>' ;
 						if ( isset($erp['enfants']) )
 						{
 							foreach ( $erp['enfants'] as $e )
 							{
-								$ret .= '<option value="'.$e['id'].'"' ;
-								if ( isset($e['description']) && $e['description'] != '' ) $ret .= 'title="'.htmlspecialchars($e['description']).'" ' ;
+								$ret .= "\n\t\t\t\t\t\t\t\t\t\t".'<option value="'.$e['id'].'"' ;
+								if ( isset($e['description']) && $e['description'] != '' ) $ret .= ' title="'.htmlspecialchars($e['description']).'"' ;
 								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
 								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
 							}
@@ -156,11 +156,27 @@
 		public function getCommunesById(array $ids)
 		{
 			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
-			$cachekey = 'communesById'.md5($coms) ;
+			$cachekey = 'communesById'.md5(implode('-',$coms)) ;
 			if ( ! $ret = $this->mc->get($cachekey) )
 			{
 				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
 				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'communeIds'=>$coms) ;
+				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
+				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
+				$this->mc->set($cachekey,$tmp) ;
+			}
+			return $ret ;
+		}
+
+		public function getCommunesByInsee(array $ids)
+		{
+			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
+			$cachekey = 'getCommunesByInsee'.md5(implode('-',$coms)) ;
+			if ( ! $ret = $this->mc->get($cachekey) )
+			{
+				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
+				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'codesInsee'=>$coms) ;
 				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
 				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
@@ -305,6 +321,7 @@
 				curl_setopt($ch, CURLOPT_HTTPHEADER, Array('Content-Type: application/json')); // Erreur 415 sans cette ligne
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				//curl_setopt($ch, CURLOPT_HEADER, 1) ;
+				curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
 				
 				$url_base = $this->url_api().'api/v002/'.$service.'/' ;
 				$url = $url_base ;

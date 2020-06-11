@@ -1,10 +1,17 @@
 <?php
 
+
 	require_once(realpath(dirname(__FILE__)).'/requires.inc.php') ;
 
 	$class_label = 'col-md-2 col-sm-2' ;
 	$class_champ = 'col-md-10 col-sm-10' ;
 
+	if ( preg_match('#Event1\.1#',$_SERVER['SCRIPT_NAME']) && preg_match('#grenoble#',$_SERVER['HTTP_REFERER']) )
+	{
+		header('location:https://apidae.allier-auvergne-tourisme.com/ApidaeEvent/?territoire='.$_GET['territoire']) ;
+		die() ;
+	}
+	
 	$http_path = './' ;
 	if ( isset($configApidaeEvent['http_path']) && $configApidaeEvent['http_path'] != '' )
 		$http_path = $configApidaeEvent['http_path'] ;
@@ -29,16 +36,34 @@
 		'https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js'
 	) ;
 
-	$devises = Array('EUR'=>'€','CHF'=>'CHF') ;
+	$devises = Array('EUR'=>'€','CHF'=>'CHF','CFP'=>'CFP') ;
+	$phone_placeholder = '00 00 00 00 00' ;
+	
+	$theme_exclude = Array() ;
+	$categorie_exclude = Array() ;
 
 	if ( isset($_GET['devise']) && isset($devises[$_GET['devise']]) ) {
 		$devise_lib = $devises[$_GET['devise']] ;
 		$devise_apidae = $_GET['devise'] ;
+		/**
+		 * Exceptions pour Nouvelle-Calédonie
+		 */
+		if ( $_GET['devise'] == 'CFP' )
+		{
+			$phone_placeholder = '00 00 00' ;
+			$theme_exclude = Array(
+				2155,2311,2312,2313,2315,2316,2317,2318,2319,2320,2329,2321,2322,2323,2324,4584,4968 // Ski
+				,2182,2330,2331,2332 // Sports de glace
+				,2259,2341,2342,4104 // Sports d'hiver
+			) ;
+		}
 	}
 	else {
 		$devise_lib = '€' ;
 		$devise_apidae = 'EUR' ;
 	}
+
+	
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -68,6 +93,7 @@
 		<script>
 			var icon_plus = '<?php echo $icon_plus ; ?>' ;
 			var icon_moins = '<?php echo $icon_moins ; ?>' ;
+			var phone_placeholder = '<?php echo $phone_placeholder ; ?>' ;
 		
 			jQuery(document).ready(function(){
 				jQuery('.chosen-select').chosen({
@@ -76,8 +102,12 @@
 			}) ;
 		</script>
 
-		<?php if ( file_exists(realpath(dirname(__FILE__)).'/../analytics.php') )
-			include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
+		<?php
+			if ( file_exists(realpath(dirname(__FILE__)).'/../analytics.php') )
+				include(realpath(dirname(__FILE__)).'/../analytics.php') ;
+			elseif ( file_exists(realpath(dirname(__FILE__)).'/analytics.php') )
+				include(realpath(dirname(__FILE__)).'/analytics.php') ;
+		?>
 
 	</head>
 	<body>
@@ -211,7 +241,7 @@
 						$communes = null ;
 						if ( isset($_GET['communes']) )
 						{
-							$communes = $ApidaeEvent->getCommunesById(explode(',',$_GET['communes'])) ;
+							$communes = $ApidaeEvent->getCommunesByInsee(explode(',',$_GET['communes'])) ;
 						}
 						elseif ( isset($configApidaeEvent['territoire']) )
 						{
@@ -359,7 +389,7 @@
 					<legend>Description de votre manifestation</legend>
 
 					<div class="form-group row">
-						<label class="<?php echo $class_label ; ?> col-form-label">Types de manifestation</label>
+						<label class="<?php echo $class_label ; ?> col-form-label">Type de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationType',Array('presentation'=>'select','type'=>'unique'),@$post['FeteEtManifestationType']) ; ?>
 						</div>
@@ -368,7 +398,7 @@
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label">Catégories de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3),@$post['FeteEtManifestationCategorie']) ; ?>
+							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationCategorie',Array('presentation'=>'select','max_selected_options'=>3,'exclude'=>$categorie_exclude),@$post['FeteEtManifestationCategorie']) ; ?>
 								<small class="form-text text-muted">3 catégories maximum</small>
 						</div>
 					</div>
@@ -376,7 +406,7 @@
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label">Thèmes de manifestation</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select'),@$post['FeteEtManifestationTheme']) ; ?>
+							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationTheme',Array('presentation'=>'select','exclude'=>$theme_exclude),@$post['FeteEtManifestationTheme']) ; ?>
 						</div>
 					</div>
 
@@ -409,7 +439,10 @@
 						) ;
 						?>
 						<div class="form-group row TourismeAdapte">
-							<label class="<?php echo $class_label ; ?> col-form-label">Accessibilité</label>
+							<label class="<?php echo $class_label ; ?> col-form-label">
+								Accessibilité
+								<br /><small class="form-text text-muted">Accueil des personnes en situation de handicap</small>
+							</label>
 							<div class="<?php echo $class_champ ; ?>">
 								<?php echo $ApidaeEvent->formHtmlCC('TourismeAdapte',$params,@$post['TourismeAdapte']) ; ?>
 							</div>
@@ -508,7 +541,6 @@
 					<legend>Contacts organisateurs</legend>
 					
 					<div class="alert alert-warning" role="alert">
-						Les contacts ci-dessous ne seront pas diffusés.<br />
 						<strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone</strong> : en cas de questions, nous pourrons prendre contact avec l'organisateur grâce à ces informations.
 					</div>
 
@@ -561,7 +593,7 @@
 											echo '</td>' ;
 											echo '<td>' ;
 												echo '<div class="form-group">' ;
-													echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="00 00 00 00 00" />' ;
+													echo '<input class="form-control telephone" type="text" name="contact['.$i.'][telephone]" value="'.htmlspecialchars(@$post['contact'][$i]['telephone']).'" placeholder="'.$phone_placeholder.'" />' ;
 												echo '</div>' ;
 											echo '</td>' ;
 										echo '</tr>' ;
@@ -746,7 +778,7 @@
 						Vous pouvez laisser un message ci-dessous : il sera communiqué à votre office de tourisme, mais ne sera pas publié.<br />
 						Merci de préciser <strong>l'organisateur de la manifestation</strong> (association ABC...).
 					</div>
-					<div class="form-group row complement_tarif">
+					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="commentaire">Commentaire privé</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<textarea class="form-control" name="commentaire" id="commentaire"><?php echo htmlspecialchars(@$post['commentaire']) ; ?></textarea>
