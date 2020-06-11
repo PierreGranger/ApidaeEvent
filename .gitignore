@@ -2,7 +2,6 @@ config.inc.php
 config.surcharge.inc.php
 *.sublime-*
 composer.phar
-composer.lock
 /vendor/
 /assets/
 /config/
