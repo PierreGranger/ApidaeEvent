@@ -185,11 +185,11 @@
 			return $ret ;
 		}
 
-		public function getCommunesByTerritoire($id_territoire)
+		public function getCommunesByTerritoire($id_territoire,$refresh=false)
 		{
 			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new \Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
 			$cachekey = 'territoire'.$id_territoire ;
-			if ( ! $ret = $this->mc->get($cachekey) )
+			if ( ! ( $ret = $this->mc->get($cachekey) ) || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__.'mc->get failed...') ;
 				$parameters = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'responseFields'=>'localisation.perimetreGeographique') ;

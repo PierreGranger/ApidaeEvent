@@ -245,7 +245,7 @@
 						}
 						elseif ( isset($configApidaeEvent['territoire']) )
 						{
-							$communes = $ApidaeEvent->getCommunesByTerritoire($configApidaeEvent['territoire']) ;
+							$communes = $ApidaeEvent->getCommunesByTerritoire($configApidaeEvent['territoire'],isset($_GET['refresh'])) ;
 						}
 
 						if ( ! is_array($communes) || sizeof($communes) == 0 )
