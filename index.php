@@ -287,7 +287,9 @@
 										echo '<option value="'.htmlentities($cle).'"' ;
 											if ( @$post['commune'] == $cle ) echo ' selected="selected"' ;
 										echo '>' ;
-											echo $d['nom'] . ' - ' . $d['codePostal'] ;
+											echo $d['nom'] ;
+											if ( isset($_GET['devise']) && $_GET['devise'] == 'CHF' ) echo ' - ' . $d['complement'] ;
+											echo ' - ' . $d['codePostal'] ;
 										echo '</option>' ;
 									}
 									

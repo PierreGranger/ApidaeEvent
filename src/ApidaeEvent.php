@@ -198,7 +198,7 @@
 				if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$ret = Array() ;
 				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
-					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code']) ;
+					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>$c['complement']) ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
 				$this->mc->set($cachekey,$ret) ;
 			}
