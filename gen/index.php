@@ -145,6 +145,15 @@
 						</div>
 
 						<div class="form-group row">
+							<label class="col-4 col-form-label" for="mm">Multimédias ?
+								<br /><small>Permettre l'ajout de multimédias (PDF seulement)</small>
+							</label>
+							<div class="col-8">
+								<input type="checkbox" id="mm" name="mm" value="1" />
+							</div>
+						</div>
+
+						<div class="form-group row">
 							<label class="col-4 col-form-label" for="devise">Devise</label>
 							<div class="col-8">
 								<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>

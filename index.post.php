@@ -21,7 +21,15 @@
 
 	$infos_orga = Array() ;
 
+	if ( ! isset($ko) ) $ko = Array() ;
+
 	$ApidaeEvent->debug($_POST,'$_POST') ;
+
+	/**
+	 * $nosave définit s'il faut envoyer en enregistrement sur Apidae ou non.
+	 * Il n'a pas d'impact sur l'envoi des mails
+	 */
+	$nosave = isset($_POST['nosave']) && $ApidaeEvent->debug ;
 
 	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $ApidaeEvent->debug )
 	{
@@ -476,47 +484,48 @@
 	$illustrations = Array() ;
 	$multimedias = Array() ;
 
-	$key_files = 'medias' ;
-	if ( isset($_FILES[$key_files]) )
+
+	$keys_files = Array('illustrations','multimedias') ;
+	foreach ( $keys_files as $kf )
 	{
-		foreach ( $_FILES['medias']['error'] as $i => $error )
+		if ( isset($_FILES[$kf]) )
 		{
-			$media = Array(
-				'name' => $_FILES[$key_files]['name'][$i],
-				'type' => $_FILES[$key_files]['type'][$i],
-				'tmp_name' => $_FILES[$key_files]['tmp_name'][$i],
-				'error' => $_FILES[$key_files]['error'][$i],
-				'size' => $_FILES[$key_files]['size'][$i],
-			) ;
-			if ( $media['error'] == UPLOAD_ERR_NO_FILE ) continue ;
-			if ( $media['error'] == UPLOAD_ERR_OK )
+			foreach ( $_FILES[$kf]['error'] as $i => $error )
 			{
-				$finfo = new finfo(FILEINFO_MIME_TYPE) ;
-				$ext = array_search( $finfo->file($media['tmp_name']),$configApidaeEvent['mimes_illustrations'],true ) ;
-			    if ( $ext !== false ) {
-			        $legende = @$_POST[$key_files][$i]['legende'] ;
-					$copyright = @$_POST[$key_files][$i]['copyright'] ;
-					
-					$illustrations[] = Array(
-						'copyright'=>$copyright,
-						'legende'=>$legende,
-						'basename'=>basename($media['name']),
-						'mime'=>$configApidaeEvent['mimes_illustrations'][$ext],
-						'tempfile'=>$media['tmp_name']
-					) ;
-			    }
+				$media = Array(
+					'name' => $_FILES[$kf]['name'][$i],
+					'type' => $_FILES[$kf]['type'][$i],
+					'tmp_name' => $_FILES[$kf]['tmp_name'][$i],
+					'error' => $_FILES[$kf]['error'][$i],
+					'size' => $_FILES[$kf]['size'][$i],
+				) ;
+				if ( $media['error'] == UPLOAD_ERR_NO_FILE ) continue ;
+				if ( $media['error'] == UPLOAD_ERR_OK )
+				{
+					$finfo = new finfo(FILEINFO_MIME_TYPE) ;
+					$ext = array_search( $finfo->file($media['tmp_name']),$configApidaeEvent['mimes_'.$kf],true ) ;
+					if ( $ext !== false ) {
+						
+						$$kf[] = Array(
+							'copyright'=>@$_POST[$kf][$i]['copyright'],
+							'legende'=>@$_POST[$kf][$i]['legende'],
+							'basename'=>basename($media['name']),
+							'mime'=>$configApidaeEvent['mimes_'.$kf][$ext],
+							'tempfile'=>$media['tmp_name']
+						) ;
+					}
+					else
+					{
+						$ko[$kf.' '.($i+1)] = 'Type de fichier interdit pour le fichier '.$kf.' '.($i+1).' : '.$ext ;
+					}
+				}
 				else
 				{
-					$ko['Photo '.($i+1)] = 'Type de fichier interdit pour la photo '.($i+1).' : '.$ext ;
+					$ko[$kf.' '.($i+1)] = 'Erreur sur le fichier '.$kf.' '.($i+1).' : '.$media['error'] ;
 				}
-			}
-			else
-			{
-				$ko['Photo '.($i+1)] = 'Erreur sur la photo '.($i+1).' : '.$media['error'] ;
 			}
 		}
 	}
-
 
 	$medias = Array() ;
 	if ( sizeof($illustrations) > 0 ) $root['illustrations'] = Array() ;
@@ -539,7 +548,9 @@
 		$medias['multimedia.multimedia-'.($i+1)] = $ApidaeEvent->getCurlValue($mm['tempfile'],$mm['mime'],$mm['basename']) ;
 		$multimedia = Array() ;
 		$multimedia['link'] = false ;
-		$multimedia['type'] = 'PLAN' ;
+		$multimedia['type'] = 'DOCUMENT' ;
+		if ( $mm['legende'] != '' ) $multimedia['nom']['libelleFr'] = $mm['legende'] ;
+		if ( $mm['copyright'] != '' ) $multimedia['copyright']['libelleFr'] = $mm['copyright'] ;
 		$multimedia['traductionFichiers'][0]['locale'] = 'fr' ;
 		$multimedia['traductionFichiers'][0]['url'] = 'MULTIMEDIA#multimedia-'.($i+1) ;
 		$root['multimedias'][] = $multimedia ;
@@ -551,7 +562,7 @@
 	if ( isset($root['illustrations']) && sizeof($root['illustrations']) > 0 ) $fieldlist[] = 'illustrations' ;
 	if ( isset($root['multimedias']) && sizeof($root['multimedias']) > 0 ) $fieldlist[] = 'multimedias' ;
 	
-	if ( sizeof($ko) == 0 && ! ( isset($_POST['nosend']) && $ApidaeEvent->debug ) )
+	if ( sizeof($ko) == 0 && ! $nosave )
 	{
 		$enregistrer = Array(
 			'fieldlist' => $fieldlist,
@@ -562,17 +573,13 @@
 		) ;
 		if ( isset($infos_proprietaire['proprietaireId']) ) $enregistrer['proprietaireId'] = $infos_proprietaire['proprietaireId'] ;
 		
-		$ko = $ApidaeEvent->ajouter($enregistrer) ;
+		$ret_enr = $ApidaeEvent->ajouter($enregistrer) ;
+		if ( ! $ret_enr ) $ko[] = $ret_enr ;
 	}
 	
 	$ApidaeEvent->debug($ko,'$ko') ;
 
-	/**
-	 * Si on est en debug, même si l'enregistrement n'est pas parti, on va quand même réaliser les étapes d'envoi de mail (qui partiront au mail admin puisque debug=1)
-	 * */
-	if ( sizeof($ko) == 0 && isset($_POST['nosend']) && $ApidaeEvent->debug ) $ko = true ;
-
-	if ( $ko === true )
+	if ( sizeof($ko) == 0 )
 	{
 		$post_mail = $_POST ;
 		unset($post_mail['g-recaptcha-response']) ;
@@ -645,10 +652,10 @@
 
 		if ( $ApidaeEvent->debug )
 		{
-			if ( isset($_POST['nosend']) ) {
+			if ( isset($_POST['nosave']) ) {
 			?>
 			<div class="alert alert-warning" role="alert">
-				<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>[debug + nosend] en réalité l'offre n'a pas été envoyée en enregistrement Apidae. Le debug + nosend traite cependant les envois de mail, qui seront uniquement envoyés au mail admin.</p>
+				<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>[debug + nosave] en réalité l'offre n'a pas été envoyée en enregistrement Apidae. Le debug + nosave traite cependant les envois de mail, qui seront uniquement envoyés au mail admin.</p>
 			</div>
 			<?php
 			} else {
@@ -716,6 +723,6 @@
 		  </ul>
 		</div>
 		<?php
-		$ApidaeEvent->debug($ko) ;
+		$ApidaeEvent->debug($ko,'$ko:'.__LINE__) ;
 	}
 	

@@ -757,7 +757,7 @@
 								<tr>
 									<th></th>
 									<th>Votre photo</th>
-									<th>Légende photo</th>
+									<th>Titre</th>
 									<th>Copyright</th>
 								</tr>
 							</thead>
@@ -768,10 +768,10 @@
 										echo "\n\t\t\t\t\t\t".'<tr>' ;
 											echo '<td></td>' ;
 											echo '<td>' ;
-													echo '<input class="form-control" type="file" name="medias['.$i.']" value="'.htmlspecialchars(@$post['photos'][$i]).'" accept="image/*" />' ;
+													echo '<input class="form-control" type="file" name="illustrations['.$i.']" value="'.htmlspecialchars(@$post['illustrations'][$i]).'" accept="image/*" />' ;
 											echo '</td>' ;
-											echo '<td><input class="form-control" type="text" name="medias['.$i.'][legende]" value="'.htmlspecialchars(@$post['medias'][$i]['legende']).'" /></td>' ;
-											echo '<td><input class="form-control" type="text" name="medias['.$i.'][copyright]" value="'.htmlspecialchars(@$post['medias'][$i]['copyright']).'" /></td>' ;
+											echo '<td><input class="form-control" type="text" name="illustrations['.$i.'][legende]" value="'.htmlspecialchars(@$post['illustrations'][$i]['legende']).'" /></td>' ;
+											echo '<td><input class="form-control" type="text" name="illustrations['.$i.'][copyright]" value="'.htmlspecialchars(@$post['illustrations'][$i]['copyright']).'" /></td>' ;
 										echo '</tr>' ;
 									}
 								?>
@@ -782,6 +782,47 @@
 						</table>
 					</div>
 				</fieldset>
+
+				<?php if ( isset($_GET['mm']) && $_GET['mm'] == 1 ) { ?>
+					<fieldset class="form-group">
+						<legend>Multimédias</legend>
+						<div class="alert alert-warning" role="alert">
+							Vous pouvez ajouter ci-dessous des fichiers PDF si nécessaire (si vous avez un programme par exemple).
+							<br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
+							<br />Les documents ajoutés ne doivent pas dépasser les 5 Mo au total.
+						</div>
+						<div class="table-responsive">
+							<table class="table photos">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Votre fichier</th>
+										<th>Titre</th>
+										<th>Copyright</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										for ( $i = 0 ; $i < 1 ; $i++ )
+										{
+											echo "\n\t\t\t\t\t\t".'<tr>' ;
+												echo '<td></td>' ;
+												echo '<td>' ;
+														echo '<input class="form-control" type="file" name="multimedias['.$i.']" value="'.htmlspecialchars(@$post['multimedias'][$i]).'" accept="'.implode(',',$configApidaeEvent['mimes_multimedias']).'" />' ;
+												echo '</td>' ;
+												echo '<td><input class="form-control" type="text" name="multimedias['.$i.'][legende]" value="'.htmlspecialchars(@$post['multimedias'][$i]['legende']).'" /></td>' ;
+												echo '<td><input class="form-control" type="text" name="multimedias['.$i.'][copyright]" value="'.htmlspecialchars(@$post['multimedias'][$i]['copyright']).'" /></td>' ;
+											echo '</tr>' ;
+										}
+									?>
+									<tr>
+										<td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/','Ajouter un fichier',$icon_plus) ; ?></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</fieldset>
+				<?php } ?>
 
 				<fieldset class="form-group">
 					<legend>Organisateur</legend>
@@ -799,9 +840,9 @@
 
 				<?php if ( $ApidaeEvent->debug ) { ?>
 					<div class="form-group row">
-						<label class="<?php echo $class_label ; ?> col-form-label" for="nosend">[Debug] Ne pas enregistrer sur Apidae</label>
+						<label class="<?php echo $class_label ; ?> col-form-label" for="nosave">[Debug] Ne pas enregistrer sur Apidae</label>
 						<div class="<?php echo $class_champ ; ?>">
-							<input type="checkbox" name="nosend" id="nosend" value="1"<?php if ( @$post['nosend'] == 1 ) echo ' checked="checked" ' ; ?> />
+							<input type="checkbox" name="nosave" id="nosave" value="1"<?php if ( @$post['nosave'] == 1 ) echo ' checked="checked" ' ; ?> />
 						</div>
 					</div>
 				<?php } ?>
@@ -820,6 +861,10 @@
 					<p>Vous devez cocher la case "Je ne suis pas un robot" pour pouvoir enregistrer</p>
 					</div>
 				<?php } ?>
+
+				<div style="text-align:center;padding:40px ;">
+					<a href="https://www.apidae-tourisme.com" target="_blank"><img src="./logo.png" alt="Apidae Event" width="170" /></a>
+				</div>
 
 			</form>
 
