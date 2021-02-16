@@ -3,8 +3,6 @@
 	var optsDate = {
 		'dateFormat' : 'dd/mm/yy',
 		'minDate' : '+1d',
-		'showOn' : 'button',
-		'buttonText' : '',
 		firstDay:1,
 	} ;
 	var optsTime = {
@@ -14,9 +12,9 @@
 
 	var today = new Date() ;
 
-jQuery(document).ready(function(){
+jQuery(function(){
 
-	jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
+	//jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
 
 	jQuery('form.form select.chosen').each(function(){
 		var params = {
@@ -37,8 +35,7 @@ jQuery(document).ready(function(){
 	}) ;
 
 	checkTarifs() ;
-
-	jQuery('span.glyphicon[title]').tooltip() ;
+	
 
 	if ( jQuery('select[name="organisateur"]').length > 0 )
 	{
@@ -187,33 +184,41 @@ function valideChamp(champ)
 		var i = match[1] ;
 		var t = match[2] ; // debut|fin
 
-		if ( ! champ.val().match(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/i) )
-			return false ;
-
 		if ( t == 'debut' )
 		{
 			var fin = champ.closest('.form').find('input[name="date\['+i+'\]\[fin\]"]') ;
 			if ( fin.val() == '' ) fin.val(val) ;
-			fin.datepicker("destroy") ;
-			var newOptDate = jQuery.extend({},optsDate,{'minDate':val}) ;
-			fin.datepicker(newOptDate) ;
-
-			if ( champ.datepicker('getDate') > fin.datepicker('getDate') )
-				fin.datepicker('setDate',val) ;
+			else if ( fin.val() < champ.val() ) fin.val(champ.val()) ;
 		}
 		else if ( t == 'fin' )
 		{
 			var debut = champ.closest('.form').find('input[name="date\['+i+'\]\[debut\]"]') ;
 			if ( debut.val() == '' ) debut.val(val) ;
+			else if ( champ.val() < debut.val() ) debut.val(champ.val()) ;
 		}
 
 		//champ.data('lastVal',val) ;
 	}
 	else if ( champ.hasClass('time') )
 	{
-		champ.val(champ.val().replace(/[;,.-]/g,':')) ;
-		champ.val(champ.val().replace(/[^0-9:]/g,'')) ;
-		if ( ! champ.val().match(/^[0-9]{1,2}:[0-9]{2}$/) ) return false ;
+		var reg = /date\[([0-9]+)\]\[(hdebut|hfin)\]/i ;
+		var match = champ.attr('name').match(reg) ;
+		
+		var i = match[1] ;
+		var t = match[2] ; // debut|fin
+
+		if ( t == 'hdebut' )
+		{
+			var fin = champ.closest('.form').find('input[name="date\['+i+'\]\[hfin\]"]') ;
+			if ( fin.val() == '' ) fin.val(val) ;
+			else if ( fin.val() < champ.val() ) fin.val(champ.val()) ;
+		}
+		else if ( t == 'hfin' )
+		{
+			var debut = champ.closest('.form').find('input[name="date\['+i+'\]\[hdebut\]"]') ;
+			if ( debut.val() == '' ) debut.val(val) ;
+			else if ( champ.val() < debut.val() ) debut.val(champ.val()) ;
+		}
 	}
 	else if ( champ.hasClass('float') )
 	{
@@ -310,9 +315,9 @@ function checkTarifs() {
 
 function initForm(elem) {
 
-	elem.find('input.date').not('.hasDatepicker').datepicker(optsDate).addClass('hasDatepicker').prop('min',today) ;
-	elem.find('input.time').not('.hasTimepicker').timepicker(optsTime).addClass('hasTimepicker') ;
-	jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
+	//elem.find('input.date').not('.hasDatepicker').datepicker(optsDate).addClass('hasDatepicker').prop('min',today) ;
+	//elem.find('input.time').not('.hasTimepicker').timepicker(optsTime).addClass('hasTimepicker') ;
+	//jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
 
 	checkTarifs() ;
 

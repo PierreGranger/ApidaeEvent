@@ -17,23 +17,26 @@
 		$http_path = $configApidaeEvent['http_path'] ;
 
 	$assets = Array(
-		'assets/jquery/jquery.min.js',
-		'assets/bootstrap/js/bootstrap.min.js',
-		'assets/bootstrap/css/bootstrap.min.css',
-		'assets/chosen/chosen.jquery.min.js',
-		'assets/chosen/chosen.min.css',
-		'assets/jquery-ui/jquery-ui.min.js',
-		'assets/jquery-ui/themes/base/jquery-ui.min.css',
-		'assets/jquery-ui/ui/widgets/datepicker.js',
-		'assets/jquery-ui/ui/i18n/datepicker-fr.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css',
+		'node_modules/jquery/dist/jquery.min.js',
+		//'node_modules/bootstrap/dist/js/bootstrap.min.js',
+		'node_modules/bootstrap/dist/css/bootstrap.min.css',
+		'node_modules/bootstrap-chosen/dist/chosen.jquery-1.4.2/chosen.jquery.min.js',
+		'node_modules/bootstrap-chosen/bootstrap-chosen.css',
 		'https://www.google.com/recaptcha/api.js',
 		'formulaire.js',
 		'formulaire.css',
-		'bootstrap-chosen.css',
-		'https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/css/ajax-bootstrap-select.min.css',
-		'https://cdnjs.cloudflare.com/ajax/libs/ajax-bootstrap-select/1.4.1/js/ajax-bootstrap-select.min.js'
+		'node_modules/ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js',
+		'node_modules/ajax-bootstrap-select/dist/css/ajax-bootstrap-select.min.css',
+		//'node_modules/timepicker/jquery.timepicker.min.js',
+		//'node_modules/timepicker/jquery.timepicker.min.css',
+		'node_modules/jquery-ui/themes/base/core.css',
+		'node_modules/jquery-ui/themes/base/theme.css',
+		//'node_modules/jquery-ui/themes/base/datepicker.css',
+		'node_modules/jquery-ui/ui/widget.js',
+		//'node_modules/jquery-ui/ui/widgets/datepicker.js',
+		'node_modules/jquery-ui/ui/widgets/tooltip.js',
+		//'node_modules/jquery-ui/ui/i18n/datepicker-fr.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'
 	) ;
 
 	$devises = Array('EUR'=>'€','CHF'=>'CHF','CFP'=>'CFP') ;
@@ -86,8 +89,8 @@
 
 			}
 
-			$icon_plus = '<span class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> <strong>##LIBELLE##</strong></span>' ;
-			$icon_moins = '<span class="btn btn-warning"><span class="glyphicon glyphicon-minus"></span></span>' ;
+			$icon_plus = '<span class="btn btn-primary"><i class="fas fa-plus"></i> <strong>##LIBELLE##</strong></span>' ;
+			$icon_moins = '<span class="btn btn-warning"><i class="fas fa-minus"></i> </span>' ;
 		?>
 		
 		<script>
@@ -109,8 +112,11 @@
 				include(realpath(dirname(__FILE__)).'/analytics.php') ;
 		?>
 
+		<?php if ( isset($config) && isset($config['gtm_head']) ) echo $config['gtm_head'] ; ?>
+
 	</head>
 	<body>
+		<?php if ( isset($config) && isset($config['gtm_body']) ) echo $config['gtm_body'] ; ?>
 
 		<div class="container">
 
@@ -136,7 +142,7 @@
 					$display_form = false ;
 					?>
 					<div class="alert alert-danger" role="alert">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<i class="fas fa-exclamation"></i>
 					  <span class="sr-only">Formulaire indisponible :</span>
 					  <strong>Un problème technique empêche l'utilisation du formulaire actuellement.</strong>
 					  <br />Veuillez nous excuser pour la gène occasionnée.
@@ -154,7 +160,7 @@
 				if ( $configApidaeEvent['debug'] && isset($_GET['showAbonnes']) )
 					include(realpath(dirname(__FILE__)).'/showAbonnes.inc.php') ;
 			?>
-
+			
 			<form class="form" method="post" enctype="multipart/form-data" novalidate>
 
 				<?php $referer = ( isset($_POST['referer']) ) ? $_POST['referer'] : @$_SERVER['HTTP_REFERER'] ; ?>
@@ -176,7 +182,7 @@
 
 						<label for="portee" class="<?php echo $class_label ; ?> col-form-label">
 							Portée
-							<span class="glyphicon glyphicon-info-sign" title="La portée concerne les spectateurs et la distance qu’ils sont prêt à parcourir pour participer à une manifestation."></span>
+							<i class="fas fa-info-circle" title="La portée concerne les spectateurs et la distance qu’ils sont prêt à parcourir pour participer à une manifestation."></i>
 						</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<select class="form-control" name="portee" id="portee" required="required">
@@ -209,12 +215,11 @@
 					</div>
 				</fieldset>
 				
-
 				<fieldset class="form-group">
 					<legend>Adresse</legend>
 					<div class="form-group row">
 						<label for="adresse1" class="<?php echo $class_label ; ?> col-form-label">Adresse 1
-							<span class="glyphicon glyphicon-info-sign" title="Voie et bâtiment. Exemple : 60 rue des Lilas – Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue."></span>
+							<i class="fas fa-info-circle" title="Voie et bâtiment. Exemple : 60 rue des Lilas – Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue."></i>
 						</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']) ; ?>" />
@@ -222,7 +227,7 @@
 					</div>
 					<div class="form-group row">
 						<label for="adresse2" class="<?php echo $class_label ; ?> col-form-label">Adresse 2
-							<span class="glyphicon glyphicon-info-sign" title="Lieu-dit, zone d’activité, BP (pour boite postale)…"></span>
+							<i class="fas fa-info-circle" title="Lieu-dit, zone d’activité, BP (pour boite postale)…"></i>
 						</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']) ; ?>" />
@@ -230,7 +235,7 @@
 					</div>
 					<div class="form-group row">
 						<label for="adresse3" class="<?php echo $class_label ; ?> col-form-label">Adresse 3
-							<span class="glyphicon glyphicon-info-sign" title="Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon village et Morillon 1100."></span>
+							<i class="fas fa-info-circle" title="Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon village et Morillon 1100."></i>
 						</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']) ; ?>" />
@@ -253,7 +258,7 @@
 							//$ApidaeEvent->alerte('Liste communes introuvable',$_GET) ;
 							?>
 								<div class="alert alert-danger" role="alert">
-								  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<i class="fas fa-exclamation"></i>
 								  <strong>Impossible de récupérer la liste de communes...</strong>
 								  <br />Veuillez nous excuser pour la gène occasionnée.
 								  <br />Vous pouvez prendre contact avec l'<a href="https://www.apidae-tourisme.com/apidae-tourisme/carte-du-reseau/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.
@@ -342,34 +347,22 @@
 										echo '<td></td>' ;
 										echo '<td>' ;
 											echo '<div class="input-group form-group date">' ;
-												echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][debut]" value="'.htmlentities(@$post['date'][$i]['debut']).'" placeholder="jj/mm/aaaa" required="required" />' ;
-												echo '<span class="input-group-addon">' ;
-													echo '<span class="glyphicon glyphicon-calendar"></span>' ;
-												echo '</span>' ;
+												echo '<input class="form-control date" type="date" min="'.date('Y-m-d').'" name="date['.$i.'][debut]" value="'.htmlentities(@$post['date'][$i]['debut']).'" placeholder="jj/mm/aaaa" required="required" autocomplete="chrome-off" />' ;
 											echo '</div>' ;
 										echo '</td>' ;
 										echo '<td>' ;
 											echo '<div class="input-group form-group date">' ;
-												echo '<input class="form-control date" type="text" min="'.date('Y-m-d').'" name="date['.$i.'][fin]" value="'.htmlentities(@$post['date'][$i]['fin']).'" placeholder="jj/mm/aaaa" required="required" />' ;
-												echo '<span class="input-group-addon">' ;
-													echo '<span class="glyphicon glyphicon-calendar"></span>' ;
-												echo '</span>' ;
+												echo '<input class="form-control date" type="date" min="'.date('Y-m-d').'" name="date['.$i.'][fin]" value="'.htmlentities(@$post['date'][$i]['fin']).'" placeholder="jj/mm/aaaa" required="required" autocomplete="chrome-off" />' ;
 											echo '</div>' ;
 										echo '</td>' ;
 										echo '<td>' ;
 											echo '<div class="input-group form-group time">' ;
-												echo '<input class="form-control time" type="text" name="date['.$i.'][hdebut]" value="'.htmlentities(@$post['date'][$i]['hdebut']).'" placeholder="hh:mm" />' ;
-												echo '<span class="input-group-addon">' ;
-													echo '<span class="glyphicon glyphicon-time"></span>' ;
-												echo '</span>' ;
+												echo '<input class="form-control time" type="time" name="date['.$i.'][hdebut]" value="'.htmlentities(@$post['date'][$i]['hdebut']).'" placeholder="hh:mm" />' ;
 											echo '</div>' ;
 										echo '</td>' ;
 										echo '<td>' ;
 											echo '<div class="input-group form-group time">' ;
-												echo '<input class="form-control time" type="text" name="date['.$i.'][hfin]" value="'.htmlentities(@$post['date'][$i]['hfin']).'" placeholder="hh:mm" />' ;
-												echo '<span class="input-group-addon">' ;
-													echo '<span class="glyphicon glyphicon-time"></span>' ;
-												echo '</span>' ;
+												echo '<input class="form-control time" type="time" name="date['.$i.'][hfin]" value="'.htmlentities(@$post['date'][$i]['hfin']).'" placeholder="hh:mm" />' ;
 											echo '</div>' ;
 										echo '</td>' ;
 										echo '<td>' ;
@@ -414,7 +407,7 @@
 
 					<div class="form-group row required">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifCourt">Descriptif court
-							<span class="glyphicon glyphicon-info-sign" title="Texte d'accroche permettant de comprendre la nature de votre prestation. Ne doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, de lieu... puisque ces informations existent par ailleurs, ce qui constitue une double saisie."></span>
+							<i class="fas fa-info-circle" title="Texte d'accroche permettant de comprendre la nature de votre prestation. Ne doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, de lieu... puisque ces informations existent par ailleurs, ce qui constitue une double saisie."></i>
 							<br /><small class="form-text text-muted">255 caractères max.</small>
 						</label>
 						<div class="<?php echo $class_champ ; ?>">
@@ -424,7 +417,7 @@
 
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifDetaille">Descriptif détaillé
-							<span class="glyphicon glyphicon-info-sign" title="Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite."></span>
+							<i class="fas fa-info-circle" title="Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite."></i>
 						</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<textarea class="form-control" name="descriptifDetaille" id="descriptifDetaille"><?php echo htmlspecialchars(@$post['descriptifDetaille']) ; ?></textarea>
@@ -433,7 +426,7 @@
 
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifsThematises_6143">Dispositions spéciales COVID 19
-							<span class="glyphicon glyphicon-info-sign" title="Offre de services confinement et post confinement."></span>
+							<i class="fas fa-info-circle" title="Offre de services confinement et post confinement."></i>
 						</label>
 						<div class="<?php echo $class_champ ; ?>">
 							<textarea class="form-control" name="descriptifsThematises[6143]" id="descriptifsThematises_6143"><?php echo htmlspecialchars(@$post['descriptifsThematises'][6143]) ; ?></textarea>
@@ -749,7 +742,7 @@
 						Vos photos doivent être libres de droit et de bonne qualité (<strong>si possible, 1200px de largeur minimum</strong>).
 						<br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
 						<br />
-						<a href="https://aide.apidae-tourisme.com/hc/fr/articles/360000825391-Saisie-l-onglet-multimédias-Zoom-sur-les-illustrations#tailleimages" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> Plus d'informations ici.</a>
+						<a href="https://aide.apidae-tourisme.com/hc/fr/articles/360000825391-Saisie-l-onglet-multimédias-Zoom-sur-les-illustrations#tailleimages" target="_blank"><i class="fas fa-info-circle"></i> Plus d'informations ici.</a>
 					</div>
 					<div class="table-responsive">
 						<table class="table photos">

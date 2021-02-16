@@ -1,9 +1,8 @@
-config.inc.php
-config.surcharge.inc.php
+/config.inc.php
+/config.surcharge.inc.php
 *.sublime-*
-composer.phar
 /vendor/
 /assets/
-/config/
-analytics.inc.php
-analytics.php
+/config/*.json
+/config/vendor/
+/node_modules/

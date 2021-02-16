@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19a87b69736b02d6b2cad5d9fab94211",
+    "content-hash": "2de2a597609f27d4371d3d24ce4e5fe5",
     "packages": [
         {
             "name": "phpmailer/phpmailer",
@@ -83,22 +83,22 @@
             "time": "2020-11-25T15:24:57+00:00"
         },
         {
-            "name": "pierre-granger/apidae-ecriture",
-            "version": "v0.2.4",
+            "name": "pierre-granger/apidae-core",
+            "version": "v0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PGranger/ApidaeEcriture.git",
-                "reference": "b837ddc227592b0294ee6ce403d1e3db692f444b"
+                "url": "https://github.com/PierreGranger/ApidaeCore.git",
+                "reference": "1f1082d74ee27f7b137c7ebe0de3f49689fa37ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PGranger/ApidaeEcriture/zipball/b837ddc227592b0294ee6ce403d1e3db692f444b",
-                "reference": "b837ddc227592b0294ee6ce403d1e3db692f444b",
+                "url": "https://api.github.com/repos/PierreGranger/ApidaeCore/zipball/1f1082d74ee27f7b137c7ebe0de3f49689fa37ee",
+                "reference": "1f1082d74ee27f7b137c7ebe0de3f49689fa37ee",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0",
-                "phpmailer/phpmailer": "^5.2 || ^6.0"
+                "php": "^7.0",
+                "phpmailer/phpmailer": "^6.0"
             },
             "type": "library",
             "autoload": {
@@ -107,12 +107,12 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "description": "Classe de simplification pour l'écriture sur Apidae",
+            "description": "Apidae Core",
             "support": {
-                "issues": "https://github.com/PGranger/ApidaeEcriture/issues",
-                "source": "https://github.com/PGranger/ApidaeEcriture/tree/v0.2.3"
+                "issues": "https://github.com/PierreGranger/ApidaeCore/issues",
+                "source": "https://github.com/PierreGranger/ApidaeCore/tree/v0.1"
             },
-            "time": "2018-10-23T12:41:16+00:00"
+            "time": "2021-02-12T20:48:05+00:00"
         },
         {
             "name": "pierre-granger/apidae-membres",
@@ -147,6 +147,38 @@
                 "source": "https://github.com/PGranger/ApidaeMembres/tree/v1.2.1"
             },
             "time": "2020-10-22T07:30:49+00:00"
+        },
+        {
+            "name": "pierre-granger/apidae-sso",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PierreGranger/ApidaeSso.git",
+                "reference": "6748a81edf0fc763dbbc32b76f080b45d3bf6b0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PierreGranger/ApidaeSso/zipball/6748a81edf0fc763dbbc32b76f080b45d3bf6b0f",
+                "reference": "6748a81edf0fc763dbbc32b76f080b45d3bf6b0f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0",
+                "pierre-granger/apidae-core": "^0.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PierreGranger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Classe d'utilisation des API de SSO d'Apidae ",
+            "support": {
+                "issues": "https://github.com/PierreGranger/ApidaeSso/issues",
+                "source": "https://github.com/PierreGranger/ApidaeSso/tree/v1.1"
+            },
+            "time": "2021-02-16T09:14:28+00:00"
         }
     ],
     "packages-dev": [],

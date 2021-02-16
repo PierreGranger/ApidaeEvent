@@ -623,8 +623,8 @@
 		}
 		$display_form = false ;
 
-		$texte_offre_enregistree = '<p><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <strong>Votre événement a bien été enregistré</strong>, nous vous remercions pour votre contribution.</p>
-		<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>Attention :</strong> Il a été envoyé en validation, et devrait être visible 24 à 48h <strong>après sa validation</strong> par votre office de tourisme, sur les différents supports de communication alimentés par Apidae.</p>' ;
+		$texte_offre_enregistree = '<p><i class="fas fa-check-circle"></i> <strong>Votre événement a bien été enregistré</strong>, nous vous remercions pour votre contribution.</p>
+		<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il a été envoyé en validation, et devrait être visible 24 à 48h <strong>après sa validation</strong> par votre office de tourisme, sur les différents supports de communication alimentés par Apidae.</p>' ;
 		
 		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
 		{
@@ -647,21 +647,88 @@
 				<script>
 					alert(jQuery('div#texte_offre_enregistree').text()) ;
 				</script>
+				<?php if ( isset($_SERVER['HTTP_REFERER']) ) { ?>
+					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Faire une autre suggestion de manifestation</a>
+				<?php } ?>
 			</div>
 		<?php
+
+
+		/**
+		 * Maj DU 15/02/2021
+		 * Récupérations d'infos pour Analytics
+		 * 
+		 * 
+		 */
+		/*
+		<script>
+				dataLayer.push({
+					'event' : 'enregistrement',
+					'departement' : 3,
+					'territoire' : 3337048,
+					'membre' : 1336
+				}) ;
+			</script>
+		*/
+
+		try {
+
+			if ( $ApidaeEvent->debug )
+				$ApidaeMembres = new \PierreGranger\ApidaeMembres(array_merge(
+					$configApidaeMembres,
+					array('debug'=>true)
+				)) ;
+			else
+				$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
+			$membre = $ApidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
+			if ( $membre )
+			{
+
+				$enregistrement = Array(
+					'event' => 'enregistrement',
+					'commune_id' => $root['localisation']['adresse']['commune']['id'],
+					'commune_nom' => $commune[2],
+					'commune_cp' => $root['localisation']['adresse']['codePostal'],
+					'membre_id' => $infos_proprietaire['proprietaireId'],
+					'membre_nom' => $infos_proprietaire['structure_validatrice']
+				) ;
+				if ( isset($_GET['territoire']) )
+				{
+					$enregistrement['territoire'] = $_GET['territoire'] ;
+				}
+				if ( preg_match('#^([0-9]{1,2})[0-9]{3}$#',$root['localisation']['adresse']['codePostal'],$match) )
+				{
+					$enregistrement['departement'] = $match[1] ;
+				}
+
+				?><script>
+					dataLayer.push(<?php echo json_encode($enregistrement) ; ?>) ;
+				</script><?php
+			}
+			elseif ( $ApidaeEvent->debug )
+			{
+				echo '<pre>'.print_r($membre,true).'</pre>' ;
+			}
+
+		} catch ( Exception $e ) {
+			if ( $ApidaeEvent->debug )
+			{
+				echo '<pre>'.print_r($e,true).'</pre>' ;
+			}
+		}
 
 		if ( $ApidaeEvent->debug )
 		{
 			if ( isset($_POST['nosave']) ) {
 			?>
 			<div class="alert alert-warning" role="alert">
-				<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>[debug + nosave] en réalité l'offre n'a pas été envoyée en enregistrement Apidae. Le debug + nosave traite cependant les envois de mail, qui seront uniquement envoyés au mail admin.</p>
+				<p><i class="fas fa-exclamation-circle"></i> <strong>[debug + nosave] en réalité l'offre n'a pas été envoyée en enregistrement Apidae. Le debug + nosave traite cependant les envois de mail, qui seront uniquement envoyés au mail admin.</p>
 			</div>
 			<?php
 			} else {
 			?>
 			<div class="alert alert-success" role="alert">
-				<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+				<i class="fas fa-save"></i>
 				<strong>[debug]</strong> Offre enregistrée en attente de validation dans Apidae :
 				<p>On la retrouve dans <a href="https://base.apidae-tourisme.com/gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Gérer > Demandes API écriture > Demandes d'écritures à valider</a></p>
 			</div>
@@ -697,7 +764,7 @@
 	{
 		?>
 		<div class="alert alert-danger" role="alert">
-		  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<i class="fas fa-exclamation-circle"></i>
 		  <span class="sr-only">Erreur à l'enregistrement :</span>
 		  <strong>Une erreur s'est produite et votre fiche n'a pas pû être enregistrée.</strong>
 		  <?php

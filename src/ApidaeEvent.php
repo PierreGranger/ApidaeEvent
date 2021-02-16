@@ -123,14 +123,16 @@
 					$famillePrec = null ;
 					foreach ( $ers as $erp )
 					{
-						$ret .= '<label class="checkbox-inline" for="'.$type.$erp['id'].'"' ;
-							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'" ' ;
-						$ret .= '>' ;
+						$ret .= '<div class="form-check form-check-inline">' ;
 							$ret .= '<input class="form-check-input" type="checkbox" name="'.$type.'[]" id="'.$type.$erp['id'].'" value="'.$erp['id'].'" ' ;
 								if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' checked="checked"' ;
 							$ret .= ' />' ;
-							$ret .= $erp['libelleFr'] ;
-						$ret .= '</label>' ;
+							$ret .= '<label class="form-check-label" for="'.$type.$erp['id'].'"' ;
+								if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'" ' ;
+							$ret .= '>' ;
+								$ret .= $erp['libelleFr'] ;
+							$ret .= '</label>' ;
+						$ret .= '</div>' ;
 						
 						/*if ( isset($erp['enfants']) )
 						{
@@ -198,7 +200,7 @@
 				if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$ret = Array() ;
 				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
-					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>$c['complement']) ;
+					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>@$c['complement']) ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
 				$this->mc->set($cachekey,$ret) ;
 			}
