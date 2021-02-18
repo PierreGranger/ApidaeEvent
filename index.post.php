@@ -1,7 +1,7 @@
 <?php
 	
 	require_once(realpath(dirname(__FILE__)).'/requires.inc.php') ;
-
+	
 	if ( ! isset($_POST['commune']) ) return ;
 	
 	$verbose = true ;
@@ -18,7 +18,9 @@
 		'url_structure_validatrice' => $configApidaeEvent['url_membre'],
 		'proprietaireId' => $configApidaeEvent['membre']
 	) ;
+	$ApidaeEvent->debug($infos_proprietaire,'$infos_proprietaire '.__LINE__) ;
 
+		
 	$infos_orga = Array() ;
 
 	if ( ! isset($ko) ) $ko = Array() ;
@@ -29,9 +31,9 @@
 	 * $nosave définit s'il faut envoyer en enregistrement sur Apidae ou non.
 	 * Il n'a pas d'impact sur l'envoi des mails
 	 */
-	$nosave = isset($_POST['nosave']) && $ApidaeEvent->debug ;
+	$nosave = isset($_POST['nosave']) && $configApidaeEvent['debug'] ;
 
-	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $ApidaeEvent->debug )
+	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $configApidaeEvent['debug'] )
 	{
 		$fields = array( 'secret' => $configApidaeEvent['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
 		$ch = curl_init();
@@ -44,7 +46,6 @@
 		//execute post
 		if ( ($result = curl_exec($ch)) === false )
 		{
-			var_dump(curl_error($ch)) ;
 			$ko['Captcha'] = 'Vérification du captcha impossible' ;
 		}
 		else
@@ -71,6 +72,9 @@
 			)
 			//Array("COMMUNES")
 		) ;
+
+		$ApidaeEvent->debug($membresCommune,'$membresCommune') ;
+
 		$membresConcernes = Array() ;
 		foreach ( $membresCommune as $mb )
 			$membresConcernes[$mb['id']] = $mb ;
@@ -91,6 +95,8 @@
 		}
 		*/
 
+		$ApidaeEvent->debug($membresConcernes,'$membresConcernes') ;
+
 		/** Cas 2 */
 		if ( isset($configApidaeEvent['membres']) )
 		{
@@ -109,7 +115,7 @@
 		}
 	}
 
-	$ApidaeEvent->debug($infos_proprietaire) ;
+	$ApidaeEvent->debug($infos_proprietaire,'$infos_proprietaire') ;
 
 	$root = Array() ;
 	$fieldlist = Array() ;
@@ -575,11 +581,13 @@
 		
 		try {
 			$ret_enr = $ApidaeEvent->ajouter($enregistrer) ;
+			if ( ! $ret_enr ) $ko[] = $ret_enr ;
 		} catch ( Exception $e ) {
-			$ko[] = 'L\'offre n\'a pas été enregistrée sur Apidae... Code erreur : '.__LINE__ ;
+			$ko[] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
+			$ko[] = $e->getMessage() ;
 		}
-		if ( ! $ret_enr ) $ko[] = $ret_enr ;
 
+		$ApidaeEvent->debug($ApidaeEvent->last_id,'last_id') ;
 		if ( $ApidaeEvent->last_id == "" ) $ko[] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
 	}
 	
@@ -639,7 +647,7 @@
 
 		try {
 
-			if ( $ApidaeEvent->debug )
+			if ( $configApidaeEvent['debug'] )
 				$ApidaeMembres = new \PierreGranger\ApidaeMembres(array_merge(
 					$configApidaeMembres,
 					array('debug'=>true)
@@ -671,13 +679,13 @@
 					dataLayer.push(<?php echo json_encode($enr_dataLayer) ; ?>) ;
 				</script><?php
 			}
-			elseif ( $ApidaeEvent->debug )
+			elseif ( $configApidaeEvent['debug'] )
 			{
 				echo '<pre>'.print_r($membre,true).'</pre>' ;
 			}
 
 		} catch ( Exception $e ) {
-			if ( $ApidaeEvent->debug )
+			if ( $configApidaeEvent['debug'] )
 			{
 				echo '<pre>'.print_r($e,true).'</pre>' ;
 			}
@@ -688,8 +696,8 @@
 
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
-			$objet = ( $ApidaeEvent->debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
-			$to = $ApidaeEvent->debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
+			$objet = ( $configApidaeEvent['debug'] ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
+			$to = $configApidaeEvent['debug'] ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
 			$ApidaeEvent->alerte($objet,$post_mail,$to) ;
 			unset($to) ;
 			unset($objet) ;
@@ -727,7 +735,7 @@
 		<?php
 
 
-		if ( $ApidaeEvent->debug )
+		if ( $configApidaeEvent['debug'] )
 		{
 			if ( isset($_POST['nosave']) ) {
 			?>
@@ -753,9 +761,9 @@
 		{
 			$objet = 'Votre suggestion de manifestation' ;
 			$message = $texte_offre_enregistree ;
-			$to = $ApidaeEvent->debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
+			$to = $configApidaeEvent['debug'] ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
 			$ApidaeEvent->alerte($objet,$message,$to) ;
-			if ( $ApidaeEvent->debug )
+			if ( $configApidaeEvent['debug'] )
 			{
 				?>
 				<div class="alert alert-success" role="alert">

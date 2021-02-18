@@ -848,7 +848,7 @@
 					</div>
 				</fieldset>
 
-				<?php if ( $ApidaeEvent->debug ) { ?>
+				<?php if ( $configApidaeEvent['debug'] ) { ?>
 					<div class="form-group row">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="nosave">[Debug] Ne pas enregistrer sur Apidae</label>
 						<div class="<?php echo $class_champ ; ?>">

@@ -52,8 +52,6 @@
 			$this->mc = new \Memcached() ;
 			$this->mc->addServer("localhost", 11211) ;
 			if ( ! $this->mc ) throw new \Exception('Memcached fail') ;
-
-			if ( $this->debugTime ) $this->debug('construct '.(microtime(true)-$start)) ;
 		}
 
 		/**
@@ -67,8 +65,6 @@
 			$ret = null ;
 
 			if ( ! is_array($params) ) $params = Array() ;
-
-			if ( $this->debugTime ) $start = microtime(true) ;
 
 			if ( ! in_array(@$params['presentation'],Array('checkbox','select')) ) $params['presentation'] = 'checkbox' ;
 
@@ -149,8 +145,6 @@
 					}
 				$ret .= '</div>' ;
 			}
-
-			if ( $this->debugTime ) $this->debug('formHtmlCC('.$type.') '.(microtime(true)-$start)) ;
 
 			return $ret ;
 		}
@@ -245,8 +239,6 @@
 		**/
 		public function getElementsReferenceByType($type,$params=null)
 		{
-			if ( $this->debugTime ) $start = microtime(true) ;
-
 			/**
 			 *	TODO : trouver un moyen de récupérer par elementReferenceType en API
 			 *	Actuellement on récupère les élements dans le fichier ressources/elements_reference.json, c'est crade et c'est plus à jour.
