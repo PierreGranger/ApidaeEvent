@@ -122,6 +122,23 @@
 
 			<?php
 
+				if ( isset($_GET['testAnalytics']) )
+				{
+					$enr_dataLayer = Array(
+						'event' => 'enregistrement',
+						'commune_id' => '1',
+						'commune_nom' => 'test',
+						'commune_cp' => '99999',
+						'membre_id' => 1,
+						'membre_nom' => 'test',
+						'territoire' => 1,
+						'departement' => 99
+					) ;
+					?><script>
+						dataLayer.push(<?php echo json_encode($enr_dataLayer) ; ?>) ;
+					</script><?php
+				}
+
 				$ko = Array() ;
 				$ok = Array() ;
 

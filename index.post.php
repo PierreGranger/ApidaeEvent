@@ -573,8 +573,14 @@
 		) ;
 		if ( isset($infos_proprietaire['proprietaireId']) ) $enregistrer['proprietaireId'] = $infos_proprietaire['proprietaireId'] ;
 		
-		$ret_enr = $ApidaeEvent->ajouter($enregistrer) ;
+		try {
+			$ret_enr = $ApidaeEvent->ajouter($enregistrer) ;
+		} catch ( Exception $e ) {
+			$ko[] = 'L\'offre n\'a pas été enregistrée sur Apidae... Code erreur : '.__LINE__ ;
+		}
 		if ( ! $ret_enr ) $ko[] = $ret_enr ;
+
+		if ( $ApidaeEvent->last_id == "" ) $ko[] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
 	}
 	
 	$ApidaeEvent->debug($ko,'$ko') ;
@@ -612,6 +618,73 @@
 		$msg .= 'Vous trouverez ci-dessous un résumé brut des informations qui ont été enregistrées sur Apidae.<br />' ;
 
 		$post_mail['message'] = $msg ;
+
+
+		/**
+		 * Maj DU 15/02/2021
+		 * Récupérations d'infos pour Analytics
+		 * 
+		 * 
+		 */
+		/*
+		<script>
+				dataLayer.push({
+					'event' : 'enregistrement',
+					'departement' : 3,
+					'territoire' : 3337048,
+					'membre' : 1336
+				}) ;
+			</script>
+		*/
+
+		try {
+
+			if ( $ApidaeEvent->debug )
+				$ApidaeMembres = new \PierreGranger\ApidaeMembres(array_merge(
+					$configApidaeMembres,
+					array('debug'=>true)
+				)) ;
+			else
+				$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
+			$membre = $ApidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
+			if ( $membre )
+			{
+
+				$enr_dataLayer = Array(
+					'event' => 'enregistrement',
+					'commune_id' => $root['localisation']['adresse']['commune']['id'],
+					'commune_nom' => $commune[2],
+					'commune_cp' => $root['localisation']['adresse']['codePostal'],
+					'membre_id' => $infos_proprietaire['proprietaireId'],
+					'membre_nom' => $infos_proprietaire['structure_validatrice']
+				) ;
+				if ( isset($_GET['territoire']) )
+				{
+					$enr_dataLayer['territoire'] = $_GET['territoire'] ;
+				}
+				if ( preg_match('#^([0-9]{1,2})[0-9]{3}$#',$root['localisation']['adresse']['codePostal'],$match) )
+				{
+					$enr_dataLayer['departement'] = $match[1] ;
+				}
+
+				?><script>
+					dataLayer.push(<?php echo json_encode($enr_dataLayer) ; ?>) ;
+				</script><?php
+			}
+			elseif ( $ApidaeEvent->debug )
+			{
+				echo '<pre>'.print_r($membre,true).'</pre>' ;
+			}
+
+		} catch ( Exception $e ) {
+			if ( $ApidaeEvent->debug )
+			{
+				echo '<pre>'.print_r($e,true).'</pre>' ;
+			}
+		}
+
+
+		if ( isset($enr_dataLayer) ) $post_mail['dataLayer'] = json_encode($enr_dataLayer,JSON_PRETTY_PRINT) ;
 
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
@@ -653,69 +726,6 @@
 			</div>
 		<?php
 
-
-		/**
-		 * Maj DU 15/02/2021
-		 * Récupérations d'infos pour Analytics
-		 * 
-		 * 
-		 */
-		/*
-		<script>
-				dataLayer.push({
-					'event' : 'enregistrement',
-					'departement' : 3,
-					'territoire' : 3337048,
-					'membre' : 1336
-				}) ;
-			</script>
-		*/
-
-		try {
-
-			if ( $ApidaeEvent->debug )
-				$ApidaeMembres = new \PierreGranger\ApidaeMembres(array_merge(
-					$configApidaeMembres,
-					array('debug'=>true)
-				)) ;
-			else
-				$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
-			$membre = $ApidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
-			if ( $membre )
-			{
-
-				$enregistrement = Array(
-					'event' => 'enregistrement',
-					'commune_id' => $root['localisation']['adresse']['commune']['id'],
-					'commune_nom' => $commune[2],
-					'commune_cp' => $root['localisation']['adresse']['codePostal'],
-					'membre_id' => $infos_proprietaire['proprietaireId'],
-					'membre_nom' => $infos_proprietaire['structure_validatrice']
-				) ;
-				if ( isset($_GET['territoire']) )
-				{
-					$enregistrement['territoire'] = $_GET['territoire'] ;
-				}
-				if ( preg_match('#^([0-9]{1,2})[0-9]{3}$#',$root['localisation']['adresse']['codePostal'],$match) )
-				{
-					$enregistrement['departement'] = $match[1] ;
-				}
-
-				?><script>
-					dataLayer.push(<?php echo json_encode($enregistrement) ; ?>) ;
-				</script><?php
-			}
-			elseif ( $ApidaeEvent->debug )
-			{
-				echo '<pre>'.print_r($membre,true).'</pre>' ;
-			}
-
-		} catch ( Exception $e ) {
-			if ( $ApidaeEvent->debug )
-			{
-				echo '<pre>'.print_r($e,true).'</pre>' ;
-			}
-		}
 
 		if ( $ApidaeEvent->debug )
 		{

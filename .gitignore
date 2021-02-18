@@ -6,3 +6,5 @@
 /config/*.json
 /config/vendor/
 /node_modules/
+/profile/
+/md/

@@ -70,10 +70,6 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "support": {
-                "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.2.0"
-            },
             "funding": [
                 {
                     "url": "https://github.com/Synchro",
@@ -108,10 +104,6 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Apidae Core",
-            "support": {
-                "issues": "https://github.com/PierreGranger/ApidaeCore/issues",
-                "source": "https://github.com/PierreGranger/ApidaeCore/tree/v0.1"
-            },
             "time": "2021-02-12T20:48:05+00:00"
         },
         {
@@ -142,10 +134,6 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Classe d'utilisation des API membres & utilisateurs d'Apidae ",
-            "support": {
-                "issues": "https://github.com/PGranger/ApidaeMembres/issues",
-                "source": "https://github.com/PGranger/ApidaeMembres/tree/v1.2.1"
-            },
             "time": "2020-10-22T07:30:49+00:00"
         },
         {
@@ -174,10 +162,6 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Classe d'utilisation des API de SSO d'Apidae ",
-            "support": {
-                "issues": "https://github.com/PierreGranger/ApidaeSso/issues",
-                "source": "https://github.com/PierreGranger/ApidaeSso/tree/v1.1"
-            },
             "time": "2021-02-16T09:14:28+00:00"
         }
     ],
@@ -189,5 +173,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }

@@ -201,6 +201,7 @@ function valideChamp(champ)
 	}
 	else if ( champ.hasClass('time') )
 	{
+		/*
 		var reg = /date\[([0-9]+)\]\[(hdebut|hfin)\]/i ;
 		var match = champ.attr('name').match(reg) ;
 		
@@ -219,6 +220,7 @@ function valideChamp(champ)
 			if ( debut.val() == '' ) debut.val(val) ;
 			else if ( champ.val() < debut.val() ) debut.val(champ.val()) ;
 		}
+		*/
 	}
 	else if ( champ.hasClass('float') )
 	{
