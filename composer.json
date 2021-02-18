@@ -1,7 +1,8 @@
 {
 	"require" : {
-		"pierre-granger/apidae-ecriture": "~0.2",
-		"pierre-granger/apidae-membres": "~1.2"
+		"pierre-granger/apidae-ecriture": "0.*",
+		"pierre-granger/apidae-membres": "1.*",
+		"pierre-granger/apidae-core": "0.*"
 	},
 	"autoload": {
         "psr-4": {
