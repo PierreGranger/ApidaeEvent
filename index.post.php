@@ -61,6 +61,7 @@
 
 	if ( $configApidaeEvent['projet_ecriture_multimembre'] === true )
 	{
+		require_once(realpath(dirname(__FILE__)).'/territoires.inc.php') ;
 		/**
 		 * On commence par récupérer la liste des membres abonnés au projet d'écriture et qui ont les droits sur la commune concernée.
 		*/
@@ -80,6 +81,9 @@
 			$membresConcernes[$mb['id']] = $mb ;
 		
 		$ApidaeEvent->debug($membresConcernes,'$membresConcernes') ;
+
+		$doubleCheck = true ;
+		if ( ! isset($territoires) || ! is_array($territoires) ) $doubleCheck = false ;
 		
 		if ( isset($configApidaeEvent['membres']) )
 		{
@@ -88,15 +92,45 @@
 			{
 				/**
 				 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
-				 *	Ce n'est pas suffisant : il faut aussi s'assurer que dans la config c'était bien le territoire choisi
 				 * */
 				if ( isset($membresConcernes[$m['id_membre']]) )
 				{
-					$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
-					$infos_proprietaire['mail_membre'] = @$m['mail'] ;
-					$infos_proprietaire['structure_validatrice'] = $m['nom'] ;
-					$infos_proprietaire['url_structure_validatrice'] = $m['site'] ;
-					break ;
+					$trouve = true ;
+					/**
+					 * Ce n'est pas suffisant : il faut aussi s'assurer que dans la config c'était bien le territoire choisi
+					 */
+					if ( $doubleCheck )
+					{
+						$trouve = false ;
+						if ( 
+							isset($m['insee_communes']) 
+							&& is_array($m['insee_communes']) 
+							&& in_array($commune[3],$m['insee_communes'])
+						)
+						{
+							// Trouvé dans la liste des communes spécifiée en config !
+							$trouve = true ;
+						}
+
+						if (
+							isset($m['id_territoire']) && isset($territoires) && is_array($territoires)
+							&& isset($territoires[$m['id_territoire']])
+							&& in_array($commune[3],$territoires[$m['id_territoire']]->perimetre)
+						)
+						{
+							// Trouvé dans le territoire de la config !
+							$trouve = true ;
+						}
+					}
+
+					if ( $trouve )
+					{
+						$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
+						$infos_proprietaire['mail_membre'] = @$m['mail'] ;
+						$infos_proprietaire['structure_validatrice'] = $m['nom'] ;
+						$infos_proprietaire['url_structure_validatrice'] = $m['site'] ;
+						break ;
+					}
 				}
 			}
 		}
