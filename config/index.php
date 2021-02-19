@@ -6,32 +6,7 @@
     require_once(realpath(dirname(__FILE__)).'/../vendor/autoload.php') ;
     require_once(realpath(dirname(__FILE__)).'/vendor/autoload.php') ;
 
-    $ApidaeSso = new \PierreGranger\ApidaeSso($configApidaeSso,$_SESSION['ApidaeSso']) ;
-    if ( isset($_GET['logout']) ) $ApidaeSso->logout() ;
-    if ( isset($_GET['code']) && ! $ApidaeSso->connected() ) $ApidaeSso->getSsoToken($_GET['code']) ;
-    
-    ini_set('display_errors',1) ;
-    error_reporting(E_ALL) ;
-
-    $droits = Array('permissions'=>Array('ADMIN_DEPARTEMENTAL')) ;
-    
-    if ( $ApidaeSso->connected() )
-    {
-        $utilisateurApidae = $ApidaeSso->getUserProfile() ;
-        $ApidaeMembres = new PierreGranger\ApidaeMembres($configApidaeMembres) ;
-        $usr = $ApidaeMembres->getUserById($utilisateurApidae['id']) ;
-        foreach ( $droits['permissions'] as $p )
-        {
-            if ( ! in_array($p,$usr['permissions']) )
-                die('<p>Vous ne disposez pas des permissions suffisantes ('.$p.' not in ('.implode(', ',$usr['permissions']).')</p>') ;
-        }
-    }
-
-    if ( ! $ApidaeSso->connected() )
-    {
-        echo $ApidaeSso->form() ;
-        die() ; // Assure qu'il ne se passera plus rien après, parce que l'utilisateur n'est pas identifié.
-    }
+    require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 
     $types = Array('offices','departements') ;
 
@@ -202,6 +177,8 @@
                     echo '<p>Pour simplifier la configuration (éviter d\'avoir à remonter les offices au dessus des départements), la config est désormais découpée en 2.</p>' ;
                     foreach ( $types as $t )
                         echo '<a class="btn btn-primary" href="?type='.$t.'">'.ucfirst($t).'</a> &nbsp; ' ;
+                    echo '<hr />' ;
+                    echo '<a class="btn btn-secondary" href="show.php">Consultation simple</a>' ;
                 echo '</div>' ;
             }
             if ( isset($_GET['type']) && in_array($_GET['type'],$types) )

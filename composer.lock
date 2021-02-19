@@ -84,16 +84,16 @@
         },
         {
             "name": "pierre-granger/apidae-core",
-            "version": "v0.1",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PierreGranger/ApidaeCore.git",
-                "reference": "1f1082d74ee27f7b137c7ebe0de3f49689fa37ee"
+                "reference": "bc1935e92bf4ab3916807d41281a547728da1ad9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PierreGranger/ApidaeCore/zipball/1f1082d74ee27f7b137c7ebe0de3f49689fa37ee",
-                "reference": "1f1082d74ee27f7b137c7ebe0de3f49689fa37ee",
+                "url": "https://api.github.com/repos/PierreGranger/ApidaeCore/zipball/bc1935e92bf4ab3916807d41281a547728da1ad9",
+                "reference": "bc1935e92bf4ab3916807d41281a547728da1ad9",
                 "shasum": ""
             },
             "require": {
@@ -110,27 +110,27 @@
             "description": "Apidae Core",
             "support": {
                 "issues": "https://github.com/PierreGranger/ApidaeCore/issues",
-                "source": "https://github.com/PierreGranger/ApidaeCore/tree/v0.1"
+                "source": "https://github.com/PierreGranger/ApidaeCore/tree/v0.2"
             },
-            "time": "2021-02-12T20:48:05+00:00"
+            "time": "2021-02-18T19:05:29+00:00"
         },
         {
             "name": "pierre-granger/apidae-ecriture",
-            "version": "v0.2.5",
+            "version": "v0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PierreGranger/ApidaeEcriture.git",
-                "reference": "340e5e48af9eb9e8c7547ba54253a2720e7c7cda"
+                "reference": "8ddf22bd17314f49747b40b22dbeb1f273192b60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PierreGranger/ApidaeEcriture/zipball/340e5e48af9eb9e8c7547ba54253a2720e7c7cda",
-                "reference": "340e5e48af9eb9e8c7547ba54253a2720e7c7cda",
+                "url": "https://api.github.com/repos/PierreGranger/ApidaeEcriture/zipball/8ddf22bd17314f49747b40b22dbeb1f273192b60",
+                "reference": "8ddf22bd17314f49747b40b22dbeb1f273192b60",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0",
-                "pierre-granger/apidae-core": "^0.1"
+                "pierre-granger/apidae-core": "0.*"
             },
             "type": "library",
             "autoload": {
@@ -142,27 +142,27 @@
             "description": "Classe de simplification pour l'écriture sur Apidae",
             "support": {
                 "issues": "https://github.com/PierreGranger/ApidaeEcriture/issues",
-                "source": "https://github.com/PierreGranger/ApidaeEcriture/tree/v0.2.5"
+                "source": "https://github.com/PierreGranger/ApidaeEcriture/tree/v0.2.6"
             },
-            "time": "2021-02-18T19:06:26+00:00"
+            "time": "2021-02-18T19:18:54+00:00"
         },
         {
             "name": "pierre-granger/apidae-membres",
-            "version": "v1.2.2",
+            "version": "v1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PierreGranger/ApidaeMembres.git",
-                "reference": "a5f214ba1db3a27b39add9a832e9ddca6109f0c4"
+                "reference": "b690a4169c60b8489b0fad0ba3e0865ffcb9681f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PierreGranger/ApidaeMembres/zipball/a5f214ba1db3a27b39add9a832e9ddca6109f0c4",
-                "reference": "a5f214ba1db3a27b39add9a832e9ddca6109f0c4",
+                "url": "https://api.github.com/repos/PierreGranger/ApidaeMembres/zipball/b690a4169c60b8489b0fad0ba3e0865ffcb9681f",
+                "reference": "b690a4169c60b8489b0fad0ba3e0865ffcb9681f",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0",
-                "pierre-granger/apidae-core": "^0.1"
+                "pierre-granger/apidae-core": "0.*"
             },
             "type": "library",
             "autoload": {
@@ -174,9 +174,9 @@
             "description": "Classe d'utilisation des API membres & utilisateurs d'Apidae ",
             "support": {
                 "issues": "https://github.com/PierreGranger/ApidaeMembres/issues",
-                "source": "https://github.com/PierreGranger/ApidaeMembres/tree/v1.2.2"
+                "source": "https://github.com/PierreGranger/ApidaeMembres/tree/v1.2.3"
             },
-            "time": "2021-02-16T16:39:37+00:00"
+            "time": "2021-02-18T19:18:31+00:00"
         }
     ],
     "packages-dev": [],

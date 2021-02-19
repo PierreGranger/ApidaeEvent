@@ -57,7 +57,6 @@
 
 	/**
 	*	Si on souhaite pouvoir écrire sur un membre différent en fonction de la commune saisie, alors dans la config on a renseigné $configApidaeEvent['membres'].
-	*	TODO 06/2019 : EN attente recherche getMembres fonctionnelle sur communeCode pour retrouver les abonnés concernés par la commune.
 	*/
 
 	if ( $configApidaeEvent['projet_ecriture_multimembre'] === true )
@@ -67,42 +66,30 @@
 		*/
 		$membresCommune = $ApidaeMembres->getMembres(
 			Array(
-					'communeCode'=>$commune[3],
+					'communeCode'=>$commune[3], // communeCode = code INSEE
 					//"idProjet" => $configApidaeEvent['projet_ecriture_projetId']
 			)
 			//Array("COMMUNES")
 		) ;
+		// Au 19/02/2021
 
 		$ApidaeEvent->debug($membresCommune,'$membresCommune') ;
 
 		$membresConcernes = Array() ;
 		foreach ( $membresCommune as $mb )
 			$membresConcernes[$mb['id']] = $mb ;
-			
-		/**
-		 * On peut avoir plusieurs membres abonnés. Il faut trouver auquel affecter la manifestation
-		 * 	1. On affecte au membre qui a le moins de communes
-		 *  2. On affecte au premier membre trouvé dans la config
-		*/
-
-		/** Cas 1 */
-		/*
-		$membreTrouve = null ;
-		foreach ( $membresConcernes as $mc )
-		{
-			if ( $membreTrouve == null || sizeof($mc['communes']) < $membreTrouve['communes'] )
-				$membreTrouve = $mc ;
-		}
-		*/
-
+		
 		$ApidaeEvent->debug($membresConcernes,'$membresConcernes') ;
-
-		/** Cas 2 */
+		
 		if ( isset($configApidaeEvent['membres']) )
 		{
-			/* Au cas où la commune serait concernée par plusieurs territoires, on parcourt les membres dans l'ordre saisi pour choisir le premier dans la liste. */
+			/* Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste. */
 			foreach ( $configApidaeEvent['membres'] as $m )
 			{
+				/**
+				 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
+				 *	Ce n'est pas suffisant : il faut aussi s'assurer que dans la config c'était bien le territoire choisi
+				 * */
 				if ( isset($membresConcernes[$m['id_membre']]) )
 				{
 					$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
