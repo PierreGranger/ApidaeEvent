@@ -148,16 +148,16 @@
         },
         {
             "name": "pierre-granger/apidae-membres",
-            "version": "v1.2.3",
+            "version": "v1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PierreGranger/ApidaeMembres.git",
-                "reference": "b690a4169c60b8489b0fad0ba3e0865ffcb9681f"
+                "reference": "0c0aecb008ca6cdb42b5eaf5ce27f8bd810f6c31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PierreGranger/ApidaeMembres/zipball/b690a4169c60b8489b0fad0ba3e0865ffcb9681f",
-                "reference": "b690a4169c60b8489b0fad0ba3e0865ffcb9681f",
+                "url": "https://api.github.com/repos/PierreGranger/ApidaeMembres/zipball/0c0aecb008ca6cdb42b5eaf5ce27f8bd810f6c31",
+                "reference": "0c0aecb008ca6cdb42b5eaf5ce27f8bd810f6c31",
                 "shasum": ""
             },
             "require": {
@@ -174,9 +174,9 @@
             "description": "Classe d'utilisation des API membres & utilisateurs d'Apidae ",
             "support": {
                 "issues": "https://github.com/PierreGranger/ApidaeMembres/issues",
-                "source": "https://github.com/PierreGranger/ApidaeMembres/tree/v1.2.3"
+                "source": "https://github.com/PierreGranger/ApidaeMembres/tree/v1.2.4"
             },
-            "time": "2021-02-18T19:18:31+00:00"
+            "time": "2021-02-19T14:01:53+00:00"
         }
     ],
     "packages-dev": [],

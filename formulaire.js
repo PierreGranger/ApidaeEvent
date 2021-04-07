@@ -12,6 +12,8 @@
 
 	var today = new Date() ;
 
+	console.log('formulaire.js') ;
+
 jQuery(function(){
 
 	//jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );

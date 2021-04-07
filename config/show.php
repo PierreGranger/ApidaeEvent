@@ -3,7 +3,7 @@
     require_once(realpath(dirname(__FILE__)).'/auth.inc.php') ;
     require_once(realpath(dirname(__FILE__)).'/../territoires.inc.php') ;
 
-    //echo '<pre>'.print_r($territoires,true).'</pre>' ;
+    $fails = 0 ;
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -25,13 +25,13 @@
     </head>
     <body>
 
-    <?php if ( false ) { ?>
     <div class="alert alert-danger">
-        <h1>Détermination du propriétaire</h1>
-        <p>Attention : le territoire n'est demandé qu'à titre indicatif.<br />
-        Le propriétaire d'une manifestation sera déterminé par la liste des comunes qui lui sont affectées sur sa fiche membre Apidae.</p>
+        <h1>Abonné ?</h1>
+        <h2>19/02/2021</h2>
+        <p>Attention : Pour l'instant, la colonne "Attention" avec la mention "Non abonné !" n'est pas fiable : en attente du traitement d'un ticket chez Smile :<br />
+        <a href="https://apidae-tourisme.zendesk.com/agent/tickets/16451">https://apidae-tourisme.zendesk.com/agent/tickets/16451</a></p>
     </div>
-    <?php } ?>
+
     <style>
         thead, thead th {
             position:sticky ;
@@ -43,26 +43,39 @@
                 <th>Ordre</th>
                 <th>ID_membre + Nom</th>
                 <th>Site</th>
-                <th>Territoire</th>
+                <th>Territoire (+ Codes INSEE)</th>
                 <th>Parrain</th>
                 <th>Mails</th>
                 <th>Communes</th>
+                <th>Attention</th>
             </thead>
             <tbody>
                 <?php
                     $tri = 0 ;
+
+                    $already = Array() ;
+
                     foreach ( $configApidaeEvent['membres'] as $m ) {
+                        $ids_membres[] = $m['id_membre'] ;
                         echo '<tr>' ;
                             echo '<th>'.@$tri++.'</th>';
-                            echo '<th>'.$m['id_membre'].' '.$m['nom'].'</th>' ;
+                            echo '<th><span class="badge bg-secondary">'.$m['id_membre'].'</span> '.$m['nom'].'</th>' ;
                             echo '<td>'.$m['site'].'</td>' ;
                             echo '<td>' ;
                                 if ( isset($territoires[$m['id_territoire']]) )
                                 {
                                     $json = $territoires[$m['id_territoire']] ;
-                                    echo $json->id.' '.$json->nom->libelleFr ;
+                                    echo '<span class="badge bg-secondary">'.$json->id.'</span> '.$json->nom->libelleFr ;
                                     echo ' ('.sizeof($json->localisation->perimetreGeographique).')' ;
                                     if ( $json->type != 'TERRITOIRE' ) echo '<div class="alert alert-danger">'.$json->type.'</div>' ;
+                                    echo '<div style="font-size:.5em;">' ;
+                                        $tmp = Array() ;
+                                        foreach ( $json->localisation->perimetreGeographique as $com )
+                                        {
+                                            $tmp[] = $com->code.'|'.$com->nom ;
+                                        }
+                                        echo implode(' ',$tmp) ;
+                                    echo '</div>' ;
                                 }
                                 else echo '<div class="alert alert-danger">'.$m['id_territoire'].' Not found</div>' ;
                             echo '</td>' ;
@@ -74,11 +87,47 @@
                             echo '<td>' ;
                                 if ( isset($m['insee_communes']) ) echo implode(', ',$m['insee_communes']) ;
                             echo '</td>' ;
+                            echo '<td>' ;
+                                if ( $fails < 5 )
+                                {
+                                    try {
+                                        $ApidaeMembres->start('getMembreById('.$m['id_membre'].')') ;
+                                        $membre = $ApidaeMembres->getMembreById(
+                                            $m['id_membre'],
+                                            Array('PROJETS')
+                                        ) ;
+                                        if ( isset($membre['projets']) )
+                                        {
+                                            $trouve = false ;
+                                            foreach ( $membre['projets'] as $p )
+                                            {
+                                                if ( $p['id'] == $configApidaeEvent['projet_ecriture_projetId'] )
+                                                {
+                                                    $trouve = true ;
+                                                    break ;
+                                                }
+                                            }
+                                            if ( ! $trouve ) echo '<span class="badge bg-danger">Pas abonné !</span>' ;
+
+                                        }
+                                    } catch ( Exception $e ) {
+                                        $fails++ ;
+                                    } finally {
+                                        $ApidaeMembres->stop('getMembreById('.$m['id_membre'].')') ;
+                                    }
+                                }
+                                if ( in_array($m['id_membre'],$already) )
+                                    echo '<span class="badge bg-warning text-dark">Doublon ?</span>' ;
+                            echo '</td>' ;
                         echo '</tr>' ;
+                        $already[] = $m['id_membre'] ;
                     }
+
                 ?>
             </tbody>
         </table>
+
+        <?php ini_set('display_errors',0) ; $ApidaeMembres->timer() ; ?>
 
     </body>
 </html>

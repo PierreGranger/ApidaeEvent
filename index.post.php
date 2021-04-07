@@ -84,7 +84,7 @@
 
 		$doubleCheck = true ;
 		if ( ! isset($territoires) || ! is_array($territoires) ) $doubleCheck = false ;
-		
+				
 		if ( isset($configApidaeEvent['membres']) )
 		{
 			/* Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste. */
@@ -93,14 +93,18 @@
 				/**
 				 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
 				 * */
+				$ApidaeEvent->debug(isset($membresConcernes[$m['id_membre']]),'isset($membresConcernes['.$m['id_membre'].']) ? '.$m['nom']) ;
 				if ( isset($membresConcernes[$m['id_membre']]) )
 				{
+					$ApidaeEvent->debug($m['id_membre'],'membre '.$m['nom'].' concerné (boucle)') ;
 					$trouve = true ;
 					/**
 					 * Ce n'est pas suffisant : il faut aussi s'assurer que dans la config c'était bien le territoire choisi
 					 */
 					if ( $doubleCheck )
 					{
+						$ApidaeEvent->debug('Double check... $commune[3] = '.$commune[3]) ;
+						$ApidaeEvent->debug(@$m['insee_communes'],'insee_communes') ;
 						$trouve = false ;
 						if ( 
 							isset($m['insee_communes']) 
@@ -109,22 +113,26 @@
 						)
 						{
 							// Trouvé dans la liste des communes spécifiée en config !
+							$ApidaeEvent->debug('trouvé dans les insee_communes !') ;
 							$trouve = true ;
 						}
 
+						$ApidaeEvent->debug(@array_keys(@$territoires[$m['id_territoire']]->perimetre),'Recherche de '.$commune[3].' dans le territoire '.$m['id_territoire'].' du membre...') ;
 						if (
 							isset($m['id_territoire']) && isset($territoires) && is_array($territoires)
 							&& isset($territoires[$m['id_territoire']])
-							&& in_array($commune[3],$territoires[$m['id_territoire']]->perimetre)
+							&& isset($territoires[$m['id_territoire']]->perimetre[$commune[3]])
 						)
 						{
 							// Trouvé dans le territoire de la config !
+							$ApidaeEvent->debug('trouvé dans le territoire !') ;
 							$trouve = true ;
 						}
 					}
 
 					if ( $trouve )
 					{
+						$ApidaeEvent->debug($m,'membre trouvé...') ;
 						$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
 						$infos_proprietaire['mail_membre'] = @$m['mail'] ;
 						$infos_proprietaire['structure_validatrice'] = $m['nom'] ;

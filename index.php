@@ -23,8 +23,8 @@
 		'node_modules/bootstrap-chosen/dist/chosen.jquery-1.4.2/chosen.jquery.min.js',
 		'node_modules/bootstrap-chosen/bootstrap-chosen.css',
 		'https://www.google.com/recaptcha/api.js',
-		'formulaire.js',
-		'formulaire.css',
+		'formulaire.js?t=20210220',
+		'formulaire.css?t=20210220',
 		'node_modules/ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js',
 		'node_modules/ajax-bootstrap-select/dist/css/ajax-bootstrap-select.min.css',
 		//'node_modules/timepicker/jquery.timepicker.min.js',
@@ -79,7 +79,7 @@
 			{
 				$type = substr($asset, strrpos($asset, '.')+1) ;
 				$local = ( substr( $asset, 0, 4 ) !== "http" ) ;
-
+				$type = preg_replace('#\?t=[0-9]+#','',$type) ;
 				echo "\n\t\t" ;
 
 				if ( $type == 'js' )

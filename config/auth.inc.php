@@ -18,7 +18,10 @@
     if ( $ApidaeSso->connected() )
     {
         $utilisateurApidae = $ApidaeSso->getUserProfile() ;
-        $ApidaeMembres = new PierreGranger\ApidaeMembres($configApidaeMembres) ;
+        $ApidaeMembres = new PierreGranger\ApidaeMembres(array_merge(
+            Array('debug'=>false,'timer'=>true),
+            $configApidaeMembres
+        )) ;
         $usr = $ApidaeMembres->getUserById($utilisateurApidae['id']) ;
         foreach ( $droits['permissions'] as $p )
         {
