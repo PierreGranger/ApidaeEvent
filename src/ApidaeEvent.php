@@ -160,7 +160,7 @@
 				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
 				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
-				$this->mc->set($cachekey,$tmp) ;
+				$this->mc->set($cachekey,$ret) ;
 			}
 			return $ret ;
 		}
@@ -176,7 +176,7 @@
 				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
 				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
-				$this->mc->set($cachekey,$tmp) ;
+				$this->mc->set($cachekey,$ret) ;
 			}
 			return $ret ;
 		}
@@ -286,8 +286,8 @@
 				
 				foreach ( $ret as $k => $v )
 				{
-					uasort($ret,Array($this,'ersort')) ;
-					if ( isset($ret['enfants']) ) uasort($ret['enfants'],$this,'ersort') ;
+					@uasort($ret,Array($this,'ersort')) ;
+					if ( isset($ret['enfants']) ) @uasort($ret['enfants'],$this,'ersort') ;
 				}
 			}
 			return $ret ;

@@ -242,7 +242,8 @@ function valideChamp(champ)
 		}
 		else if ( devise == 'CHF' || devise == 'CFP' )
 		{
-			if ( ! champ.val().match(/^[0-9+]{6,12}$/) ) return false ;
+			var tmp = val.replace(/[^0-9+]/g,'') ;
+			if ( ! tmp.match(/^[0-9+]{6,14}$/) ) return false ;
 		}
 	}
 	else if ( type == 204 || champ.hasClass('mail') ) // Mél
