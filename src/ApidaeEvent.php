@@ -154,7 +154,7 @@
 		{
 			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
 			$cachekey = 'communesById'.md5(implode('-',$coms)) ;
-			if ( ! $ret = $this->mc->get($cachekey) || $refresh === true )
+			if ( ( $ret = $this->mc->get($cachekey) === false ) || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
 				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'communeIds'=>$coms) ;
@@ -170,7 +170,7 @@
 		{
 			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
 			$cachekey = 'getCommunesByInsee'.md5(implode('-',$coms)) ;
-			if ( ! $ret = $this->mc->get($cachekey) || $refresh === true )
+			if ( ( $ret = $this->mc->get($cachekey) === false ) || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
 				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'codesInsee'=>$coms) ;
@@ -186,7 +186,7 @@
 		{
 			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new \Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
 			$cachekey = 'territoire'.$id_territoire ;
-			if ( ! ( $ret = $this->mc->get($cachekey) ) || $refresh === true )
+			if ( ( $ret = $this->mc->get($cachekey) === false ) || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__.'mc->get failed...') ;
 				$parameters = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'responseFields'=>'localisation.perimetreGeographique') ;
@@ -205,7 +205,7 @@
 		public function getOffre($id_offre,$responseFields=null,$refresh=false) {
 			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new \Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
 			$cachekey = 'offre'.$id_offre ;
-			if ( ! $ret = $this->mc->get($cachekey) || $refresh === true )
+			if ( ( $ret = $this->mc->get($cachekey) ) === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__.'mc->get failed...') ;
 				$parameters = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'responseFields'=>$responseFields) ;
