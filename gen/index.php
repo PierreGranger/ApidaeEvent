@@ -64,7 +64,7 @@ if (!$ApidaeSso->connected()) {
 		$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres);
 		$membre = $ApidaeMembres->getMembreById($utilisateurApidae['membre']['id']);
 		if (isset($membre['entitesJuridiques'][0]['id'])) {
-			$entite = $ApidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],$refresh);
+			$entite = $ApidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],null,$refresh);
 			if (isset($entite['informations']['moyensCommunication'])) {
 				foreach ($entite['informations']['moyensCommunication'] as $mc) {
 					if ($mc['type']['id'] == 205) {
