@@ -34,6 +34,7 @@
 		private $method_territoires = 'api' ; // api
 
 		private $mc ;
+		private $mc_expiration = 2592000 ; // 2592000 = 30 jours
 
 		public function __construct($params=null) {
 			
@@ -95,7 +96,7 @@
 						$ret .= "\n\t\t\t\t\t\t\t\t\t".'<option value="'.$erp['id'].'"' ;
 						//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
 							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'"' ;
-							if ( isset($post) && is_array($post) && in_array($p['id'],$post) ) $ret .= ' selected="selected"' ;
+							if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' selected="selected"' ;
 						$ret .= '>'.$erp['libelleFr'].'</option>' ;
 						if ( isset($erp['enfants']) )
 						{
@@ -149,34 +150,34 @@
 			return $ret ;
 		}
 
-		public function getCommunesById(array $ids)
+		public function getCommunesById(array $ids, $refresh=false)
 		{
 			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
 			$cachekey = 'communesById'.md5(implode('-',$coms)) ;
-			if ( ! $ret = $this->mc->get($cachekey) )
+			if ( ! $ret = $this->mc->get($cachekey) || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
 				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'communeIds'=>$coms) ;
 				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
 				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
-				$this->mc->set($cachekey,$ret) ;
+				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
 
-		public function getCommunesByInsee(array $ids)
+		public function getCommunesByInsee(array $ids, $refresh=false)
 		{
 			$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
 			$cachekey = 'getCommunesByInsee'.md5(implode('-',$coms)) ;
-			if ( ! $ret = $this->mc->get($cachekey) )
+			if ( ! $ret = $this->mc->get($cachekey) || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__,'mc->get failed...') ;
 				$q = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'codesInsee'=>$coms) ;
 				$ret = $this->curlApi('referentiel/communes','GET',Array('query'=>json_encode($q))) ;
 				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
-				$this->mc->set($cachekey,$ret) ;
+				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
@@ -196,15 +197,15 @@
 				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
 					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>@$c['complement']) ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
-				$this->mc->set($cachekey,$ret) ;
+				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
 
-		public function getOffre($id_offre,$responseFields=null) {
+		public function getOffre($id_offre,$responseFields=null,$refresh=false) {
 			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new \Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
 			$cachekey = 'offre'.$id_offre ;
-			if ( ! $ret = $this->mc->get($cachekey) )
+			if ( ! $ret = $this->mc->get($cachekey) || $refresh === true )
 			{
 				$this->debug(__METHOD__.__LINE__.'mc->get failed...') ;
 				$parameters = Array('apiKey'=>$this->projet_consultation_apiKey,'projetId'=>$this->projet_consultation_projetId,'responseFields'=>$responseFields) ;
@@ -212,7 +213,7 @@
 				if ( ! is_array($tmp) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer l\'offre') ;
 				$this->debug(__METHOD__.__LINE__,'mc->set...') ;
 				$ret = $tmp ;
-				$this->mc->set($cachekey,$ret) ;
+				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
@@ -388,7 +389,7 @@
 			if (!\DateTime::createFromFormat('d/m/Y', $date1))
 				if (!\DateTime::createFromFormat('Y-m-d', $date1))
 					return false ;
-				
+			/*	
 			// TODO : vérifier que $date1 est bien > date du jour
 			if ( $future === true )
 			{
@@ -399,6 +400,7 @@
 			{
 
 			}
+			*/
 			return $retour ;
 		}
 

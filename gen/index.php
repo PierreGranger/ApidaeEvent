@@ -2,19 +2,15 @@
 
 if (session_status() == PHP_SESSION_NONE) session_start();
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 require_once(realpath(dirname(__FILE__)) . '/../requires.inc.php');
 require_once(realpath(dirname(__FILE__)) . '/../vendor/autoload.php');
 require_once(realpath(dirname(__FILE__)) . '/vendor/autoload.php');
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 $ApidaeSso = new \PierreGranger\ApidaeSso($configApidaeSso, $_SESSION['ApidaeSso']);
 if (isset($_GET['logout'])) $ApidaeSso->logout();
 if (isset($_GET['code']) && !$ApidaeSso->connected()) $ApidaeSso->getSsoToken($_GET['code']);
+
+$refresh = isset($_GET['refresh']) ;
 
 if (!$ApidaeSso->connected()) {
 	$ssoUrl = $ApidaeSso->getSsoUrl();
@@ -68,7 +64,7 @@ if (!$ApidaeSso->connected()) {
 		$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres);
 		$membre = $ApidaeMembres->getMembreById($utilisateurApidae['membre']['id']);
 		if (isset($membre['entitesJuridiques'][0]['id'])) {
-			$entite = $ApidaeEvent->getOffre($membre['entitesJuridiques'][0]['id']);
+			$entite = $ApidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],$refresh);
 			if (isset($entite['informations']['moyensCommunication'])) {
 				foreach ($entite['informations']['moyensCommunication'] as $mc) {
 					if ($mc['type']['id'] == 205) {
