@@ -440,7 +440,7 @@ function checkIllustrations() {
 		tfoot.html(errors.join("<br />")) ;
 	}
 
-	return errors.length > 0 ;
+	return errors.length == 0 ;
 }
 
 /**

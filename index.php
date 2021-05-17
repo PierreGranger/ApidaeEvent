@@ -316,7 +316,7 @@
 											echo $d['nom'] ;
 											//if ( isset($_GET['devise']) && $_GET['devise'] == 'CHF' ) echo ' - ' . $d['complement'] ;
 											echo ' - ' . $d['codePostal'] ;
-											if ( $d['complement'] != '' ) echo ' ('.$d['complement'].')' ;
+											if ( isset($d['complement']) && $d['complement'] != '' ) echo ' ('.$d['complement'].')' ;
 										echo '</option>' ;
 									}
 									
