@@ -156,6 +156,24 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
+						<label class="col-4 col-form-label" for="illustrationMini">Taille mini illustration
+							<br /><small>Si une illustration est ajoutée, elle doit obligatoirement faire + de X pixels (ex: 1200)</small>
+							<br /><small>Laisser à 0 pour ne pas demander de taille minimale</small>
+						</label>
+						<div class="col-8">
+							<input type="number" id="illustrationMini" name="illustrationMini" value="" min="0" max="2000" step="200" />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-4 col-form-label" for="illustrationObligatoire">1 illustration obligatoire minimum
+						</label>
+						<div class="col-8">
+							<input type="checkbox" id="illustrationObligatoire" name="illustrationObligatoire" value="1" />
+						</div>
+					</div>
+
+					<div class="form-group row">
 						<label class="col-4 col-form-label" for="devise">Devise</label>
 						<div class="col-8">
 							<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
@@ -253,7 +271,12 @@ if (!$ApidaeSso->connected()) {
 
 		function gen(e) {
 			var form = jQuery('.form form');
-			var params = form.find('select, input[value!=""]').serialize();
+
+			var champs = form.find('select, input').filter(function(i) {
+				return jQuery(this).val() != "" && jQuery(this).val() != 0 ;
+			}) ;
+
+			var params = champs.serialize();
 			console.log(params);
 
 			var url = jQuery('div#url').data('base') + '?' + params;

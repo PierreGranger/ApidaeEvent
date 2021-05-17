@@ -12,8 +12,6 @@
 
 	var today = new Date() ;
 
-	console.log('formulaire.js') ;
-
 jQuery(function(){
 
 	//jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
@@ -77,6 +75,12 @@ jQuery(document).on('submit','form.form',function(e){
 
 	var erreurContacts = checkContacts() ;
 	if ( erreurContacts !== true )
+	{
+		ok = false ;
+	}
+
+	var erreurIllustrations = checkIllustrations() ;
+	if ( erreurIllustrations !== true )
 	{
 		ok = false ;
 	}
@@ -168,11 +172,11 @@ jQuery(document).on('change','div.tarifs select[name^="tarifs"]',function(){
 
 function valideChamp(champ)
 {
+	var val = champ.val() ;
 	var type = null ;
 	if ( typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/) )
 		type = champ.closest('tr').find('select').val() ;
 
-	var val = champ.val() ;
 	if ( val == '' && ! champ.prop('required') ) return true ;
 	if ( val == '' && champ.prop('required') ) return false ;
 
@@ -198,31 +202,6 @@ function valideChamp(champ)
 			if ( debut.val() == '' ) debut.val(val) ;
 			else if ( champ.val() < debut.val() ) debut.val(champ.val()) ;
 		}
-
-		//champ.data('lastVal',val) ;
-	}
-	else if ( champ.hasClass('time') )
-	{
-		/*
-		var reg = /date\[([0-9]+)\]\[(hdebut|hfin)\]/i ;
-		var match = champ.attr('name').match(reg) ;
-		
-		var i = match[1] ;
-		var t = match[2] ; // debut|fin
-
-		if ( t == 'hdebut' )
-		{
-			var fin = champ.closest('.form').find('input[name="date\['+i+'\]\[hfin\]"]') ;
-			if ( fin.val() == '' ) fin.val(val) ;
-			else if ( fin.val() < champ.val() ) fin.val(champ.val()) ;
-		}
-		else if ( t == 'hfin' )
-		{
-			var debut = champ.closest('.form').find('input[name="date\['+i+'\]\[hdebut\]"]') ;
-			if ( debut.val() == '' ) debut.val(val) ;
-			else if ( champ.val() < debut.val() ) debut.val(champ.val()) ;
-		}
-		*/
 	}
 	else if ( champ.hasClass('float') )
 	{
@@ -413,3 +392,71 @@ function checkContacts() {
 
 }
 jQuery(document).on('change','fieldset.contacts',checkContacts) ;
+
+/**
+ * 17/05/2021
+ * 1) ajout du ?illustrationObligatoire=1 => <fieldset class="illustrations required">
+ * 2) ajout du ?illustrationMini=XX => <input type="file" minwidth="XX" />
+ */
+function checkIllustrations() {
+
+	var dbg = true ;
+	var errors = [] ;
+
+	var fieldset = jQuery('fieldset.illustrations') ;
+	var inputs = fieldset.find('input[type="file"]') ;
+	var tfoot = fieldset.find('tfoot tr td') ;
+
+	fieldset.find('tbody tr').removeClass('has-error') ;
+	tfoot.closest('tr').removeClass('has-error') ;
+	tfoot.html('') ;
+
+	var nbfiles = 0 ;
+	inputs.each(function(){
+		nbfiles += jQuery(this).get(0).files.length ;
+		if ( jQuery(this).get(0).files.length == 1 && typeof jQuery(this).attr('minwidth') != 'undefined' )
+		{
+			var minWidth = parseInt(jQuery(this).attr('minwidth')) ;
+			if ( typeof jQuery(this).data('width') != 'undefined' )
+			{
+				if ( jQuery(this).data('width') < minWidth )
+				{
+					jQuery(this).closest('tr').addClass('has-error') ;
+					errors.push('Les illustrations doivent faire '+minWidth+'px au minimum') ;
+				}
+			}
+		}
+	}) ;
+
+	if ( nbfiles == 0 && fieldset.hasClass('required') )
+	{
+		fieldset.find('tbody tr').first().addClass('has-error') ;
+		errors.push('1 illustration minimum') ;
+	}
+
+	if ( errors.length > 0 )
+	{
+		tfoot.closest('tr').addClass('has-error') ;
+		tfoot.html(errors.join("<br />")) ;
+	}
+
+	return errors.length > 0 ;
+}
+
+/**
+ * Comme le chargement de l'image est asynchrone on ne doit lancer le checkIllustrations qu'après
+ */
+//jQuery(document).on('change','fieldset.illustrations',checkIllustrations) ;
+jQuery(document).on('change','fieldset.illustrations input[type="file"]',function(){
+	var reader = new FileReader() ;
+	reader.readAsDataURL(jQuery(this).get(0).files[0]) ;
+	var input = jQuery(this) ;
+	reader.onload = function(e) {
+		var img = new Image() ;
+		img.onload = function() {
+			input.data('width',this.width) ;
+			checkIllustrations() ;
+		}
+		img.src = e.target.result ;
+	} ;
+}) ;

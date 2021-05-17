@@ -8,3 +8,5 @@
 	
 	$ApidaeEvent = new \PierreGranger\ApidaeEvent($configApidaeEvent) ;
 	$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeEvent) ;
+
+	if ( isset($flush) && $flush === true ) var_dump($ApidaeEvent->flush()) ;

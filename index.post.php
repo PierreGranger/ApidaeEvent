@@ -65,6 +65,9 @@
 		/**
 		 * On commence par récupérer la liste des membres abonnés au projet d'écriture et qui ont les droits sur la commune concernée.
 		*/
+
+		$ApidaeEvent->debug($commune,'$commune') ;
+
 		$membresCommune = $ApidaeMembres->getMembres(
 			Array(
 					'communeCode'=>$commune[3], // communeCode = code INSEE
@@ -93,7 +96,7 @@
 				/**
 				 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
 				 * */
-				$ApidaeEvent->debug(isset($membresConcernes[$m['id_membre']]),'isset($membresConcernes['.$m['id_membre'].']) ? '.$m['nom']) ;
+				//$ApidaeEvent->debug(isset($membresConcernes[$m['id_membre']]),'isset($membresConcernes['.$m['id_membre'].']) ? '.$m['nom']) ;
 				if ( isset($membresConcernes[$m['id_membre']]) )
 				{
 					$ApidaeEvent->debug($m['id_membre'],'membre '.$m['nom'].' concerné (boucle)') ;

@@ -314,8 +314,9 @@
 											if ( @$post['commune'] == $cle ) echo ' selected="selected"' ;
 										echo '>' ;
 											echo $d['nom'] ;
-											if ( isset($_GET['devise']) && $_GET['devise'] == 'CHF' ) echo ' - ' . $d['complement'] ;
+											//if ( isset($_GET['devise']) && $_GET['devise'] == 'CHF' ) echo ' - ' . $d['complement'] ;
 											echo ' - ' . $d['codePostal'] ;
+											if ( $d['complement'] != '' ) echo ' ('.$d['complement'].')' ;
 										echo '</option>' ;
 									}
 									
@@ -757,10 +758,15 @@
 
 				</fieldset>
 
-				<fieldset class="form-group">
+				<fieldset class="form-group illustrations <?php if ( isset($_GET['illustrationObligatoire']) && $_GET['illustrationObligatoire'] ) echo ' required' ; ?>">
 					<legend>Photos</legend>
 					<div class="alert alert-warning" role="alert">
-						Vos photos doivent être libres de droit et de bonne qualité (<strong>si possible, 1200px de largeur minimum</strong>).
+						Vos photos doivent être libres de droit et de bonne qualité
+						<?php if ( isset($_GET['illustrationMini']) ) { ?>
+							(<strong><?php echo $_GET['illustrationMini'] ; ?>px de largeur minimum</strong>).
+						<?php } else { ?>
+							(<strong>si possible, 1200px de largeur minimum</strong>).
+						<?php } ?>
 						<br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
 						<br />
 						<a href="https://aide.apidae-tourisme.com/hc/fr/articles/360000825391-Saisie-l-onglet-multimédias-Zoom-sur-les-illustrations#tailleimages" target="_blank"><i class="fas fa-info-circle"></i> Plus d'informations ici.</a>
@@ -775,6 +781,7 @@
 									<th>Copyright</th>
 								</tr>
 							</thead>
+							<tfoot><tr><td colspan="4"></td></tr></tfoot>
 							<tbody>
 								<?php
 									for ( $i = 0 ; $i < 1 ; $i++ )
@@ -782,7 +789,10 @@
 										echo "\n\t\t\t\t\t\t".'<tr>' ;
 											echo '<td></td>' ;
 											echo '<td>' ;
-													echo '<input class="form-control" type="file" name="illustrations['.$i.']" value="'.htmlspecialchars(@$post['illustrations'][$i]).'" accept="image/*" />' ;
+													echo '<input class="form-control" type="file" name="illustrations['.$i.']" value="'.htmlspecialchars(@$post['illustrations'][$i]).'" accept="image/*" ' ;
+														if ( isset($_GET['illustrationMini']) && (int)$_GET['illustrationMini'] > 0 && (int)$_GET['illustrationMini'] <= 2000 )
+															echo 'minwidth="'.(int)$_GET['illustrationMini'].'" ' ;
+													echo '/>' ;
 											echo '</td>' ;
 											echo '<td><input class="form-control" type="text" name="illustrations['.$i.'][legende]" value="'.htmlspecialchars(@$post['illustrations'][$i]['legende']).'" /></td>' ;
 											echo '<td><input class="form-control" type="text" name="illustrations['.$i.'][copyright]" value="'.htmlspecialchars(@$post['illustrations'][$i]['copyright']).'" /></td>' ;

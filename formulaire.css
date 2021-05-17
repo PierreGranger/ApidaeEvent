@@ -25,7 +25,14 @@ input.float {
 	background:#ffeceb ;
 }
 
-.has-error .chosen-single {
+tfoot tr.has-error {
+	background:#ffeceb ;
+	color:#a94442 ;
+	font-weight:bold ;
+}
+
+.has-error .chosen-single,
+.has-error input[type="file"] {
 	background:#ffeceb ;
 	border-color:#a94442 ;
 }
