@@ -23,7 +23,7 @@
 		'node_modules/bootstrap-chosen/dist/chosen.jquery-1.4.2/chosen.jquery.min.js',
 		'node_modules/bootstrap-chosen/bootstrap-chosen.css',
 		'https://www.google.com/recaptcha/api.js',
-		'formulaire.js?t=20210517',
+		'formulaire.js?t=202105171400',
 		'formulaire.css?t=20210517',
 		'node_modules/ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js',
 		'node_modules/ajax-bootstrap-select/dist/css/ajax-bootstrap-select.min.css',
