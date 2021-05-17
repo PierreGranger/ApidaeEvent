@@ -8,13 +8,13 @@
   },
   "dependencies": {
     "ajax-bootstrap-select": "^1.4.5",
+    "bootstrap": "^4.6.0",
     "bootstrap-chosen": "^1.4.2",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.0",
     "jquery-datepicker": "^1.12.3",
     "jquery-ui": "^1.12.1",
     "popper": "^1.0.1",
-    "timepicker": "^1.13.18",
-    "bootstrap": "^4.6.0"
+    "timepicker": "^1.13.18"
   },
   "devDependencies": {},
   "scripts": {
