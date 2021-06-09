@@ -455,6 +455,19 @@
 						</div>
 					</div>
 
+					<?php
+						$params = Array(
+							'presentation' => 'checkbox',
+							'include' => Array(6486) // Pass sanitaire obligatoire
+						) ;
+					?>
+					<div class="form-group row prestations-typesClientele">
+						<label class="<?php echo $class_label ; ?> col-form-label"></label>
+						<div class="<?php echo $class_champ ; ?>">
+							<?php echo $ApidaeEvent->formHtmlCC('TypeClientele',$params,@$post['TypeClientele']) ; ?>
+						</div>
+					</div>
+
 					<?php if ( isset($_GET['TourismeAdapte']) && $_GET['TourismeAdapte'] == 1 ) { ?>
 
 						<?php

@@ -500,6 +500,22 @@
 	}
 
 	/**
+	 * TypesClientele
+	 */
+	if ( isset($_POST['TypeClientele']) && is_array($_POST['TypeClientele']) && sizeof($_POST['TypeClientele']) > 0 )
+	{
+		$fieldlist[] = 'prestations.typesClientele' ;
+		$root['prestations']['typesClientele'] = [] ;
+		foreach ( $_POST['TypeClientele'] as $id )
+		{
+			$root['prestations']['typesClientele'][] = [
+				'elementReferenceType' => 'TypeClientele',
+				'id' => $id
+			 ] ;
+		}
+	}
+
+	/**
 	 * Tourisme adapté / Handicap
 	 */
 	if ( isset($_POST['TourismeAdapte']) && is_array($_POST['TourismeAdapte']) && sizeof($_POST['TourismeAdapte']) > 0 )
