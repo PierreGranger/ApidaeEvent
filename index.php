@@ -627,6 +627,31 @@
 					</div>
 				</fieldset>
 
+				<?php if ( isset($_GET['reservation']) && $_GET['reservation'] ) { ?>
+					
+					<fieldset>
+						
+						<legend>Réservation</legend>
+						
+						<div class="form-group row">
+							<label for="reservation_nom" class="<?php echo $class_label ; ?> col-form-label">Nom de l'organisme</label>
+							<div class="<?php echo $class_champ ; ?>">
+								<input class="form-control" type="text" name="reservation[nom]" id="reservation_nom" value="<?php echo htmlentities(@$post['reservation']['nom']) ; ?>">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="reservation_url" class="<?php echo $class_label ; ?> col-form-label">URL de réservation<br /><small>http(s)://...</small></label>
+							<div class="<?php echo $class_champ ; ?>">
+								<input class="form-control url" type="text" name="reservation[url]" id="reservation_url" value="<?php echo htmlentities(@$post['reservation']) ; ?>" placeholder="https://...">
+								<small class="helper url">http(s)://...</small>
+							</div>
+						</div>
+
+					</fieldset>
+
+				<?php } ?>
+
 				<fieldset class="contacts<?php if ( isset($_GET['contactObligatoire']) && $_GET['contactObligatoire'] ) echo ' required' ; ?>">
 					
 					<legend>Contacts organisateurs</legend>

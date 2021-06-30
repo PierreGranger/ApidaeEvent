@@ -20,9 +20,15 @@ input.float {
 	min-width:70px !important ;
 	text-align:right ;
 }
+.form-group .helper {
+	display:none ;
+}
 
 .has-error .form-control {
 	background:#ffeceb ;
+}
+.form-group.has-error .helper {
+	display:block ;
 }
 
 tfoot tr.has-error {

@@ -1,14 +1,19 @@
 <?php
 	
 	require_once(realpath(dirname(__FILE__)).'/requires.inc.php') ;
+
+	use PierreGranger\ApidaeException ;
+	use PierreGranger\ApidaeTimer ;
+	use PierreGranger\ApidaeMembres ;
 	
 	if ( ! isset($_POST['commune']) ) return ;
 	
 	$verbose = true ;
 	$debug = $configApidaeEvent['debug'] ;
+	$erreurs_debug = [] ;
 
 	if ( $debug )
-		$timer = new \PierreGranger\ApidaeTimer() ;
+		$timer = new ApidaeTimer() ;
 
 	$commune = explode('|',$_POST['commune']) ;
 
@@ -67,7 +72,7 @@
 	{
 		if ( $debug ) $timer->start('territoires.inc.php') ;
 		require_once(realpath(dirname(__FILE__)).'/territoires.inc.php') ;
-		if ( $debug ) $timer->end('territoires.inc.php') ;
+		if ( $debug ) $timer->stop('territoires.inc.php') ;
 		/**
 		 * On commence par récupérer la liste des membres abonnés au projet d'écriture et qui ont les droits sur la commune concernée.
 		*/
@@ -75,10 +80,20 @@
 		$ApidaeEvent->debug($commune,'$commune') ;
 
 		if ( $debug ) $timer->start('getMembres') ;
-		$membresCommune = $ApidaeMembres->getMembres(
-			['communeCode'=>$commune[3]], // communeCode = code INSEE
-		) ;
-		if ( $debug ) $timer->start('getMembres') ;
+		try {
+			$membresCommune = $ApidaeMembres->getMembres(
+				['communeCode'=>$commune[3]], // communeCode = code INSEE
+			) ;
+		} catch ( Exception $e ) {
+			if ( $debug )
+			{
+				echo '<pre>' ;
+					echo json_encode($e,JSON_PRETTY_PRINT) ;
+				echo '</pre>' ;
+			}
+			$ko[] = 'Une erreur est survenue, merci de réessayer ultérieurement... ['.__LINE__.']' ;
+		}
+		if ( $debug ) $timer->stop('getMembres') ;
 
 		$ApidaeEvent->debug($membresCommune,'$membresCommune') ;
 
@@ -93,6 +108,7 @@
 				
 		if ( isset($configApidaeEvent['membres']) )
 		{
+			$timer->start('loop_membres') ;
 			/* Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste. */
 			foreach ( $configApidaeEvent['membres'] as $m )
 			{
@@ -147,8 +163,9 @@
 						break ;
 					}
 				}
-				if ( $debug ) $timer->end('membres : '.$m['id_membre']) ;
+				if ( $debug ) $timer->stop('membres : '.$m['id_membre']) ;
 			}
+			$timer->stop('loop_membres') ;
 		}
 	}
 
@@ -554,6 +571,34 @@
 	}
 
 	/**
+	 * Réservation
+	 */
+	if ( isset($_POST['reservation']) && $_POST['reservation']['url'] != '' )
+	{
+		$fieldlist[] = 'reservation.organismes' ;
+		$root['reservation']['organismes'] = [
+			[
+				'nom' => trim($_POST['reservation']['nom']) == '' ? 'Réservation' : trim($_POST['reservation']['nom']),
+				'type' => [
+					'elementReferenceType' => 'ReservationType',
+					'id' => 475 // Directe
+				],
+				'moyensCommunication' => [
+					[
+						'type' => [
+							'elementReferenceType' => 'MoyenCommunicationType',
+							'id' => 205 // Site web (URL)
+						],
+						'coordonnees' => [
+							'fr' => $_POST['reservation']['url']
+						]
+					]
+				]
+			]
+		] ;
+	}
+
+	/**
 	* Gestion des multimédias
 	**/
 
@@ -641,6 +686,18 @@
 	if ( $debug ) $timer->start('enregistrement') ;
 	if ( sizeof($ko) == 0 && ! $nosave )
 	{
+		/*
+		if ( $debug )
+		{
+			echo '<pre>' ;
+				echo json_encode($root,JSON_PRETTY_PRINT) ;
+			echo '</pre>' ;
+			echo '<pre>' ;
+			echo json_encode($fieldlist,JSON_PRETTY_PRINT) ;
+			echo '</pre>' ;
+		}
+		*/
+
 		$enregistrer = Array(
 			'fieldlist' => $fieldlist,
 			'root' => $root,
@@ -653,6 +710,16 @@
 		try {
 			$ret_enr = $ApidaeEvent->ajouter($enregistrer) ;
 			if ( ! $ret_enr ) $ko[] = $ret_enr ;
+		} catch ( ApidaeException $e ) {
+			if ( $debug )
+			{
+				echo '<pre>' ;
+					echo json_encode($e->getDetails(),JSON_PRETTY_PRINT) ;
+				echo '</pre>' ;
+			}
+			$ko[] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
+			$ko[] = $e->getMessage() ;
+			$erreurs_debug[] = $e->getDetails() ;
 		} catch ( Exception $e ) {
 			$ko[] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
 			$ko[] = $e->getMessage() ;
@@ -722,20 +789,24 @@
 		try {
 
 			if ( $debug )
-				$ApidaeMembres = new \PierreGranger\ApidaeMembres(array_merge(
+				$ApidaeMembres = new ApidaeMembres(array_merge(
 					$configApidaeMembres,
 					['debug'=>true]
 				)) ;
 			else
-				$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
+				$ApidaeMembres = new ApidaeMembres($configApidaeMembres) ;
 			
+			$membre = false ;
 			if ( $debug ) $timer->start('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
-			$membre = $ApidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
-			if ( $debug ) $timer->end('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
+			try {
+				$membre = $ApidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
+			} catch ( Exception $e ) {
+				$ko[] = 'Une erreur est survenue, merci de réessayer ultérieurement... ['.__LINE__.']' ;
+			}
+			if ( $debug ) $timer->stop('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
 			
 			if ( $membre )
 			{
-
 				$enr_dataLayer = Array(
 					'event' => 'enregistrement',
 					'commune_id' => $root['localisation']['adresse']['commune']['id'],
@@ -786,9 +857,9 @@
 			{
 				echo '<div class="alert alert-info">' ;
 					echo '<h2>Objet</h2>' . $objet ;
-					echo '<h2>To</h2>' . $to ;
+					echo '<h2>To</h2>' . json_encode($to) ;
 					echo '<h2>Message</h2>' ;
-						echo '<pre>'.print_r($post_mail,true).'</pre>' ;
+						echo '<pre>'.json_encode($post_mail,JSON_PRETTY_PRINT).'</pre>' ;
 				echo '</div>' ;
 			}
 			unset($to) ;
@@ -896,12 +967,14 @@
 			if ( ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mails_erreur') ;
-				$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$ko) ;
-				$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$_POST) ;
+				$erreur_alerte = $ko ;
+				$erreur_alerte['erreurs_debug'] = $erreurs_debug ;
+				$erreur_alerte['_POST'] = $_POST ;
+				$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$erreur_alerte) ;
 				if ( $debug ) $timer->stop('mails_erreur') ;
 			}
 		  ?>
-		  <?php if ( $alerte === true ) { ?><br />L'erreur a été envoyée à un administrateur.<?php } ?>
+		  <?php if ( isset($alerte) && $alerte === true ) { ?><br />L'erreur a été envoyée à un administrateur.<?php } ?>
 		  <br />Veuillez nous excuser pour la gène occasionnée.
 		  <br />Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact avec l'Office du Tourisme concernée par votre manifestation :
 		  <ul>

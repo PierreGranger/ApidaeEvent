@@ -129,7 +129,7 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
-						<label class="col-4 col-form-label" for="contactObligatoire">Contact obligatoire ?
+						<label class="col-4 col-form-label" for="contactObligatoire">Contact obligatoire
 							<br /><small>1 Mail ou 1 téléphone minimum dans la zone "Contact"</small>
 						</label>
 						<div class="col-8">
@@ -138,7 +138,7 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
-						<label class="col-4 col-form-label" for="TourismeAdapte">Tourisme Adapté ?
+						<label class="col-4 col-form-label" for="TourismeAdapte">Tourisme Adapté
 							<br /><small>Champs principaux de "Prestations > Accueil des personnes en situation de handicap > Tourisme adapté"</small>
 						</label>
 						<div class="col-8">
@@ -147,7 +147,7 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
-						<label class="col-4 col-form-label" for="clientele">Types de clientèle ?
+						<label class="col-4 col-form-label" for="clientele">Types de clientèle
 							<br /><small>Ajout des champs Types de clientèles (Offres adaptées à des clientèles spécifiques + Clientèle pratiquant une activité spécifique)</small>
 						</label>
 						<div class="col-8">
@@ -156,7 +156,7 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
-						<label class="col-4 col-form-label" for="generique">Evenements génériques & championnats ?
+						<label class="col-4 col-form-label" for="generique">Evenements génériques & championnats
 							<br /><small>Journées du patrimoine...</small>
 						</label>
 						<div class="col-8">
@@ -165,7 +165,17 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
-						<label class="col-4 col-form-label" for="mm">Multimédias ?
+						<label class="col-4 col-form-label" for="reservation">Réservation
+							<br /><small></small>
+						</label>
+						<div class="col-8">
+							<input type="checkbox" id="reservation" name="reservation" value="1" />
+						</div>
+					</div>
+
+
+					<div class="form-group row">
+						<label class="col-4 col-form-label" for="mm">Multimédias
 							<br /><small>Permettre l'ajout de multimédias (PDF seulement)</small>
 						</label>
 						<div class="col-8">
@@ -174,7 +184,7 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
-						<label class="col-4 col-form-label" for="copyright">Copyright obligatoire ?
+						<label class="col-4 col-form-label" for="copyright">Copyright obligatoire
 							<br /><small>Si une illustration est ajoutée elle doit avoir un copyright renseigné</small>
 						</label>
 						<div class="col-8">

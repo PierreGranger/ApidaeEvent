@@ -231,7 +231,7 @@ function valideChamp(champ)
 		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
 		if ( ! re.test(val) ) return false ;
 	}
-	else if ( type == 205 ) // Site web
+	else if ( type == 205 || champ.hasClass('url') ) // Site web
 	{
 		var re = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/ ;
 		if ( ! re.test(val) ) return false ;
@@ -486,3 +486,29 @@ jQuery(document).on('change','fieldset.illustrations input[type="file"]',functio
 }) ;
 
 jQuery(document).on('change','input[name*="copyright"]',checkIllustrations) ;
+
+
+
+
+
+
+
+
+
+
+function faker() {
+	var cd = new Date() ;
+	var td = cd.getDate()+'/'+(cd.getMonth()+1)+' - '+cd.getHours()+':'+cd.getMinutes() ;
+	jQuery('input[name="nom"]').val('Test '+td) ;
+	jQuery('input[type="tel"]').val('01 23 45 67 89') ;
+	jQuery('select[name="portee"]').val('2354') ;
+	jQuery('select[name="commune"]').val('1408|03510|Molinet|03173') ;
+	jQuery("form.form select.chosen").trigger("chosen:updated");
+
+	var d5 = new Date(new Date().getTime()+(5*24*60*60*1000));
+	var d = d5.toISOString().match('([0-9]{4}-[0-9]{2}-[0-9]{2})');
+	jQuery('input[name="date[0][debut]"').val(d[0]) ;
+	jQuery('input[name="date[0][fin]"').val(d[0]) ;
+
+	jQuery('textarea[name="descriptifCourt"]').val(td) ;
+}
