@@ -5,6 +5,10 @@
 	if ( ! isset($_POST['commune']) ) return ;
 	
 	$verbose = true ;
+	$debug = $configApidaeEvent['debug'] ;
+
+	if ( $debug )
+		$timer = new \PierreGranger\ApidaeTimer() ;
 
 	$commune = explode('|',$_POST['commune']) ;
 
@@ -31,9 +35,9 @@
 	 * $nosave définit s'il faut envoyer en enregistrement sur Apidae ou non.
 	 * Il n'a pas d'impact sur l'envoi des mails
 	 */
-	$nosave = isset($_POST['nosave']) && $configApidaeEvent['debug'] ;
+	$nosave = isset($_POST['nosave']) && $debug ;
 
-	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $configApidaeEvent['debug'] )
+	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $debug )
 	{
 		$fields = array( 'secret' => $configApidaeEvent['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
 		$ch = curl_init();
@@ -61,21 +65,20 @@
 
 	if ( $configApidaeEvent['projet_ecriture_multimembre'] === true )
 	{
+		if ( $debug ) $timer->start('territoires.inc.php') ;
 		require_once(realpath(dirname(__FILE__)).'/territoires.inc.php') ;
+		if ( $debug ) $timer->end('territoires.inc.php') ;
 		/**
 		 * On commence par récupérer la liste des membres abonnés au projet d'écriture et qui ont les droits sur la commune concernée.
 		*/
 
 		$ApidaeEvent->debug($commune,'$commune') ;
 
+		if ( $debug ) $timer->start('getMembres') ;
 		$membresCommune = $ApidaeMembres->getMembres(
-			Array(
-					'communeCode'=>$commune[3], // communeCode = code INSEE
-					//"idProjet" => $configApidaeEvent['projet_ecriture_projetId']
-			)
-			//Array("COMMUNES")
+			['communeCode'=>$commune[3]], // communeCode = code INSEE
 		) ;
-		// Au 19/02/2021
+		if ( $debug ) $timer->start('getMembres') ;
 
 		$ApidaeEvent->debug($membresCommune,'$membresCommune') ;
 
@@ -93,6 +96,7 @@
 			/* Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste. */
 			foreach ( $configApidaeEvent['membres'] as $m )
 			{
+				if ( $debug ) $timer->start('membres : '.$m['id_membre']) ;
 				/**
 				 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
 				 * */
@@ -143,6 +147,7 @@
 						break ;
 					}
 				}
+				if ( $debug ) $timer->end('membres : '.$m['id_membre']) ;
 			}
 		}
 	}
@@ -616,6 +621,7 @@
 	if ( isset($root['illustrations']) && sizeof($root['illustrations']) > 0 ) $fieldlist[] = 'illustrations' ;
 	if ( isset($root['multimedias']) && sizeof($root['multimedias']) > 0 ) $fieldlist[] = 'multimedias' ;
 	
+	if ( $debug ) $timer->start('enregistrement') ;
 	if ( sizeof($ko) == 0 && ! $nosave )
 	{
 		$enregistrer = Array(
@@ -638,6 +644,7 @@
 		$ApidaeEvent->debug($ApidaeEvent->last_id,'last_id') ;
 		if ( $ApidaeEvent->last_id == "" ) $ko[] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
 	}
+	if ( $debug ) $timer->stop('enregistrement') ;
 	
 	$ApidaeEvent->debug($ko,'$ko') ;
 
@@ -695,14 +702,18 @@
 
 		try {
 
-			if ( $configApidaeEvent['debug'] )
+			if ( $debug )
 				$ApidaeMembres = new \PierreGranger\ApidaeMembres(array_merge(
 					$configApidaeMembres,
-					array('debug'=>true)
+					['debug'=>true]
 				)) ;
 			else
 				$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
+			
+			if ( $debug ) $timer->start('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
 			$membre = $ApidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
+			if ( $debug ) $timer->end('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
+			
 			if ( $membre )
 			{
 
@@ -727,13 +738,13 @@
 					dataLayer.push(<?php echo json_encode($enr_dataLayer) ; ?>) ;
 				</script><?php
 			}
-			elseif ( $configApidaeEvent['debug'] )
+			elseif ( $debug )
 			{
 				echo '<pre>'.print_r($membre,true).'</pre>' ;
 			}
 
 		} catch ( Exception $e ) {
-			if ( $configApidaeEvent['debug'] )
+			if ( $debug )
 			{
 				echo '<pre>'.print_r($e,true).'</pre>' ;
 			}
@@ -744,9 +755,14 @@
 
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
-			$objet = ( $configApidaeEvent['debug'] ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
-			$to = $configApidaeEvent['debug'] ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
-			$ApidaeEvent->alerte($objet,$post_mail,$to) ;
+			$objet = ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
+			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
+			if ( ! isset($_POST['nomail']) )
+			{
+				if ( $debug ) $timer->start('mail_membre') ;
+				$ApidaeEvent->alerte($objet,$post_mail,$to) ;
+				if ( $debug ) $timer->stop('mail_membre') ;
+			}
 			unset($to) ;
 			unset($objet) ;
 		}
@@ -772,6 +788,7 @@
 			<?php $alert = addslashes(strip_tags($texte_offre_enregistree)) ; ?>
 			<div class="alert alert-success" role="alert">
 				<div id="texte_offre_enregistree"><?php echo $texte_offre_enregistree ; ?></div>
+				<a href="#" onclick="window.location.replace('window.location.href')">Suggérer une autre manifestation</a>
 				<p>Plus d'informations ici : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
 				<script>
 					alert(jQuery('div#texte_offre_enregistree').text()) ;
@@ -783,7 +800,7 @@
 		<?php
 
 
-		if ( $configApidaeEvent['debug'] )
+		if ( $debug )
 		{
 			if ( isset($_POST['nosave']) ) {
 			?>
@@ -809,9 +826,14 @@
 		{
 			$objet = 'Votre suggestion de manifestation' ;
 			$message = $texte_offre_enregistree ;
-			$to = $configApidaeEvent['debug'] ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
-			$ApidaeEvent->alerte($objet,$message,$to) ;
-			if ( $configApidaeEvent['debug'] )
+			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
+			if ( ! isset($_POST['nomail']) )
+			{
+				if ( $debug ) $timer->start('mail_suggestion') ;
+				$ApidaeEvent->alerte($objet,$message,$to) ;
+				if ( $debug ) $timer->stop('mail_suggestion') ;
+			}
+			if ( $debug )
 			{
 				?>
 				<div class="alert alert-success" role="alert">
@@ -843,8 +865,13 @@
 				  	}
 			  	echo '</ul>' ;
 		  	}
-		  	$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$ko) ;
-		  	$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$_POST) ;
+			if ( ! isset($_POST['nomail']) )
+			{
+				if ( $debug ) $timer->start('mails_erreur') ;
+				$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$ko) ;
+				$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$_POST) ;
+				if ( $debug ) $timer->stop('mails_erreur') ;
+			}
 		  ?>
 		  <?php if ( $alerte === true ) { ?><br />L'erreur a été envoyée à un administrateur.<?php } ?>
 		  <br />Veuillez nous excuser pour la gène occasionnée.
@@ -859,3 +886,5 @@
 		$ApidaeEvent->debug($ko,'$ko:'.__LINE__) ;
 	}
 	
+	if ( $debug )
+		$timer->display() ;
