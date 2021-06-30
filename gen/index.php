@@ -156,6 +156,15 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
+						<label class="col-4 col-form-label" for="copyright">Copyright obligatoire ?
+							<br /><small>Si une illustration est ajoutée elle doit avoir un copyright renseigné</small>
+						</label>
+						<div class="col-8">
+							<input type="checkbox" id="copyright" name="copyright" value="1" />
+						</div>
+					</div>
+
+					<div class="form-group row">
 						<label class="col-4 col-form-label" for="illustrationMini">Taille mini illustration
 							<br /><small>Si une illustration est ajoutée, elle doit obligatoirement faire + de X pixels (ex: 1200)</small>
 							<br /><small>Laisser à 0 pour ne pas demander de taille minimale</small>

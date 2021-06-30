@@ -771,7 +771,12 @@
 
 				</fieldset>
 
-				<fieldset class="form-group illustrations <?php if ( isset($_GET['illustrationObligatoire']) && $_GET['illustrationObligatoire'] ) echo ' required' ; ?>">
+				<?php
+					$classes = ['form-group','illustrations'] ;
+					if ( isset($_GET['illustrationObligatoire']) && $_GET['illustrationObligatoire'] ) $classes[] = 'required' ;
+					if ( isset($_GET['copyright']) && $_GET['copyright'] ) $classes[] = 'copyright' ;
+				?>
+				<fieldset class="<?php echo implode(' ',$classes) ; ?>">
 					<legend>Photos</legend>
 					<div class="alert alert-warning" role="alert">
 						Vos photos doivent être libres de droit et de bonne qualité
@@ -808,7 +813,11 @@
 													echo '/>' ;
 											echo '</td>' ;
 											echo '<td><input class="form-control" type="text" name="illustrations['.$i.'][legende]" value="'.htmlspecialchars(@$post['illustrations'][$i]['legende']).'" /></td>' ;
-											echo '<td><input class="form-control" type="text" name="illustrations['.$i.'][copyright]" value="'.htmlspecialchars(@$post['illustrations'][$i]['copyright']).'" /></td>' ;
+											echo '<td>' ;
+												echo '<div class="form-group">' ;
+													echo '<input class="form-control" type="text" name="illustrations['.$i.'][copyright]" value="'.htmlspecialchars(@$post['illustrations'][$i]['copyright']).'" />' ;
+												echo '</div>' ;
+											echo '</td>' ;
 										echo '</tr>' ;
 									}
 								?>

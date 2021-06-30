@@ -408,31 +408,55 @@ function checkIllustrations() {
 	var tfoot = fieldset.find('tfoot tr td') ;
 
 	fieldset.find('tbody tr').removeClass('has-error') ;
+	fieldset.find('tbody tr div.form-group').removeClass('has-error') ; // Retrait des erreurs pour les copyright
 	tfoot.closest('tr').removeClass('has-error') ;
 	tfoot.html('') ;
 
 	var nbfiles = 0 ;
 	inputs.each(function(){
 		nbfiles += jQuery(this).get(0).files.length ;
-		if ( jQuery(this).get(0).files.length == 1 && typeof jQuery(this).attr('minwidth') != 'undefined' )
+		if ( jQuery(this).get(0).files.length == 1 )
 		{
-			var minWidth = parseInt(jQuery(this).attr('minwidth')) ;
-			if ( typeof jQuery(this).data('width') != 'undefined' )
+			/**
+			 * Vérification de la taille des illustrations envoyées
+			 */
+			if ( typeof jQuery(this).attr('minwidth') != 'undefined' )
 			{
-				if ( jQuery(this).data('width') < minWidth )
+				var minWidth = parseInt(jQuery(this).attr('minwidth')) ;
+				if ( typeof jQuery(this).data('width') != 'undefined' )
 				{
-					jQuery(this).closest('tr').addClass('has-error') ;
-					errors.push('Les illustrations doivent faire '+minWidth+'px au minimum') ;
+					if ( jQuery(this).data('width') < minWidth )
+					{
+						jQuery(this).closest('tr').addClass('has-error') ;
+						errors.push('Les illustrations doivent faire '+minWidth+'px au minimum') ;
+					}
+				}
+			}
+
+			/**
+			 * Vérification des copyright obligatoires
+			 */
+			if ( fieldset.hasClass('copyright') )
+			{
+				var input_copyright = jQuery(this).closest('tr').find('input[name*="copyright"]') ;
+				if ( input_copyright.val().trim() == "" )
+				{
+					input_copyright.closest('div.form-group').addClass('has-error') ;
+					errors.push('Copyright obligatoire') ;
 				}
 			}
 		}
 	}) ;
 
+	/**
+	 * Test du paramètre obligatoire (1 illustration mini)
+	 */
 	if ( nbfiles == 0 && fieldset.hasClass('required') )
 	{
 		fieldset.find('tbody tr').first().addClass('has-error') ;
 		errors.push('1 illustration minimum') ;
 	}
+
 
 	if ( errors.length > 0 )
 	{
@@ -460,3 +484,5 @@ jQuery(document).on('change','fieldset.illustrations input[type="file"]',functio
 		img.src = e.target.result ;
 	} ;
 }) ;
+
+jQuery(document).on('change','input[name*="copyright"]',checkIllustrations) ;
