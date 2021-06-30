@@ -156,6 +156,15 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
+						<label class="col-4 col-form-label" for="generique">Evenements génériques & championnats ?
+							<br /><small>Journées du patrimoine...</small>
+						</label>
+						<div class="col-8">
+							<input type="checkbox" id="generique" name="generique" value="1" />
+						</div>
+					</div>
+
+					<div class="form-group row">
 						<label class="col-4 col-form-label" for="mm">Multimédias ?
 							<br /><small>Permettre l'ajout de multimédias (PDF seulement)</small>
 						</label>

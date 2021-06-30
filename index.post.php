@@ -521,6 +521,23 @@
 	}
 
 	/**
+	 * Generique
+	 */
+	if ( isset($_POST['FeteEtManifestationGenerique']) && is_array($_POST['FeteEtManifestationGenerique']) && sizeof($_POST['FeteEtManifestationGenerique']) > 0 )
+	{
+		$fieldlist[] = 'informationsFeteEtManifestation.evenementGenerique' ;
+		$root['informationsFeteEtManifestation']['evenementGenerique'] = Array() ;
+		foreach ( $_POST['FeteEtManifestationGenerique'] as $id )
+		{
+			$root['informationsFeteEtManifestation']['evenementGenerique'][]=Array(
+				'elementReferenceType' => 'FeteEtManifestationGenerique',
+				'id' => $id
+			) ;
+		}
+
+	}
+
+	/**
 	 * Tourisme adapté / Handicap
 	 */
 	if ( isset($_POST['TourismeAdapte']) && is_array($_POST['TourismeAdapte']) && sizeof($_POST['TourismeAdapte']) > 0 )
@@ -768,18 +785,18 @@
 		}
 		$display_form = false ;
 
-		$texte_offre_enregistree = '<p><i class="fas fa-check-circle"></i> <strong>Votre suggestion d\'événement a bien été enregistrée</strong>, nous vous remercions pour votre contribution.</p>
-		<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il a été envoyé en validation, et ne sera visible que 24 à 48h <strong>après sa validation</strong> par votre office de tourisme, sur les différents supports de communication alimentés par Apidae.</p>' ;
+		$texte_offre_enregistree = '<p><i class="fas fa-check-circle"></i> <strong>Votre suggestion d\'événement a bien été enregistrée</strong>, nous vous remercions pour votre contribution.</p>'."\n".
+		'<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il a été envoyé en validation, et ne sera visible qu\'<strong>après sa validation</strong> par votre office de tourisme, sur les différents supports de communication alimentés par Apidae.</p>'."\n" ;
 		
 		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
 		{
 			$texte_offre_enregistree .= '<p>La validation est en cours auprès de : '.$infos_proprietaire['structure_validatrice'] ;
 			$texte_offre_enregistree .= ' (<a href="'.$infos_proprietaire['url_structure_validatrice'].'" target="_blank">'.$infos_proprietaire['url_structure_validatrice'].'</a>)' ;
-			$texte_offre_enregistree .= '</p>' ;
+			$texte_offre_enregistree .= '</p>'."\n" ;
 		}
 
 		if ( isset($_POST['commentaire']) && trim($_POST['commentaire']) != '' )
-			$texte_offre_enregistree .= '<p>Votre commentaire a également été transmis : "<em>'.htmlentities($_POST['commentaire']).'</em>"</p>' ;
+			$texte_offre_enregistree .= '<p>Votre commentaire a également été transmis : "<em>'.htmlentities($_POST['commentaire']).'</em>"</p>'."\n" ;
 
 		$url_consulter = 'https://base.apidae-tourisme.com/consulter/objet-touristique/'.$ApidaeEvent->last_id ;
 		//$texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
@@ -788,7 +805,7 @@
 			<?php $alert = addslashes(strip_tags($texte_offre_enregistree)) ; ?>
 			<div class="alert alert-success" role="alert">
 				<div id="texte_offre_enregistree"><?php echo $texte_offre_enregistree ; ?></div>
-				<a href="#" onclick="window.location.replace('window.location.href')">Suggérer une autre manifestation</a>
+				
 				<p>Plus d'informations ici : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
 				<script>
 					alert(jQuery('div#texte_offre_enregistree').text()) ;

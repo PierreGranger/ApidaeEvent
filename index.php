@@ -427,6 +427,22 @@
 						</div>
 					</div>
 
+					<?php if ( isset($_GET['generique']) ) { ?>
+						<?php
+							// var t = [] ; jQuery('tr.selected').find('span.label').each(function(){t.push(jQuery(this).text())}) ; t.join(',') ;
+							$params_generique = [
+								'presentation'=>'select',
+								'include'=>[5948,2392,5134,6501,3726,2396,2412,4963,4967,4964,4965,4966,4565,2421,6329,3911,2384,3721,2386,5627,2399,4145,2397,6497,2429,2383,4655,3756,5490,5885,4052,2385,2405,2395,6500,2428,2425,4997,4856,2427,4998,5046,2406,2387,2422,5945,2403,2388,4047,2423,4051,4913,4146,4525,5860,6457,2414,2398,5321,6280,5380,2401,2402,4070,4574,2408,5745,2503,4636,4656,2426,2404,2424,2411,2415,2400,4572,2394,2391,2389,2390,4654,2407]
+							] ;
+						?>
+						<div class="form-group row">
+							<label class="<?php echo $class_label ; ?> col-form-label">Evénements génériques et championnats</label>
+							<div class="<?php echo $class_champ ; ?>">
+								<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationGenerique',$params_generique,@$post['FeteEtManifestationGenerique']) ; ?>
+							</div>
+						</div>
+					<?php } ?>
+
 					<div class="form-group row required">
 						<label class="<?php echo $class_label ; ?> col-form-label" for="descriptifCourt">Descriptif court
 							<i class="fas fa-info-circle" title="Texte d'accroche permettant de comprendre la nature de votre prestation. Ne doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, de lieu... puisque ces informations existent par ailleurs, ce qui constitue une double saisie."></i>
