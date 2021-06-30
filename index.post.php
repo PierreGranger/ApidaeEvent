@@ -699,6 +699,8 @@
 
 		$post_mail['message'] = $msg ;
 
+		if ( sizeof($medias) > 0 )
+			$post_mail['fichiers'] = $medias ;
 
 		/**
 		 * Maj DU 15/02/2021
@@ -779,6 +781,15 @@
 				if ( $debug ) $timer->start('mail_membre') ;
 				$ApidaeEvent->alerte($objet,$post_mail,$to) ;
 				if ( $debug ) $timer->stop('mail_membre') ;
+			}
+			else
+			{
+				echo '<div class="alert alert-info">' ;
+					echo '<h2>Objet</h2>' . $objet ;
+					echo '<h2>To</h2>' . $to ;
+					echo '<h2>Message</h2>' ;
+						echo '<pre>'.print_r($post_mail,true).'</pre>' ;
+				echo '</div>' ;
 			}
 			unset($to) ;
 			unset($objet) ;
