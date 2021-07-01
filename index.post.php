@@ -82,7 +82,7 @@
 		if ( $debug ) $timer->start('getMembres') ;
 		try {
 			$membresCommune = $ApidaeMembres->getMembres(
-				['communeCode'=>$commune[3]], // communeCode = code INSEE
+				['communeCode'=>$commune[3]] // communeCode = code INSEE
 			) ;
 		} catch ( Exception $e ) {
 			if ( $debug )
@@ -108,7 +108,7 @@
 				
 		if ( isset($configApidaeEvent['membres']) )
 		{
-			$timer->start('loop_membres') ;
+			if ( $debug ) $timer->start('loop_membres') ;
 			/* Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste. */
 			foreach ( $configApidaeEvent['membres'] as $m )
 			{
@@ -165,7 +165,7 @@
 				}
 				if ( $debug ) $timer->stop('membres : '.$m['id_membre']) ;
 			}
-			$timer->stop('loop_membres') ;
+			if ( $debug ) $timer->stop('loop_membres') ;
 		}
 	}
 
