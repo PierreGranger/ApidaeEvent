@@ -319,8 +319,18 @@ if (!$ApidaeSso->connected()) {
 			var url = jQuery('div#url').data('base') + '?' + params;
 			jQuery('div#url').html('<a href="' + url + '" target="_blank">' + url + '</a>');
 
+			var p = document.createElement("p");
+
 			var iframe = '<iframe src="' + url + '" frameborder="0" style="width:100%;height:3300px;"></iframe>';
-			jQuery('#html').html(iframe);
+			var iframe_converted = '<iframe src="' + url + '" frameborder="0" style="width:100%;height:3300px;"></iframe>';
+
+			p.textContent = iframe;
+			var iframe_converted = p.innerHTML;
+
+			console.log('iframe',iframe) ;
+			console.log('iframe_converted',iframe_converted) ;
+
+			jQuery('#html').html(iframe_converted);
 			jQuery('#iframe').html(iframe);
 
 			jQuery('#cfg .territoire strong').html(form.find('select#territoire').val());
