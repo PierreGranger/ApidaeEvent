@@ -12,7 +12,7 @@
     "bootstrap-chosen": "^1.4.2",
     "jquery": "^3.6.0",
     "jquery-datepicker": "^1.12.3",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.0",
     "popper": "^1.0.1",
     "timepicker": "^1.13.18"
   },
