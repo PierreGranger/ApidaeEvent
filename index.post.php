@@ -97,9 +97,9 @@
 
 		$ApidaeEvent->debug($membresCommune,'$membresCommune') ;
 
-		$membresConcernes = Array() ;
+		$membresConcernes = [] ;
 		foreach ( $membresCommune as $mb )
-			$membresConcernes[$mb['id']] = $mb ;
+			$membresConcernes[$mb->id] = $mb ;
 		
 		$ApidaeEvent->debug($membresConcernes,'$membresConcernes') ;
 
@@ -170,6 +170,15 @@
 	}
 
 	$ApidaeEvent->debug($infos_proprietaire,'$infos_proprietaire') ;
+	
+	if ( $debug && $commune[3] == 37278 )
+	{
+		$infos_proprietaire['proprietaireId'] = $configApidaeEvent['membre'] ;
+		$infos_proprietaire['mail_membre'] = @$configApidaeEvent['mail_admin'] ;
+		$infos_proprietaire['structure_validatrice'] = $configApidaeEvent['nom_membre'] ;
+		$infos_proprietaire['url_structure_validatrice'] = $configApidaeEvent['url_membre'] ;
+		$ApidaeEvent->debug($infos_proprietaire,'$infos_proprietaire (force Apidae / debug)') ;
+	}
 
 	$root = Array() ;
 	$fieldlist = Array() ;
@@ -637,7 +646,7 @@
 					}
 					else
 					{
-						$ko[$kf.' '.($i+1)] = 'Type de fichier interdit pour le fichier '.$kf.' '.($i+1).' : '.$ext ;
+						$ko[$kf.' '.($i+1)] = 'Type de fichier '.$finfo->file($media['tmp_name']).' interdit pour "'.$_FILES[$kf]['name'][$i]."\n".'<br />Formats acceptés : '.implode(',',$configApidaeEvent['mimes_'.$kf]) ;
 					}
 				}
 				else
@@ -711,22 +720,48 @@
 			$ret_enr = $ApidaeEvent->ajouter($enregistrer) ;
 			if ( ! $ret_enr ) $ko[] = $ret_enr ;
 		} catch ( ApidaeException $e ) {
+			$details = $e->getDetails() ;
 			if ( $debug )
 			{
 				echo '<pre>' ;
-					echo json_encode($e->getDetails(),JSON_PRETTY_PRINT) ;
+					print_r($e->getMessage()) ;
+					print_r($details) ;
 				echo '</pre>' ;
 			}
-			$ko[] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
-			$ko[] = $e->getMessage() ;
-			$erreurs_debug[] = $e->getDetails() ;
+
+			$ko['erreur'] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
+			$erreurs_debug[] = $details ;
+
+			// Exemple : ECRITURE_INVALID_OBJET_TOURISTIQUE_DATA
+
+			/**
+			 * Exemple : El\u00e9ment de r\u00e9f\u00e9rence '0' non trouv\u00e9 pour le champ 'descriptionTarif.periodes[].tarifs[].type'
+			 * El\u00e9ment r\u00e9f\u00e9rence '4101 - Forfait \/ engagement' interdit pour le champ obligatoire 'descriptionTarif.periodes[].tarifs[].type'
+			 */
+			if ( isset($details['message']) )
+			{
+				if ( preg_match('#descriptionTarif\.periodes\[\]\.tarifs\[\]\.type#',$details['message']) )
+				{
+					if ( preg_match('#\'0\' non trouv#',$details['message']) )
+						$ko['details'] = 'Vous devez spécifier un type de tarif' ;
+					else
+						$ko['details'] = $details['message'] ;
+				}
+				else
+				{
+					if ( isset($details['errorType']) ) $ko['errorType'] = $details['errorType'] ;
+					$ko['details'] = $details['message'] ;
+				}
+			}
+			else
+				$ko['details'] = $e->getMessage() ;
 		} catch ( Exception $e ) {
-			$ko[] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
-			$ko[] = $e->getMessage() ;
+			$ko['erreur'] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
+			$ko['details'] = $e->getMessage() ;
 		}
 
 		$ApidaeEvent->debug($ApidaeEvent->last_id,'last_id') ;
-		if ( $ApidaeEvent->last_id == "" ) $ko[] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
+		if ( $ApidaeEvent->last_id == "" && ! isset($ko['erreur']) ) $ko['erreur'] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
 	}
 	if ( $debug ) $timer->stop('enregistrement') ;
 	

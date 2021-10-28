@@ -171,6 +171,19 @@
 					</div>
 					<?php
 				}
+				
+				if ( date('Y-m-d') == '2021-11-08' )
+				{
+					$display_form = false ;
+					?>
+					<div class="alert alert-danger" role="alert">
+					<i class="fas fa-exclamation"></i>
+					  <span class="sr-only">Formulaire indisponible :</span><br />
+					  <strong>Une migration de la plateforme est en cours : le formulaire sera de nouveau disponible dès demain.</strong>
+					  <br />Veuillez nous excuser pour la gène occasionnée.
+					</div>
+					<?php
+				}
 
 			?>
 
@@ -268,6 +281,10 @@
 						if ( isset($_GET['communes']) )
 						{
 							$communes = $ApidaeEvent->getCommunesByInsee(explode(',',$_GET['communes'])) ;
+						}
+						elseif ( isset($configApidaeEvent['communes_insee']) )
+						{
+							$communes = $ApidaeEvent->getCommunesByInsee(explode(',',$configApidaeEvent['communes_insee'])) ;
 						}
 						elseif ( isset($configApidaeEvent['territoire']) )
 						{
@@ -432,6 +449,7 @@
 							// var t = [] ; jQuery('tr.selected').find('span.label').each(function(){t.push(jQuery(this).text())}) ; t.join(',') ;
 							$params_generique = [
 								'presentation'=>'select',
+								'type'=>'unique',
 								'include'=>[5948,2392,5134,6501,3726,2396,2412,4963,4967,4964,4965,4966,4565,2421,6329,3911,2384,3721,2386,5627,2399,4145,2397,6497,2429,2383,4655,3756,5490,5885,4052,2385,2405,2395,6500,2428,2425,4997,4856,2427,4998,5046,2406,2387,2422,5945,2403,2388,4047,2423,4051,4913,4146,4525,5860,6457,2414,2398,5321,6280,5380,2401,2402,4070,4574,2408,5745,2503,4636,4656,2426,2404,2424,2411,2415,2400,4572,2394,2391,2389,2390,4654,2407]
 							] ;
 						?>
@@ -752,6 +770,7 @@
 											<th>Précisions tarifs</th>
 										</tr>
 									</thead>
+									<tfoot><tr><td colspan="5"></td></tr></tfoot>
 									<tbody>
 										<?php
 											$types = $ApidaeEvent->getElementsReferenceByType('TarifType',Array('include'=>$configApidaeEvent['types_tarifs'])) ;

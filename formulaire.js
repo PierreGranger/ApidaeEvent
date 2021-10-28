@@ -70,7 +70,7 @@ jQuery(document).on('submit','form.form',function(e){
 	var erreurTarif = checkTypeTarifs() ;
 	if ( erreurTarif !== true )
 	{
-		//alert(erreurTarif) ;
+		ok = false ;
 	}
 
 	var erreurContacts = checkContacts() ;
@@ -267,6 +267,11 @@ function selectChange(select,init)
 
 function checkTypeTarifs() {
 	var trs = jQuery('form.form div.tarifs table tbody tr') ;
+	
+	var tfoot = trs.closest('table').find('tfoot tr td') ;
+	tfoot.closest('tr').removeClass('has-error') ;
+	tfoot.html('') ;
+
 	var erreurs = [] ;
 	trs.each(function(){
 		var inputs = jQuery(this).find('input') ;
@@ -283,6 +288,10 @@ function checkTypeTarifs() {
 		}
 	}) ;
 	if ( erreurs.length == 0 ) return true ;
+
+	tfoot.closest('tr').addClass('has-error') ;
+	tfoot.html(erreurs.join("<br />")) ;
+
 	return erreurs ;
 }
 jQuery(document).on('change','form.form div.tarifs table tbody tr',checkTypeTarifs) ;
@@ -443,6 +452,19 @@ function checkIllustrations() {
 				{
 					input_copyright.closest('div.form-group').addClass('has-error') ;
 					errors.push('Copyright obligatoire') ;
+				}
+			}
+
+			/**
+			 * Vérification de la taille du fichier (10 Mo max acceptés par les API)
+			 */
+			if ( window.FileReader )
+			{
+				let file = jQuery(this).get(0).files[0] ;
+				if ( file.size > 10000000 )
+				{
+					jQuery(this).closest('tr').addClass('has-error') ;
+					errors.push('Les illustrations doivent faire moins de 10 Mo') ;
 				}
 			}
 		}
