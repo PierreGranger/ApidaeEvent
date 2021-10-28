@@ -549,18 +549,13 @@
 	/**
 	 * Generique
 	 */
-	if ( isset($_POST['FeteEtManifestationGenerique']) && is_array($_POST['FeteEtManifestationGenerique']) && sizeof($_POST['FeteEtManifestationGenerique']) > 0 )
+	if ( isset($_POST['FeteEtManifestationGenerique']) && $_POST['FeteEtManifestationGenerique'] != '' )
 	{
 		$fieldlist[] = 'informationsFeteEtManifestation.evenementGenerique' ;
-		$root['informationsFeteEtManifestation']['evenementGenerique'] = Array() ;
-		foreach ( $_POST['FeteEtManifestationGenerique'] as $id )
-		{
-			$root['informationsFeteEtManifestation']['evenementGenerique'][]=Array(
+		$root['informationsFeteEtManifestation']['evenementGenerique'] = [
 				'elementReferenceType' => 'FeteEtManifestationGenerique',
-				'id' => $id
-			) ;
-		}
-
+				'id' => $_POST['FeteEtManifestationGenerique']
+		] ;
 	}
 
 	/**

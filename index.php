@@ -903,7 +903,7 @@
 										echo "\n\t\t\t\t\t\t".'<tr>' ;
 											echo '<td></td>' ;
 											echo '<td>' ;
-													echo '<input class="form-control" type="file" name="illustrations['.$i.']" value="'.htmlspecialchars(@$post['illustrations'][$i]).'" accept="image/*" ' ;
+													echo '<input class="form-control" type="file" name="illustrations['.$i.']" accept="image/*" ' ;
 														if ( isset($_GET['illustrationMini']) && (int)$_GET['illustrationMini'] > 0 && (int)$_GET['illustrationMini'] <= 2000 )
 															echo 'minwidth="'.(int)$_GET['illustrationMini'].'" ' ;
 													echo '/>' ;
