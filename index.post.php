@@ -99,7 +99,7 @@
 
 		$membresConcernes = [] ;
 		foreach ( $membresCommune as $mb )
-			$membresConcernes[$mb->id] = $mb ;
+			$membresConcernes[$mb['id']] = $mb ;
 		
 		$ApidaeEvent->debug($membresConcernes,'$membresConcernes') ;
 
