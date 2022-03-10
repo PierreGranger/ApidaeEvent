@@ -91,8 +91,8 @@
                                 if ( $fails < 5 )
                                 {
                                     try {
-                                        $ApidaeMembres->start('getMembreById('.$m['id_membre'].')') ;
-                                        $membre = $ApidaeMembres->getMembreById(
+                                        $apidaeMembres->start('getMembreById('.$m['id_membre'].')') ;
+                                        $membre = $apidaeMembres->getMembreById(
                                             $m['id_membre'],
                                             Array('PROJETS')
                                         ) ;
@@ -113,7 +113,7 @@
                                     } catch ( Exception $e ) {
                                         $fails++ ;
                                     } finally {
-                                        $ApidaeMembres->stop('getMembreById('.$m['id_membre'].')') ;
+                                        $apidaeMembres->stop('getMembreById('.$m['id_membre'].')') ;
                                     }
                                 }
                                 if ( in_array($m['id_membre'],$already) )
@@ -127,7 +127,7 @@
             </tbody>
         </table>
 
-        <?php ini_set('display_errors',0) ; $ApidaeMembres->timer() ; ?>
+        <?php ini_set('display_errors',0) ; $apidaeMembres->timer() ; ?>
 
     </body>
 </html>

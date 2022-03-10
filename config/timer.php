@@ -28,9 +28,9 @@
 <?php
     try {
 
-        $ApidaeMembres->start('getMembreById()') ;
+        $apidaeMembres->start('getMembreById()') ;
 
-        $membre = $ApidaeMembres->getMembreById(
+        $membre = $apidaeMembres->getMembreById(
             1157,
             Array('PROJETS')
         ) ;
@@ -38,10 +38,10 @@
     } catch ( Exception $e ) {
         $fails++ ;
     } finally {
-        $ApidaeMembres->strpos('getMembreById()') ;
+        $apidaeMembres->strpos('getMembreById()') ;
     }
 
-    $ApidaeMembres->timer() ;
+    $apidaeMembres->timer() ;
 
 ?>
 

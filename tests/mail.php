@@ -50,9 +50,9 @@
     }
 */
     echo 'test alerte'."\n" ;
-    echo '$ApidaeEvent->alerte($subject,$message,$to)=' ;
+    echo '$apidaeEvent->alerte($subject,$message,$to)=' ;
     try {
-        var_dump($ApidaeEvent->alerte($subject,$message,$to)) ;
+        var_dump($apidaeEvent->alerte($subject,$message,$to)) ;
     } catch (Exception $e) {
         var_dump($e) ;
     }

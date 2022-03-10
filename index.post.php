@@ -17,24 +17,11 @@
 
 	$commune = explode('|',$_POST['commune']) ;
 
-	/**
-	 * Fail over : si on a trouvé aucun propriétaire dans la liste 
-	 */
-
-	$infos_proprietaire = Array(
-		'mail_membre' => $configApidaeEvent['mail_admin'],
-		'structure_validatrice' => $configApidaeEvent['nom_membre'],
-		'url_structure_validatrice' => $configApidaeEvent['url_membre'],
-		'proprietaireId' => $configApidaeEvent['membre']
-	) ;
-	$ApidaeEvent->debug($infos_proprietaire,'$infos_proprietaire '.__LINE__) ;
-
-		
 	$infos_orga = Array() ;
 
 	if ( ! isset($ko) ) $ko = Array() ;
 
-	$ApidaeEvent->debug($_POST,'$_POST') ;
+	$apidaeEvent->debug($_POST,'$_POST') ;
 
 	/**
 	 * $nosave définit s'il faut envoyer en enregistrement sur Apidae ou non.
@@ -64,121 +51,7 @@
 		}
 	}
 
-	/**
-	*	Si on souhaite pouvoir écrire sur un membre différent en fonction de la commune saisie, alors dans la config on a renseigné $configApidaeEvent['membres'].
-	*/
-
-	if ( $configApidaeEvent['projet_ecriture_multimembre'] === true )
-	{
-		if ( $debug ) $timer->start('territoires.inc.php') ;
-		require_once(realpath(dirname(__FILE__)).'/territoires.inc.php') ;
-		if ( $debug ) $timer->stop('territoires.inc.php') ;
-		/**
-		 * On commence par récupérer la liste des membres abonnés au projet d'écriture et qui ont les droits sur la commune concernée.
-		*/
-
-		$ApidaeEvent->debug($commune,'$commune') ;
-
-		if ( $debug ) $timer->start('getMembres') ;
-		try {
-			$membresCommune = $ApidaeMembres->getMembres(
-				['communeCode'=>$commune[3]] // communeCode = code INSEE
-			) ;
-		} catch ( Exception $e ) {
-			if ( $debug )
-			{
-				echo '<pre>' ;
-					echo json_encode($e,JSON_PRETTY_PRINT) ;
-				echo '</pre>' ;
-			}
-			$ko[] = 'Une erreur est survenue, merci de réessayer ultérieurement... ['.__LINE__.']' ;
-		}
-		if ( $debug ) $timer->stop('getMembres') ;
-
-		$ApidaeEvent->debug($membresCommune,'$membresCommune') ;
-
-		$membresConcernes = [] ;
-		foreach ( $membresCommune as $mb )
-			$membresConcernes[$mb['id']] = $mb ;
-		
-		$ApidaeEvent->debug($membresConcernes,'$membresConcernes') ;
-
-		$doubleCheck = true ;
-		if ( ! isset($territoires) || ! is_array($territoires) ) $doubleCheck = false ;
-				
-		if ( isset($configApidaeEvent['membres']) )
-		{
-			if ( $debug ) $timer->start('loop_membres') ;
-			/* Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste. */
-			foreach ( $configApidaeEvent['membres'] as $m )
-			{
-				if ( $debug ) $timer->start('membres : '.$m['id_membre']) ;
-				/**
-				 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
-				 * */
-				//$ApidaeEvent->debug(isset($membresConcernes[$m['id_membre']]),'isset($membresConcernes['.$m['id_membre'].']) ? '.$m['nom']) ;
-				if ( isset($membresConcernes[$m['id_membre']]) )
-				{
-					$ApidaeEvent->debug($m['id_membre'],'membre '.$m['nom'].' concerné (boucle)') ;
-					$trouve = true ;
-					/**
-					 * Ce n'est pas suffisant : il faut aussi s'assurer que dans la config c'était bien le territoire choisi
-					 */
-					if ( $doubleCheck )
-					{
-						$ApidaeEvent->debug('Double check... $commune[3] = '.$commune[3]) ;
-						$ApidaeEvent->debug(@$m['insee_communes'],'insee_communes') ;
-						$trouve = false ;
-						if ( 
-							isset($m['insee_communes']) 
-							&& is_array($m['insee_communes']) 
-							&& in_array($commune[3],$m['insee_communes'])
-						)
-						{
-							// Trouvé dans la liste des communes spécifiée en config !
-							$ApidaeEvent->debug('trouvé dans les insee_communes !') ;
-							$trouve = true ;
-						}
-
-						$ApidaeEvent->debug(@array_keys(@$territoires[$m['id_territoire']]->perimetre),'Recherche de '.$commune[3].' dans le territoire '.$m['id_territoire'].' du membre...') ;
-						if (
-							isset($m['id_territoire']) && isset($territoires) && is_array($territoires)
-							&& isset($territoires[$m['id_territoire']])
-							&& isset($territoires[$m['id_territoire']]->perimetre[$commune[3]])
-						)
-						{
-							// Trouvé dans le territoire de la config !
-							$ApidaeEvent->debug('trouvé dans le territoire !') ;
-							$trouve = true ;
-						}
-					}
-
-					if ( $trouve )
-					{
-						$ApidaeEvent->debug($m,'membre trouvé...') ;
-						$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
-						$infos_proprietaire['mail_membre'] = @$m['mail'] ;
-						$infos_proprietaire['structure_validatrice'] = $m['nom'] ;
-						$infos_proprietaire['url_structure_validatrice'] = $m['site'] ;
-						break ;
-					}
-				}
-				if ( $debug ) $timer->stop('membres : '.$m['id_membre']) ;
-			}
-			if ( $debug ) $timer->stop('loop_membres') ;
-		}
-	}
-
-	$ApidaeEvent->debug($infos_proprietaire,'$infos_proprietaire') ;
-	
-	if ( $debug && $commune[3] == 37278 )
-	{
-		$infos_proprietaire['proprietaireId'] = $configApidaeEvent['membre'] ;
-		$infos_proprietaire['mail_membre'] = @$configApidaeEvent['mail_admin'] ;
-		$infos_proprietaire['structure_validatrice'] = $configApidaeEvent['nom_membre'] ;
-		$infos_proprietaire['url_structure_validatrice'] = $configApidaeEvent['url_membre'] ;
-		$ApidaeEvent->debug($infos_proprietaire,'$infos_proprietaire (force Apidae / debug)') ;
-	}
+	include(realpath(dirname(__FILE__)).'/post.infos_proprietaire.inc.php') ;
 
 	$root = Array() ;
 	$fieldlist = Array() ;
@@ -226,19 +99,19 @@
 	foreach ( $_POST['date'] as $i => $date )
 	{
 		if ( sizeof($date) <= 4 ) continue ;
-		if ( ! $ApidaeEvent->verifDate($date['debut']) ) continue ;
+		if ( ! $apidaeEvent->verifDate($date['debut']) ) continue ;
 
-		$date['debut'] = $ApidaeEvent->dateUs($date['debut']) ;
-		$date['fin'] = $ApidaeEvent->dateUs($date['fin']) ;
+		$date['debut'] = $apidaeEvent->dateUs($date['debut']) ;
+		$date['fin'] = $apidaeEvent->dateUs($date['fin']) ;
 
 		$db = new DateTime($date['debut']) ;
 		
 		$periode = Array() ;
 		$periode['identifiantTemporaire'] = ( $i + 1 ) ;
 		$periode['dateDebut'] = $date['debut'] ;
-		$periode['dateFin'] = $ApidaeEvent->verifDate($date['fin']) ? $date['fin'] : $date['debut'] ;
-		if ( $ApidaeEvent->verifTime($date['hdebut']) ) $periode['horaireOuverture'] = $date['hdebut'].":00" ;
-		if ( $ApidaeEvent->verifTime($date['hfin']) ) $periode['horaireFermeture'] = $date['hfin'].":00" ;
+		$periode['dateFin'] = $apidaeEvent->verifDate($date['fin']) ? $date['fin'] : $date['debut'] ;
+		if ( $apidaeEvent->verifTime($date['hdebut']) ) $periode['horaireOuverture'] = $date['hdebut'].":00" ;
+		if ( $apidaeEvent->verifTime($date['hfin']) ) $periode['horaireFermeture'] = $date['hfin'].":00" ;
 		$periode['tousLesAns'] = false ;
 		$periode['type'] = 'OUVERTURE_TOUS_LES_JOURS' ;
 		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = Array('libelleFr' => trim($date['complementHoraire'])) ;
@@ -656,7 +529,7 @@
 	if ( sizeof($illustrations) > 0 ) $root['illustrations'] = Array() ;
 	foreach ( $illustrations as $i => $illus )
 	{
-		$medias['multimedia.illustration-'.($i+1)] = $ApidaeEvent->getCurlValue($illus['tempfile'],$illus['mime'],$illus['basename']) ;
+		$medias['multimedia.illustration-'.($i+1)] = $apidaeEvent->getCurlValue($illus['tempfile'],$illus['mime'],$illus['basename']) ;
 		$illustration = Array() ;
 		$illustration['link'] = false ;
 		$illustration['type'] = 'IMAGE' ;
@@ -670,7 +543,7 @@
 	if ( sizeof($multimedias) > 0 ) $root['multimedias'] = Array() ;
 	foreach ( $multimedias as $i => $mm )
 	{
-		$medias['multimedia.multimedia-'.($i+1)] = $ApidaeEvent->getCurlValue($mm['tempfile'],$mm['mime'],$mm['basename']) ;
+		$medias['multimedia.multimedia-'.($i+1)] = $apidaeEvent->getCurlValue($mm['tempfile'],$mm['mime'],$mm['basename']) ;
 		$multimedia = Array() ;
 		$multimedia['link'] = false ;
 		$multimedia['type'] = 'DOCUMENT' ;
@@ -681,8 +554,8 @@
 		$root['multimedias'][] = $multimedia ;
 	}
 	
-	$ApidaeEvent->debug($illustrations,'$illustrations') ;
-	$ApidaeEvent->debug($medias,'$medias') ;
+	$apidaeEvent->debug($illustrations,'$illustrations') ;
+	$apidaeEvent->debug($medias,'$medias') ;
 
 	if ( isset($root['illustrations']) && sizeof($root['illustrations']) > 0 ) $fieldlist[] = 'illustrations' ;
 	if ( isset($root['multimedias']) && sizeof($root['multimedias']) > 0 ) $fieldlist[] = 'multimedias' ;
@@ -712,7 +585,7 @@
 		if ( isset($infos_proprietaire['proprietaireId']) ) $enregistrer['proprietaireId'] = $infos_proprietaire['proprietaireId'] ;
 		
 		try {
-			$ret_enr = $ApidaeEvent->ajouter($enregistrer) ;
+			$ret_enr = $apidaeEvent->ajouter($enregistrer) ;
 			if ( ! $ret_enr ) $ko[] = $ret_enr ;
 		} catch ( ApidaeException $e ) {
 			$details = $e->getDetails() ;
@@ -755,12 +628,12 @@
 			$ko['details'] = $e->getMessage() ;
 		}
 
-		$ApidaeEvent->debug($ApidaeEvent->last_id,'last_id') ;
-		if ( $ApidaeEvent->last_id == "" && ! isset($ko['erreur']) ) $ko['erreur'] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
+		$apidaeEvent->debug($apidaeEvent->last_id,'last_id') ;
+		if ( $apidaeEvent->last_id == "" && ! isset($ko['erreur']) ) $ko['erreur'] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
 	}
 	if ( $debug ) $timer->stop('enregistrement') ;
 	
-	$ApidaeEvent->debug($ko,'$ko') ;
+	$apidaeEvent->debug($ko,'$ko') ;
 
 	if ( sizeof($ko) == 0 )
 	{
@@ -771,16 +644,16 @@
 		$msg .= ( @$post_mail['referer'] != '' ) ? $post_mail['referer'] : $post_mail['script_uri'] ;
 		$msg .= '.<br />' ;
 
-		$msg .= 'Une offre ('.$ApidaeEvent->last_id.') a été enregistrée comme brouillon sur Apidae.' ;
+		$msg .= 'Une offre ('.$apidaeEvent->last_id.') a été enregistrée comme brouillon sur Apidae.' ;
 		$msg .= '<br />' ;
 
 		$msg .= '<ul>' ;
 		
-		if ( $ApidaeEvent->last_id != null )
-			$msg .= '<li>Vous pouvez <strong><a href="'.$ApidaeEvent->url_base().'gerer/objet-touristique/'.$ApidaeEvent->last_id.'/modifier/">consulter le brouillon ici</a></strong></li>' ;
+		if ( $apidaeEvent->last_id != null )
+			$msg .= '<li>Vous pouvez <strong><a href="'.$apidaeEvent->url_base().'gerer/objet-touristique/'.$apidaeEvent->last_id.'/modifier/">consulter le brouillon ici</a></strong></li>' ;
 
 		$msg .= '<li>Vous pouvez également consulter la liste des offres en attente :<br />
-		<strong>Gérer > Demandes API écriture > <a href="'.$ApidaeEvent->url_base().'gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Demandes d\'écriture à valider</a></strong>.</li>' ;
+		<strong>Gérer > Demandes API écriture > <a href="'.$apidaeEvent->url_base().'gerer/recherche-avancee/demandes-api-ecriture-a-valider/resultats/">Demandes d\'écriture à valider</a></strong>.</li>' ;
 
 		$msg .= '</ul>' ;
 		
@@ -819,17 +692,17 @@
 		try {
 
 			if ( $debug )
-				$ApidaeMembres = new ApidaeMembres(array_merge(
+				$apidaeMembres = new ApidaeMembres(array_merge(
 					$configApidaeMembres,
 					['debug'=>true]
 				)) ;
 			else
-				$ApidaeMembres = new ApidaeMembres($configApidaeMembres) ;
+				$apidaeMembres = new ApidaeMembres($configApidaeMembres) ;
 			
 			$membre = false ;
 			if ( $debug ) $timer->start('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
 			try {
-				$membre = $ApidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
+				$membre = $apidaeMembres->getMembreById($infos_proprietaire['proprietaireId']) ;
 			} catch ( Exception $e ) {
 				$ko[] = 'Une erreur est survenue, merci de réessayer ultérieurement... ['.__LINE__.']' ;
 			}
@@ -880,7 +753,7 @@
 			if ( ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mail_membre') ;
-				$ApidaeEvent->alerte($objet,$post_mail,$to) ;
+				$apidaeEvent->alerte($objet,$post_mail,$to) ;
 				if ( $debug ) $timer->stop('mail_membre') ;
 			}
 			else
@@ -910,7 +783,7 @@
 		if ( isset($_POST['commentaire']) && trim($_POST['commentaire']) != '' )
 			$texte_offre_enregistree .= '<p>Votre commentaire a également été transmis : "<em>'.htmlentities($_POST['commentaire']).'</em>"</p>'."\n" ;
 
-		$url_consulter = 'https://base.apidae-tourisme.com/consulter/objet-touristique/'.$ApidaeEvent->last_id ;
+		$url_consulter = 'https://base.apidae-tourisme.com/consulter/objet-touristique/'.$apidaeEvent->last_id ;
 		//$texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
 		
 		?>
@@ -959,7 +832,7 @@
 			if ( ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mail_suggestion') ;
-				$ApidaeEvent->alerte($objet,$message,$to) ;
+				$apidaeEvent->alerte($objet,$message,$to) ;
 				if ( $debug ) $timer->stop('mail_suggestion') ;
 			}
 			if ( $debug )
@@ -1000,7 +873,7 @@
 				$erreur_alerte = $ko ;
 				$erreur_alerte['erreurs_debug'] = $erreurs_debug ;
 				$erreur_alerte['_POST'] = $_POST ;
-				$alerte = $ApidaeEvent->alerte('Erreur enregistrement',$erreur_alerte) ;
+				$alerte = $apidaeEvent->alerte('Erreur enregistrement',$erreur_alerte) ;
 				if ( $debug ) $timer->stop('mails_erreur') ;
 			}
 		  ?>
@@ -1014,7 +887,7 @@
 		  </ul>
 		</div>
 		<?php
-		$ApidaeEvent->debug($ko,'$ko:'.__LINE__) ;
+		$apidaeEvent->debug($ko,'$ko:'.__LINE__) ;
 	}
 	
 	if ( $debug )
