@@ -4,6 +4,7 @@ namespace PierreGranger ;
 
 use GuzzleHttp\Command\Result;
 use GuzzleHttp\Command\Results;
+use PierreGranger\ApidaeMembres;
 
 /**
  * Extension de la classe ApidaeEvent pour l'usage d'Apidae sur event.apidae-tourisme.com
@@ -15,7 +16,7 @@ use GuzzleHttp\Command\Results;
  */
 class ApidaeEventMM extends ApidaeEvent {
 
-    protected ApidaeMembres $apidaeMembres ;
+    protected $apidaeMembres ;
 
     public function __construct(array $params) {
         parent::__construct($params) ;
@@ -30,7 +31,7 @@ class ApidaeEventMM extends ApidaeEvent {
 
         $cachekey = 'territoires' ;
 
-        if ( $refresh === true || ( $territoires = $this->mc->get($cachekey) ) === false )
+        if ( $refresh === true || ( $territoires = $this->get($cachekey) ) === false )
         {
             $this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 
@@ -73,7 +74,7 @@ class ApidaeEventMM extends ApidaeEvent {
             }
 
             $this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-            $this->mc->set($cachekey,$territoires,$this->mc_expiration) ;
+            $this->set($cachekey,$territoires,$this->mc_expiration) ;
         }
 
         return $territoires ;
@@ -87,7 +88,7 @@ class ApidaeEventMM extends ApidaeEvent {
 
         $cachekey = 'membresCommune'.$codeInsee ;
 
-        if ( $refresh === true || ( $membres = $this->mc->get($cachekey) ) === false )
+        if ( $refresh === true || ( $membres = $this->get($cachekey) ) === false )
         {
             $this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 
@@ -113,7 +114,7 @@ class ApidaeEventMM extends ApidaeEvent {
             }
 
             $this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-            $this->mc->set($cachekey,$membres,$this->mc_expiration) ;
+            $this->set($cachekey,$membres,$this->mc_expiration) ;
         }
 
         return $membres ;

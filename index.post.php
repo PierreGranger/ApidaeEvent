@@ -748,7 +748,7 @@
 
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
-			$objet = ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
+			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
 			if ( ! isset($_POST['nomail']) )
 			{
@@ -826,7 +826,7 @@
 		 */
 		if ( isset($infos_orga['mail']) && $infos_orga['mail'] != '' && filter_var($infos_orga['mail'], FILTER_VALIDATE_EMAIL) )
 		{
-			$objet = 'Votre suggestion de manifestation' ;
+			$objet = 'ApidaeEvent - Votre suggestion de manifestation' ;
 			$message = $texte_offre_enregistree ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
 			if ( ! isset($_POST['nomail']) )
@@ -873,7 +873,7 @@
 				$erreur_alerte = $ko ;
 				$erreur_alerte['erreurs_debug'] = $erreurs_debug ;
 				$erreur_alerte['_POST'] = $_POST ;
-				$alerte = $apidaeEvent->alerte('Erreur enregistrement',$erreur_alerte) ;
+				$alerte = $apidaeEvent->alerte('ApidaeEvent - Erreur enregistrement',$erreur_alerte) ;
 				if ( $debug ) $timer->stop('mails_erreur') ;
 			}
 		  ?>

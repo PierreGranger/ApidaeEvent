@@ -36,7 +36,7 @@ use Exception ;
 		private string $method_communes = 'json' ; // json|sql (impossible via API pour l'instant)
 		private string $method_territoires = 'api' ; // api
 
-		protected Memcached $mc ;
+		protected $mc ;
 		protected $mc_expiration = 86400 ; // 2592000 = 30 jours, 86400 = 24h
 
 		protected Client $client ;
@@ -57,10 +57,15 @@ use Exception ;
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
-			if ( ! class_exists('Memcached') ) throw new Exception('Classe Memcached introuvable sur le serveur') ;
-			$this->mc = new Memcached() ;
-			$this->mc->addServer("localhost", 11211) ;
-			if ( ! $this->mc ) throw new Exception('Memcached fail') ;
+			$this->mc = false ;
+			try {
+				if ( class_exists('Memcached') )
+				{
+					$this->mc = new Memcached() ;
+					$this->mc->addServer("localhost", 11211) ;
+				}
+			} catch ( Exception $e ) {}
+			//if ( ! $this->mc ) throw new Exception('Memcached fail') ;
 
 			$this->client = new Client([
 				'apiKey' => $params['projet_consultation_apiKey'],
@@ -168,13 +173,13 @@ use Exception ;
 		// {
 		// 	$coms = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
 		// 	$cachekey = 'communesById'.md5(implode('-',$coms)) ;
-		// 	if ( ( $ret = $this->mc->get($cachekey) ) === false || $refresh === true )
+		// 	if ( ( $ret = $this->get($cachekey) ) === false || $refresh === true )
 		// 	{
 		// 		$this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 		// 		$ret = $this->client->referentielCommunes(['query' => ['communeIds'=>$coms]]) ;
 		// 		if ( ! is_array($ret) && preg_match('#^Guzzle.*Result$#',get_class($ret)) ) $ret = $ret->toArray() ;
 		// 		$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-		// 		$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
+		// 		$this->set($cachekey,$ret,$this->mc_expiration) ;
 		// 	}
 		// 	return $ret ;
 		// }
@@ -188,13 +193,13 @@ use Exception ;
 		{
 			$insees = array_filter($ids,function($id){ return preg_match('#^[0-9]+$#',$id) ; }) ;
 			$cachekey = 'getCommunesByInsee'.md5(implode('-',$insees)) ;
-			if ( ( $ret = $this->mc->get($cachekey) ) === false || $refresh === true )
+			if ( ( $ret = $this->get($cachekey) ) === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 				$ret = $this->client->referentielCommunes(['query' => ['codesInsee' => $insees]]) ;
 				if ( ! is_array($ret) && preg_match('#^Guzzle.*Result$#',get_class($ret)) ) $ret = $ret->toArray() ;
 				$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
+				$this->set($cachekey,$ret,$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
@@ -207,7 +212,7 @@ use Exception ;
 		{
 			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
 			$cachekey = 'territoire'.$id_territoire ;
-			if ( ( $ret = $this->mc->get($cachekey) ) === false || $refresh === true )
+			if ( ( $ret = $this->get($cachekey) ) === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 				$tmp = $this->client->objetTouristiqueGetById(['id' => $id_territoire,'responseFields' => 'localisation.perimetreGeographique']) ;
@@ -218,7 +223,7 @@ use Exception ;
 				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
 					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>@$c['complement']) ;
 				$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
+				$this->set($cachekey,$ret,$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
@@ -226,14 +231,14 @@ use Exception ;
 		public function getOffre(int $id_offre,string $responseFields=null,bool $refresh=false) {
 			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
 			$cachekey = 'offre'.$id_offre ;
-			if ( ( $ret = $this->mc->get($cachekey) ) === false || $refresh === true )
+			if ( ( $ret = $this->get($cachekey) ) === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 				$ret = $this->client->objetTouristiqueGetById(['id' => $id_offre,'responseFields' => $responseFields]) ;
 				if ( ! is_array($ret) && preg_match('#^Guzzle.*Result$#',get_class($ret)) ) $ret = $ret->toArray() ;
 				if ( ! is_array($ret) ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer l\'offre') ;
 				$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
+				$this->set($cachekey,$ret,$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
@@ -373,6 +378,17 @@ use Exception ;
 		public function flush()
 		{
 			return $this->mc->flush() ;
+		}
+
+		protected function get(string $cachekey) {
+			if ( $this->mc ) return $this->mc->get($cachekey) ;
+			else return false ;
+		}
+
+		protected function set(string $cachekey, $ret, $expiration=null) {
+			if ( $expiration == null ) $expiration = $this->mc_expiration ;
+			if ( $this->mc ) return $this->mc->set($cachekey,$ret,$expiration) ;
+			return false ;
 		}
 
 	}
