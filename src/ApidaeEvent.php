@@ -57,6 +57,7 @@ use Exception ;
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
+			$this->mc = false ;
 			try {
 				if ( class_exists('Memcached') )
 				{
