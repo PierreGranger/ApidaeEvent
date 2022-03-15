@@ -59,12 +59,12 @@ if (!$ApidaeSso->connected()) {
 
 		$utilisateurApidae = $ApidaeSso->getUserProfile();
 
-		if (!isset($ApidaeEvent)) die('no $ApidaeEvent');
+		if (!isset($apidaeEvent)) die('no $apidaeEvent');
 		$siteweb = null;
-		$ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres);
-		$membre = $ApidaeMembres->getMembreById($utilisateurApidae['membre']['id']);
+		$apidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres);
+		$membre = $apidaeMembres->getMembreById($utilisateurApidae['membre']['id']);
 		if (isset($membre['entitesJuridiques'][0]['id'])) {
-			$entite = $ApidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],null,$refresh);
+			$entite = $apidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],null,$refresh);
 			if (isset($entite['informations']['moyensCommunication'])) {
 				foreach ($entite['informations']['moyensCommunication'] as $mc) {
 					if ($mc['type']['id'] == 205) {

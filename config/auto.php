@@ -11,7 +11,7 @@
     echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
      ' ;
 
-    $ApidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
+    $apidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres) ;
 
     foreach ( $membres as $m )
     {
@@ -28,12 +28,12 @@
         $mails_api = Array() ;
 
         try {
-            $infos = $ApidaeMembres->getMembreById($m['id_membre']) ;
+            $infos = $apidaeMembres->getMembreById($m['id_membre']) ;
             $infos_api['id'] = $infos['id'] ;
             $infos_api['nom'] = $infos['nom'] ;
             $infos_api['mails'] = Array() ;
 
-            $utilisateurs = $ApidaeMembres->getUsersByMember($m['id_membre'],Array('UTILISATEURS')) ;
+            $utilisateurs = $apidaeMembres->getUsersByMember($m['id_membre'],Array('UTILISATEURS')) ;
     
             foreach ( $utilisateurs as $u )
             {

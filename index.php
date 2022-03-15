@@ -150,7 +150,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 					$post = $_POST;
 					if (!is_array($post)) $post = array();
 
-					$token_test = $ApidaeEvent->gimme_token();
+					$token_test = $apidaeEvent->gimme_token();
 
 					if (!$token_test) {
 						$display_form = false;
@@ -203,7 +203,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 								<option value="">-</option>
 								<?php
 
-								$FeteEtManifestationPortees = $ApidaeEvent->getElementsReferenceByType('FeteEtManifestationPortee');
+								$FeteEtManifestationPortees = $apidaeEvent->getElementsReferenceByType('FeteEtManifestationPortee');
 								foreach ($FeteEtManifestationPortees as $option) {
 									echo '<option value="' . $option['id'] . '"';
 									if (isset($option['description'])) echo ' title="' . htmlspecialchars($option['description']) . '" ';
@@ -232,7 +232,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 					<legend>Adresse</legend>
 					<div class="form-group row">
 						<label for="adresse1" class="<?php echo $class_label; ?> col-form-label">Adresse 1
-							<i class="fas fa-info-circle" title="Voie et bâtiment. Exemple : 60 rue des Lilas – Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue."></i>
+							<i class="fas fa-info-circle" title="Voie et bâtiment. Exemple : 60 rue des Lilas - Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue."></i>
 						</label>
 						<div class="<?php echo $class_champ; ?>">
 							<input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']); ?>" />
@@ -255,18 +255,18 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 						</div>
 					</div>
 					<?php
-
+					
 					$communes = null;
 					if (isset($_GET['communes'])) {
-						$communes = $ApidaeEvent->getCommunesByInsee(explode(',', $_GET['communes']));
+						$communes = $apidaeEvent->getCommunesByInsee(explode(',', $_GET['communes']));
 					} elseif (isset($configApidaeEvent['communes_insee'])) {
-						$communes = $ApidaeEvent->getCommunesByInsee(explode(',', $configApidaeEvent['communes_insee']));
+						$communes = $apidaeEvent->getCommunesByInsee(explode(',', $configApidaeEvent['communes_insee']));
 					} elseif (isset($configApidaeEvent['territoire'])) {
-						$communes = $ApidaeEvent->getCommunesByTerritoire($configApidaeEvent['territoire'], isset($_GET['refresh']));
+						$communes = $apidaeEvent->getCommunesByTerritoire($configApidaeEvent['territoire'], isset($_GET['refresh']));
 					}
 
 					if (!is_array($communes) || sizeof($communes) == 0) {
-						//$ApidaeEvent->alerte('Liste communes introuvable',$_GET) ;
+						//$apidaeEvent->alerte('Liste communes introuvable',$_GET) ;
 					?>
 						<div class="alert alert-danger" role="alert">
 							<i class="fas fa-exclamation"></i>
@@ -398,14 +398,14 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 					<div class="form-group row">
 						<label class="<?php echo $class_label; ?> col-form-label">Type de manifestation</label>
 						<div class="<?php echo $class_champ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationType', array('presentation' => 'select', 'type' => 'unique'), @$post['FeteEtManifestationType']); ?>
+							<?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationType', array('presentation' => 'select', 'type' => 'unique'), @$post['FeteEtManifestationType']); ?>
 						</div>
 					</div>
 
 					<div class="form-group row">
 						<label class="<?php echo $class_label; ?> col-form-label">Catégories de manifestation</label>
 						<div class="<?php echo $class_champ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => 3, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
+							<?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => 3, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
 							<small class="form-text text-muted">3 catégories maximum</small>
 						</div>
 					</div>
@@ -413,7 +413,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 					<div class="form-group row">
 						<label class="<?php echo $class_label; ?> col-form-label">Thèmes de manifestation</label>
 						<div class="<?php echo $class_champ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationTheme', array('presentation' => 'select', 'exclude' => $theme_exclude), @$post['FeteEtManifestationTheme']); ?>
+							<?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationTheme', array('presentation' => 'select', 'exclude' => $theme_exclude), @$post['FeteEtManifestationTheme']); ?>
 						</div>
 					</div>
 
@@ -429,7 +429,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 						<div class="form-group row">
 							<label class="<?php echo $class_label; ?> col-form-label">Evénements génériques et championnats</label>
 							<div class="<?php echo $class_champ; ?>">
-								<?php echo $ApidaeEvent->formHtmlCC('FeteEtManifestationGenerique', $params_generique, @$post['FeteEtManifestationGenerique']); ?>
+								<?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationGenerique', $params_generique, @$post['FeteEtManifestationGenerique']); ?>
 							</div>
 						</div>
 					<?php } ?>
@@ -506,7 +506,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 					<div class="form-group row prestations-typesClientele">
 						<label class="<?php echo $class_label; ?> col-form-label"><?php echo $labelClientele; ?></label>
 						<div class="<?php echo $class_champ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('TypeClientele', $params, @$post['TypeClientele']); ?>
+							<?php echo $apidaeEvent->formHtmlCC('TypeClientele', $params, @$post['TypeClientele']); ?>
 						</div>
 					</div>
 
@@ -525,7 +525,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 								<br /><small class="form-text text-muted">Accueil des personnes en situation de handicap</small>
 							</label>
 							<div class="<?php echo $class_champ; ?>">
-								<?php echo $ApidaeEvent->formHtmlCC('TourismeAdapte', $params, @$post['TourismeAdapte']); ?>
+								<?php echo $apidaeEvent->formHtmlCC('TourismeAdapte', $params, @$post['TourismeAdapte']); ?>
 							</div>
 						</div>
 
@@ -554,7 +554,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 							<tbody>
 								<?php
 
-								$types = $ApidaeEvent->getElementsReferenceByType('MoyenCommunicationType', array('include' => $configApidaeEvent['types_mcs']));
+								$types = $apidaeEvent->getElementsReferenceByType('MoyenCommunicationType', array('include' => $configApidaeEvent['types_mcs']));
 
 								$nb = 3;
 								if (isset($post['mc'])) $nb = sizeof($post['mc']);
@@ -659,7 +659,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 							</thead>
 							<tbody>
 								<?php
-								$types = $ApidaeEvent->getElementsReferenceByType('ContactFonction');
+								$types = $apidaeEvent->getElementsReferenceByType('ContactFonction');
 								for ($i = 0; $i < 1; $i++) {
 									echo "\n\t\t\t\t\t\t" . '<tr>';
 									echo '<td></td>';
@@ -742,7 +742,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 									</tfoot>
 									<tbody>
 										<?php
-										$types = $ApidaeEvent->getElementsReferenceByType('TarifType', array('include' => $configApidaeEvent['types_tarifs']));
+										$types = $apidaeEvent->getElementsReferenceByType('TarifType', array('include' => $configApidaeEvent['types_tarifs']));
 										for ($i = 0; $i < 1; $i++) {
 											echo "\n\t\t\t\t\t\t" . '<tr>';
 											echo '<td></td>';
@@ -828,7 +828,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 					<div class="form-group row modes_paiement">
 						<label class="<?php echo $class_label; ?> col-form-label">Modes de paiement</label>
 						<div class="<?php echo $class_champ; ?>">
-							<?php echo $ApidaeEvent->formHtmlCC('ModePaiement', $params_paiement, @$post['ModePaiement']); ?>
+							<?php echo $apidaeEvent->formHtmlCC('ModePaiement', $params_paiement, @$post['ModePaiement']); ?>
 						</div>
 					</div>
 

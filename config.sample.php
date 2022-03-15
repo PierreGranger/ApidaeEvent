@@ -22,6 +22,7 @@
 		'projet_ecriture_clientId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
 		'projet_ecriture_secret' => 'xxxxx',
 		'projet_ecriture_multimembre' => false,
+		'wsProjetAbonnesKey' => '', // Clé permettant l'appel au webservice de récupération des abonnés d'un projet
 		'territoire' => 711392, // Auvergne
 		//'communes_insee' => '37278,37278',
 		'membres' => Array(

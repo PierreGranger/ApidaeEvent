@@ -9,3 +9,6 @@
 /profile/
 /md/
 composer.lock
+package-lock.json
+.env.*.local
+.env.local

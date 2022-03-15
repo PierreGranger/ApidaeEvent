@@ -18,11 +18,11 @@
     if ( $ApidaeSso->connected() )
     {
         $utilisateurApidae = $ApidaeSso->getUserProfile() ;
-        $ApidaeMembres = new PierreGranger\ApidaeMembres(array_merge(
+        $apidaeMembres = new PierreGranger\ApidaeMembres(array_merge(
             Array('debug'=>false,'timer'=>true),
             $configApidaeMembres
         )) ;
-        $usr = $ApidaeMembres->getUserById($utilisateurApidae['id']) ;
+        $usr = $apidaeMembres->getUserById($utilisateurApidae['id']) ;
         foreach ( $droits['permissions'] as $p )
         {
             if ( ! in_array($p,$usr['permissions']) )
