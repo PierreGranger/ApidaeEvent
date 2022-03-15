@@ -4,6 +4,7 @@ namespace PierreGranger ;
 
 use GuzzleHttp\Command\Result;
 use GuzzleHttp\Command\Results;
+use PierreGranger\ApidaeMembres;
 
 /**
  * Extension de la classe ApidaeEvent pour l'usage d'Apidae sur event.apidae-tourisme.com
