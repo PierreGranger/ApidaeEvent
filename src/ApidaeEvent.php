@@ -36,7 +36,7 @@ use Exception ;
 		private string $method_communes = 'json' ; // json|sql (impossible via API pour l'instant)
 		private string $method_territoires = 'api' ; // api
 
-		protected Memcached $mc ;
+		protected $mc ;
 		protected $mc_expiration = 86400 ; // 2592000 = 30 jours, 86400 = 24h
 
 		protected Client $client ;
