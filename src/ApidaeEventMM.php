@@ -16,7 +16,7 @@ use PierreGranger\ApidaeMembres;
  */
 class ApidaeEventMM extends ApidaeEvent {
 
-    protected ApidaeMembres $apidaeMembres ;
+    protected $apidaeMembres ;
 
     public function __construct(array $params) {
         parent::__construct($params) ;
