@@ -38,7 +38,7 @@
     } catch ( Exception $e ) {
         $fails++ ;
     } finally {
-        $apidaeMembres->strpos('getMembreById()') ;
+        $apidaeMembres->stop('getMembreById()') ;
     }
 
     $apidaeMembres->timer() ;

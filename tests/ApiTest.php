@@ -30,13 +30,6 @@ class ApiTest extends TestCase {
         $this->assertArrayHasKey('codePostal',$commune) ;
     }
 
-    public function testGetCommunesById() {
-        $communes = self::$apidaeEvent->getCommunesById([1237,1247,1271],true) ;
-        $this->assertCount(3,$communes) ;
-        $commune = array_shift($communes) ;
-        $this->assertArrayHasKey('codePostal',$commune) ;
-    }
-
     public function testGetOffre() {
         $offre = self::$apidaeEvent->getOffre(760958,null,true) ;
         $this->assertArrayHasKey('id',$offre) ;

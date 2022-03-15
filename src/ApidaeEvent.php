@@ -4,6 +4,8 @@ namespace PierreGranger ;
 
 use ApidaePHP\Client;
 use PierreGranger\ApidaeEcriture ;
+use Memcached ;
+use Exception ;
 
 /**
 *	Class permettant de faciliter la génération d'un questionnaire de saisie de FMA libre pour Apidae
@@ -34,7 +36,7 @@ use PierreGranger\ApidaeEcriture ;
 		private string $method_communes = 'json' ; // json|sql (impossible via API pour l'instant)
 		private string $method_territoires = 'api' ; // api
 
-		protected \Memcached $mc ;
+		protected Memcached $mc ;
 		protected $mc_expiration = 86400 ; // 2592000 = 30 jours, 86400 = 24h
 
 		protected Client $client ;
@@ -45,19 +47,20 @@ use PierreGranger\ApidaeEcriture ;
 			
 			parent::__construct($params) ;
 
-			if ( ! is_array($params) ) throw new \Exception('$params is not an array') ;
+			if ( ! is_array($params) ) throw new Exception('$params is not an array') ;
+			if ( ! isset($params['env']) ) $params['env'] = 'prod' ;
 			
-			if ( isset($params['projet_consultation_apiKey']) ) $this->projet_consultation_apiKey = $params['projet_consultation_apiKey'] ; //else throw new \Exception('missing projet_consultation_apiKey') ;
-			if ( isset($params['projet_consultation_projetId']) ) $this->projet_consultation_projetId = $params['projet_consultation_projetId'] ; //else throw new \Exception('missing projet_consultation_projetId') ;
+			if ( isset($params['projet_consultation_apiKey']) ) $this->projet_consultation_apiKey = $params['projet_consultation_apiKey'] ; //else throw new Exception('missing projet_consultation_apiKey') ;
+			if ( isset($params['projet_consultation_projetId']) ) $this->projet_consultation_projetId = $params['projet_consultation_projetId'] ; //else throw new Exception('missing projet_consultation_projetId') ;
 			if ( isset($params['selection_territoires']) ) $this->selection_territoires = $params['selection_territoires'] ;
 
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
-			if ( ! class_exists('Memcached') ) throw new \Exception('Classe Memcached introuvable sur le serveur') ;
-			$this->mc = new \Memcached() ;
+			if ( ! class_exists('Memcached') ) throw new Exception('Classe Memcached introuvable sur le serveur') ;
+			$this->mc = new Memcached() ;
 			$this->mc->addServer("localhost", 11211) ;
-			if ( ! $this->mc ) throw new \Exception('Memcached fail') ;
+			if ( ! $this->mc ) throw new Exception('Memcached fail') ;
 
 			$this->client = new Client([
 				'apiKey' => $params['projet_consultation_apiKey'],
@@ -197,20 +200,20 @@ use PierreGranger\ApidaeEcriture ;
 		}
 
 		/**
-		 * @param $id_territoire Identifiant d'une offre territoire sur Apidae
+		 * @param int $id_territoire Identifiant d'une offre territoire sur Apidae
 		 * @return array Tableau contenant la liste des communes du territoire $id_territoire
 		 */
 		public function getCommunesByTerritoire(int $id_territoire,bool $refresh=false)
 		{
-			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new \Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
+			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
 			$cachekey = 'territoire'.$id_territoire ;
 			if ( ( $ret = $this->mc->get($cachekey) ) === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 				$tmp = $this->client->objetTouristiqueGetById(['id' => $id_territoire,'responseFields' => 'localisation.perimetreGeographique']) ;
 				if ( ! is_array($tmp) && preg_match('#^Guzzle.*Result$#',get_class($tmp)) ) $tmp = $tmp->toArray() ;
-				if ( ! isset($tmp['type']) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
-				if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+				if ( ! isset($tmp['type']) ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+				if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				$ret = Array() ;
 				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
 					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>@$c['complement']) ;
@@ -221,14 +224,14 @@ use PierreGranger\ApidaeEcriture ;
 		}
 
 		public function getOffre(int $id_offre,string $responseFields=null,bool $refresh=false) {
-			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new \Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
+			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
 			$cachekey = 'offre'.$id_offre ;
 			if ( ( $ret = $this->mc->get($cachekey) ) === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
 				$ret = $this->client->objetTouristiqueGetById(['id' => $id_offre,'responseFields' => $responseFields]) ;
 				if ( ! is_array($ret) && preg_match('#^Guzzle.*Result$#',get_class($ret)) ) $ret = $ret->toArray() ;
-				if ( ! is_array($ret) ) throw new \Exception(__METHOD__.__LINE__.'Impossible de récupérer l\'offre') ;
+				if ( ! is_array($ret) ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer l\'offre') ;
 				$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
 				$this->mc->set($cachekey,$ret,$this->mc_expiration) ;
 			}
@@ -299,6 +302,7 @@ use PierreGranger\ApidaeEcriture ;
 
 			foreach ( $ret as $k => &$v )
 				$this->triEnfants($v) ;
+			unset($v) ;
 
 			return $ret ;
 		}
@@ -310,12 +314,18 @@ use PierreGranger\ApidaeEcriture ;
 				foreach ( $elementReference['enfants'] as &$enfant ) {
 					$this->triEnfants($enfant) ;
 				}
+				unset($enfant) ;
 			}
+			unset($elementReference) ;
 		}
 
 		private static function triOrdre($a,$b) { return (int)$a['ordre'] - (int)$b['ordre'] ; }
 
-		private function getFamillesElementsReference($ers) {
+		/**
+		 * @param array<array> $ers Tableau d'éléments de références
+		 * @return null|array
+		 */
+		private function getFamillesElementsReference(array $ers) {
 			$cles_Familles = Array() ;
 			foreach ($ers as $er )
 				if ( isset($er['familleCritere']) ) $cles_Familles[] = $er['familleCritere'] ;
@@ -354,7 +364,7 @@ use PierreGranger\ApidaeEcriture ;
 
 		public function verifTime($h)
 		{
-			if ( ! $match = preg_match('#^([0-9]{2}):([0-9]{2})$#',$h) ) return false ;
+			if ( ! preg_match('#^([0-9]{2}):([0-9]{2})$#',$h,$match) ) return false ;
 			if ( (int) $match[1] < 0 || (int) $match[1] > 24 ) return false ;
 			if ( (int) $match[2] < 0 || (int) $match[2] > 60 ) return false ;
 			return true ;

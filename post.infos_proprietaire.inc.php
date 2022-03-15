@@ -42,12 +42,12 @@
         require_once(realpath(dirname(__FILE__)).'/requires.inc.php') ;
         $debug = true ;
         $timer = new ApidaeTimer() ;
-        //$commune = explode('|','14707|37260|Villeperdue|37278') ;
+        $commune = explode('|','14707|37260|Villeperdue|37278') ;
 		//$commune = explode('|','1425|03000|Moulins|03190') ;
 		//$commune = explode('|','11754|30129|Redessan|30211') ;
 		//$commune = explode('|','11893|30120|Le Vigan|30350') ;
 		//$commune = explode('|','4451|13710|Fuveau|13040') ;
-		$commune = explode('|','30427|73120|Courchevel|73227') ;
+		//$commune = explode('|','30427|73120|Courchevel|73227') ;
     }
 
     if ( ! isset($commune) || ! is_array($commune) )
@@ -55,6 +55,7 @@
         die('Missing (array)$commune') ;
     }
 
+	$communeId = $commune[0] ;
 	$communeInsee = $commune[3] ;
 
     function ip_debug($var,$titre=null) {
@@ -98,7 +99,7 @@
 	 * alors dans la config on a renseigné $configApidaeEvent['membres'].
 	 */
 
-	if ( $configApidaeEvent['projet_ecriture_multimembre'] === true )
+	if ( $configApidaeEvent['projet_ecriture_multimembre'] === true && isset($configApidaeEvent['membres']) )
 	{
 		/**
 		 * Note : on a du cache dessus, si besoin on peut rafraichir via scripts/territoires.php
@@ -109,90 +110,108 @@
 		ip_debug(sizeof($territoires),'Nombre de territoires') ;
 		ip_stop() ;
 
-
-		/**
-		 * On commence par récupérer la liste des membres abonnés au projet d'écriture et qui ont les droits sur la commune concernée.
-		*/
 		ip_debug($commune,'$commune') ;
 
-        /**
-         * + de 6 secondes
-         * @todo : optim cache
-         * Pas possible de faire des appels plus simple via responseFields (déjà au mini)
-         */
-        ip_start('Recherche des membres à partir de la commune '.$communeInsee) ;
-		$membresCommune = $apidaeEvent->getMembresFromCommuneInsee($communeInsee) ;
-		if ( ! $membresCommune ) $ko[] = 'Récupération des membres concernés par cette commune impossible' ;
-		ip_debug(sizeof($membresCommune),'sizeof($membresCommune)') ;
-		ip_debug(array_keys($membresCommune),'array_keys($membresCommune)') ;
-		
+		/**
+		 * On commence par utiliser un webservice dédié à la récupération des abonnés d'un projet,
+		 * plutôt que l'API membre qui a des temps de réponse très lents
+		 */
+		ip_start('Recherche des membres abonnés + concernés par la commune '.$communeInsee.' par Webservice') ;
+		$membresCommune = false ;
+		if ( isset($url_ws_abonnes) )
+		{
+			try {
+				$query = [
+					'projetId' => $configApidaeEvent['projet_ecriture_projetId'],
+					'communeId' => $communeId,
+					'key' => @$configApidaeEvent['wsProjetAbonnesKey']
+				] ;
+				$tmp = file_get_contents($url_ws_abonnes.'/v1/sit/projets/abonnes?'.http_build_query($query)) ;
+				$values = json_decode($tmp,true) ;
+				if ( json_last_error() == JSON_ERROR_NONE && is_array($values) )
+				{
+					ip_debug('Worked ! '.$tmp) ;
+					$membresCommune = [] ;
+					foreach ( $values as $id_membre )
+						$membresCommune[$id_membre] = $id_membre ;
+				}
+				else ip_debug('Failed ! Not json :( json_last_error()=' . json_last_error()) ;
+			} catch ( Exception $e ) {
+				ip_debug('Failed ! '.$e->getMessage()) ;
+			}
+		}
 		ip_stop() ;
+
+        /**
+		 * Si le Webservice n'a pas pu renvoyer la liste des membres abonnés au projet :
+		 * On récupère la liste des membres qui ont les droits sur la commune concernée.
+		 * Malheureusement cet appel est très long et manque de précision (on ne peut pas filtrer les membres abonnés)
+         */
+		if ( $membresCommune === false && ! is_array($membresCommune) )
+		{
+			ip_start('Recherche des membres à partir de la commune '.$communeInsee) ;
+			$membresCommune = $apidaeEvent->getMembresFromCommuneInsee($communeInsee) ;
+			if ( ! $membresCommune ) $ko[] = 'Récupération des membres concernés par cette commune impossible' ;
+			ip_debug(sizeof($membresCommune),'sizeof($membresCommune)') ;
+			ip_debug(array_keys($membresCommune),'array_keys($membresCommune)') ;
+			ip_stop() ;
+		}
 
 		$doubleCheck = true ;
 		if ( ! isset($territoires) || ! is_array($territoires) ) $doubleCheck = false ;
 		
         ip_start('Recherche du membre correspondant dans la config') ;
-		if ( isset($configApidaeEvent['membres']) )
+	
+		if ( $debug ) $timer->start('loop_membres') ;
+		/**
+		 * Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste.
+		 * Cette boucle est crade mais elle ne prend que 0.003s, aucun intérêt à l'optimiser.
+		 */
+		foreach ( $configApidaeEvent['membres'] as $m )
 		{
-			if ( $debug ) $timer->start('loop_membres') ;
 			/**
-             * Au cas où la commune serait concernée par plusieurs territoires, on parcoure les membres dans l'ordre saisi pour choisir le premier dans la liste.
-             * Cette boucle est crade mais elle ne prend que 0.003s, aucun intérêt à l'optimiser.
-             */
-			foreach ( $configApidaeEvent['membres'] as $m )
+			 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
+			 * */
+			//ip_debug(isset($membresCommune[$m['id_membre']]),'isset($membresCommune['.$m['id_membre'].']) ? '.$m['nom']) ;
+			if ( isset($membresCommune[$m['id_membre']]) )
 			{
-				/**
-				 * On trouve le premier membre concerné (dont une commune sur Apidae correspond à la commune de la manif)
-				 * */
-				//ip_debug(isset($membresCommune[$m['id_membre']]),'isset($membresCommune['.$m['id_membre'].']) ? '.$m['nom']) ;
-				if ( isset($membresCommune[$m['id_membre']]) )
+				ip_debug('Membre '.$m['id_membre'].' '.$m['nom'].' concerné par la commune '.$communeInsee) ;
+				
+				ip_debug('Le membre possède-t-il la commune '.$communeInsee.' dans la config ApidaeEvent ?') ;
+				$trouve = false ;
+				if ( 
+					isset($m['insee_communes']) 
+					&& is_array($m['insee_communes']) 
+					&& in_array($communeInsee,$m['insee_communes'])
+				)
 				{
-					ip_debug($m['id_membre'],'membre '.$m['nom'].' concerné (boucle)') ;
+					ip_debug('trouvé dans les insee_communes !') ;
 					$trouve = true ;
-					/**
-					 * Ce n'est pas suffisant : il faut aussi s'assurer que dans la config c'était bien le territoire choisi
-					 */
-					if ( $doubleCheck )
-					{
-						ip_debug('Double check... $communeInsee = '.$communeInsee) ;
-						$trouve = false ;
-						if ( 
-							isset($m['insee_communes']) 
-							&& is_array($m['insee_communes']) 
-							&& in_array($communeInsee,$m['insee_communes'])
-						)
-						{
-							// Trouvé dans la liste des communes spécifiée en config !
-							ip_debug('trouvé dans les insee_communes !') ;
-							$trouve = true ;
-						}
+				}
 
-						// @array_keys(@$territoires[$m['id_territoire']]['perimetre'])
-						ip_debug('Recherche de '.$communeInsee.' dans le territoire '.$m['id_territoire'].' du membre...') ;
-						if (
-							isset($m['id_territoire']) && isset($territoires) && is_array($territoires)
-							&& isset($territoires[$m['id_territoire']])
-							&& isset($territoires[$m['id_territoire']]['perimetre'][$communeInsee])
-						)
-						{
-							// Trouvé dans le territoire de la config !
-							ip_debug('trouvé dans le territoire !') ;
-							$trouve = true ;
-						}
-					}
+				ip_debug('Recherche de '.$communeInsee.' dans le territoire '.$m['id_territoire'].' du membre...') ;
+				if (
+					isset($m['id_territoire']) && isset($territoires) && is_array($territoires)
+					&& isset($territoires[$m['id_territoire']])
+					&& isset($territoires[$m['id_territoire']]['perimetre'][$communeInsee])
+				)
+				{
+					ip_debug('trouvé dans le territoire !') ;
+					$trouve = true ;
+				}
 
-					if ( $trouve )
-					{
-						ip_debug($m,'membre trouvé...') ;
-						$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
-						$infos_proprietaire['mail_membre'] = @$m['mail'] ;
-						$infos_proprietaire['structure_validatrice'] = $m['nom'] ;
-						$infos_proprietaire['url_structure_validatrice'] = $m['site'] ;
-						break ;
-					}
+				if ( $trouve )
+				{
+					ip_debug($m,'membre trouvé...') ;
+					$infos_proprietaire['proprietaireId'] = $m['id_membre'] ;
+					$infos_proprietaire['mail_membre'] = @$m['mail'] ;
+					$infos_proprietaire['structure_validatrice'] = $m['nom'] ;
+					$infos_proprietaire['url_structure_validatrice'] = $m['site'] ;
+					break ;
 				}
 			}
 		}
+
         ip_stop() ;
 	}
 

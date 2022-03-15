@@ -1,8 +1,9 @@
 <?php
 
-	namespace PierreGranger ;
+namespace PierreGranger ;
 
-    use GuzzleHttp\Command\Results;
+use GuzzleHttp\Command\Result;
+use GuzzleHttp\Command\Results;
 
 /**
  * Extension de la classe ApidaeEvent pour l'usage d'Apidae sur event.apidae-tourisme.com
@@ -23,7 +24,7 @@ class ApidaeEventMM extends ApidaeEvent {
 
     /**
      * @param bool $refresh
-     * @return array
+     * @return array|false
      */
     public function getTerritoires(bool $refresh=false) {
 
@@ -60,7 +61,6 @@ class ApidaeEventMM extends ApidaeEvent {
                 
                 foreach ( $result['objetsTouristiques'] as $obt )
                 {
-                    //echo json_encode($obt) ;
                     $obt['perimetre'] = [] ;
                     if ( isset($obt['localisation']['perimetreGeographique']) )
                     {
@@ -81,7 +81,7 @@ class ApidaeEventMM extends ApidaeEvent {
 
     /**
      * @param string $codeInsee SUPER IMPORTANT d'être en string, pour les codes INSEE avec un 0 devant !
-     * @return array Liste des membres, avec leur identifiant comme clé
+     * @return array|false Liste des membres, avec leur identifiant comme clé
      */
     public function getMembresFromCommuneInsee(string $codeInsee, bool $refresh = false) {
 
@@ -100,8 +100,6 @@ class ApidaeEventMM extends ApidaeEvent {
                 return false ;
             }
 
-            echo json_encode($membresCommune) ;
-
             if ( ! is_array($membresCommune) )
             {
                 $this->debug(__METHOD__.':'.__LINE__.' : apidaeMembres->getMembres failed') ;
@@ -111,7 +109,6 @@ class ApidaeEventMM extends ApidaeEvent {
             $membres = [] ;
             foreach ( $membresCommune as $mb )
             {
-                echo $mb['id']. '-' ;
                 $membres[$mb['id']] = $mb ;
             }
 
