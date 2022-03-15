@@ -58,8 +58,11 @@ use Exception ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
 			try {
-				$this->mc = new Memcached() ;
-				$this->mc->addServer("localhost", 11211) ;
+				if ( class_exists('Memcached') )
+				{
+					$this->mc = new Memcached() ;
+					$this->mc->addServer("localhost", 11211) ;
+				}
 			} catch ( Exception $e ) {}
 			//if ( ! $this->mc ) throw new Exception('Memcached fail') ;
 
