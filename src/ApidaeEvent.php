@@ -57,7 +57,6 @@ use Exception ;
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
-			if ( ! class_exists('Memcached') ) throw new Exception('Classe Memcached introuvable sur le serveur') ;
 			try {
 				$this->mc = new Memcached() ;
 				$this->mc->addServer("localhost", 11211) ;
