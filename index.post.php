@@ -672,23 +672,6 @@
 		if ( sizeof($medias) > 0 )
 			$post_mail['fichiers'] = $medias ;
 
-		/**
-		 * Maj DU 15/02/2021
-		 * Récupérations d'infos pour Analytics
-		 * 
-		 * 
-		 */
-		/*
-		<script>
-				dataLayer.push({
-					'event' : 'enregistrement',
-					'departement' : 3,
-					'territoire' : 3337048,
-					'membre' : 1336
-				}) ;
-			</script>
-		*/
-
 		try {
 
 			if ( $debug )

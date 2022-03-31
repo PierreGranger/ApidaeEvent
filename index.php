@@ -104,20 +104,9 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 		});
 	</script>
 
-	<?php
-	if (file_exists(realpath(dirname(__FILE__)) . '/../analytics.php'))
-		include(realpath(dirname(__FILE__)) . '/../analytics.php');
-	elseif (file_exists(realpath(dirname(__FILE__)) . '/analytics.php'))
-		include(realpath(dirname(__FILE__)) . '/analytics.php');
-	?>
-
-	<?php if (isset($config) && isset($config['gtm_head'])) echo $config['gtm_head']; ?>
-
 </head>
 
 <body>
-	<?php if (isset($config) && isset($config['gtm_body'])) echo $config['gtm_body']; ?>
-
 	<div class="container">
 
 		<?php

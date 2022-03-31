@@ -48,7 +48,12 @@
 		//$commune = explode('|','11893|30120|Le Vigan|30350') ;
 		//$commune = explode('|','4451|13710|Fuveau|13040') ;
 		//$commune = explode('|','30427|73120|Courchevel|73227') ;
+		$commune = explode('|','1938|06790|Aspremont|06006') ;
+		if ( isset($argv[2]) && preg_match('#^[a-zA-Z0-9- ]+|[a-zA-Z0-9- ]+|.*|[a-zA-Z0-9- ]+$#',$argv[2]) )
+			$commune = explode('|',$argv[2]) ;
     }
+
+	
 
     if ( ! isset($commune) || ! is_array($commune) )
     {
@@ -175,7 +180,8 @@
 			//ip_debug(isset($membresCommune[$m['id_membre']]),'isset($membresCommune['.$m['id_membre'].']) ? '.$m['nom']) ;
 			if ( isset($membresCommune[$m['id_membre']]) )
 			{
-				ip_debug('Membre '.$m['id_membre'].' '.$m['nom'].' concerné par la commune '.$communeInsee) ;
+				if ( $m['id_membre'] == 1157 ) continue ;
+				ip_debug('Membre '.$m['id_membre'].' '.$m['nom'].' concerné par la commune [insee='.$communeInsee.']') ;
 				
 				ip_debug('Le membre possède-t-il la commune '.$communeInsee.' dans la config ApidaeEvent ?') ;
 				$trouve = false ;
@@ -189,7 +195,13 @@
 					$trouve = true ;
 				}
 
-				ip_debug('Recherche de '.$communeInsee.' dans le territoire '.$m['id_territoire'].' du membre...') ;
+				ip_debug('Le membre possède-t-il la commune [insee='.$communeInsee.'] dans le territoire '.$m['id_territoire'].' de la config ApidaeEvent ?') ;
+
+				if ( isset($territoires[$m['id_territoire']]) )
+					ip_debug('Périmètre du territoire '.$m['id_territoire'].' (codes Insee) : '.implode(',',array_keys($territoires[$m['id_territoire']]['perimetre']))) ;
+				else
+					ip_debug('/!\ Le territoire '.$m['id_territoire'].' n\'a pas été trouvé en cache dans $territoires...') ;
+
 				if (
 					isset($m['id_territoire']) && isset($territoires) && is_array($territoires)
 					&& isset($territoires[$m['id_territoire']])
