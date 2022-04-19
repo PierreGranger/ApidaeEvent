@@ -58,10 +58,11 @@ Clonez/téléchargez le projet sur votre serveur
 git clone https://github.com/PGranger/ApidaeEvent.git
 ```
 
-Installez les dépendances avec Composer
+Installez les dépendances
 
 ```
 composer install
+npm install
 ```
 
 #### Projets d'écriture
