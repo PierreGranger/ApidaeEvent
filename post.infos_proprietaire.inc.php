@@ -35,6 +35,10 @@
 	 * Si $ko n'est pas vide, l'enregistrement ne se fera pas.
 	 */
 
+	 /**
+	  * @example php post.infos_proprietaire.inc.php debug '30341|73670|Entremont-le-Vieux|73107'
+	  */
+
     if ( ! isset($debug) ) $debug = false ;
 
     if ( isset($argv[1]) && $argv[1] == 'debug' )
@@ -48,7 +52,8 @@
 		//$commune = explode('|','11893|30120|Le Vigan|30350') ;
 		//$commune = explode('|','4451|13710|Fuveau|13040') ;
 		//$commune = explode('|','30427|73120|Courchevel|73227') ;
-		$commune = explode('|','1938|06790|Aspremont|06006') ;
+		//$commune = explode('|','1938|06790|Aspremont|06006') ;
+		$commune = explode('|','30341|73670|Entremont-le-Vieux|73107') ;
 		if ( isset($argv[2]) && preg_match('#^[a-zA-Z0-9- ]+|[a-zA-Z0-9- ]+|.*|[a-zA-Z0-9- ]+$#',$argv[2]) )
 			$commune = explode('|',$argv[2]) ;
     }

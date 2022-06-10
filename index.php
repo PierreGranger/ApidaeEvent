@@ -969,7 +969,11 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 				<?php } ?>
 
 				<div style="text-align:center;padding:40px ;">
+					<?php if ( strtotime(date('Y-m-d')) < strtotime('2022-06-22') ) { ?>
 					<a href="https://www.apidae-tourisme.com" target="_blank"><img src="./logo.png" alt="Apidae Event" width="170" /></a>
+					<?php } else { ?>
+						<a href="https://www.apidae-tourisme.com" target="_blank"><img src="./Apidae_Event.png" alt="Apidae Event" width="170" /></a>
+					<?php } ?>
 				</div>
 
 			</form>

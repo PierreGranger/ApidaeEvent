@@ -1,7 +1,9 @@
 <?php
 
     require_once(realpath(dirname(__FILE__)).'/auth.inc.php') ;
-    require_once(realpath(dirname(__FILE__)).'/../territoires.inc.php') ;
+    require_once(realpath(dirname(__FILE__)).'/../scripts/territoires.php') ;
+
+    $territoires = $apidaeEvent->getTerritoires() ;
 
     $fails = 0 ;
 
@@ -22,22 +24,15 @@
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="./jsoneditor.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <style>
+            thead, thead th {
+                position:sticky ;
+                top:0 ;
+            }
+        </style>
     </head>
     <body>
 
-    <div class="alert alert-danger">
-        <h1>Abonné ?</h1>
-        <h2>19/02/2021</h2>
-        <p>Attention : Pour l'instant, la colonne "Attention" avec la mention "Non abonné !" n'est pas fiable : en attente du traitement d'un ticket chez Smile :<br />
-        <a href="https://apidae-tourisme.zendesk.com/agent/tickets/16451">https://apidae-tourisme.zendesk.com/agent/tickets/16451</a></p>
-    </div>
-
-    <style>
-        thead, thead th {
-            position:sticky ;
-            top:0 ;
-        }
-    </style>
         <table class="table table-striped" style="font-size:.7em;">
             <thead class="table-dark">
                 <th>Ordre</th>
@@ -56,6 +51,7 @@
                     $already = Array() ;
 
                     foreach ( $configApidaeEvent['membres'] as $m ) {
+
                         $ids_membres[] = $m['id_membre'] ;
                         echo '<tr>' ;
                             echo '<th>'.@$tri++.'</th>';
@@ -64,15 +60,15 @@
                             echo '<td>' ;
                                 if ( isset($territoires[$m['id_territoire']]) )
                                 {
-                                    $json = $territoires[$m['id_territoire']] ;
-                                    echo '<span class="badge bg-secondary">'.$json->id.'</span> '.$json->nom->libelleFr ;
-                                    echo ' ('.sizeof($json->localisation->perimetreGeographique).')' ;
-                                    if ( $json->type != 'TERRITOIRE' ) echo '<div class="alert alert-danger">'.$json->type.'</div>' ;
+                                    $territoire = $territoires[$m['id_territoire']] ;
+                                    echo '<span class="badge bg-secondary">'.$territoire['id'].'</span> '.$territoire['nom']['libelleFr'] ;
+                                    echo ' ('.sizeof($territoire['localisation']['perimetreGeographique']).')' ;
+                                    if ( $territoire['type'] != 'TERRITOIRE' ) echo '<div class="alert alert-danger">'.$territoire['type'].'</div>' ;
                                     echo '<div style="font-size:.5em;">' ;
                                         $tmp = Array() ;
-                                        foreach ( $json->localisation->perimetreGeographique as $com )
+                                        foreach ( $territoire['localisation']['perimetreGeographique'] as $com )
                                         {
-                                            $tmp[] = $com->code.'|'.$com->nom ;
+                                            $tmp[] = $com['code'].'|'.$com['nom'] ;
                                         }
                                         echo implode(' ',$tmp) ;
                                     echo '</div>' ;
