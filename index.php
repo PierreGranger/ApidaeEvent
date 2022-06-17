@@ -442,15 +442,6 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 						</div>
 					</div>
 
-					<div class="form-group row">
-						<label class="<?php echo $class_label; ?> col-form-label" for="descriptifsThematises_6143">Dispositions spéciales COVID 19
-							<i class="fas fa-info-circle" title="Offre de services confinement et post confinement."></i>
-						</label>
-						<div class="<?php echo $class_champ; ?>">
-							<textarea class="form-control" name="descriptifsThematises[6143]" id="descriptifsThematises_6143"><?php echo htmlspecialchars(@$post['descriptifsThematises'][6143]); ?></textarea>
-						</div>
-					</div>
-
 					<?php
 					if (isset($_GET['clientele'])) {
 						$labelClientele = 'Types de Clientèle';
@@ -481,23 +472,19 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 									563 VTTistes	10.02.28	Clientèles pratiquant une activité spécifique	
 	  							*/
 							'include' => [
-								6486, 3734, 3737, 579, 594, 4908, 4813, 5416, 496, 509, 513, 504, 511, 512, 565, 591, 566, 522, 564, 558, 4668, 563
+								3734, 3737, 579, 594, 4908, 4813, 5416, 496, 509, 513, 504, 511, 512, 565, 591, 566, 522, 564, 558, 4668, 563
 							]
 						);
-					} else {
-						$labelClientele = '';
-						$params = array(
-							'presentation' => 'checkbox',
-							'include' => array(6486) // Pass sanitaire obligatoire
-						);
+						?>
+						<div class="form-group row prestations-typesClientele">
+							<label class="<?php echo $class_label; ?> col-form-label"><?php echo $labelClientele; ?></label>
+							<div class="<?php echo $class_champ; ?>">
+								<?php echo $apidaeEvent->formHtmlCC('TypeClientele', $params, @$post['TypeClientele']); ?>
+							</div>
+						</div>
+						<?php
 					}
 					?>
-					<div class="form-group row prestations-typesClientele">
-						<label class="<?php echo $class_label; ?> col-form-label"><?php echo $labelClientele; ?></label>
-						<div class="<?php echo $class_champ; ?>">
-							<?php echo $apidaeEvent->formHtmlCC('TypeClientele', $params, @$post['TypeClientele']); ?>
-						</div>
-					</div>
 
 					<?php if (isset($_GET['TourismeAdapte']) && $_GET['TourismeAdapte'] == 1) { ?>
 
