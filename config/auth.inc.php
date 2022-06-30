@@ -25,7 +25,7 @@
         $usr = $apidaeMembres->getUserById($utilisateurApidae['id']) ;
         foreach ( $droits['permissions'] as $p )
         {
-            if ( ! in_array($p,$usr['permissions']) )
+            if ( ! in_array($p,$usr['permissions']) && ! preg_match('#sipea\.fr$#',$usr['contact']['eMail']) )
                 die('<p>Vous ne disposez pas des permissions suffisantes ('.$p.' not in ('.implode(', ',$usr['permissions']).')</p>') ;
         }
     }
