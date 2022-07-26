@@ -391,11 +391,17 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 						</div>
 					</div>
 
+					<?php $limitCategories = 3 ; ?>
+					<?php if ( isset($_GET['limitCategories']) && is_int($limitCategories) ) $limitCategories = (int)$_GET['limitCategories'] ; ?>
 					<div class="form-group row">
-						<label class="<?php echo $class_label; ?> col-form-label">Catégories de manifestation</label>
+						<label class="<?php echo $class_label; ?> col-form-label">Catégorie<?php $limitCategories > 1 ? 's':'' ; ?> de manifestation</label>
 						<div class="<?php echo $class_champ; ?>">
-							<?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => 3, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
-							<small class="form-text text-muted">3 catégories maximum</small>
+							<?php if ( $limitCategories > 1 ) { ?>
+								<?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => $limitCategories, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
+								<small class="form-text text-muted"><?php echo $limitCategories ; ?> catégories maximum</small>
+							<?php } else  { ?>
+								<?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'type' => 'unique', 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
+							<?php } ?>
 						</div>
 					</div>
 

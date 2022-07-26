@@ -165,6 +165,15 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
+						<label class="col-4 col-form-label" for="limitCategories">Nombre de catégories
+							<br /><small>Défaut : 3</small>
+						</label>
+						<div class="col-8">
+							<input type="number" id="limitCategories" name="limitCategories" value="" placeholder="3" min="1" max="3" step="1" />
+						</div>
+					</div>
+
+					<div class="form-group row">
 						<label class="col-4 col-form-label" for="reservation">Réservation
 							<br /><small></small>
 						</label>
