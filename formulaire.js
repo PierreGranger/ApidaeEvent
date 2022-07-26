@@ -467,6 +467,17 @@ function checkIllustrations() {
 					errors.push('Les illustrations doivent faire moins de 10 Mo') ;
 				}
 			}
+
+			/**
+			 * Vérification du type mime
+			 */
+			if (window.FileReader && window.Blob) {
+				let file = jQuery(this).get(0).files[0] ;
+				if ( file.type.toString().match(/image\/(png|jpg|jpeg|gif)/gi) == null ) {
+					jQuery(this).closest('tr').addClass('has-error') ;
+					errors.push('Le type d\'illustration '+file.type+' n\'est pas autorisé') ;
+				}
+			}
 		}
 	}) ;
 
