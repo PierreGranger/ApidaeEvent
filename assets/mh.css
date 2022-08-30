@@ -4,8 +4,9 @@ div.periode {
 
 div.timePeriod {
     background:pink ;
+    border:1px dotted red ;
 }
 
 div.timeFrames {
-    background:grey ;   
+    background:lightgreen ;   
 }

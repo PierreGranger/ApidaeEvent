@@ -1,16 +1,21 @@
 
+jQuery(function() {
+	jQuery('.chosen-select').chosen({
+		disable_search_threshold: 10
+	});
+});
 
-	var optsDate = {
-		'dateFormat' : 'dd/mm/yy',
-		'minDate' : '+1d',
-		firstDay:1,
-	} ;
-	var optsTime = {
-		'scrollDefault': '09:00',
-		'timeFormat': 'H:i'
-	} ;
+var optsDate = {
+	'dateFormat' : 'dd/mm/yy',
+	'minDate' : '+1d',
+	firstDay:1,
+} ;
+var optsTime = {
+	'scrollDefault': '09:00',
+	'timeFormat': 'H:i'
+} ;
 
-	var today = new Date() ;
+var today = new Date() ;
 
 jQuery(function(){
 

@@ -1,12 +1,12 @@
 <?php
 
-require_once(realpath(dirname(__FILE__)) . '/requires.inc.php');
+require_once(realpath(dirname(__FILE__)) . '/../src/requires.inc.php');
 
 ?><!DOCTYPE html>
 <html lang="fr">
 
 <head>
-	<?php include('head.inc.php') ; ?>
+	<?php include(realpath(dirname(__FILE__)) . '/../src/head.inc.php') ; ?>
 </head>
 <body>
 

@@ -1,13 +1,13 @@
 <?php
 
 
-require_once(realpath(dirname(__FILE__)) . '/requires.inc.php');
+require_once(realpath(dirname(__FILE__)) . '/../src/requires.inc.php');
 
 ?><!DOCTYPE html>
 <html lang="fr">
 
 <head>
-	<?php include('head.inc.php') ; ?>
+	<?php include(realpath(dirname(__FILE__)) . '/../src/head.inc.php') ; ?>
 </head>
 
 <body>
@@ -37,7 +37,7 @@ require_once(realpath(dirname(__FILE__)) . '/requires.inc.php');
 					$display_form = true;
 
 					if (isset($_POST['nom'])) {
-						include(realpath(dirname(__FILE__)) . '/index.post.php');
+						include(realpath(dirname(__FILE__)) . '/../src/index.post.php');
 					}
 
 					$post = $_POST;
@@ -65,7 +65,7 @@ require_once(realpath(dirname(__FILE__)) . '/requires.inc.php');
 
 			<?php
 			if ($configApidaeEvent['debug'] && isset($_GET['showAbonnes']))
-				include(realpath(dirname(__FILE__)) . '/showAbonnes.inc.php');
+				include(realpath(dirname(__FILE__)) . '/../src/showAbonnes.inc.php');
 			?>
 
 			<form class="form" method="post" enctype="multipart/form-data" novalidate>
@@ -233,7 +233,7 @@ require_once(realpath(dirname(__FILE__)) . '/requires.inc.php');
 
 					<?php if ( @$multiHoraire )
 						{
-							include(realpath(dirname(__FILE__)).'/form.multihoraire.inc.php') ;
+							include(realpath(dirname(__FILE__)) . '/../src/form.multihoraire.inc.php') ;
 						} else {
 					?>
 
@@ -325,7 +325,6 @@ require_once(realpath(dirname(__FILE__)) . '/requires.inc.php');
 
 					<?php if (isset($_GET['generique'])) { ?>
 						<?php
-						// var t = [] ; jQuery('tr.selected').find('span.label').each(function(){t.push(jQuery(this).text())}) ; t.join(',') ;
 						$params_generique = [
 							'presentation' => 'select',
 							'type' => 'unique',

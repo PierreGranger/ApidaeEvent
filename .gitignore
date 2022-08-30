@@ -2,7 +2,6 @@
 /config.surcharge.inc.php
 *.sublime-*
 /vendor/
-/assets/
 /config/*.json
 /config/vendor/
 /node_modules/
@@ -10,6 +9,6 @@
 /md/
 composer.lock
 package-lock.json
-.env.*.local
-.env.local
 /_*
+/.vscode/
+/public/build/

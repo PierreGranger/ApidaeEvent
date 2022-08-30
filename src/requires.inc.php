@@ -2,8 +2,8 @@
 	
 	date_default_timezone_set('Europe/Paris') ;
 
-	require realpath(dirname(__FILE__)).'/vendor/autoload.php' ;
-	require realpath(dirname(__FILE__)).'/config.inc.php' ;
+	require realpath(dirname(__FILE__)).'/../vendor/autoload.php' ;
+	require realpath(dirname(__FILE__)).'/../config.inc.php' ;
 	
 	/** Pour tout usage classique d'ApidaeEvent */
 	//$apidaeEvent = new \PierreGranger\ApidaeEvent($configApidaeEvent) ;
