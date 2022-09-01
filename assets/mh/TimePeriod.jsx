@@ -10,12 +10,8 @@ function TimePeriod({cle, removeTimePeriod, changeTimePeriod, allowedDays, perio
     const [weekDays, setWeekDays] = React.useState([])
     const [timeFrames, setTimeFrames] = React.useState([{index:0}])
 
-    function changeType() {
-
-    }
-
-    function changeWeekDays(days) {
-        setWeekDays(days)
+    function changeTimeFrames(timeFrames) {
+        setTimeFrames(timeFrames)
     }
 
     React.useEffect(() => {
@@ -34,10 +30,10 @@ function TimePeriod({cle, removeTimePeriod, changeTimePeriod, allowedDays, perio
             </div>
             <div className="col">
                 <Type type={type} onChange={setType}></Type>
-                <WeekDays allowedDays={allowedDays} changeWeekDays={changeWeekDays} periodeCle={periodeCle} timePeriodCle={cle}></WeekDays>
+                <WeekDays allowedDays={allowedDays} changeWeekDays={setWeekDays} periodeCle={periodeCle} timePeriodCle={cle}></WeekDays>
             </div>
             <div className="col">
-                <TimeFrames type={type}></TimeFrames>
+                <TimeFrames type={type} changeTimeFrames={changeTimeFrames}></TimeFrames>
             </div>
         </div>
     )
