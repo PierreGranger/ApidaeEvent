@@ -8,23 +8,14 @@
     "test": "tests"
   },
   "dependencies": {
-    "@babel/preset-react": "^7.18.6",
     "@fortawesome/fontawesome-free": "^6.1.2",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "@popperjs/core": "^2.11.6",
     "ajax-bootstrap-select": "^1.4.5",
     "bootstrap": "^5.2.0",
     "bootstrap-chosen": "^1.4.2",
-    "jquery": "^3.6.0",
-    "jquery-datepicker": "^1.12.3",
-    "jquery-ui": "^1.13.0",
-    "moment": "^2.29.4",
-    "popper": "^1.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "timepicker": "^1.13.18"
+    "jquery": "^3.6.0"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^3.0.0",

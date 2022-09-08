@@ -13,7 +13,6 @@ Encore
   .enableBuildNotifications()
   .enableSourceMaps(!Encore.isProduction())
   .enableVersioning(Encore.isProduction())
-  .enableReactPreset()
   .autoProvidejQuery()
 
 module.exports = Encore.getWebpackConfig();

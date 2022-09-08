@@ -1,28 +1,20 @@
 import jquery from 'jquery'
 import 'bootstrap'
-import 'jquery-ui'
- 
+
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 
-//import 'jquery/dist/jquery.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import 'bootstrap-chosen/dist/chosen.jquery-1.4.2/chosen.jquery.min.js'
 import 'bootstrap-chosen/bootstrap-chosen.css'
-//import 'https://www.google.com/recaptcha/api.js'
-import 'ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js'
-import 'ajax-bootstrap-select/dist/css/ajax-bootstrap-select.min.css'
-import 'jquery-ui/themes/base/core.css'
-import 'jquery-ui/themes/base/theme.css'
-import 'jquery-ui/ui/widget.js'
-import 'jquery-ui/ui/widgets/tooltip.js'
-// import 'https://unpkg.com/react@18/umd/react.development.js'
-// import 'https://unpkg.com/react-dom@18/umd/react-dom.development.js'
-// import 'https://unpkg.com/babel-standalone@6/babel.min.js'
+
+// import 'ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js'
+// import 'ajax-bootstrap-select/dist/css/ajax-bootstrap-select.min.css'
+ 
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './mh.css'
-import './mh.jsx'
+
 import './formulaire.js'
 import './formulaire.css'

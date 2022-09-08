@@ -1,8 +1,5 @@
 <?php
 
-$class_label = 'col-md-2 col-sm-2';
-$class_champ = 'col-md-10 col-sm-10';
-
 $http_path = './';
 if (isset($configApidaeEvent['http_path']) && $configApidaeEvent['http_path'] != '')
 	$http_path = $configApidaeEvent['http_path'];
@@ -58,3 +55,9 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 	var icon_moins = '<?php echo $icon_moins; ?>';
 	var phone_placeholder = '<?php echo $phone_placeholder; ?>';
 </script>
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
+<?php if ( isset($_GET['apihours']) ) { ?>
+	<link href="https://form.apihours-cooking.apidae.net/0.6.0/styles.css" rel="stylesheet"/>
+<?php } ?>
