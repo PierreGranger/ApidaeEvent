@@ -12,3 +12,5 @@ package-lock.json
 /_*
 /.vscode/
 /public/build/
+offices.json
+departements.json

@@ -98,8 +98,14 @@
 	$periodesOuvertures = Array() ;
 	foreach ( $_POST['date'] as $i => $date )
 	{
-		if ( sizeof($date) <= 4 ) continue ;
-		if ( ! $apidaeEvent->verifDate($date['debut']) ) continue ;
+		if (sizeof($date) <= 3) {
+			$apidaeEvent->debug($date,'date '.$i.' refusée (<4 champ)') ;
+			continue ;
+		}
+		if (! $apidaeEvent->verifDate($date['debut'])) {
+			$apidaeEvent->debug($date,'date '.$i.' refusée ('.$date['debut'].' invalide)') ;
+			continue ;
+		}
 
 		$date['debut'] = $apidaeEvent->dateUs($date['debut']) ;
 		$date['fin'] = $apidaeEvent->dateUs($date['fin']) ;
@@ -115,6 +121,8 @@
 		$periode['tousLesAns'] = false ;
 		$periode['type'] = 'OUVERTURE_TOUS_LES_JOURS' ;
 		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = Array('libelleFr' => trim($date['complementHoraire'])) ;
+
+		if ( isset($date['timePeriods']) ) $periode['timePeriods'] = json_decode($date['timePeriods']) ;
 
 		$periodesOuvertures[] = $periode ;
 		
@@ -561,6 +569,11 @@
 	if ( isset($root['multimedias']) && sizeof($root['multimedias']) > 0 ) $fieldlist[] = 'multimedias' ;
 	
 	if ( $debug ) $timer->start('enregistrement') ;
+
+	if ( $debug ) {
+		$apidaeEvent->debug($root,$root) ;
+	}
+
 	if ( sizeof($ko) == 0 && ! $nosave )
 	{
 		/*

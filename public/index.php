@@ -37,7 +37,7 @@
 		<?php
 
 			if (isset($_POST['nom'])) {
-				include(realpath(dirname(__FILE__)) . '/../src/index.post.php');
+				include(realpath(dirname(__FILE__)) . '/../src/post.inc.php');
 			}
 
 			$post = $_POST;

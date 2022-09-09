@@ -1,6 +1,9 @@
 import jquery from 'jquery'
 import 'bootstrap'
 
+import { faker } from './formulaire.js'
+global.faker = faker
+
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 
