@@ -23,6 +23,7 @@
                     input.value = timePeriods
                     console.log(timePeriods)
                     try { 
+                        description.innerHTML = ''
                         var tps = JSON.parse(timePeriods)
                         tps.forEach(timePeriod => description.innerHTML += timePeriod.description + "\n" )
                     } catch (e) {}

@@ -1,4 +1,3 @@
-import jquery from 'jquery'
 import 'bootstrap'
 
 import { faker } from './formulaire.js'

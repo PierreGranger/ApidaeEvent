@@ -1,8 +1,7 @@
 <?php
 
-require_once(realpath(dirname(__FILE__)) . '/../requires.inc.php');
-require_once(realpath(dirname(__FILE__)) . '/../vendor/autoload.php');
-require_once(realpath(dirname(__FILE__)) . '/vendor/autoload.php');
+require_once(realpath(dirname(__FILE__)) . '/../../src/requires.inc.php');
+require_once(realpath(dirname(__FILE__)) . '/../../vendor/autoload.php');
 
 $ApidaeSso = new \PierreGranger\ApidaeSso($configApidaeSso, $_SESSION['ApidaeSso']);
 
@@ -20,9 +19,10 @@ $query = array(
     'searchFields' => 'NOM',
     'responseFields' => array('nom', 'id', 'localisation.perimetreGeographique', 'informationsTerritoire.territoireType')
 );
-$url = 'https://api.apidae-tourisme.com/api/v002/recherche/list-objets-touristiques?query=' . json_encode($query);
+$url = $ApidaeSso->url_api().'api/v002/recherche/list-objets-touristiques?query=' . json_encode($query);
 
-$c = json_decode(file_get_contents($url), true);
+$content = file_get_contents($url) ;
+$c = json_decode($content, true);
 
 if (json_last_error() != JSON_ERROR_NONE) die('{"error",3,"retour Apidae incorrect"}');
 

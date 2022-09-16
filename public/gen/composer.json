@@ -1,6 +1,0 @@
-{
-    "require": {
-        "pierre-granger/apidae-sso": "^1.0",
-        "pierre-granger/apidae-membres": "^1.2"
-    }
-}
