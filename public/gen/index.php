@@ -16,7 +16,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 		$apidaeMembres = new ApidaeMembres($configApidaeMembres);
 		$membre = $apidaeMembres->getMembreById($utilisateurApidae['membre']['id']);
 		if (isset($membre['entitesJuridiques'][0]['id'])) {
-			$entite = $apidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],null,$refresh);
+			$entite = $apidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],null,isset($_GET['refresh']));
 			if (isset($entite['informations']['moyensCommunication'])) {
 				foreach ($entite['informations']['moyensCommunication'] as $mc) {
 					if ($mc['type']['id'] == 205) {
@@ -39,9 +39,6 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
-
-	<?php if (file_exists(realpath(dirname(__FILE__)) . '/../../analytics.php'))
-		include(realpath(dirname(__FILE__)) . '/../../analytics.php'); ?>
 
 	<style>
 		div#url,
