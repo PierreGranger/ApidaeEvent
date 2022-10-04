@@ -1,5 +1,5 @@
     
-    <script type="text/javascript" src="https://form.apihours-cooking.apidae.net/0.6.0/bundle.js"></script>
+    <script type="text/javascript" src="https://form.apihours.apidae-tourisme.<?php echo isset($config['apihours']['env']) ? $config['apihours']['env'] : 'com' ; ?>/0.6.0/bundle.js"></script>
 
     <script>
 

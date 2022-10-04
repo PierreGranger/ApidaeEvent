@@ -127,8 +127,7 @@ jQuery(document).on('click','table td.plus .btn',function(){
 		if ( jQuery(this).closest('table').hasClass('mc') ) jQuery(this).attr('placeholder','') ;
 		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
 	}) ;
-	var descriptions = ligne.find('.description')
-	descriptions.each(function() {
+	ligne.find('.description').each(function() {
 		jQuery(this).html('') ;
 	})
 	setIndent(jQuery(this).closest('table')) ;

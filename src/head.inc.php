@@ -57,7 +57,3 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js"></script>
-
-<?php if ( isset($_GET['apihours']) ) { ?>
-	<link href="https://form.apihours-cooking.apidae.net/0.6.0/styles.css" rel="stylesheet"/>
-<?php } ?>
