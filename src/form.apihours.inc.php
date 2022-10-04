@@ -72,15 +72,15 @@
                             </div>
                         </td>
                         <td>
+                            <button type="button" class="timePeriods btn btn-primary" onclick="btnTimePeriods()">Saisie des horaires</button>
+                            <input type="hidden" class="timePeriods" name="date[<?= $i ; ?>][timePeriods]" value="<?= htmlentities(@$post['date'][$i]['timePeriods']) ; ?>" />
+                            <div class="col-12 description" style="white-space:pre-wrap; font-size:.8em;"></div>
+                        </td>
+                        <td>
                             <div class="form-floating">
                                 <input class="form-control" type="text" name="date[<?= $i ; ?>][complementHoraire]" value="<?= htmlentities(@$post['date'][$i]['complementHoraire']) ; ?>" id="date_complement_<?= $i ; ?>" />
                                 <label for="date_<?= $i ; ?>_complement">Autres précisions</label>
                             </div>
-                        </td>
-                        <td>
-                            <button type="button" class="timePeriods btn btn-primary" onclick="btnTimePeriods()">Saisie des horaires</button>
-                            <input type="hidden" class="timePeriods" name="date[<?= $i ; ?>][timePeriods]" value="<?= htmlentities(@$post['date'][$i]['timePeriods']) ; ?>" />
-                            <div class="col-12 description" style="white-space:pre-wrap; font-size:.8em;"></div>
                         </td>
                     </tr>
                 <?php } ?>
