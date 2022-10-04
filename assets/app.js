@@ -1,6 +1,6 @@
 import 'bootstrap'
 
-import { faker, recaptchaKo, recaptchaKo, recaptchaOk } from './formulaire.js'
+import { faker, recaptchaKo, recaptchaOk } from './formulaire.js'
 global.faker = faker
 global.recaptchaKo = recaptchaKo
 global.recaptchaOk = recaptchaOk
