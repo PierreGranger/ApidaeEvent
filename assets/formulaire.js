@@ -379,17 +379,6 @@ function setIndent(rowsContainer, rowsSelector) {
 	}) ;
 }
 
-function recaptchaKo(){
-	jQuery('form.form input.btn-submit').closest('div.form-group').hide() ;
-	jQuery('form.form div#recaptcha p').show() ;
-}
-
-function recaptchaOk()
-{
-	jQuery('form.form input.btn-submit').closest('div.form-group').show() ;
-	jQuery('form.form div#recaptcha p').hide() ;
-}
-
 function valideTarifUnique()
 {
 	var selects = jQuery('form.form div.tarifs table tbody tr select[name^="tarifs"]') ;
@@ -577,6 +566,17 @@ jQuery(document).on('change','input[name*="copyright"]',checkIllustrations) ;
 
 
 
+
+export function recaptchaKo(){
+	jQuery('form.form input.btn-submit').closest('div.form-group').hide() ;
+	jQuery('form.form div#recaptcha p').show() ;
+}
+
+export function recaptchaOk()
+{
+	jQuery('form.form input.btn-submit').closest('div.form-group').show() ;
+	jQuery('form.form div#recaptcha p').hide() ;
+}
 
 export function faker() {
 	var cd = new Date() ;
