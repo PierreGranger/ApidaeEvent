@@ -1,7 +1,9 @@
 import 'bootstrap'
 
-import { faker } from './formulaire.js'
+import { faker, recaptchaKo, recaptchaKo, recaptchaOk } from './formulaire.js'
 global.faker = faker
+global.recaptchaKo = recaptchaKo
+global.recaptchaOk = recaptchaOk
 
 const $ = require('jquery');
 global.$ = global.jQuery = $;
