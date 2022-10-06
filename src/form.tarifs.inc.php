@@ -54,13 +54,13 @@
                                         </td>
                                         <td>
                                             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                                                <input class="form-control" type="text" name="tarifs[<?= $i ; ?>][mini]" value="<?= htmlspecialchars(@$post['tarifs'][$i]['mini']) ; ?>" />
+                                                <input class="form-control float" type="text" name="tarifs[<?= $i ; ?>][mini]" value="<?= htmlspecialchars(@$post['tarifs'][$i]['mini']) ; ?>" />
                                                 <span class="input-group-text"><?= $devise_lib  ; ?></span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                                                <input class="form-control" type="text" name="tarifs[<?= $i ; ?>][maxi]" value="<?= htmlspecialchars(@$post['tarifs'][$i]['maxi']) ; ?>" />
+                                                <input class="form-control float" type="text" name="tarifs[<?= $i ; ?>][maxi]" value="<?= htmlspecialchars(@$post['tarifs'][$i]['maxi']) ; ?>" />
                                                 <span class="input-group-text"><?= $devise_lib  ; ?></span>
                                             </div>
                                         </td>
