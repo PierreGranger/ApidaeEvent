@@ -59,10 +59,21 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 
 		<h1>ApidaeEvent - aide à la configuration</h1>
 
-		<div class="jumbotron">
+		<div class="alert alert-primary">
+				<p>Ce générateur vous permet :</p>
+				<ul>
+					<li>De générer le code d'intégration que vous pourrez ensuite copier/coller</li>
+					<li>De préparer les informations à communiquer à event@apidae-tourisme.zendesk.com (Mails, territoire...)</li>
+				</ul>
+				<p>Il n'enregistre rien :</p>
+				<ul>
+					<li>Toute modification d'option nécessite de recopier/coller le code d'intégration</li>
+					<li>Tout changement d'email à notifier doit être renvoyé à event@apidae-tourisme.zendesk.com</li>
+				</ul>
+				<p>Aide en ligne : <a href="https://aide.apidae-tourisme.com/hc/fr/articles/360030771712-Apidae-Event-">https://aide.apidae-tourisme.com/hc/fr/articles/360030771712-Apidae-Event-</a></p>
+			</div>
 
-			<p>Aide en ligne : <a href="https://aide.apidae-tourisme.com/hc/fr/articles/360030771712-Apidae-Event-">https://aide.apidae-tourisme.com/hc/fr/articles/360030771712-Apidae-Event-</a></p>
-			<!--<p>Documentation : <a target="_blank" href="https://github.com/PGranger/ApidaeEvent">https://github.com/PGranger/ApidaeEvent</a></p>-->
+		<div class="jumbotron">
 
 			<div class="form">
 
@@ -186,8 +197,6 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-				</form>
-
 				<div class="form-group row">
 					<label class="col-4 col-form-label" for="mails">Emails à notifier</label>
 					<div class="col-8">
@@ -195,6 +204,24 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						<small>Séparés par une virgule</small>
 					</div>
 				</div>
+
+				<fieldset>
+					<legend>Affectation forcée</legend>
+					<p class="alert alert-danger">Ne renseignez ce champ que si vous êtes certain(e) d'en avoir bien compris le fonctionnement</p>
+					<p><small>En renseignant cette information, toute manifestation saisie sur le formulaire ci-dessous (récupéré dans le code d'intégration) sera affectée au membre correspondant.<br />
+						Il ne s'agit pas du comportement habituel d'ApidaeEvent : <strong>par défaut</strong> en laissant cette <strong>case vide</strong>, les manifestations saisies seront affectées automatiquement selon la commune de saisie.<br />
+						<strong>Le comportement par défaut est préférable</strong> puisqu'il assure que la manifestation sera affectée à un membre disposant des droits sur la commune.
+				</small></p>
+					<div class="form-group row">
+						<label class="col-4 col-form-label" for="membre">Affectation forcée au membre</label>
+						<div class="col-8">
+							<input type="text" class="form-control" name="membre" id="membre" placeholder="ex : <?php echo $utilisateurApidae['membre']['id']; ?>" />
+							<small><?php echo $utilisateurApidae['membre']['nom']; ?> : <?php echo $utilisateurApidae['membre']['id']; ?></small>
+						</div>
+					</div>
+				</fieldset>
+
+				</form>
 
 				<input type="button" value="Générer" class="gen" />
 
@@ -276,11 +303,11 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 			var form = jQuery('.form form');
 
 			var champs = form.find('select, input').filter(function(i) {
-				return jQuery(this).val() != "" && jQuery(this).val() != 0 ;
+				return jQuery(this).val() != "" && jQuery(this).val() != 0 && jQuery(this).attr('id') != 'mails' ;
 			}) ;
 
 			var params = champs.serialize();
-			console.log(params);
+			console.log('params',params);
 
 			var url = jQuery('div#url').data('base') + '?' + params;
 			jQuery('div#url').html('<a href="' + url + '" target="_blank">' + url + '</a>');
