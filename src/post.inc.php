@@ -51,10 +51,14 @@
 		}
 	}
 
-	include(realpath(dirname(__FILE__)).'/post.infos_proprietaire.inc.php') ;
+	if ( isset($_GET['membre']) ) {
+		include(realpath(dirname(__FILE__)).'/post.affectationForcee.inc.php') ;
+	} else {
+		include(realpath(dirname(__FILE__)).'/post.membreByCommune.inc.php') ;
+	}
 
-	$root = Array() ;
-	$fieldlist = Array() ;
+	$root = [] ;
+	$fieldlist = [] ;
 	
 	$root['type'] = 'FETE_ET_MANIFESTATION' ;
 
