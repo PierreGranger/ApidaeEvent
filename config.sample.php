@@ -43,5 +43,8 @@
 		'recaptcha_sitekey' => '',
 		'http_path' => '',
 		'mimes_illustrations' => Array('jpg' => 'image/jpeg','png' => 'image/png','gif' => 'image/gif'),
-		'mimes_multimedias' => Array('pdf' => 'application/pdf')
+		'mimes_multimedias' => Array('pdf' => 'application/pdf'),
+		'apihours' => [
+			'env' => 'com' // dev|com|cooking
+		]
 	) ;

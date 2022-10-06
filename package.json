@@ -2,23 +2,31 @@
   "name": "apidae-event",
   "version": "1.0.0",
   "description": "dépendances pour ApidaeEvent",
-  "main": "index.php",
+  "main": "public/index.php",
+  "private": true,
   "directories": {
     "test": "tests"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.2",
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-regular-svg-icons": "^6.1.2",
+    "@popperjs/core": "^2.11.6",
     "ajax-bootstrap-select": "^1.4.5",
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5.2.0",
     "bootstrap-chosen": "^1.4.2",
-    "jquery": "^3.6.0",
-    "jquery-datepicker": "^1.12.3",
-    "jquery-ui": "^1.13.0",
-    "popper": "^1.0.1",
-    "timepicker": "^1.13.18"
+    "jquery": "^3.6.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@symfony/webpack-encore": "^3.0.0",
+    "webpack-notifier": "^1.15.0"
+  },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
   },
   "repository": {
     "type": "git",

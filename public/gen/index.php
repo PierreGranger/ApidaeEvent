@@ -1,70 +1,22 @@
 <?php
 
+use PierreGranger\ApidaeMembres;
+
 if (session_status() == PHP_SESSION_NONE) session_start();
 
-require_once(realpath(dirname(__FILE__)) . '/../requires.inc.php');
-require_once(realpath(dirname(__FILE__)) . '/../vendor/autoload.php');
-require_once(realpath(dirname(__FILE__)) . '/vendor/autoload.php');
+require_once(realpath(dirname(__FILE__)) . '/../../src/requires.inc.php');
+require_once(realpath(dirname(__FILE__)) . '/../../vendor/autoload.php');
 
-$ApidaeSso = new \PierreGranger\ApidaeSso($configApidaeSso, $_SESSION['ApidaeSso']);
-if (isset($_GET['logout'])) $ApidaeSso->logout();
-if (isset($_GET['code']) && !$ApidaeSso->connected()) $ApidaeSso->getSsoToken($_GET['code']);
-
-$refresh = isset($_GET['refresh']) ;
-
-if (!$ApidaeSso->connected()) {
-	$ssoUrl = $ApidaeSso->getSsoUrl();
-
-?><html>
-
-	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<script>
-			(function(i, s, o, g, r, a, m) {
-				i['GoogleAnalyticsObject'] = r;
-				i[r] = i[r] || function() {
-					(i[r].q = i[r].q || []).push(arguments)
-				}, i[r].l = 1 * new Date();
-				a = s.createElement(o),
-					m = s.getElementsByTagName(o)[0];
-				a.async = 1;
-				a.src = g;
-				m.parentNode.insertBefore(a, m)
-			})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-			<?php
-			$uid = isset($utilisateurApidae) ? ',{userId:' . $utilisateurApidae['id'] . '}' : '';
-			?>
-			ga('create', 'UA-101563357-1', 'auto'
-				<?php echo $uid; ?>);
-			ga('send', 'pageview');
-		</script>
-		<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-	</head>
-
-	<body>
-
-		<div class="container theme-showcase">
-			<div class="jumbotron">
-				<h1>Espace réservé</h1>
-				<p>Cet espace est réservé : vous pouvez y accéder en vous authentifiant sur Apidae.</p>
-				<p><a class="btn btn-primary btn-lg" role="button" href="<?php echo $ssoUrl; ?>">S'authentifier sur Apidae</a></p>
-			</div>
-		</div>
-	</body>
-
-	</html><?php die(); // Assure qu'il ne se passera plus rien après, parce que l'utilisateur n'est pas identifié.
-		}
+require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 
 		$utilisateurApidae = $ApidaeSso->getUserProfile();
 
 		if (!isset($apidaeEvent)) die('no $apidaeEvent');
 		$siteweb = null;
-		$apidaeMembres = new \PierreGranger\ApidaeMembres($configApidaeMembres);
+		$apidaeMembres = new ApidaeMembres($configApidaeMembres);
 		$membre = $apidaeMembres->getMembreById($utilisateurApidae['membre']['id']);
 		if (isset($membre['entitesJuridiques'][0]['id'])) {
-			$entite = $apidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],null,$refresh);
+			$entite = $apidaeEvent->getOffre($membre['entitesJuridiques'][0]['id'],null,isset($_GET['refresh']));
 			if (isset($entite['informations']['moyensCommunication'])) {
 				foreach ($entite['informations']['moyensCommunication'] as $mc) {
 					if ($mc['type']['id'] == 205) {
@@ -87,9 +39,6 @@ if (!$ApidaeSso->connected()) {
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
-
-	<?php if (file_exists(realpath(dirname(__FILE__)) . '/../../analytics.php'))
-		include(realpath(dirname(__FILE__)) . '/../../analytics.php'); ?>
 
 	<style>
 		div#url,
@@ -220,6 +169,14 @@ if (!$ApidaeSso->connected()) {
 					</div>
 
 					<div class="form-group row">
+						<label class="col-4 col-form-label" for="apihours">Multihoraire ApiHours (popup)
+						</label>
+						<div class="col-8">
+							<input type="checkbox" id="apihours" name="apihours" value="1" />
+						</div>
+					</div>
+
+					<div class="form-group row">
 						<label class="col-4 col-form-label" for="devise">Devise</label>
 						<div class="col-8">
 							<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
@@ -265,7 +222,7 @@ if (!$ApidaeSso->connected()) {
 
 		<div class="alert alert-primary" style="display:none;">
 			<h3>URL de démo</h3>
-			<div id="url" data-base="https://event.apidae-tourisme.com/"></div>
+			<div id="url" data-base="https://event.apidae-tourisme.<?php echo $ApidaeSso->getEnv() == 'prod' ? 'com' : $ApidaeSso->getEnv() ; ?>/"></div>
 		</div>
 
 		<div class="alert alert-primary">
