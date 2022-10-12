@@ -280,7 +280,7 @@
     <fieldset>
         <legend>Organisateur</legend>
         <div class="alert alert-info" role="alert">
-            Vous pouvez laisser un message ci-dessous : il sera communiqué à votre office de tourisme, mais ne sera pas publié.<br />
+            Vous pouvez laisser un message ci-dessous : il sera communiqué au propriétaire du formulaire, mais ne sera pas publié.<br />
             Merci de préciser <strong>l'organisateur de la manifestation</strong> (association ABC...).
         </div>
         <div class="<?= $class_line ; ?>">

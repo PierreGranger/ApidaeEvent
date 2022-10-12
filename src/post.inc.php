@@ -771,7 +771,7 @@
 		$display_form = false ;
 
 		$texte_offre_enregistree = '<p><i class="fas fa-check-circle"></i> <strong>Votre suggestion d\'événement a bien été enregistrée</strong>, nous vous remercions pour votre contribution.</p>'."\n".
-		'<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il a été envoyé en validation, et ne sera visible qu\'<strong>après sa validation</strong> par votre office de tourisme, sur les différents supports de communication alimentés par Apidae.</p>'."\n" ;
+		'<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il a été envoyé en validation, et ne sera visible qu\'<strong>après sa validation</strong>, sur les différents supports de communication alimentés par Apidae.</p>'."\n" ;
 		
 		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
 		{
