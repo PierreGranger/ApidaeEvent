@@ -57,6 +57,10 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 
 	<div class="container">
 
+		<div>
+			<a href="?logout">Se déconnecter</a>
+		</div>
+
 		<h1>ApidaeEvent - aide à la configuration</h1>
 
 		<div class="alert alert-primary">
