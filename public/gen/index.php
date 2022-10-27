@@ -213,7 +213,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 				</div>
 
 				<div class="row mb-3">	
-					<label class="col-sm-6 col-form-label" for="forceMembre"><input type="checkbox" id="forceMembre" name="apihours" value="1" /> Personnalisation du membre valideur dans Apidae
+					<label class="col-sm-6 col-form-label" for="forceMembre"><input type="checkbox" id="forceMembre" value="1" /> Personnalisation du membre valideur dans Apidae
 					</label>
 				</div>
 
