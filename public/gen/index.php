@@ -220,16 +220,15 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 				<div class="alert alert-secondary showForceMembre">
 					<fieldset>
 						<legend>Personnalisation du membre valideur dans Apidae</legend>
-							<p class="alert alert-danger">Ne renseignez ce champ que si vous êtes certain(e) d'en avoir bien compris le fonctionnement</p>
+							<p class="alert alert-danger">Champ à renseigner que  si vous êtes certain(e) d'en avoir bien compris le fonctionnement</p>
 
 							<small><p>La validation des fiches dans Apidae provenant d'Apidae Event est faite, <strong>par défaut</strong> et de manière générale, par l'Office de Tourisme du territoire.
 							<br />Si vous êtes dans ce cas, laissez la <strong>case vide</strong>.</p>
  
-							<p>En renseignant cette information, toute manifestation saisie sur le formulaire paramétré ci-dessus sera affecté au membre choisi dans l'étape suivante :<br />
-							Identifiant du membre valideur : (au lieu de > Affectation forcée au membre)</p></small>
+							<p>En renseignant cette information, toute manifestation saisie sur le formulaire paramétré ci-dessus sera affecté au membre choisi dans l'étape suivante.</p></small>
 							
 							<div class="row mb-3">
-								<label class="col-sm-6 col-form-label" for="membre">Affectation forcée au membre</label>
+								<label class="col-sm-6 col-form-label" for="membre">Identifiant du membre valideur</label>
 								<div class="col-sm-6">
 									<input type="text" class="form-control" name="membre" id="membre" placeholder="ex : <?php echo $utilisateurApidae['membre']['id']; ?>" />
 									<small><?php echo $utilisateurApidae['membre']['nom']; ?> : <?php echo $utilisateurApidae['membre']['id']; ?></small>
