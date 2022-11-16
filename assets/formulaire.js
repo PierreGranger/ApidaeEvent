@@ -40,17 +40,11 @@ jQuery(function(){
 	}) ;
 
 	checkTarifs() ;
-	
-
-	if ( jQuery('select[name="organisateur"]').length > 0 )
-	{
-		
-	}
 
 }) ;
 
 jQuery(document).on('click','form.form .btn-submit',function(){
-	jQuery(this).closest('form.form').submit() ;
+	jQuery(this).closest('form.form').trigger('submit') ;
 }) ;
 
 /**
@@ -64,7 +58,7 @@ jQuery(document).on('submit','form.form',function(e){
 
 	jQuery(this).find('select, input, textarea').each(function(){
 		var okChamp = valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
-		jQuery(this).closest('.form-group').toggleClass('has-error',!okChamp) ;
+		jQuery(this).closest('.form-group, div').toggleClass('has-error',!okChamp) ;
 		if ( ! okChamp )
 		{
 			ok = false ;
@@ -118,20 +112,21 @@ jQuery(document).on('submit','form.form',function(e){
 jQuery(document).on('click','table td.plus .btn',function(){
 	var ligne = jQuery(this).closest('tbody').find('tr').first().clone() ;
 	var tr = jQuery(this).closest('tr') ;
+	var table = jQuery(this).closest('table') ;
 	ligne.insertBefore(tr) ;
 	ligne.find('td').first().addClass('moins').html(icon_moins) ;
 	var champs = ligne.find('input, select') ;
 	champs.each(function(i,v){
 		jQuery(this).removeAttr('required') ;
 		jQuery(this).val('') ;
-		if ( jQuery(this).closest('table').hasClass('mc') ) jQuery(this).attr('placeholder','') ;
+		if ( table.hasClass('mc') ) jQuery(this).attr('placeholder','') ;
 		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
 	}) ;
 	ligne.find('.description').each(function() {
 		jQuery(this).html('') ;
 	})
-	setIndent(jQuery(this).closest('table')) ;
-	initForm(jQuery(this).closest('table')) ;
+	setIndent(table) ;
+	initForm(table) ;
 	valideTarifUnique() ;
 }) ;
 
@@ -148,15 +143,14 @@ jQuery(document).on('click','div.multirows .plus .btn',function(){
 	let multirows = plus.closest('.multirows') ;
 	let rows = multirows.find('.rows') ;
 	let row = rows.find('.row').first().clone() ;
-	console.log(multirows,rows,row)
 	row.find('div').first().addClass('moins').html(icon_moins) ;
 	rows.append(row) ;
 	let champs = row.find('input, select') ;
 	champs.each(function(i,v){
-		plus.removeAttr('required') ;
-		plus.val('') ;
-		if ( rows.hasClass('mc') ) plus.attr('placeholder','') ;
-		plus.removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
+		jQuery(this).removeAttr('required') ;
+		jQuery(this).val('') ;
+		if ( rows.hasClass('mc') ) jQuery(this).attr('placeholder','') ;
+		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
 	}) ;
 	setIndent(rows,'.row') ;
 	initForm(rows) ;
@@ -203,7 +197,7 @@ jQuery(document).on('change','form.form input[name="gratuit"]',function(){
 }) ;
 
 jQuery(document).on('change focusout','form.form select, form.form input, form.form textarea',function(){
-	jQuery(this).closest('.form-group').toggleClass('has-error',!valideChamp(jQuery(this))) ;
+	jQuery(this).closest('.form-group, div').toggleClass('has-error',!valideChamp(jQuery(this))) ;
 }) ;
 
 jQuery(document).on('change','div.tarifs select[name^="tarifs"]',function(){
@@ -356,25 +350,25 @@ function setIndent(rowsContainer, rowsSelector) {
 
 	var i = 0 ;
 	rowsContainer.find(rowsSelector).each(function(){
-		jQuery(this).find('div').each(function(){
-			jQuery(this).find('input, select, label').each(function(){
-				if ( jQuery(this).attr('name') ) {
-					var name = jQuery(this).attr('name').match(/^(.*)\[([0-9]+)\](.*)/i) ;
-					if ( name.length > 1 )
-					{
-						jQuery(this).attr('name',name[1]+'['+i+']'+name[3]) ;
-						jQuery(this).attr('id',name[1]+'_'+i+'_'+name[3]) ;
-					}
+		
+		jQuery(this).find('input, select, label').each(function(){
+			if ( jQuery(this).attr('name') ) {
+				var name = jQuery(this).attr('name').match(/^(.*)\[([0-9]+)\](.*)/i) ;
+				if ( name.length > 1 )
+				{
+					jQuery(this).attr('name',name[1]+'['+i+']'+name[3]) ;
+					jQuery(this).attr('id',name[1]+'_'+i+'_'+name[3]) ;
 				}
-				if ( jQuery(this).attr('for') ) {
-					var forAttr = jQuery(this).attr('for').match(/^(.*)_([0-9]+)_(.*)/i) ;
-					if ( forAttr != null && forAttr.length > 1 )
-					{
-						jQuery(this).attr('for',forAttr[1]+'_'+i+'_'+forAttr[3]) ;
-					}
+			}
+			if ( jQuery(this).attr('for') ) {
+				var forAttr = jQuery(this).attr('for').match(/^(.*)_([0-9]+)_(.*)/i) ;
+				if ( forAttr != null && forAttr.length > 1 )
+				{
+					jQuery(this).attr('for',forAttr[1]+'_'+i+'_'+forAttr[3]) ;
 				}
-			}) ;
+			}
 		}) ;
+	
 		i++ ;
 	}) ;
 }

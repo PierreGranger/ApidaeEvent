@@ -35,19 +35,24 @@
                     <?php
                     for ($i = 0; $i < 1; $i++) {
                         echo "\n\t\t\t\t\t\t" . '<tr>';
-                        echo '<td></td>';
-                        echo '<td>';
-                        echo '<input class="form-control" type="file" name="illustrations[' . $i . ']" accept="image/*" ';
-                        if (isset($_GET['illustrationMini']) && (int)$_GET['illustrationMini'] > 0 && (int)$_GET['illustrationMini'] <= 2000)
-                            echo 'minwidth="' . (int)$_GET['illustrationMini'] . '" ';
-                        echo '/>';
-                        echo '</td>';
-                        echo '<td><input class="form-control" type="text" name="illustrations[' . $i . '][legende]" value="' . htmlspecialchars(@$post['illustrations'][$i]['legende']) . '" /></td>';
-                        echo '<td>';
-                        echo '<div class="form-group">';
-                        echo '<input class="form-control" type="text" name="illustrations[' . $i . '][copyright]" value="' . htmlspecialchars(@$post['illustrations'][$i]['copyright']) . '" />';
-                        echo '</div>';
-                        echo '</td>';
+                            echo '<td></td>';
+                            echo '<td>';
+                                echo '<div class="form-group">' ;
+                                    echo '<input class="form-control" type="file" name="illustrations[' . $i . ']" accept="image/*" ';
+                                    if (isset($_GET['illustrationMini']) && (int)$_GET['illustrationMini'] > 0 && (int)$_GET['illustrationMini'] <= 2000)
+                                        echo 'minwidth="' . (int)$_GET['illustrationMini'] . '" ';
+                                    echo '/>';
+                                echo '</div>' ;
+                            echo '</td>';
+                            echo '<td>' ;
+                                echo '<div class="form-group">' ;
+                                    echo '<input class="form-control" type="text" name="illustrations[' . $i . '][legende]" value="' . htmlspecialchars(@$post['illustrations'][$i]['legende']) . '" /></td>';
+                                echo '</div>' ;
+                            echo '<td>';
+                                echo '<div class="form-group">';
+                                    echo '<input class="form-control" type="text" name="illustrations[' . $i . '][copyright]" value="' . htmlspecialchars(@$post['illustrations'][$i]['copyright']) . '" />';
+                                echo '</div>';
+                            echo '</td>';
                         echo '</tr>';
                     }
                     ?>
@@ -83,10 +88,22 @@
                             echo "\n\t\t\t\t\t\t" . '<tr>';
                             echo '<td></td>';
                             echo '<td>';
-                            echo '<input class="form-control" type="file" name="multimedias[' . $i . ']" value="' . htmlspecialchars(@$post['multimedias'][$i]) . '" accept="' . implode(',', $configApidaeEvent['mimes_multimedias']) . '" />';
+                                echo '<div class="form-group">' ;
+                                    echo '<input class="form-control" type="file" name="multimedias[' . $i . ']" ' ;
+                                        //echo 'value="' . htmlspecialchars(@$post['multimedias'][$i]) . '" ' ;
+                                    echo 'accept="' . implode(',', $configApidaeEvent['mimes_multimedias']) . '" />';
+                                echo '</div>' ;
                             echo '</td>';
-                            echo '<td><input class="form-control" type="text" name="multimedias[' . $i . '][legende]" value="' . htmlspecialchars(@$post['multimedias'][$i]['legende']) . '" /></td>';
-                            echo '<td><input class="form-control" type="text" name="multimedias[' . $i . '][copyright]" value="' . htmlspecialchars(@$post['multimedias'][$i]['copyright']) . '" /></td>';
+                            echo '<td>' ;
+                                echo '<div class="form-group">' ;
+                                    echo '<input class="form-control" type="text" name="multimedias[' . $i . '][legende]" value="' . htmlspecialchars(@$post['multimedias'][$i]['legende']) . '" />' ;
+                                echo '</div>' ;
+                            echo '</td>';
+                            echo '<td>' ;
+                                echo '<div class="form-group">' ;
+                                    echo '<input class="form-control" type="text" name="multimedias[' . $i . '][copyright]" value="' . htmlspecialchars(@$post['multimedias'][$i]['copyright']) . '" />' ;
+                                echo '</div>' ;
+                            echo '</td>';
                             echo '</tr>';
                         }
                         ?>
