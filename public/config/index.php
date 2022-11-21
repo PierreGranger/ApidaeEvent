@@ -2,11 +2,12 @@
 
     if (session_status() == PHP_SESSION_NONE) session_start() ;
 
-    require_once(realpath(dirname(__FILE__)).'/../requires.inc.php') ;
-    require_once(realpath(dirname(__FILE__)).'/../vendor/autoload.php') ;
-    require_once(realpath(dirname(__FILE__)).'/vendor/autoload.php') ;
+    require_once(realpath(dirname(__FILE__)).'/../../src/requires.inc.php') ;
+    require_once(realpath(dirname(__FILE__)).'/../../vendor/autoload.php') ;
 
     require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
+
+    $confPath = realpath(dirname(__FILE__).'/../../') ;
 
     $types = Array('offices','departements') ;
 
@@ -22,7 +23,7 @@
             $retour['erreur'] = 'Le formulaire n\'est pas conforme' ;
         }
 
-        $ok = file_put_contents(realpath(dirname(__FILE__)).'/'.$_GET['type'].'.json',$json_edite) ;
+        $ok = file_put_contents($confPath.'/'.$_GET['type'].'.json',$json_edite) ;
         if ( $ok === false )
         {
             $retour['erreur'] = 'Ecriture du fichier de config impossible' ;
@@ -32,18 +33,20 @@
         {
             $json_edite = json_encode($_POST['json'],JSON_PRETTY_PRINT) ;
             
-            $to = $configApidaeEvent['mail_admin'][0] ;
-            $subject = 'ApidaeEvent : config '. $utilisateurApidae['firstName'].' '.$utilisateurApidae['lastName'] . ' #' . $utilisateurApidae['id'] ;
+            if ($configApidaeEvent['debug'] !== true) {
+                $to = $configApidaeEvent['mail_admin'][0] ;
+                $subject = 'ApidaeEvent : config '. $utilisateurApidae['firstName'].' '.$utilisateurApidae['lastName'] . ' #' . $utilisateurApidae['id'] ;
 
-            $headers[] = 'MIME-Version: 1.0';
-            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-            $headers[] = 'From: Apidae Event <'.$configApidaeEvent['mail_expediteur'].'>';
-            $headers[] = 'To: '.$to ;
-            
-            $message = '<pre>'.$json_edite.'</pre>' ;
+                $headers[] = 'MIME-Version: 1.0';
+                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                $headers[] = 'From: Apidae Event <'.$configApidaeEvent['mail_expediteur'].'>';
+                $headers[] = 'To: '.$to ;
 
-            // Envoi
-            mail($to, $subject, $message, implode("\r\n", $headers));
+                $message = '<pre>'.$json_edite.'</pre>' ;
+
+                // Envoi
+                mail($to, $subject, $message, implode("\r\n", $headers));
+            }
 
             $retour['json'] = $_POST['json'] ;
         }
@@ -71,8 +74,6 @@
         <script src="./jsoneditor.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-		<?php if ( file_exists(realpath(dirname(__FILE__)).'/../analytics.php') )
-			include(realpath(dirname(__FILE__)).'/../analytics.php') ; ?>
         <script>
             var k = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65],
             n = 0;
@@ -143,10 +144,14 @@
                     data:{'json':editor.getValue()}
                 }) ;
                 ajax.fail(function(e){
-                    alert(e) ;
-                    console.log(e) ;
+                    console.log('ajax.fail')
+                    console.log('e',e)
+                    if ( e.responseText !== 'undefined' ) alert(e.responseText)
+                    else alert('ajax.fail @see console')
                 }) ;
                 ajax.done(function(e){
+                    console.log('ajax.done')
+                    console.log('e',e)
                     if ( e['erreur'] != '0' )
                     {
                         console.log(e) ;
@@ -184,22 +189,8 @@
             if ( isset($_GET['type']) && in_array($_GET['type'],$types) )
             {
 
-                $startval = file_get_contents(realpath(dirname(__FILE__)).'/'.$_GET['type'].'.json') ;
+                $startval = file_get_contents($confPath.'/'.$_GET['type'].'.json') ;
 
-                /*
-                if ( isset($_GET['reset']) )
-                {
-                    include(realpath(dirname(__FILE__)).'/../config.inc.php') ;
-                    $membres = $configApidaeEvent['membres'] ;
-                    foreach ( $membres as $k => $mb )
-                    {
-                        if ( isset($mb['secret']) ) { unset($membres[$k]) ; continue ; }
-                        if ( ! is_array($mb['mail']) ) $membres[$k]['mail'] = Array($mb['mail']) ;
-                    }
-                    $startval = json_encode($membres) ;
-                }
-                */
-                
                 ?>
 
                     <input type="hidden" name="type" value="<?php echo $_GET['type'] ; ?>" />

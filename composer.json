@@ -1,9 +1,10 @@
 {
 	"require" : {
-		"pierre-granger/apidae-core": "^0.6.2",
-		"pierre-granger/apidae-ecriture": "^0.5",
-		"pierre-granger/apidae-membres": "^1.0",
-		"sitra-tourisme/sitra-api-php": "dev-dev"
+		"pierre-granger/apidae-core": "^0.6.4",
+		"pierre-granger/apidae-ecriture": "^0.6.1",
+		"pierre-granger/apidae-membres": "^1.3",
+		"apidae-tourisme/apidae-php": "^2.0",
+		"pierre-granger/apidae-sso": "^1.2"
 	},
 	"autoload": {
         "psr-4": {

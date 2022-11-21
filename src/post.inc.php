@@ -51,10 +51,14 @@
 		}
 	}
 
-	include(realpath(dirname(__FILE__)).'/post.infos_proprietaire.inc.php') ;
+	if ( isset($_GET['membre']) ) {
+		include(realpath(dirname(__FILE__)).'/post.affectationForcee.inc.php') ;
+	} else {
+		include(realpath(dirname(__FILE__)).'/post.membreByCommune.inc.php') ;
+	}
 
-	$root = Array() ;
-	$fieldlist = Array() ;
+	$root = [] ;
+	$fieldlist = [] ;
 	
 	$root['type'] = 'FETE_ET_MANIFESTATION' ;
 
@@ -98,8 +102,14 @@
 	$periodesOuvertures = Array() ;
 	foreach ( $_POST['date'] as $i => $date )
 	{
-		if ( sizeof($date) <= 4 ) continue ;
-		if ( ! $apidaeEvent->verifDate($date['debut']) ) continue ;
+		if (sizeof($date) <= 3) {
+			$apidaeEvent->debug($date,'date '.$i.' refusée (<4 champ)') ;
+			continue ;
+		}
+		if (! $apidaeEvent->verifDate($date['debut'])) {
+			$apidaeEvent->debug($date,'date '.$i.' refusée ('.$date['debut'].' invalide)') ;
+			continue ;
+		}
 
 		$date['debut'] = $apidaeEvent->dateUs($date['debut']) ;
 		$date['fin'] = $apidaeEvent->dateUs($date['fin']) ;
@@ -115,6 +125,8 @@
 		$periode['tousLesAns'] = false ;
 		$periode['type'] = 'OUVERTURE_TOUS_LES_JOURS' ;
 		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = Array('libelleFr' => trim($date['complementHoraire'])) ;
+
+		if ( isset($date['timePeriods']) ) $periode['timePeriods'] = json_decode($date['timePeriods']) ;
 
 		$periodesOuvertures[] = $periode ;
 		
@@ -561,6 +573,11 @@
 	if ( isset($root['multimedias']) && sizeof($root['multimedias']) > 0 ) $fieldlist[] = 'multimedias' ;
 	
 	if ( $debug ) $timer->start('enregistrement') ;
+
+	if ( $debug ) {
+		$apidaeEvent->debug($root,$root) ;
+	}
+
 	if ( sizeof($ko) == 0 && ! $nosave )
 	{
 		/*
@@ -754,7 +771,7 @@
 		$display_form = false ;
 
 		$texte_offre_enregistree = '<p><i class="fas fa-check-circle"></i> <strong>Votre suggestion d\'événement a bien été enregistrée</strong>, nous vous remercions pour votre contribution.</p>'."\n".
-		'<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il a été envoyé en validation, et ne sera visible qu\'<strong>après sa validation</strong> par votre office de tourisme, sur les différents supports de communication alimentés par Apidae.</p>'."\n" ;
+		'<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il ne sera visible sur les différents supports de communication alimentés par Apidae qu\'<strong>après validation</strong>.</p>'."\n" ;
 		
 		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
 		{

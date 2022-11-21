@@ -1,16 +1,21 @@
 
+jQuery(function() {
+	jQuery('.chosen-select').chosen({
+		disable_search_threshold: 10
+	});
+});
 
-	var optsDate = {
-		'dateFormat' : 'dd/mm/yy',
-		'minDate' : '+1d',
-		firstDay:1,
-	} ;
-	var optsTime = {
-		'scrollDefault': '09:00',
-		'timeFormat': 'H:i'
-	} ;
+var optsDate = {
+	'dateFormat' : 'dd/mm/yy',
+	'minDate' : '+1d',
+	firstDay:1,
+} ;
+var optsTime = {
+	'scrollDefault': '09:00',
+	'timeFormat': 'H:i'
+} ;
 
-	var today = new Date() ;
+var today = new Date() ;
 
 jQuery(function(){
 
@@ -35,17 +40,11 @@ jQuery(function(){
 	}) ;
 
 	checkTarifs() ;
-	
-
-	if ( jQuery('select[name="organisateur"]').length > 0 )
-	{
-		
-	}
 
 }) ;
 
 jQuery(document).on('click','form.form .btn-submit',function(){
-	jQuery(this).closest('form.form').submit() ;
+	jQuery(this).closest('form.form').trigger('submit') ;
 }) ;
 
 /**
@@ -59,7 +58,7 @@ jQuery(document).on('submit','form.form',function(e){
 
 	jQuery(this).find('select, input, textarea').each(function(){
 		var okChamp = valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
-		jQuery(this).closest('.form-group').toggleClass('has-error',!okChamp) ;
+		jQuery(this).closest('.form-group, div').toggleClass('has-error',!okChamp) ;
 		if ( ! okChamp )
 		{
 			ok = false ;
@@ -113,17 +112,21 @@ jQuery(document).on('submit','form.form',function(e){
 jQuery(document).on('click','table td.plus .btn',function(){
 	var ligne = jQuery(this).closest('tbody').find('tr').first().clone() ;
 	var tr = jQuery(this).closest('tr') ;
+	var table = jQuery(this).closest('table') ;
 	ligne.insertBefore(tr) ;
 	ligne.find('td').first().addClass('moins').html(icon_moins) ;
 	var champs = ligne.find('input, select') ;
 	champs.each(function(i,v){
 		jQuery(this).removeAttr('required') ;
 		jQuery(this).val('') ;
-		if ( jQuery(this).closest('table').hasClass('mc') ) jQuery(this).attr('placeholder','') ;
+		if ( table.hasClass('mc') ) jQuery(this).attr('placeholder','') ;
 		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
 	}) ;
-	setIndent(jQuery(this).closest('table')) ;
-	initForm(jQuery(this).closest('table')) ;
+	ligne.find('.description').each(function() {
+		jQuery(this).html('') ;
+	})
+	setIndent(table) ;
+	initForm(table) ;
 	valideTarifUnique() ;
 }) ;
 
@@ -132,6 +135,37 @@ jQuery(document).on('click','table td.moins',function(){
 	setIndent(jQuery(this).closest('table')) ;
 	initForm(jQuery(this).closest('table')) ;
 }) ;
+
+
+// Clone row in multirows.
+jQuery(document).on('click','div.multirows .plus .btn',function(){
+	let plus = jQuery(this) ;
+	let multirows = plus.closest('.multirows') ;
+	let rows = multirows.find('.rows') ;
+	let row = rows.find('.row').first().clone() ;
+	row.find('div').first().addClass('moins').html(icon_moins) ;
+	rows.append(row) ;
+	let champs = row.find('input, select') ;
+	champs.each(function(i,v){
+		jQuery(this).removeAttr('required') ;
+		jQuery(this).val('') ;
+		if ( rows.hasClass('mc') ) jQuery(this).attr('placeholder','') ;
+		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
+	}) ;
+	setIndent(rows,'.row') ;
+	initForm(rows) ;
+	valideTarifUnique() ;
+}) ;
+
+jQuery(document).on('click','div.multirows .moins',function(){
+	jQuery(this).closest('.row').remove() ;
+	setIndent(jQuery(this).closest('.rows'),'.row') ;
+	initForm(jQuery(this).closest('.rows')) ;
+}) ;
+
+
+
+
 
 jQuery(document).on('click','div.date span.input-group-addon',function(){
 	jQuery(this).closest('div').find('button').trigger('click') ;
@@ -163,7 +197,7 @@ jQuery(document).on('change','form.form input[name="gratuit"]',function(){
 }) ;
 
 jQuery(document).on('change focusout','form.form select, form.form input, form.form textarea',function(){
-	jQuery(this).closest('.form-group').toggleClass('has-error',!valideChamp(jQuery(this))) ;
+	jQuery(this).closest('.form-group, div').toggleClass('has-error',!valideChamp(jQuery(this))) ;
 }) ;
 
 jQuery(document).on('change','div.tarifs select[name^="tarifs"]',function(){
@@ -307,38 +341,36 @@ function checkTarifs() {
 }
 
 function initForm(elem) {
-
-	//elem.find('input.date').not('.hasDatepicker').datepicker(optsDate).addClass('hasDatepicker').prop('min',today) ;
-	//elem.find('input.time').not('.hasTimepicker').timepicker(optsTime).addClass('hasTimepicker') ;
-	//jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
-
 	checkTarifs() ;
-
 }
 
-function setIndent(table) {
+function setIndent(rowsContainer, rowsSelector) {
+
+	if ( typeof rowsSelector === 'undefined' ) rowsSelector = 'tbody tr'
+
 	var i = 0 ;
-	table.find('tbody tr').each(function(){
-		jQuery(this).find('input, select').each(function(){
-			var trouve = jQuery(this).attr('name').match(/^(.*)\[([0-9]+)\](.*)/i) ;
-			if ( trouve.length > 1 )
-			{
-				jQuery(this).attr('name',trouve[1]+'['+i+']'+trouve[3]) ;
+	rowsContainer.find(rowsSelector).each(function(){
+		
+		jQuery(this).find('input, select, label').each(function(){
+			if ( jQuery(this).attr('name') ) {
+				var name = jQuery(this).attr('name').match(/^(.*)\[([0-9]+)\](.*)/i) ;
+				if ( name.length > 1 )
+				{
+					jQuery(this).attr('name',name[1]+'['+i+']'+name[3]) ;
+					jQuery(this).attr('id',name[1]+'_'+i+'_'+name[3]) ;
+				}
+			}
+			if ( jQuery(this).attr('for') ) {
+				var forAttr = jQuery(this).attr('for').match(/^(.*)_([0-9]+)_(.*)/i) ;
+				if ( forAttr != null && forAttr.length > 1 )
+				{
+					jQuery(this).attr('for',forAttr[1]+'_'+i+'_'+forAttr[3]) ;
+				}
 			}
 		}) ;
+	
 		i++ ;
 	}) ;
-}
-
-function recaptchaKo(){
-	jQuery('form.form input.btn-submit').closest('div.form-group').hide() ;
-	jQuery('form.form div#recaptcha p').show() ;
-}
-
-function recaptchaOk()
-{
-	jQuery('form.form input.btn-submit').closest('div.form-group').show() ;
-	jQuery('form.form div#recaptcha p').hide() ;
 }
 
 function valideTarifUnique()
@@ -529,13 +561,25 @@ jQuery(document).on('change','input[name*="copyright"]',checkIllustrations) ;
 
 
 
-function faker() {
+export function recaptchaKo(){
+	jQuery('form.form input.btn-submit').closest('div.form-group').hide() ;
+	jQuery('form.form div#recaptcha p').show() ;
+}
+
+export function recaptchaOk()
+{
+	jQuery('form.form input.btn-submit').closest('div.form-group').show() ;
+	jQuery('form.form div#recaptcha p').hide() ;
+}
+
+export function faker() {
 	var cd = new Date() ;
 	var td = cd.getDate()+'/'+(cd.getMonth()+1)+' - '+cd.getHours()+':'+cd.getMinutes() ;
 	jQuery('input[name="nom"]').val('Test '+td) ;
 	jQuery('input[type="tel"]').val('01 23 45 67 89') ;
 	jQuery('select[name="portee"]').val('2354') ;
-	jQuery('select[name="commune"]').val('1408|03510|Molinet|03173') ;
+	//jQuery('select[name="commune"]').val('1408|03510|Molinet|03173') ;
+	jQuery('select[name="commune"]').val('14707|37260|Villeperdue|37278') ;
 	jQuery("form.form select.chosen").trigger("chosen:updated");
 
 	var d5 = new Date(new Date().getTime()+(5*24*60*60*1000));
