@@ -220,7 +220,10 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 				<div class="alert alert-secondary showForceMembre">
 					<fieldset>
 						<legend>Personnalisation du membre valideur dans Apidae</legend>
-							<p class="alert alert-danger">Champ à renseigner que  si vous êtes certain(e) d'en avoir bien compris le fonctionnement</p>
+							<p class="alert alert-danger">
+								Champ à renseigner seulement si vous êtes certain(e) d'en avoir bien compris le fonctionnement : 
+								<a href="https://aide.apidae-tourisme.com/hc/fr/articles/6791266766236-Apidae-Event-changer-le-membre-valideur" target="_blank">Voir la documentation</a>
+							</p>
 
 							<small><p>La validation des fiches dans Apidae provenant d'Apidae Event est faite, <strong>par défaut</strong> et de manière générale, par l'Office de Tourisme du territoire.
 							<br />Si vous êtes dans ce cas, laissez la <strong>case vide</strong>.</p>
