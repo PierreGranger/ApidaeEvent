@@ -1,6 +1,6 @@
 <?php
 
-    require_once(realpath(dirname(__FILE__)).'/../requires.inc.php') ;
+    require_once(realpath(dirname(__FILE__)).'/../src/requires.inc.php') ;
 
     /**
      * Fonctions qui utilisent du cache
