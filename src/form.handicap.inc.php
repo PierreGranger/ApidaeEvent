@@ -4,7 +4,7 @@
     // https://apidae-tourisme.zendesk.com/agent/tickets/5997
     $params = array(
         'presentation' => 'checkbox',
-        'include' => array(3651, 3653, 3652, 3674, 3675, 3943, 3676, 1191, 1196, 4217, 3666, 1199, 4219)
+        'include' => array(3651, 3653, 3652, 3674, 3675, 3943, 3676, 1191, 1196, 4217, 1199, 4219)
     );
     ?>
     <div class="<?= $class_line ; ?> TourismeAdapte">
