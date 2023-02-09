@@ -106,7 +106,7 @@
                 //1277, // Espèces
                 4098, // Moneo resto
                 5408, // Monnaie locale
-                5558, // Paiement en ligne
+                //5558, // Paiement en ligne
                 1287, // Paypal
                 1285, // Titre Restaurant
                 1281, // Virement
