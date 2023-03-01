@@ -253,7 +253,7 @@ function valideChamp(champ)
 			var beautify = champ.val().match(/([0-9+]{1,2})/g) ;
 			if ( typeof beautify == 'object' && beautify != null ) champ.val(beautify.join(' ')) ;
 		}
-		else if ( devise == 'CHF' || devise == 'CFP' )
+		else if ( devise == 'CHF' || devise == 'CFP' || devise == 'XPF' )
 		{
 			var tmp = val.replace(/[^0-9+]/g,'') ;
 			if ( ! tmp.match(/^[0-9+]{6,14}$/) ) return false ;

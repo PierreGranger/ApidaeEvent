@@ -4,7 +4,7 @@ $http_path = './';
 if (isset($configApidaeEvent['http_path']) && $configApidaeEvent['http_path'] != '')
 	$http_path = $configApidaeEvent['http_path'];
 
-$devises = ['EUR' => '€', 'CHF' => 'CHF', 'CFP' => 'CFP'];
+$devises = ['EUR' => '€', 'CHF' => 'CHF', 'CFP' => 'CFP', 'XPF' => 'XPF'];
 $phone_placeholder = '00 00 00 00 00';
 
 $theme_exclude = [] ;
@@ -16,7 +16,7 @@ if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
 	/**
 	 * Exceptions pour Nouvelle-Calédonie
 	 */
-	if ($_GET['devise'] == 'CFP') {
+	if ($_GET['devise'] == 'CFP' || $_GET['devise'] == 'XPF') {
 		$phone_placeholder = '00 00 00';
 		$theme_exclude = [
 			2155, 2311, 2312, 2313, 2315, 2316, 2317, 2318, 2319, 2320, 2329, 2321, 2322, 2323, 2324, 4584, 4968 // Ski

@@ -199,7 +199,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						<div class="col-sm-6">
 							<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
 							<label><input type="radio" id="devise_chf" name="devise" value="CHF" /> Franc suisse (CHF)</label>
-							<label><input type="radio" id="devise_cfp" name="devise" value="CFP" /> Franc pacifique (CFP)</label>
+							<label><input type="radio" id="devise_xpf" name="devise" value="XPF" /> Franc pacifique (XPF)</label>
 
 						</div>
 					</div>
