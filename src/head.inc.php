@@ -5,30 +5,30 @@ if (isset($configApidaeEvent['http_path']) && $configApidaeEvent['http_path'] !=
 	$http_path = $configApidaeEvent['http_path'];
 
 $devises = ['EUR' => '€', 'CHF' => 'CHF', 'CFP' => 'CFP', 'XPF' => 'XPF'];
-$phone_placeholder = '00 00 00 00 00';
+$devises_keys = array_keys($devises) ;
+
 
 $theme_exclude = [] ;
 $categorie_exclude = [] ;
 
-if (isset($_GET['devise']) && isset($devises[$_GET['devise']])) {
-	$devise_lib = $devises[$_GET['devise']];
-	$devise_apidae = $_GET['devise'];
-	/**
-	 * Exceptions pour Nouvelle-Calédonie
-	 */
-	if ($_GET['devise'] == 'CFP' || $_GET['devise'] == 'XPF') {
-		$phone_placeholder = '00 00 00';
-		$theme_exclude = [
-			2155, 2311, 2312, 2313, 2315, 2316, 2317, 2318, 2319, 2320, 2329, 2321, 2322, 2323, 2324, 4584, 4968 // Ski
-			, 2182, 2330, 2331, 2332 // Sports de glace
-			, 2259, 2341, 2342, 4104 // Sports d'hiver
-		];
-	} elseif ($_GET['devise'] == 'CHF') {
-		$phone_placeholder = '+41 00 000 00 00';
-	}
-} else {
-	$devise_lib = '€';
-	$devise_apidae = 'EUR';
+if ( isset($_GET['devise']) && in_array($_GET['devise'],$devises_keys)) {
+	$devise_apidae = $_GET['devise'] ;
+	if ( $devise_apidae == 'CFP' ) $devise_apidae = 'XPF' ;
+}
+
+$devise_lib = $devises[$devise_apidae];
+
+$phone_placeholder = '00 00 00 00 00';
+
+if ($devise_apidae == 'XPF') {
+	$phone_placeholder = '00 00 00';
+	$theme_exclude = [
+		2155, 2311, 2312, 2313, 2315, 2316, 2317, 2318, 2319, 2320, 2329, 2321, 2322, 2323, 2324, 4584, 4968 // Ski
+		, 2182, 2330, 2331, 2332 // Sports de glace
+		, 2259, 2341, 2342, 4104 // Sports d'hiver
+	];
+} elseif ($devise_key == 'CHF') {
+	$phone_placeholder = '+41 00 000 00 00';
 }
 
 $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
