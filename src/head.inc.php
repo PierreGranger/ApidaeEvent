@@ -7,7 +7,7 @@ if (isset($configApidaeEvent['http_path']) && $configApidaeEvent['http_path'] !=
 $devises = ['EUR' => '€', 'CHF' => 'CHF', 'CFP' => 'CFP', 'XPF' => 'XPF'];
 $devises_keys = array_keys($devises) ;
 
-
+$devise_apidae = 'EUR' ;
 $theme_exclude = [] ;
 $categorie_exclude = [] ;
 
