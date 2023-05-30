@@ -65,7 +65,7 @@
     </fieldset>
 
     <?php if (isset($_GET['mm']) && $_GET['mm'] == 1) { ?>
-        <fieldset>
+        <fieldset class="multimedias">
             <legend>Multimédias</legend>
             <div class="alert alert-warning" role="alert">
                 Vous pouvez ajouter ci-dessous des fichiers PDF si nécessaire (si vous avez un programme par exemple).
@@ -82,6 +82,11 @@
                             <th>Copyright</th>
                         </tr>
                     </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                    </tfoot>
                     <tbody>
                         <?php
                         for ($i = 0; $i < 1; $i++) {

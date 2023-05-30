@@ -78,8 +78,14 @@ jQuery(document).on('submit','form.form',function(e){
 		ok = false ;
 	}
 
-	var erreurIllustrations = checkIllustrations() ;
+	var erreurIllustrations = checkFilesInput('illustrations') ;
 	if ( erreurIllustrations !== true )
+	{
+		ok = false ;
+	}
+
+	var erreurMultimedias = checkFilesInput('multimedias') ;
+	if ( erreurMultimedias !== true )
 	{
 		ok = false ;
 	}
@@ -439,12 +445,16 @@ jQuery(document).on('change','fieldset.contacts',checkContacts) ;
  * 1) ajout du ?illustrationObligatoire=1 => <fieldset class="illustrations required">
  * 2) ajout du ?illustrationMini=XX => <input type="file" minwidth="XX" />
  */
-function checkIllustrations() {
+function checkFilesInput(type) {
 
 	var dbg = true ;
-	var errors = [] ;
+	var errors = [];
+	
+	if (type != 'illustrations' && type != 'multimedias') {
+		return false;
+	}
 
-	var fieldset = jQuery('fieldset.illustrations') ;
+	var fieldset = jQuery('fieldset.'+type) ;
 	var inputs = fieldset.find('input[type="file"]') ;
 	var tfoot = fieldset.find('tfoot tr td') ;
 
@@ -459,7 +469,7 @@ function checkIllustrations() {
 		if ( jQuery(this).get(0).files.length == 1 )
 		{
 			/**
-			 * Vérification de la taille des illustrations envoyées
+			 * Vérification de la taille des fichiers envoyées
 			 */
 			if ( typeof jQuery(this).attr('minwidth') != 'undefined' )
 			{
@@ -469,7 +479,7 @@ function checkIllustrations() {
 					if ( jQuery(this).data('width') < minWidth )
 					{
 						jQuery(this).closest('tr').addClass('has-error') ;
-						errors.push('Les illustrations doivent faire '+minWidth+'px au minimum') ;
+						errors.push('Les '+type+' doivent faire '+minWidth+'px au minimum') ;
 					}
 				}
 			}
@@ -489,14 +499,16 @@ function checkIllustrations() {
 
 			/**
 			 * Vérification de la taille du fichier (10 Mo max acceptés par les API)
+			 * 30/05/2023 : Toujous imparfait parce qu'il faudrait vérifier le poids total des fichiers et non le poids de chaque fichier individuel
 			 */
 			if ( window.FileReader )
 			{
-				let file = jQuery(this).get(0).files[0] ;
-				if ( file.size > 10000000 )
+				let file = jQuery(this).get(0).files[0];
+				var limit = type == 'illustrations' ? 10000000 : 5000000;
+				if ( file.size > limit )
 				{
 					jQuery(this).closest('tr').addClass('has-error') ;
-					errors.push('Les illustrations doivent faire moins de 10 Mo') ;
+					errors.push('Les '+type+' doivent faire moins de '+(limit/1000000)+' Mo') ;
 				}
 			}
 
@@ -504,8 +516,12 @@ function checkIllustrations() {
 			 * Vérification du type mime
 			 */
 			if (window.FileReader && window.Blob) {
-				let file = jQuery(this).get(0).files[0] ;
-				if ( file.type.toString().match(/image\/(png|jpg|jpeg|gif)/gi) == null ) {
+				let file = jQuery(this).get(0).files[0];
+				if (
+					(type == 'illustrations' && file.type.toString().match(/image\/(png|jpg|jpeg|gif)/gi) == null)
+					||
+					(type == 'multimedias' && file.type.toString().match(/application\/(pdf)/gi) == null)
+				) {
 					jQuery(this).closest('tr').addClass('has-error') ;
 					errors.push('Le type d\'illustration '+file.type+' n\'est pas autorisé') ;
 				}
@@ -519,7 +535,7 @@ function checkIllustrations() {
 	if ( nbfiles == 0 && fieldset.hasClass('required') )
 	{
 		fieldset.find('tbody tr').first().addClass('has-error') ;
-		errors.push('1 illustration minimum') ;
+		errors.push('1 '+type+' minimum') ;
 	}
 
 
@@ -533,24 +549,38 @@ function checkIllustrations() {
 }
 
 /**
- * Comme le chargement de l'image est asynchrone on ne doit lancer le checkIllustrations qu'après
+ * Comme le chargement de l'image est asynchrone on ne doit lancer le checkFilesInput qu'après
  */
-//jQuery(document).on('change','fieldset.illustrations',checkIllustrations) ;
-jQuery(document).on('change','fieldset.illustrations input[type="file"]',function(){
+jQuery(document).on('change','fieldset.illustrations input[type="file"], fieldset.multimedias input[type="file"]',function(){
 	var reader = new FileReader() ;
 	reader.readAsDataURL(jQuery(this).get(0).files[0]) ;
-	var input = jQuery(this) ;
-	reader.onload = function(e) {
-		var img = new Image() ;
-		img.onload = function() {
-			input.data('width',this.width) ;
-			checkIllustrations() ;
-		}
-		img.src = e.target.result ;
-	} ;
+	var input = jQuery(this);
+	var type = null;
+	var fieldset = jQuery(this).closest('fieldset');
+	if (fieldset.hasClass('illustrations')) type = 'illustrations';
+	else if (fieldset.hasClass('multimedias')) type = 'multimedias';
+	if (type != null) {
+		reader.onload = function (e) {
+			if ( type == 'illustrations' ) {
+				var img = new Image();
+				img.onload = function () {
+					input.data('width', this.width);
+					checkFilesInput(type);
+				}
+				img.src = e.target.result;
+			} else {
+				checkFilesInput(type);
+			}
+		};
+	}
 }) ;
 
-jQuery(document).on('change','input[name*="copyright"]',checkIllustrations) ;
+
+
+
+jQuery(document).on('change', 'input[name*="copyright"]', function () {
+	checkFilesInput('illustrations');
+}) ;
 
 
 
