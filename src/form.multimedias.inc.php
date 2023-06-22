@@ -6,12 +6,12 @@
     <fieldset class="<?php echo implode(' ', $classes); ?>">
         <legend>Photos</legend>
         <div class="alert alert-warning" role="alert">
-            Vos photos doivent être libres de droit et de bonne qualité
+            Vos photos doivent être libres de droit et de bonne qualité (
             <?php if (isset($_GET['illustrationMini'])) { ?>
-                (<strong><?php echo $_GET['illustrationMini']; ?>px de largeur minimum</strong>).
+                <strong><?php echo $_GET['illustrationMini']; ?>px de largeur minimum</strong>
             <?php } else { ?>
-                (<strong>si possible, 1200px de largeur minimum</strong>).
-            <?php } ?>
+                <strong>si possible, 1920px de largeur minimum</strong>
+            <?php } ?> et <strong>10 Mo maximum</strong>).
             <br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
             <br />
             <a href="https://aide.apidae-tourisme.com/hc/fr/articles/360000825391-Saisie-l-onglet-multimédias-Zoom-sur-les-illustrations#tailleimages" target="_blank"><i class="fas fa-info-circle"></i> Plus d'informations ici.</a>
