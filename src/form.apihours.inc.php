@@ -5,7 +5,7 @@
 
         function btnTimePeriods(){
             var btn = event.srcElement
-            let start = btn.closest('.row, tr').querySelector('input.fin').value
+            let start = btn.closest('.row, tr').querySelector('input.debut').value
             let end = btn.closest('.row, tr').querySelector('input.fin').value
             let input = btn.closest('.row, tr').querySelector('input.timePeriods')
             let description = btn.closest('.row, tr').querySelector('div.description')
