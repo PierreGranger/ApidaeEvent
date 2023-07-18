@@ -1,7 +1,7 @@
 <?php
 
     require_once(realpath(dirname(__FILE__)).'/auth.inc.php') ;
-    require_once(realpath(dirname(__FILE__)).'/../scripts/territoires.php') ;
+    require_once(realpath(dirname(__FILE__)).'/../../scripts/territoires.php') ;
 
     $territoires = $apidaeEvent->getTerritoires() ;
 
