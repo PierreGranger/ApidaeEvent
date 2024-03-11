@@ -233,7 +233,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 							<div class="row mb-3">
 								<label class="col-sm-6 col-form-label" for="membre">Identifiant du membre valideur</label>
 								<div class="col-sm-6">
-									<input type="text" class="form-control" name="membre" id="membre" placeholder="ex : <?php echo $utilisateurApidae['membre']['id']; ?>" />
+									<input type="text" class="form-control" name="membre" id="membre" />
 									<small><?php echo $utilisateurApidae['membre']['nom']; ?> : <?php echo $utilisateurApidae['membre']['id']; ?></small>
 								</div>
 							</div>
