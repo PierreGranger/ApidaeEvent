@@ -31,7 +31,7 @@ input.float {
 	display:block ;
 }
 
-tfoot tr.has-error {
+tfoot tr.has-error > td {
 	background:#ffeceb ;
 	color:#a94442 ;
 	font-weight:bold ;
@@ -41,4 +41,8 @@ tfoot tr.has-error {
 .has-error input[type="file"] {
 	background:#ffeceb ;
 	border-color:#a94442 ;
+}
+
+input[data-interdit], label[data-interdit] {
+	opacity:.5 ;
 }

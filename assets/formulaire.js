@@ -590,8 +590,53 @@ jQuery(document).on('change', 'input[name*="copyright"]', function () {
 	checkFilesInput('illustrations');
 }) ;
 
+function criteresInterditsByEr(selector) {
+	
+	var values = [];
+	if (typeof jQuery(selector).val() == 'object') values = jQuery(selector).val();
+	else if(typeof jQuery(selector).val() == 'string') values = [jQuery(selector).val()];
 
+	if ( values.length > 0 ) {
+		values.forEach(function (item) {
+			if (
+				typeof interdictions_elements_reference[item] != 'undefined'
+				&& typeof interdictions_elements_reference[item]['interditUtilisationDe'] != 'undefined'
+			) {
+				jQuery('select option').each(function () {
+					if (interdictions_elements_reference[item]['interditUtilisationDe'].includes(parseInt(jQuery(this).val()))) {
+						jQuery(this).prop('disabled', 'disabled').attr('data-interdit', true);
+						if (jQuery(this).is(':selected')) {
+							jQuery(this).prop('selected', false);
+						}
+					}
+				});
+				jQuery('input[type="checkbox"]').each(function () {
+					if (interdictions_elements_reference[item]['interditUtilisationDe'].includes(parseInt(jQuery(this).val()))) {
+						jQuery(this).on('click', function () { return false }).attr('data-interdit', true);
+						jQuery(this).closest('div').find('label').attr('data-interdit', true);
+						if (jQuery(this).is(':checked')) {
+							jQuery(this).prop('checked', false);
+						}
+					}
+				});
+			}
+		});
+	}
+}
 
+export function criteresInterdits() {
+
+	jQuery('select option[disabled][data-interdit]').prop('disabled', false).removeAttr('data-interdit');
+	jQuery('input[type="checkbox"][data-interdit]').off('onclick').removeAttr('data-interdit');
+	jQuery('label[data-interdit]').removeAttr('data-interdit');
+
+	if (typeof interdictions_elements_reference != 'undefined') {
+		criteresInterditsByEr('select[name^="FeteEtManifestationCategorie"]');
+		criteresInterditsByEr('select[name="FeteEtManifestationType"]');
+	}
+}
+
+jQuery(document).on('change', 'select[name^="FeteEtManifestationCategorie"], select[name="FeteEtManifestationType"]', criteresInterdits);
 
 
 
