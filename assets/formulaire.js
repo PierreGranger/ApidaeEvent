@@ -64,7 +64,13 @@ jQuery(document).on('submit','form.form',function(e){
 			ok = false ;
 			if ( firstError == null ) firstError = jQuery(this) ;
 		}
-	}) ;
+	});
+	
+	var erreurMC = checkMC() ;
+	if ( erreurMC !== true )
+	{
+		ok = false ;
+	}
 
 	var erreurTarif = checkTypeTarifs() ;
 	if ( erreurTarif !== true )
@@ -299,7 +305,27 @@ function selectChange(select,init)
 	if ( ! init ) valideChamp(coord) ;
 }
 
+function checkMC() {
+	var renseignes = 0;
 
+	var tfoot = jQuery('table.mc').find('tfoot tr td') ;
+	tfoot.closest('tr').removeClass('has-error') ;
+	tfoot.html('') ;
+
+	jQuery('table.mc tbody tr input[name^="mc"]').each(function () {
+		if (jQuery(this).val().trim() != '') {
+			renseignes++;
+		}
+	});
+	if (renseignes == 0) {
+		tfoot.closest('tr').addClass('has-error') ;
+		tfoot.html('Vous devez renseigner au moins un moyen de communication') ;
+		return false;
+	}
+	return true;
+}
+
+jQuery(document).on('change', 'table.mc tbody tr input[name^="mc"]', checkMC);
 
 /**
  * 

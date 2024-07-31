@@ -16,6 +16,7 @@
                         <th>Complément</th>
                     </tr>
                 </thead>
+                <tfoot><tr><td colspan="4"></td></tr></tfoot>
                 <tbody>
                     <?php
 
@@ -30,7 +31,6 @@
                         echo '<td>';
                         echo '<div class="form-group">';
                         echo '<select class="form-control" name="mc[' . $i . '][type]"';
-                        if ($i == 0) echo ' required="required" ';
                         echo '>';
                         echo '<option value="">-</option>';
                         foreach ($types as $type) {
@@ -56,7 +56,6 @@
                         echo '<td>';
                         echo '<div class="form-group">';
                         echo '<input class="form-control" type="text" name="mc[' . $i . '][coordonnee]" value="' . htmlentities(@$post['mc'][$i]['coordonnee']) . '" ';
-                        if ($i == 0) echo 'required="required" ';
                         echo '/>';
                         echo '<small style="display:none;" class="help h205">http(s)://...</small>';
                         echo '</div>';
