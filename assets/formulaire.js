@@ -463,7 +463,9 @@ function checkFilesInput(type) {
 	tfoot.closest('tr').removeClass('has-error') ;
 	tfoot.html('') ;
 
-	var nbfiles = 0 ;
+	var nbfiles = 0;
+	var poidstotal = 0;
+
 	inputs.each(function(){
 		nbfiles += jQuery(this).get(0).files.length ;
 		if ( jQuery(this).get(0).files.length == 1 )
@@ -510,6 +512,7 @@ function checkFilesInput(type) {
 					jQuery(this).closest('tr').addClass('has-error') ;
 					errors.push('Les '+type+' doivent faire moins de '+(limit/1000000)+' Mo') ;
 				}
+				poidstotal += file.size;
 			}
 
 			/**
@@ -527,7 +530,12 @@ function checkFilesInput(type) {
 				}
 			}
 		}
+
 	}) ;
+
+	if (poidstotal > 10000000) {
+		errors.push('L\'ensemble des fichiers joints ne doit pas dépasser 10 Mo') ;
+	}
 
 	/**
 	 * Test du paramètre obligatoire (1 illustration mini)
