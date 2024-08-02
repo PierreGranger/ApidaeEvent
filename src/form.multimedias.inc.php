@@ -11,7 +11,7 @@
                 <strong><?php echo $_GET['illustrationMini']; ?>px de largeur minimum</strong>
             <?php } else { ?>
                 <strong>si possible, 1920px de largeur minimum</strong>
-            <?php } ?> et <strong>10 Mo maximum</strong>).
+            <?php } ?> et <strong>10 Mo maximum</strong>), aux formats png ou jpg/jpeg.
             <br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
             <br />
             <a href="https://aide.apidae-tourisme.com/hc/fr/articles/360000825391-Saisie-l-onglet-multimédias-Zoom-sur-les-illustrations#tailleimages" target="_blank"><i class="fas fa-info-circle"></i> Plus d'informations ici.</a>
