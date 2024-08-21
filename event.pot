@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 13:57+0200\n"
+"POT-Creation-Date: 2024-08-21 16:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,54 +21,54 @@ msgstr ""
 msgid "Merci de préciser les dates avant de saisir les horaires associés"
 msgstr ""
 
-#: src/form.apihours.inc.php:38 src/form.dates.inc.php:3
+#: src/form.apihours.inc.php:37 src/form.dates.inc.php:3
 msgid "Dates de la manifestation"
 msgstr ""
 
-#: src/form.apihours.inc.php:41 src/form.dates.inc.php:6
+#: src/form.apihours.inc.php:40 src/form.dates.inc.php:6
 msgid "Merci de préciser au minimum une date."
 msgstr ""
 
-#: src/form.apihours.inc.php:49 src/form.dates.inc.php:14
+#: src/form.apihours.inc.php:48 src/form.dates.inc.php:14
 msgid "Début"
 msgstr ""
 
-#: src/form.apihours.inc.php:50 src/form.dates.inc.php:15
+#: src/form.apihours.inc.php:49 src/form.dates.inc.php:15
 msgid "Fin"
 msgstr ""
 
-#: src/form.apihours.inc.php:51
+#: src/form.apihours.inc.php:50
 msgid "Horaires"
 msgstr ""
 
-#: src/form.apihours.inc.php:52 src/form.dates.inc.php:18
+#: src/form.apihours.inc.php:51 src/form.dates.inc.php:18
 #: src/form.mc.inc.php:16
 msgid "Complément"
 msgstr ""
 
-#: src/form.apihours.inc.php:64 src/form.apihours.inc.php:70
-#: src/form.apihours.inc.php:117 src/form.apihours.inc.php:123
+#: src/form.apihours.inc.php:63 src/form.apihours.inc.php:69
+#: src/form.apihours.inc.php:116 src/form.apihours.inc.php:122
 #: src/form.dates.inc.php:30 src/form.dates.inc.php:35
 msgid "jj/mm/aaaa"
 msgstr ""
 
-#: src/form.apihours.inc.php:65 src/form.apihours.inc.php:118
+#: src/form.apihours.inc.php:64 src/form.apihours.inc.php:117
 msgid "Du"
 msgstr ""
 
-#: src/form.apihours.inc.php:71 src/form.apihours.inc.php:124
+#: src/form.apihours.inc.php:70 src/form.apihours.inc.php:123
 msgid "Au"
 msgstr ""
 
-#: src/form.apihours.inc.php:75
+#: src/form.apihours.inc.php:74
 msgid "Saisie des horaires"
 msgstr ""
 
-#: src/form.apihours.inc.php:82 src/form.apihours.inc.php:130
+#: src/form.apihours.inc.php:81 src/form.apihours.inc.php:129
 msgid "Autres précisions"
 msgstr ""
 
-#: src/form.apihours.inc.php:88 src/form.apihours.inc.php:141
+#: src/form.apihours.inc.php:87 src/form.apihours.inc.php:140
 #: src/form.dates.inc.php:54
 msgid "Ajouter une date"
 msgstr ""
@@ -300,11 +300,19 @@ msgstr ""
 msgid "Commentaire privé"
 msgstr ""
 
-#: src/form.inc.php:315
+#: src/form.inc.php:313
+msgid ""
+"J'accepte les <a href=\"https://aide.apidae-tourisme.com/hc/fr/"
+"articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-"
+"professionnels-et-fournisseurs-d-informations\" target=\"_blank\">conditions "
+"RGPD du réseau Apidae</a>."
+msgstr ""
+
+#: src/form.inc.php:322
 msgid "Enregistrer cet événement"
 msgstr ""
 
-#: src/form.inc.php:321
+#: src/form.inc.php:328
 msgid ""
 "Vous devez cocher la case \"Je ne suis pas un robot\" pour pouvoir "
 "enregistrer"

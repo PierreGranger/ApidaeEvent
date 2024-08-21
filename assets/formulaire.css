@@ -1,7 +1,8 @@
 
 .required>label:after,
 fieldset.required>legend:after,
-th.required:after {
+th.required:after,
+label[for="rgpd"]:after {
 	content: " *";
 	color:red ;
 }
@@ -31,7 +32,8 @@ input.float {
 	display:block ;
 }
 
-tfoot tr.has-error > td {
+tfoot tr.has-error > td,
+div.rgpd>div.has-error {
 	background:#ffeceb ;
 	color:#a94442 ;
 	font-weight:bold ;

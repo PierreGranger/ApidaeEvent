@@ -57,7 +57,7 @@ jQuery(document).on('submit','form.form',function(e){
 	var firstError = null ;
 
 	jQuery(this).find('select, input, textarea').each(function(){
-		var okChamp = valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
+		var okChamp = valideChamp(jQuery(this), jQuery(this).closest('tr').find('select').val());
 		jQuery(this).closest('.form-group, div').toggleClass('has-error',!okChamp) ;
 		if ( ! okChamp )
 		{
@@ -218,7 +218,12 @@ jQuery(document).on('change','div.tarifs select[name^="tarifs"]',function(){
 
 function valideChamp(champ)
 {
-	var val = champ.val() ;
+	var val = champ.val();
+	
+	if (champ.is(':checkbox') && ! champ.is(':checked')) {
+		val = '';
+	}
+
 	var type = null ;
 	if ( typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/) )
 		type = champ.closest('tr').find('select').val() ;

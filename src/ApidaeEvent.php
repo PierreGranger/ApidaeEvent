@@ -50,7 +50,7 @@ use Exception ;
 		public const ACCEPTED_LANGUAGES = [
 			'fr' => ['lang' => 'fr', 'locale' => 'fr_FR', 'codeLibelle' => 'Fr'],
 			'en' => ['lang' => 'en', 'locale' => 'en_GB', 'codeLibelle' => 'En', 'deepL' => 'en-GB'],
-			'de' => ['lang' => 'de', 'locale' => 'de_DE', 'codeLibelle' => 'De']
+			//'de' => ['lang' => 'de', 'locale' => 'de_DE', 'codeLibelle' => 'De'] // Allemand utilisé pour debug seulement (toutes valeurs à ! pour bien voir les oublis)
 		];
 	
 		public function __construct(array $params=null) {
