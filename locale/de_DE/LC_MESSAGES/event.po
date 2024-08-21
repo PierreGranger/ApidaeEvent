@@ -1,0 +1,525 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2024 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Pierre Granger <pierre@g5-ge>, 2024.
+#
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-21 11:52+0200\n"
+"PO-Revision-Date: 2024-08-21 09:42+0200\n"
+"Last-Translator: Pierre Granger <pierre@g5-ge>\n"
+"Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"!Report-Msgid-Bugs-To: \n"
+"!Report-Msgid-Bugs-To: \n"
+"!Project-Id-Version: PACKAGE VERSION\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/form.apihours.inc.php:13
+msgid "Merci de préciser les dates avant de saisir les horaires associés"
+msgstr "!"
+
+#: src/form.apihours.inc.php:38 src/form.dates.inc.php:3
+msgid "Dates de la manifestation"
+msgstr "!"
+
+#: src/form.apihours.inc.php:41 src/form.dates.inc.php:6
+msgid "Merci de préciser au minimum une date."
+msgstr "!"
+
+#: src/form.apihours.inc.php:49 src/form.dates.inc.php:14
+msgid "Début"
+msgstr "!"
+
+#: src/form.apihours.inc.php:50 src/form.dates.inc.php:15
+msgid "Fin"
+msgstr "!"
+
+#: src/form.apihours.inc.php:51
+msgid "Horaires"
+msgstr "!"
+
+#: src/form.apihours.inc.php:52 src/form.dates.inc.php:18
+#: src/form.mc.inc.php:16
+msgid "Complément"
+msgstr "!"
+
+#: src/form.apihours.inc.php:64 src/form.apihours.inc.php:70
+#: src/form.apihours.inc.php:117 src/form.apihours.inc.php:123
+#: src/form.dates.inc.php:30 src/form.dates.inc.php:35
+msgid "jj/mm/aaaa"
+msgstr "!"
+
+#: src/form.apihours.inc.php:65 src/form.apihours.inc.php:118
+msgid "Du"
+msgstr "!"
+
+#: src/form.apihours.inc.php:71 src/form.apihours.inc.php:124
+msgid "Au"
+msgstr "!"
+
+#: src/form.apihours.inc.php:75
+msgid "Saisie des horaires"
+msgstr "!"
+
+#: src/form.apihours.inc.php:82 src/form.apihours.inc.php:130
+msgid "Autres précisions"
+msgstr "!"
+
+#: src/form.apihours.inc.php:88 src/form.apihours.inc.php:141
+#: src/form.dates.inc.php:54
+msgid "Ajouter une date"
+msgstr "!"
+
+#: src/form.clientele.inc.php:3
+msgid "Types de Clientèle"
+msgstr "!"
+
+#: src/form.contacts.inc.php:3
+msgid "Contacts organisateurs"
+msgstr "!"
+
+#: src/form.contacts.inc.php:6
+msgid ""
+"<strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un "
+"numéro de téléphone</strong> : en cas de questions, nous pourrons prendre "
+"contact avec l'organisateur grâce à ces informations."
+msgstr "!"
+
+#: src/form.contacts.inc.php:14
+msgid "Fonction"
+msgstr "!"
+
+#: src/form.contacts.inc.php:15
+msgid "Prénom"
+msgstr "!"
+
+#: src/form.contacts.inc.php:16
+msgid "Nom"
+msgstr "!"
+
+#: src/form.contacts.inc.php:17
+msgid "Mail"
+msgstr "!"
+
+#: src/form.contacts.inc.php:18
+msgid "Téléphone"
+msgstr "!"
+
+#: src/form.contacts.inc.php:62
+msgid "Ajouter un contact"
+msgstr "!"
+
+#: src/form.dates.inc.php:16
+msgid "Heure de début"
+msgstr "!"
+
+#: src/form.dates.inc.php:17
+msgid "Heure de fin"
+msgstr "!"
+
+#: src/form.dates.inc.php:40 src/form.dates.inc.php:45
+msgid "hh:mm"
+msgstr "!"
+
+#: src/form.handicap.inc.php:12
+msgid "Accessibilité"
+msgstr "!"
+
+#: src/form.handicap.inc.php:13
+msgid "Accueil des personnes en situation de handicap"
+msgstr "!"
+
+#: src/form.inc.php:16
+msgid "Nom de la manifestation"
+msgstr "DE Manif name"
+
+#: src/form.inc.php:24
+msgid "Importance de votre événement"
+msgstr "!"
+
+#: src/form.inc.php:27
+msgid "Portée"
+msgstr "!"
+
+#: src/form.inc.php:27
+msgid ""
+"La portée concerne les spectateurs et la distance qu’ils sont prêt à "
+"parcourir pour participer à une manifestation."
+msgstr "!"
+
+#: src/form.inc.php:48
+msgid "Participants attendus"
+msgstr "!"
+
+#: src/form.inc.php:54
+msgid "Visiteurs attendus"
+msgstr "!"
+
+#: src/form.inc.php:64
+msgid "Adresse"
+msgstr "!"
+
+#: src/form.inc.php:66
+msgid "Adresse 1"
+msgstr "!"
+
+#: src/form.inc.php:67
+msgid ""
+"Voie et bâtiment. Exemple : 60 rue des Lilas - Bâtiment A. Pas de virgule "
+"mais un espace entre le numéro et le nom de la rue."
+msgstr "!"
+
+#: src/form.inc.php:74
+msgid "Adresse 2"
+msgstr "!"
+
+#: src/form.inc.php:75
+msgid "Lieu-dit, zone d’activité, BP (pour boite postale)…"
+msgstr "!"
+
+#: src/form.inc.php:82
+msgid "Adresse 3"
+msgstr "!"
+
+#: src/form.inc.php:83
+msgid ""
+"Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon "
+"village et Morillon 1100."
+msgstr "!"
+
+#. $apidaeEvent->alerte('Liste communes introuvable',$_GET) ;
+#: src/form.inc.php:105
+msgid "Impossible de récupérer la liste de communes..."
+msgstr "!"
+
+#: src/form.inc.php:106 src/post.inc.php:881
+msgid "Veuillez nous excuser pour la gène occasionnée."
+msgstr "!"
+
+#: src/form.inc.php:107
+msgid ""
+"Vous pouvez prendre contact avec l'<a href=\"https://www.apidae-tourisme.com/"
+"apidae-tourisme/carte-du-reseau/\" target=\"_blank\">Office du Tourisme "
+"concernée par votre manifestation</a>."
+msgstr "!"
+
+#: src/form.inc.php:126
+msgid "Commune"
+msgstr "!"
+
+#: src/form.inc.php:151
+msgid ""
+"Saisir le lieu précis où se déroule l’événement <strong>seulement si "
+"nécessaire</strong> (si l'adresse n'est pas suffisante).<br />\n"
+"                Ex : Espace culturel / Place du village / Salle des fêtes / "
+"Esplanade du lac...</p>"
+msgstr "!"
+
+#: src/form.inc.php:156
+msgid "Lieu précis"
+msgstr "!"
+
+#: src/form.inc.php:175
+msgid "Description de votre manifestation"
+msgstr "!"
+
+#: src/form.inc.php:178
+msgid "Type de manifestation"
+msgstr "!"
+
+#: src/form.inc.php:188
+msgid "Catégories de manifestation"
+msgstr "!"
+
+#: src/form.inc.php:188
+msgid "Catégorie de manifestation"
+msgstr "!"
+
+#: src/form.inc.php:193
+msgid "catégories maximum"
+msgstr "!"
+
+#: src/form.inc.php:201
+msgid "Thèmes de manifestation"
+msgstr "!"
+
+#: src/form.inc.php:216
+msgid "Evénements génériques et championnats"
+msgstr "!"
+
+#: src/form.inc.php:224
+msgid "Descriptif court"
+msgstr "!"
+
+#: src/form.inc.php:225
+msgid ""
+"Texte d'accroche permettant de comprendre la nature de votre prestation. Ne "
+"doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, "
+"de lieu... puisque ces informations existent par ailleurs, ce qui constitue "
+"une double saisie."
+msgstr "!"
+
+#: src/form.inc.php:226
+msgid "255 caractères max."
+msgstr "!"
+
+#: src/form.inc.php:234
+msgid "Descriptif détaillé"
+msgstr "!"
+
+#: src/form.inc.php:235
+msgid ""
+"Le descriptif détaillé est complémentaire du descriptif court et non "
+"redondant. En effet certains sites web affichent ces deux champs à la suite."
+msgstr "!"
+
+#: src/form.inc.php:257
+msgid "Nom de l'organisme"
+msgstr "!"
+
+#: src/form.inc.php:264
+msgid "URL de réservation"
+msgstr "!"
+
+#: src/form.inc.php:282
+msgid "Organisateur"
+msgstr "!"
+
+#: src/form.inc.php:284
+msgid ""
+"Vous pouvez laisser un message ci-dessous : il sera communiqué au "
+"propriétaire du formulaire, mais ne sera pas publié.<br />\n"
+"            Merci de préciser <strong>l'organisateur de la manifestation</"
+"strong> (association ABC...)."
+msgstr "!"
+
+#: src/form.inc.php:288
+msgid "Commentaire privé"
+msgstr "!"
+
+#: src/form.inc.php:315
+msgid "Enregistrer cet événement"
+msgstr "!"
+
+#: src/form.inc.php:321
+msgid ""
+"Vous devez cocher la case \"Je ne suis pas un robot\" pour pouvoir "
+"enregistrer"
+msgstr "!"
+
+#: src/form.mc.inc.php:3
+msgid "Moyens de communication"
+msgstr "!"
+
+#: src/form.mc.inc.php:6
+msgid ""
+"Merci de préciser au moins un moyen de communication (Mail, téléphone...) : "
+"ils seront diffusés sur les supports de communications (sites web, "
+"brochures...)"
+msgstr "!"
+
+#: src/form.mc.inc.php:14
+msgid "Type"
+msgstr "!"
+
+#: src/form.mc.inc.php:15
+msgid "Coordonnée"
+msgstr "!"
+
+#: src/form.mc.inc.php:71
+msgid "Ajouter une ligne"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:7
+msgid "Photos"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:9
+msgid "Vos photos doivent être libres de droit et de bonne qualité"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:11
+msgid "px de largeur minimum"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:13
+msgid "<strong>si possible, 1920px de largeur minimum</strong>"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:14
+msgid "et <strong>10 Mo maximum</strong>), aux formats png ou jpg/jpeg."
+msgstr "!"
+
+#: src/form.multimedias.inc.php:15
+msgid ""
+"Une fois publiées, elles pourront être diffusées sur différents supports "
+"(sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les "
+"droits nécessaires</strong>, et précisez le Copyright si besoin."
+msgstr "!"
+
+#. $texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
+#: src/form.multimedias.inc.php:17 src/post.inc.php:794
+msgid "Plus d'informations ici"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:24
+msgid "Votre photo"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:25 src/form.multimedias.inc.php:81
+msgid "Titre"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:26 src/form.multimedias.inc.php:82
+msgid "Copyright"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:60
+msgid "Ajouter une photo"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:69
+msgid "Multimédias"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:71
+msgid ""
+"Vous pouvez ajouter ci-dessous des fichiers PDF si nécessaire (si vous avez "
+"un programme par exemple).\n"
+"                <br />Une fois publiées, elles pourront être diffusées sur "
+"différents supports (sites Internet, brochures...) : <strong>assurez-vous "
+"d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si "
+"besoin.\n"
+"                <br />Les documents ajoutés ne doivent pas dépasser les 5 Mo "
+"au total."
+msgstr "!"
+
+#: src/form.multimedias.inc.php:80
+msgid "Votre fichier"
+msgstr "!"
+
+#: src/form.multimedias.inc.php:116
+msgid "Ajouter un fichier"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:2
+msgid "Tarifs"
+msgstr ""
+
+#: src/form.tarifs.inc.php:5
+msgid "Gratuit pour les visiteurs"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:15
+msgid ""
+"<strong>Attention</strong> : chaque type de tarif n'est utilisable qu'une "
+"fois. Si vous avez plusieurs \"pleins tarifs\", précisez la plage mini-maxi "
+"sur une seule ligne."
+msgstr "!"
+
+#: src/form.tarifs.inc.php:23
+msgid "Type de tarif"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:24
+msgid "Mini #DEVISE# (à partir de...)"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:25
+msgid "Maxi #DEVISE# (jusqu'à...)"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:26
+msgid "Précisions tarifs"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:72
+msgid "Ajouter un tarif"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:82
+msgid "Complément sur les tarifs"
+msgstr "!"
+
+#: src/form.tarifs.inc.php:117
+msgid "Modes de paiement"
+msgstr "!"
+
+#: src/post.inc.php:45
+msgid "Vérification du captcha impossible"
+msgstr "!"
+
+#: src/post.inc.php:50
+msgid "L'utilisateur n'a pas coché la case \"Je ne suis pas un robot\""
+msgstr "!"
+
+#: src/post.inc.php:186
+msgid ""
+"merci de préciser au moins 1 mail ou 1 numéro de téléphone dans la ligne "
+"\"contact\"."
+msgstr "!"
+
+#: src/post.inc.php:191
+msgid "merci de préciser au moins 1 contact"
+msgstr "!"
+
+#: src/post.inc.php:631
+msgid "Vous devez spécifier un type de tarif"
+msgstr "!"
+
+#: src/post.inc.php:644
+msgid "L'offre n'a pas été enregistrée sur Apidae..."
+msgstr "!"
+
+#: src/post.inc.php:649
+msgid ""
+"L'offre n'a pas été créée sur Apidae pour une raison inconnue (last_id is "
+"null)..."
+msgstr "!"
+
+#: src/post.inc.php:773
+msgid ""
+"<strong>Votre suggestion d'événement a bien été enregistrée</strong>, nous "
+"vous remercions pour votre contribution."
+msgstr "!"
+
+#: src/post.inc.php:774
+msgid ""
+"<strong>Attention :</strong> Il ne sera visible sur les différents supports "
+"de communication alimentés par Apidae qu'<strong>après validation</strong>."
+msgstr "!"
+
+#: src/post.inc.php:778
+msgid "La validation est en cours auprès de"
+msgstr "!"
+
+#: src/post.inc.php:784
+msgid "Votre commentaire a également été transmis"
+msgstr "!"
+
+#: src/post.inc.php:799
+msgid "Faire une autre suggestion de manifestation"
+msgstr "!"
+
+#: src/post.inc.php:858
+msgid "Erreur à l'enregistrement"
+msgstr "!"
+
+#: src/post.inc.php:859
+msgid "Une erreur s'est produite et votre fiche n'a pas pû être enregistrée."
+msgstr "!"
+
+#: src/post.inc.php:880
+msgid "L'erreur a été envoyée à un administrateur."
+msgstr "!"
+
+#: src/post.inc.php:882
+msgid ""
+"Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact "
+"avec l'Office du Tourisme concernée par votre manifestation"
+msgstr "!"

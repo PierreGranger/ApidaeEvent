@@ -1,8 +1,8 @@
     <fieldset>
-        <legend>Tarifs</legend>
+        <legend><?php _('Tarifs') ; ?></legend>
 
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label" for="gratuit">Gratuit pour les visiteurs</label>
+            <label class="<?php echo $class_label; ?> col-form-label" for="gratuit"><?php __('Gratuit pour les visiteurs') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <input type="checkbox" name="gratuit" id="gratuit" value="1" <?php if (@$post['gratuit'] == 1) echo ' checked="checked" '; ?> />
             </div>
@@ -12,7 +12,7 @@
             <div class="block">
 
                 <div class="alert alert-warning" role="alert">
-                    <p><strong>Attention</strong> : chaque type de tarif n'est utilisable qu'une fois. Si vous avez plusieurs "pleins tarifs", précisez la plage mini-maxi sur une seule ligne.</p>
+                    <p><?php __('<strong>Attention</strong> : chaque type de tarif n\'est utilisable qu\'une fois. Si vous avez plusieurs "pleins tarifs", précisez la plage mini-maxi sur une seule ligne.') ; ?></p>
                 </div>
 
                 <div class="table-responsive">
@@ -20,10 +20,10 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>Type de tarif</th>
-                                <th>Mini <?php echo $devise_lib; ?> (à partir de...)</th>
-                                <th>Maxi <?php echo $devise_lib; ?> (jusqu'à...)</th>
-                                <th>Précisions tarifs</th>
+                                <th><?php __('Type de tarif') ; ?></th>
+                                <th><?php echo preg_replace('/#DEVISE#/',$devise_lib,__('Mini #DEVISE# (à partir de...)',false)) ; ?></th>
+                                <th><?php echo preg_replace('/#DEVISE#/',$devise_lib,__('Maxi #DEVISE# (jusqu\'à...)',false)) ; ?></th>
+                                <th><?php __('Précisions tarifs') ; ?></th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -46,7 +46,7 @@
                                                         <option value="<?= $type['id'] ; ?>"
                                                             <?php if (@$post['tarifs'][$i]['type'] == $type['id']) echo ' selected="selected" '; ?>
                                                         >
-                                                        <?= $type['libelleFr']; ?>
+                                                        <?= $apidaeEvent->libelleEr($type); ?>
                                                         </option>
                                                     <?php } ?>
                                                 </select>
@@ -69,7 +69,7 @@
                                 <?php
                             }
                             echo '<tr>';
-                            echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', 'Ajouter un tarif', $icon_plus) . '</td>';
+                            echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', __('Ajouter un tarif',false), $icon_plus) . '</td>';
                             echo '</tr>';
                             ?>
                         </tbody>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="<?= $class_line ; ?> complement_tarif">
-            <label class="<?php echo $class_label; ?> col-form-label" for="descriptionTarif_complement_libelleFr">Complément sur les tarifs</label>
+            <label class="<?php echo $class_label; ?> col-form-label" for="descriptionTarif_complement_libelleFr"><?php __('Complément sur les tarifs') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <textarea class="form-control" name="descriptionTarif_complement_libelleFr" id="descriptionTarif_complement_libelleFr"><?php echo htmlspecialchars(@$post['descriptionTarif_complement_libelleFr']); ?></textarea>
             </div>
@@ -114,7 +114,7 @@
         );
         ?>
         <div class="<?= $class_line ; ?> modes_paiement">
-            <label class="<?php echo $class_label; ?> col-form-label">Modes de paiement</label>
+            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Modes de paiement') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <?php echo $apidaeEvent->formHtmlCC('ModePaiement', $params_paiement, @$post['ModePaiement']); ?>
             </div>

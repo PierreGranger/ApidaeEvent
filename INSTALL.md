@@ -14,7 +14,7 @@ Installez les dépendances
 ```
 composer install
 npm install
-npm build
+npm run build
 ```
 
 ## Projets d'écriture

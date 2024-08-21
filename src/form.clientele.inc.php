@@ -1,6 +1,6 @@
 <?php
         if (isset($_GET['clientele'])) {
-            $labelClientele = 'Types de Clientèle';
+            $labelClientele = __('Types de Clientèle',false);
             $params = array(
                 'presentation' => 'select',
                 //'include' => Array(6486) // Pass sanitaire obligatoire
@@ -40,4 +40,3 @@
             </div>
             <?php
         }
-        ?>

@@ -42,12 +42,12 @@
 		//execute post
 		if ( ($result = curl_exec($ch)) === false )
 		{
-			$ko['Captcha'] = 'Vérification du captcha impossible' ;
+			$ko['Captcha'] = __('Vérification du captcha impossible',false) ;
 		}
 		else
 		{
 			$json_result = json_decode($result) ;
-			if ( ! $json_result->success ) $ko['Captcha'] = 'L\'utilisateur n\'a pas coché la case "Je ne suis pas un robot"' ;
+			if ( ! $json_result->success ) $ko['Captcha'] = __('L\'utilisateur n\'a pas coché la case "Je ne suis pas un robot"',false) ;
 		}
 	}
 
@@ -187,12 +187,12 @@
 		
 		if ( isset($_GET['contactObligatoire']) && $_GET['contactObligatoire'] == 1 && ! $mc_trouve )
 		{
-			$ko['Contact obligatoire'] = 'merci de préciser au moins 1 mail ou 1 numéro de téléphone dans la ligne "contact".' ;
+			$ko['Contact obligatoire'] = __('merci de préciser au moins 1 mail ou 1 numéro de téléphone dans la ligne "contact".',false) ;
 		}
 
 	}
 	elseif ( isset($_GET['contactObligatoire']) && $_GET['contactObligatoire'] == 1 )
-		$ko['Contact obligatoire'] = 'merci de préciser au moins 1 contact' ;
+		$ko['Contact obligatoire'] = __('merci de préciser au moins 1 contact',false) ;
 
 	if ( sizeof($contacts) > 0 )
 	{
@@ -632,7 +632,7 @@
 				if ( preg_match('#descriptionTarif\.periodes\[\]\.tarifs\[\]\.type#',$details['message']) )
 				{
 					if ( preg_match('#\'0\' non trouv#',$details['message']) )
-						$ko['details'] = 'Vous devez spécifier un type de tarif' ;
+						$ko['details'] = __('Vous devez spécifier un type de tarif',false) ;
 					else
 						$ko['details'] = $details['message'] ;
 				}
@@ -645,12 +645,12 @@
 			else
 				$ko['details'] = $e->getMessage() ;
 		} catch ( Exception $e ) {
-			$ko['erreur'] = 'L\'offre n\'a pas été enregistrée sur Apidae...' ;
+			$ko['erreur'] = __('L\'offre n\'a pas été enregistrée sur Apidae...',false) ;
 			$ko['details'] = $e->getMessage() ;
 		}
 
 		$apidaeEvent->debug($apidaeEvent->last_id,'last_id') ;
-		if ( $apidaeEvent->last_id == "" && ! isset($ko['erreur']) ) $ko['erreur'] = 'L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...' ;
+		if ( $apidaeEvent->last_id == "" && ! isset($ko['erreur']) ) $ko['erreur'] = __('L\'offre n\'a pas été créée sur Apidae pour une raison inconnue (last_id is null)...',false) ;
 	}
 	if ( $debug ) $timer->stop('enregistrement') ;
 	
@@ -774,18 +774,18 @@
 		}
 		$display_form = false ;
 
-		$texte_offre_enregistree = '<p><i class="fas fa-check-circle"></i> <strong>Votre suggestion d\'événement a bien été enregistrée</strong>, nous vous remercions pour votre contribution.</p>'."\n".
-		'<p><i class="fas fa-exclamation-circle"></i> <strong>Attention :</strong> Il ne sera visible sur les différents supports de communication alimentés par Apidae qu\'<strong>après validation</strong>.</p>'."\n" ;
+		$texte_offre_enregistree = '<p><i class="fas fa-check-circle"></i> '.__('<strong>Votre suggestion d\'événement a bien été enregistrée</strong>, nous vous remercions pour votre contribution.',false).'</p>'."\n".
+		'<p><i class="fas fa-exclamation-circle"></i> '.__('<strong>Attention :</strong> Il ne sera visible sur les différents supports de communication alimentés par Apidae qu\'<strong>après validation</strong>.',false).'</p>'."\n" ;
 		
 		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
 		{
-			$texte_offre_enregistree .= '<p>La validation est en cours auprès de : '.$infos_proprietaire['structure_validatrice'] ;
+			$texte_offre_enregistree .= '<p>'.__('La validation est en cours auprès de').' : '.$infos_proprietaire['structure_validatrice'] ;
 			$texte_offre_enregistree .= ' (<a href="'.$infos_proprietaire['url_structure_validatrice'].'" target="_blank">'.$infos_proprietaire['url_structure_validatrice'].'</a>)' ;
 			$texte_offre_enregistree .= '</p>'."\n" ;
 		}
 
 		if ( isset($_POST['commentaire']) && trim($_POST['commentaire']) != '' )
-			$texte_offre_enregistree .= '<p>Votre commentaire a également été transmis : "<em>'.htmlentities($_POST['commentaire']).'</em>"</p>'."\n" ;
+			$texte_offre_enregistree .= '<p>'.__('Votre commentaire a également été transmis').' : "<em>'.htmlentities($_POST['commentaire']).'</em>"</p>'."\n" ;
 
 		$url_consulter = 'https://base.apidae-tourisme.com/consulter/objet-touristique/'.$apidaeEvent->last_id ;
 		//$texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
@@ -795,12 +795,12 @@
 			<div class="alert alert-success" role="alert">
 				<div id="texte_offre_enregistree"><?php echo $texte_offre_enregistree ; ?></div>
 				
-				<p>Plus d'informations ici : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
+				<p><?php __('Plus d\'informations ici') ; ?> : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
 				<script>
 					alert(jQuery('div#texte_offre_enregistree').text()) ;
 				</script>
 				<?php if ( isset($_SERVER['HTTP_REFERER']) ) { ?>
-					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Faire une autre suggestion de manifestation</a>
+					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> <?php __('Faire une autre suggestion de manifestation') ; ?></a>
 				<?php } ?>
 			</div>
 		<?php
@@ -859,8 +859,8 @@
 		?>
 		<div class="alert alert-danger" role="alert">
 			<i class="fas fa-exclamation-circle"></i>
-		  <span class="sr-only">Erreur à l'enregistrement :</span>
-		  <strong>Une erreur s'est produite et votre fiche n'a pas pû être enregistrée.</strong>
+		  <span class="sr-only"><?php __('Erreur à l\'enregistrement') ; ?> :</span>
+		  <strong><?php __('Une erreur s\'est produite et votre fiche n\'a pas pû être enregistrée.') ; ?></strong>
 		  <?php
 		  	if ( is_array($ko) )
 		  	{
@@ -881,9 +881,9 @@
 				if ( $debug ) $timer->stop('mails_erreur') ;
 			}
 		  ?>
-		  <?php if ( isset($alerte) && $alerte === true ) { ?><br />L'erreur a été envoyée à un administrateur.<?php } ?>
-		  <br />Veuillez nous excuser pour la gène occasionnée.
-		  <br />Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact avec l'Office du Tourisme concernée par votre manifestation :
+		  <?php if ( isset($alerte) && $alerte === true ) { ?><br /><?php __('L\'erreur a été envoyée à un administrateur.') ; ?><?php } ?>
+		  <br /><?php __('Veuillez nous excuser pour la gène occasionnée.') ; ?>
+		  <br /><?php __('Vous pouvez essayer de nouveau d\'enregistrer ci-dessous, ou prendre contact avec l\'Office du Tourisme concernée par votre manifestation') ; ?> :
 		  <ul>
 			<li><?php echo $infos_proprietaire['structure_validatrice'] ; ?></li>
 			<li><?php echo '<a href="'.$infos_proprietaire['url_structure_validatrice'].'" onclick="window.open(this.href);return false;">'.$infos_proprietaire['url_structure_validatrice'] ; ?></a></li>

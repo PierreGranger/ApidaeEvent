@@ -48,3 +48,7 @@ Vous pourrez ainsi configurer plus finement le formulaire (ajout de champs, chan
 Vous pouvez également contribuer au projet si vous souhaitez l'améliorer.
 
 [INSTALL.md](INSTALL.md)
+
+## traduction
+
+[i18n.md](i18n.md)

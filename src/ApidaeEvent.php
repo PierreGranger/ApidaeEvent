@@ -43,6 +43,16 @@ use Exception ;
 
 		protected array $config ;
 
+		private array $language ;
+
+		public const DEFAULT_LANGUAGE = ['lang' => 'fr', 'locale' => 'fr_FR', 'codeLibelle' => 'Fr'] ;
+
+		public const ACCEPTED_LANGUAGES = [
+			'fr' => ['lang' => 'fr', 'locale' => 'fr_FR', 'codeLibelle' => 'Fr'],
+			'en' => ['lang' => 'en', 'locale' => 'en_GB', 'codeLibelle' => 'En', 'deepL' => 'en-GB'],
+			'de' => ['lang' => 'de', 'locale' => 'de_DE', 'codeLibelle' => 'De']
+		];
+	
 		public function __construct(array $params=null) {
 			
 			parent::__construct($params) ;
@@ -56,6 +66,12 @@ use Exception ;
 
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
+
+			if ( isset($params['lang']) && isset(self::ACCEPTED_LANGUAGES[$params['lang']]) ) {
+				$this->language = self::ACCEPTED_LANGUAGES[$params['lang']] ;
+			} else {
+				$this->language = self::DEFAULT_LANGUAGE ;
+			}
 
 			$this->mc = false ;
 			try {
@@ -109,14 +125,14 @@ use Exception ;
 					foreach ( $ers as $erp )
 					{
 						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] && $famillePrec != null ) $ret .= "\n\t\t\t\t\t\t\t\t".'</optgroup>' ;
-						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= "\n\t\t\t\t\t\t\t\t".'<optgroup label="'.htmlspecialchars($familles[$erp['familleCritere']]['libelleFr']).'">' ;
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= "\n\t\t\t\t\t\t\t\t".'<optgroup label="'.htmlspecialchars($this->libelleEr($familles[$erp['familleCritere']])).'">' ;
 						// TODO : on change le fonctionnement de la boucle. On a un tableau avec les parents ($erp) et des enants possibles ($erp['enfants']).
 						
 						$ret .= "\n\t\t\t\t\t\t\t\t\t".'<option value="'.$erp['id'].'"' ;
 						//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
 							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'"' ;
 							if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' selected="selected"' ;
-						$ret .= '>'.$erp['libelleFr'].'</option>' ;
+						$ret .= '>'.$this->libelleEr($erp).'</option>' ;
 						if ( isset($erp['enfants']) )
 						{
 							foreach ( $erp['enfants'] as $e )
@@ -124,7 +140,7 @@ use Exception ;
 								$ret .= "\n\t\t\t\t\t\t\t\t\t\t".'<option value="'.$e['id'].'"' ;
 								if ( isset($e['description']) && $e['description'] != '' ) $ret .= ' title="'.htmlspecialchars($e['description']).'"' ;
 								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
-								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
+								$ret .= '>'.$this->libelleEr($erp).' &raquo; '.$this->libelleEr($e).'</option>' ;
 							}
 						}
 
@@ -146,21 +162,10 @@ use Exception ;
 							$ret .= '<label class="form-check-label" for="'.$type.$erp['id'].'"' ;
 								if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'" ' ;
 							$ret .= '>' ;
-								$ret .= $erp['libelleFr'] ;
+								$ret .= $this->libelleEr($erp) ;
 							$ret .= '</label>' ;
 						$ret .= '</div>' ;
 						
-						/*if ( isset($erp['enfants']) )
-						{
-							foreach ( $erp['enfants'] as $e )
-							{
-								$ret .= '<option value="'.$e['id'].'"' ;
-								if ( isset($e['description']) && $e['description'] != '' ) $ret .= 'title="'.htmlspecialchars($e['description']).'" ' ;
-								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
-								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
-							}
-						}*/
-
 						$famillePrec = @$erp['familleCritere'] ;
 					}
 				$ret .= '</div>' ;
@@ -288,7 +293,7 @@ use Exception ;
 				
 				$newEr = Array(
 					'id' => $er['id'],
-					'libelleFr' => $er['libelleFr'],
+					'libelleFr' => $this->libelleEr($er, 'fr'),
 					'ordre' => $er['ordre']
 				) ;
 				if ( isset($er['description']) ) $newEr['description'] = $er['description'] ;
@@ -391,4 +396,10 @@ use Exception ;
 			return false ;
 		}
 
+		public function libelleEr($er, $codeLibelle = 'fr') {
+			if ( isset($codeLibelle) && isset($er['libelle'.$codeLibelle]) ) return $er['libelle'.$codeLibelle] ;
+			elseif ( isset($er['libelle'.$this->language['codeLibelle']]) ) return $er['libelle'.$this->language['codeLibelle']] ;
+			return $er['libelleFr'] ;
+		}
+		
 	}
