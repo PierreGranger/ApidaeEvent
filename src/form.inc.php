@@ -23,7 +23,7 @@
 
         <legend><?php __('Importance de votre événement') ; ?></legend>
 
-        <div class="<?= $class_line ; ?>">
+        <div class="<?= $class_line ; ?> required">
             <label for="portee" class="<?= $class_label; ?> col-form-label"> <?php __('Portée') ; ?> <i class="fas fa-info-circle" title="<?php __('La portée concerne les spectateurs et la distance qu’ils sont prêt à parcourir pour participer à une manifestation.') ; ?>"></i></label>
             <div class="<?= $class_champ ; ?>">
                 <select class="form-control" name="portee" id="portee" required="required">
