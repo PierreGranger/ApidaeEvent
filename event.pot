@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:22+0200\n"
+"POT-Creation-Date: 2024-08-23 11:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,19 +276,31 @@ msgid ""
 "redondant. En effet certains sites web affichent ces deux champs à la suite."
 msgstr ""
 
-#: src/form.inc.php:257
+#: src/form.inc.php:244
+msgid "Animaux acceptés"
+msgstr ""
+
+#: src/form.inc.php:251
+msgid "Conditions d'accueil des animaux"
+msgstr ""
+
+#: src/form.inc.php:252
+msgid "Animaux acceptés en laisse uniquement, en terrasse uniquement..."
+msgstr ""
+
+#: src/form.inc.php:275
 msgid "Nom de l'organisme"
 msgstr ""
 
-#: src/form.inc.php:264
+#: src/form.inc.php:282
 msgid "URL de réservation"
 msgstr ""
 
-#: src/form.inc.php:282
+#: src/form.inc.php:300
 msgid "Organisateur"
 msgstr ""
 
-#: src/form.inc.php:284
+#: src/form.inc.php:302
 msgid ""
 "Vous pouvez laisser un message ci-dessous : il sera communiqué au "
 "propriétaire du formulaire, mais ne sera pas publié.<br />\n"
@@ -296,11 +308,11 @@ msgid ""
 "strong> (association ABC...)."
 msgstr ""
 
-#: src/form.inc.php:288
+#: src/form.inc.php:306
 msgid "Commentaire privé"
 msgstr ""
 
-#: src/form.inc.php:313
+#: src/form.inc.php:331
 msgid ""
 "J'accepte les <a href=\"https://aide.apidae-tourisme.com/hc/fr/"
 "articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-"
@@ -308,11 +320,11 @@ msgid ""
 "RGPD du réseau Apidae</a>."
 msgstr ""
 
-#: src/form.inc.php:322
+#: src/form.inc.php:340
 msgid "Enregistrer cet événement"
 msgstr ""
 
-#: src/form.inc.php:328
+#: src/form.inc.php:346
 msgid ""
 "Vous devez cocher la case \"Je ne suis pas un robot\" pour pouvoir "
 "enregistrer"

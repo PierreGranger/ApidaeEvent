@@ -310,6 +310,19 @@
 	}
 
 	/**
+	 * Toutou
+	 */
+	if ( isset($_POST['animauxAcceptes']) ) {
+		$fieldlist[] = 'prestations.animauxAcceptes' ;
+		$root['prestations']['animauxAcceptes'] = 'ACCEPTES' ;
+	}
+	if ( isset($_POST['descriptifAnimauxAcceptes']) && trim($_POST['descriptifAnimauxAcceptes']) != "" )
+	{
+		$fieldlist[] = 'prestations.descriptifAnimauxAcceptes' ;
+		$root['prestations']['descriptifAnimauxAcceptes']['libelleFr'] = trim($_POST['descriptifAnimauxAcceptes']) ;
+	}
+
+	/**
 	 * Descriptifs thématisés
 	 */
 	$dts = Array() ;

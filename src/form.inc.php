@@ -239,6 +239,24 @@
             </div>
         </div>
 
+        <?php if ( isset($_GET['toutou']) ) { ?>
+        <div class="<?= $class_line ; ?>">
+            <label class="<?php echo $class_label; ?> col-form-label" for="animauxAcceptes"><?php __('Animaux acceptés') ; ?></label>
+            <div class="<?php echo $class_champ; ?>">
+                <input type="checkbox" name="animauxAcceptes" id="animauxAcceptes" value="1" required="required" <?php if (@$post['animauxAcceptes'] == 1) echo ' checked="checked" '; ?> />
+            </div>
+        </div>
+
+        <div class="<?= $class_line ; ?>">
+            <label class="<?php echo $class_label; ?> col-form-label" for="descriptifAnimauxAcceptes"><?php __('Conditions d\'accueil des animaux') ; ?>
+                <i class="fas fa-info-circle" title="<?php __('Animaux acceptés en laisse uniquement, en terrasse uniquement...') ; ?>"></i>
+            </label>
+            <div class="<?php echo $class_champ; ?>">
+                <textarea class="form-control" name="descriptifAnimauxAcceptes" id="descriptifAnimauxAcceptes"><?php echo htmlspecialchars(@$post['descriptifAnimauxAcceptes']); ?></textarea>
+            </div>
+        </div>
+        <?php } ?>
+
         <?php include(realpath(dirname(__FILE__)).'/form.clientele.inc.php') ; ?>
 
         <?php include(realpath(dirname(__FILE__)).'/form.handicap.inc.php') ; ?>
@@ -309,7 +327,7 @@
 
     <div class="<?= $class_line ; ?> required rgpd">
         <div class="<?php echo $class_champ; ?>">
-            <input type="checkbox" name="rgpd" id="rgpd" value="1" required="required" <?php if (@$post['gratuit'] == 1) echo ' checked="checked" '; ?> />
+            <input type="checkbox" name="rgpd" id="rgpd" value="1" required="required" <?php if (@$post['rgpd'] == 1) echo ' checked="checked" '; ?> />
             <label for="rgpd"><?php __('J\'accepte les <a href="https://aide.apidae-tourisme.com/hc/fr/articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-professionnels-et-fournisseurs-d-informations" target="_blank">conditions RGPD du réseau Apidae</a>.') ; ?></label>    
         </div>
     </div>

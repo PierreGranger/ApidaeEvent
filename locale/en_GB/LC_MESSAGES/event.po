@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:22+0200\n"
+"POT-Creation-Date: 2024-08-23 11:21+0200\n"
 "PO-Revision-Date: 2024-08-21 13:57+0200\n"
 "Last-Translator: Pierre Granger <pierre.granger@apidae-tourisme.com>\n"
 "Language-Team: English (British) <(nothing)>\n"
@@ -293,19 +293,31 @@ msgstr ""
 "The detailed description complements the short description and is not "
 "redundant. Some websites display these two fields in succession."
 
-#: src/form.inc.php:257
+#: src/form.inc.php:244
+msgid "Animaux acceptés"
+msgstr "Pets allowed"
+
+#: src/form.inc.php:251
+msgid "Conditions d'accueil des animaux"
+msgstr "Pet-friendly conditions"
+
+#: src/form.inc.php:252
+msgid "Animaux acceptés en laisse uniquement, en terrasse uniquement..."
+msgstr "Pets allowed on leash only, on terrace only..."
+
+#: src/form.inc.php:275
 msgid "Nom de l'organisme"
 msgstr "Name of the organisation"
 
-#: src/form.inc.php:264
+#: src/form.inc.php:282
 msgid "URL de réservation"
 msgstr "Booking URL"
 
-#: src/form.inc.php:282
+#: src/form.inc.php:300
 msgid "Organisateur"
 msgstr "Organiser"
 
-#: src/form.inc.php:284
+#: src/form.inc.php:302
 msgid ""
 "Vous pouvez laisser un message ci-dessous : il sera communiqué au "
 "propriétaire du formulaire, mais ne sera pas publié.<br />\n"
@@ -317,11 +329,11 @@ msgstr ""
 "            Please specify <strong>the organiser of the event</strong> (ABC "
 "association...)."
 
-#: src/form.inc.php:288
+#: src/form.inc.php:306
 msgid "Commentaire privé"
 msgstr "Private comment"
 
-#: src/form.inc.php:313
+#: src/form.inc.php:331
 msgid ""
 "J'accepte les <a href=\"https://aide.apidae-tourisme.com/hc/fr/"
 "articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-"
@@ -330,14 +342,14 @@ msgid ""
 msgstr ""
 "I accept the <a href=\"https://aide.apidae-tourisme.com/hc/fr/"
 "articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-"
-"professionnels-et-fournisseurs-d-informations\" target=\"_blank\"> "
-"GDPR conditions of the Apidae network</a>."
+"professionnels-et-fournisseurs-d-informations\" target=\"_blank\"> GDPR "
+"conditions of the Apidae network</a>."
 
-#: src/form.inc.php:322
+#: src/form.inc.php:340
 msgid "Enregistrer cet événement"
 msgstr "Register this event"
 
-#: src/form.inc.php:328
+#: src/form.inc.php:346
 msgid ""
 "Vous devez cocher la case \"Je ne suis pas un robot\" pour pouvoir "
 "enregistrer"
