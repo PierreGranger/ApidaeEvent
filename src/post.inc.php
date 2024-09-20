@@ -63,7 +63,10 @@
 	$root['type'] = 'FETE_ET_MANIFESTATION' ;
 
 	$fieldlist[] = 'nom' ;
-	$root['nom']['libelleFr'] = $_POST['nom'] ;
+	if ( $libelleXy != 'libelleFr' ) {
+		$root['nom']['libelleFr'] = $_POST['nom'] ;
+	}
+	$root['nom'][$libelleXy] = $_POST['nom'] ;
 
 	if ( $_POST['lieu'] != '' ) {
 		$fieldlist[] = 'informationsFeteEtManifestation.nomLieu' ;
@@ -128,7 +131,7 @@
 		if ( $apidaeEvent->verifTime($date['hfin']) ) $periode['horaireFermeture'] = $date['hfin'].":00" ;
 		$periode['tousLesAns'] = false ;
 		$periode['type'] = 'OUVERTURE_TOUS_LES_JOURS' ;
-		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = Array('libelleFr' => trim($date['complementHoraire'])) ;
+		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = [$libelleXy => trim($date['complementHoraire'])] ;
 
 		if ( isset($date['timePeriods']) ) $periode['timePeriods'] = json_decode($date['timePeriods']) ;
 
@@ -301,12 +304,12 @@
 	if ( isset($_POST['descriptifCourt']) && trim($_POST['descriptifCourt']) != "" )
 	{
 		$fieldlist[] = 'presentation.descriptifCourt' ;
-		$root['presentation']['descriptifCourt']['libelleFr'] = trim($_POST['descriptifCourt']) ;
+		$root['presentation']['descriptifCourt'][$libelleXy] = trim($_POST['descriptifCourt']) ;
 	}
 	if ( isset($_POST['descriptifDetaille']) && trim($_POST['descriptifDetaille']) != "" )
 	{
 		$fieldlist[] = 'presentation.descriptifDetaille' ;
-		$root['presentation']['descriptifDetaille']['libelleFr'] = trim($_POST['descriptifDetaille']) ;
+		$root['presentation']['descriptifDetaille'][$libelleXy] = trim($_POST['descriptifDetaille']) ;
 	}
 
 	/**
@@ -319,7 +322,7 @@
 	if ( isset($_POST['descriptifAnimauxAcceptes']) && trim($_POST['descriptifAnimauxAcceptes']) != "" )
 	{
 		$fieldlist[] = 'prestations.descriptifAnimauxAcceptes' ;
-		$root['prestations']['descriptifAnimauxAcceptes']['libelleFr'] = trim($_POST['descriptifAnimauxAcceptes']) ;
+		$root['prestations']['descriptifAnimauxAcceptes'][$libelleXy] = trim($_POST['descriptifAnimauxAcceptes']) ;
 	}
 
 	/**
@@ -328,9 +331,9 @@
 	$dts = Array() ;
 	if ( isset($_POST['descriptifsThematises']) )
 	{
-		foreach ( $_POST['descriptifsThematises'] as $id => $libelleFr )
+		foreach ( $_POST['descriptifsThematises'] as $id => $lib )
 		{
-			if ( trim($libelleFr) != '' )
+			if ( trim($lib) != '' )
 			{
 				$dts[] = Array(
 					'theme' => Array(
@@ -338,7 +341,7 @@
 						'id' => $id
 					),
 					'description' => Array(
-						'libelleFr' => trim($libelleFr)
+						$libelleXy => trim($lib)
 					)
 				) ;
 			}
@@ -353,10 +356,10 @@
 	/**
 	*	Gestion des tarifs
 	*/
-	if ( isset($_POST['descriptionTarif_complement_libelleFr']) )
+	if ( isset($_POST['descriptionTarif_complement_'.$codeLibelibelleXylle]) )
 	{
 		$fieldlist[] = 'descriptionTarif.complement' ;
-		$root['descriptionTarif']['complement']['libelleFr'] = trim($_POST['descriptionTarif_complement_libelleFr']) ;	
+		$root['descriptionTarif']['complement'][$libelleXy] = trim($_POST['descriptionTarif_complement_'.$libelleXy]) ;	
 	}
 
 	if ( isset($_POST['gratuit']) )
@@ -379,7 +382,7 @@
 			
 			$t['minimum'] = $tarif['mini'] ;
 			$t['maximum'] = $tarif['maxi'] ;
-			if ( isset($tarif['precisions']) ) $t['precisionTarif']['libelleFr'] = $tarif['precisions'] ;
+			if ( isset($tarif['precisions']) ) $t['precisionTarif'][$libelleXy] = $tarif['precisions'] ;
 			$t['type'] = Array('elementReferenceType'=>'TarifType','id'=>(int)$tarif['type']) ;
 			$tarifs[] = $t ;
 		}
@@ -562,8 +565,8 @@
 		$illustration = Array() ;
 		$illustration['link'] = false ;
 		$illustration['type'] = 'IMAGE' ;
-		if ( $illus['legende'] != '' ) $illustration['nom']['libelleFr'] = $illus['legende'] ;
-		if ( $illus['copyright'] != '' ) $illustration['copyright']['libelleFr'] = $illus['copyright'] ;
+		if ( $illus['legende'] != '' ) $illustration['nom'][$libelleXy] = $illus['legende'] ;
+		if ( $illus['copyright'] != '' ) $illustration['copyright'][$libelleXy] = $illus['copyright'] ;
 		$illustration['traductionFichiers'][0]['locale'] = 'fr' ;
 		$illustration['traductionFichiers'][0]['url'] = 'MULTIMEDIA#illustration-'.($i+1) ;
 		$root['illustrations'][] = $illustration ;
@@ -576,8 +579,8 @@
 		$multimedia = Array() ;
 		$multimedia['link'] = false ;
 		$multimedia['type'] = 'DOCUMENT' ;
-		if ( $mm['legende'] != '' ) $multimedia['nom']['libelleFr'] = $mm['legende'] ;
-		if ( $mm['copyright'] != '' ) $multimedia['copyright']['libelleFr'] = $mm['copyright'] ;
+		if ( $mm['legende'] != '' ) $multimedia['nom'][$libelleXy] = $mm['legende'] ;
+		if ( $mm['copyright'] != '' ) $multimedia['copyright'][$libelleXy] = $mm['copyright'] ;
 		$multimedia['traductionFichiers'][0]['locale'] = 'fr' ;
 		$multimedia['traductionFichiers'][0]['url'] = 'MULTIMEDIA#multimedia-'.($i+1) ;
 		$root['multimedias'][] = $multimedia ;
@@ -589,6 +592,15 @@
 	if ( isset($root['illustrations']) && sizeof($root['illustrations']) > 0 ) $fieldlist[] = 'illustrations' ;
 	if ( isset($root['multimedias']) && sizeof($root['multimedias']) > 0 ) $fieldlist[] = 'multimedias' ;
 	
+	if ( isset($_POST['rgpd']) && $_POST['rgpd'] == 1 ) {
+		$root['enquete']['enquetes'][] = [
+			'annee' => date('Y'),
+			'retour' => true,
+			'titre' => ['elementReferenceType' =>'EnqueteTitre', 'id' => 5865] // Mise en conformité RGPD
+		] ;
+		$fieldlist[] = 'enquete.enquetes' ;
+	}
+
 	if ( $debug ) $timer->start('enregistrement') ;
 
 	if ( $debug ) {

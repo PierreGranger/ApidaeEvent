@@ -396,7 +396,7 @@ use Exception ;
 			return false ;
 		}
 
-		public function libelleEr($er, $codeLibelle = 'fr') {
+		public function libelleEr($er, $codeLibelle = 'Fr') {
 			if ( isset($codeLibelle) && isset($er['libelle'.$codeLibelle]) ) return $er['libelle'.$codeLibelle] ;
 			elseif ( isset($er['libelle'.$this->language['codeLibelle']]) ) return $er['libelle'.$this->language['codeLibelle']] ;
 			return $er['libelleFr'] ;

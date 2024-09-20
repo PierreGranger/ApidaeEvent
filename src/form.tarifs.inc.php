@@ -1,5 +1,5 @@
     <fieldset>
-        <legend><?php _('Tarifs') ; ?></legend>
+        <legend><?php __('Tarifs') ; ?></legend>
 
         <div class="<?= $class_line ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label" for="gratuit"><?php __('Gratuit pour les visiteurs') ; ?></label>
@@ -79,9 +79,9 @@
         </div>
 
         <div class="<?= $class_line ; ?> complement_tarif">
-            <label class="<?php echo $class_label; ?> col-form-label" for="descriptionTarif_complement_libelleFr"><?php __('Complément sur les tarifs') ; ?></label>
+            <label class="<?php echo $class_label; ?> col-form-label" for="descriptionTarif_complement_<?php echo $libelleXy ; ?>"><?php __('Complément sur les tarifs') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
-                <textarea class="form-control" name="descriptionTarif_complement_libelleFr" id="descriptionTarif_complement_libelleFr"><?php echo htmlspecialchars(@$post['descriptionTarif_complement_libelleFr']); ?></textarea>
+                <textarea class="form-control" name="descriptionTarif_complement_<?php echo $libelleXy ; ?>" id="descriptionTarif_complement_<?php echo $libelleXy ; ?>"><?php echo htmlspecialchars(@$post['descriptionTarif_complement_'.$libelleXy]); ?></textarea>
             </div>
         </div>
 

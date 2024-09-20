@@ -8,21 +8,24 @@
 	require realpath(dirname(__FILE__)).'/../config.inc.php' ;
 	require realpath(dirname(__FILE__)).'/functions.inc.php' ;
 	
-
     // https://stackoverflow.com/a/3770616/2846837
     $lang_detected = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) : 'fr' ;
     
 	$locale = ApidaeEvent::DEFAULT_LANGUAGE['locale'] ;
 	$lang = ApidaeEvent::DEFAULT_LANGUAGE['lang'] ;
+	$codeLibelle = ApidaeEvent::DEFAULT_LANGUAGE['codeLibelle'] ;
 
 	if ( isset($_GET['locale']) && isset(ApidaeEvent::ACCEPTED_LANGUAGES[$_GET['locale']]) ) {
 		$locale = ApidaeEvent::ACCEPTED_LANGUAGES[$_GET['locale']]['locale'] ;
 		$lang = $_GET['locale'] ;
+		$codeLibelle = ApidaeEvent::ACCEPTED_LANGUAGES[$_GET['locale']]['codeLibelle'] ;
 	}
 	elseif ( isset(ApidaeEvent::ACCEPTED_LANGUAGES[$lang_detected]) ) {
 		$locale = ApidaeEvent::ACCEPTED_LANGUAGES[$lang_detected]['locale'] ; 
 		$lang = $lang_detected ;
+		$codeLibelle = ApidaeEvent::ACCEPTED_LANGUAGES[$lang_detected]['codeLibelle'] ;
 	}
+	$libelleXy = 'libelle'.$codeLibelle ;
 	
     // https://www.php.net/manual/fr/function.gettext.php
     $results = putenv('LC_ALL='.$locale);
