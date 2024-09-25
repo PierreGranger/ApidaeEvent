@@ -62,13 +62,6 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 	<link href="https://form.apihours.apidae-tourisme.<?php echo isset($config['apihours']['env']) ? $config['apihours']['env'] : 'com' ; ?>/0.6.0/styles.css" rel="stylesheet"/>
 <?php } ?>
 
-<?php
-	$tmp = file_get_contents(realpath(dirname(__FILE__)).'/../ressources/elements_reference_interdits.json') ;
-	$interdits = json_decode($tmp,true) ;
-	if ( json_last_error() == JSON_ERROR_NONE ) {
-		?>
-		<script>
-			var interdictions_elements_reference = <?php echo $tmp ; ?> ;
-		</script>
-		<?php
-	}
+	<script>
+		var interdictions_elements_reference = <?php echo json_encode($apidaeEvent->getElementsReferenceInterdictions(['FeteEtManifestationType','FeteEtManifestationCategorie'])) ; ?> ;
+	</script>

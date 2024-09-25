@@ -658,7 +658,7 @@ function criteresInterditsByEr(selector) {
 export function criteresInterdits() {
 
 	jQuery('select option[disabled][data-interdit]').prop('disabled', false).removeAttr('data-interdit');
-	jQuery('input[type="checkbox"][data-interdit]').off('onclick').removeAttr('data-interdit');
+	jQuery('input[type="checkbox"][data-interdit]').off('click').removeAttr('data-interdit');
 	jQuery('label[data-interdit]').removeAttr('data-interdit');
 
 	if (typeof interdictions_elements_reference != 'undefined') {
