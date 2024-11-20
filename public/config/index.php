@@ -24,6 +24,9 @@
         }
 
         $ok = file_put_contents($confPath.'/'.$_GET['type'].'.json',$json_edite) ;
+
+        file_put_contents($confPath.'/ressources/'.date('Ymdhis').'_'.$utilisateurApidae['id'].'_'.$_GET['type'].'.json',$json_edite) ;
+
         if ( $ok === false )
         {
             $retour['erreur'] = 'Ecriture du fichier de config impossible' ;
@@ -34,18 +37,13 @@
             $json_edite = json_encode($_POST['json'],JSON_PRETTY_PRINT) ;
             
             if ($configApidaeEvent['debug'] !== true) {
-                $to = $configApidaeEvent['mail_admin'][0] ;
-                $subject = 'ApidaeEvent : config '. $utilisateurApidae['firstName'].' '.$utilisateurApidae['lastName'] . ' #' . $utilisateurApidae['id'] ;
-
-                $headers[] = 'MIME-Version: 1.0';
-                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                $headers[] = 'From: Apidae Event <'.$configApidaeEvent['mail_expediteur'].'>';
-                $headers[] = 'To: '.$to ;
-
-                $message = '<pre>'.$json_edite.'</pre>' ;
-
+                $mailed = $apidaeEvent->alerte(
+                    'ApidaeEvent : config '. $utilisateurApidae['firstName'].' '.$utilisateurApidae['lastName'] . ' #' . $utilisateurApidae['id'],
+                    '<pre>'.$json_edite.'</pre>',
+                    $configApidaeEvent['mail_admin']
+                ) ;
                 // Envoi
-                mail($to, $subject, $message, implode("\r\n", $headers));
+                $retour['mail'] = $mailed ;
             }
 
             $retour['json'] = $_POST['json'] ;
