@@ -65,8 +65,12 @@
 	$fieldlist[] = 'nom' ;
 	$root['nom']['libelleFr'] = $_POST['nom'] ;
 
-	$fieldlist[] = 'informationsFeteEtManifestation.nomLieu' ;
-	$root['informationsFeteEtManifestation']['nomLieu'] = $_POST['lieu'] ;
+	if ( $_POST['lieu'] != '' ) {
+		$fieldlist[] = 'informationsFeteEtManifestation.nomLieu' ;
+		$root['informationsFeteEtManifestation']['nomLieu'] = $_POST['lieu'] ;
+		$fieldlist[] = 'localisation.adresse.nomDuLieu' ;
+		$root['localisation']['adresse']['nomDuLieu'] = $_POST['lieu'] ;
+	}
 
 	$fieldlist[] = 'localisation.adresse.adresse1' ;
 	$root['localisation']['adresse']['adresse1'] = $_POST['adresse1'] ;
