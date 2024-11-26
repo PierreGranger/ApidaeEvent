@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-23 11:21+0200\n"
+"POT-Creation-Date: 2024-11-26 13:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -195,7 +195,7 @@ msgstr ""
 msgid "Impossible de récupérer la liste de communes..."
 msgstr ""
 
-#: src/form.inc.php:106 src/post.inc.php:881
+#: src/form.inc.php:106 src/post.inc.php:910
 msgid "Veuillez nous excuser pour la gène occasionnée."
 msgstr ""
 
@@ -314,10 +314,8 @@ msgstr ""
 
 #: src/form.inc.php:331
 msgid ""
-"J'accepte les <a href=\"https://aide.apidae-tourisme.com/hc/fr/"
-"articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-"
-"professionnels-et-fournisseurs-d-informations\" target=\"_blank\">conditions "
-"RGPD du réseau Apidae</a>."
+"J'accepte les <a href=\"https://www.apidae-tourisme.com/charte-de-"
+"confidentialite/\" target=\"_blank\">conditions RGPD du réseau Apidae</a>."
 msgstr ""
 
 #: src/form.inc.php:340
@@ -381,7 +379,7 @@ msgid ""
 msgstr ""
 
 #. $texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
-#: src/form.multimedias.inc.php:17 src/post.inc.php:794
+#: src/form.multimedias.inc.php:17 src/post.inc.php:823
 msgid "Plus d'informations ici"
 msgstr ""
 
@@ -476,67 +474,67 @@ msgstr ""
 msgid "L'utilisateur n'a pas coché la case \"Je ne suis pas un robot\""
 msgstr ""
 
-#: src/post.inc.php:186
+#: src/post.inc.php:193
 msgid ""
 "merci de préciser au moins 1 mail ou 1 numéro de téléphone dans la ligne "
 "\"contact\"."
 msgstr ""
 
-#: src/post.inc.php:191
+#: src/post.inc.php:198
 msgid "merci de préciser au moins 1 contact"
 msgstr ""
 
-#: src/post.inc.php:631
+#: src/post.inc.php:660
 msgid "Vous devez spécifier un type de tarif"
 msgstr ""
 
-#: src/post.inc.php:644
+#: src/post.inc.php:673
 msgid "L'offre n'a pas été enregistrée sur Apidae..."
 msgstr ""
 
-#: src/post.inc.php:649
+#: src/post.inc.php:678
 msgid ""
 "L'offre n'a pas été créée sur Apidae pour une raison inconnue (last_id is "
 "null)..."
 msgstr ""
 
-#: src/post.inc.php:773
+#: src/post.inc.php:802
 msgid ""
 "<strong>Votre suggestion d'événement a bien été enregistrée</strong>, nous "
 "vous remercions pour votre contribution."
 msgstr ""
 
-#: src/post.inc.php:774
+#: src/post.inc.php:803
 msgid ""
 "<strong>Attention :</strong> Il ne sera visible sur les différents supports "
 "de communication alimentés par Apidae qu'<strong>après validation</strong>."
 msgstr ""
 
-#: src/post.inc.php:778
+#: src/post.inc.php:807
 msgid "La validation est en cours auprès de"
 msgstr ""
 
-#: src/post.inc.php:784
+#: src/post.inc.php:813
 msgid "Votre commentaire a également été transmis"
 msgstr ""
 
-#: src/post.inc.php:799
+#: src/post.inc.php:828
 msgid "Faire une autre suggestion de manifestation"
 msgstr ""
 
-#: src/post.inc.php:858
+#: src/post.inc.php:887
 msgid "Erreur à l'enregistrement"
 msgstr ""
 
-#: src/post.inc.php:859
+#: src/post.inc.php:888
 msgid "Une erreur s'est produite et votre fiche n'a pas pû être enregistrée."
 msgstr ""
 
-#: src/post.inc.php:880
+#: src/post.inc.php:909
 msgid "L'erreur a été envoyée à un administrateur."
 msgstr ""
 
-#: src/post.inc.php:882
+#: src/post.inc.php:911
 msgid ""
 "Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact "
 "avec l'Office du Tourisme concernée par votre manifestation"
