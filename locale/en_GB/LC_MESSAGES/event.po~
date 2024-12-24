@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-23 11:21+0200\n"
+"POT-Creation-Date: 2024-12-24 11:17+0100\n"
 "PO-Revision-Date: 2024-08-21 13:57+0200\n"
 "Last-Translator: Pierre Granger <pierre.granger@apidae-tourisme.com>\n"
 "Language-Team: English (British) <(nothing)>\n"
@@ -199,7 +199,7 @@ msgstr ""
 msgid "Impossible de récupérer la liste de communes..."
 msgstr "Impossible to retrieve the list of communes..."
 
-#: src/form.inc.php:106 src/post.inc.php:881
+#: src/form.inc.php:106 src/post.inc.php:910
 msgid "Veuillez nous excuser pour la gène occasionnée."
 msgstr "We apologise for any inconvenience caused."
 
@@ -334,16 +334,14 @@ msgid "Commentaire privé"
 msgstr "Private comment"
 
 #: src/form.inc.php:331
+#, fuzzy
 msgid ""
-"J'accepte les <a href=\"https://aide.apidae-tourisme.com/hc/fr/"
-"articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-"
-"professionnels-et-fournisseurs-d-informations\" target=\"_blank\">conditions "
-"RGPD du réseau Apidae</a>."
+"J'accepte les <a href=\"https://www.apidae-tourisme.com/charte-de-"
+"confidentialite/\" target=\"_blank\">conditions RGPD du réseau Apidae</a>."
 msgstr ""
-"I accept the <a href=\"https://aide.apidae-tourisme.com/hc/fr/"
-"articles/360016788691-Conditions-d-adh%C3%A9sion-Apidae-pour-les-socio-"
-"professionnels-et-fournisseurs-d-informations\" target=\"_blank\"> GDPR "
-"conditions of the Apidae network</a>."
+"I accept the <a href=\"https://www.apidae-tourisme.com/charte-de-"
+"confidentialite/\" target=\"_blank\"> GDPR conditions of the Apidae network</"
+"a>."
 
 #: src/form.inc.php:340
 msgid "Enregistrer cet événement"
@@ -412,7 +410,7 @@ msgstr ""
 "and specify the Copyright if necessary."
 
 #. $texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
-#: src/form.multimedias.inc.php:17 src/post.inc.php:794
+#: src/form.multimedias.inc.php:17 src/post.inc.php:823
 msgid "Plus d'informations ici"
 msgstr "For more information, click here"
 
@@ -515,7 +513,7 @@ msgstr "Captcha verification not possible"
 msgid "L'utilisateur n'a pas coché la case \"Je ne suis pas un robot\""
 msgstr "The user has not ticked the \"I am not a robot\" box"
 
-#: src/post.inc.php:186
+#: src/post.inc.php:193
 msgid ""
 "merci de préciser au moins 1 mail ou 1 numéro de téléphone dans la ligne "
 "\"contact\"."
@@ -523,19 +521,19 @@ msgstr ""
 "please specify at least 1 e-mail or 1 telephone number in the \"contact\" "
 "line."
 
-#: src/post.inc.php:191
+#: src/post.inc.php:198
 msgid "merci de préciser au moins 1 contact"
 msgstr "please specify at least 1 contact"
 
-#: src/post.inc.php:631
+#: src/post.inc.php:660
 msgid "Vous devez spécifier un type de tarif"
 msgstr "You must specify a tariff type"
 
-#: src/post.inc.php:644
+#: src/post.inc.php:673
 msgid "L'offre n'a pas été enregistrée sur Apidae..."
 msgstr "The offer has not been registered on Apidae..."
 
-#: src/post.inc.php:649
+#: src/post.inc.php:678
 msgid ""
 "L'offre n'a pas été créée sur Apidae pour une raison inconnue (last_id is "
 "null)..."
@@ -543,7 +541,7 @@ msgstr ""
 "The offer has not been created on Apidae for an unknown reason (last_id is "
 "null)..."
 
-#: src/post.inc.php:773
+#: src/post.inc.php:802
 msgid ""
 "<strong>Votre suggestion d'événement a bien été enregistrée</strong>, nous "
 "vous remercions pour votre contribution."
@@ -551,7 +549,7 @@ msgstr ""
 "<strong>Your event suggestion has been successfully registered</strong>, we "
 "thank you for your contribution."
 
-#: src/post.inc.php:774
+#: src/post.inc.php:803
 msgid ""
 "<strong>Attention :</strong> Il ne sera visible sur les différents supports "
 "de communication alimentés par Apidae qu'<strong>après validation</strong>."
@@ -559,31 +557,31 @@ msgstr ""
 "<strong>Please note:</strong> It will only be visible on the various "
 "communication media fed by Apidae <strong>after validation</strong>."
 
-#: src/post.inc.php:778
+#: src/post.inc.php:807
 msgid "La validation est en cours auprès de"
 msgstr "Validation is in progress with"
 
-#: src/post.inc.php:784
+#: src/post.inc.php:813
 msgid "Votre commentaire a également été transmis"
 msgstr "Your comment has also been forwarded"
 
-#: src/post.inc.php:799
+#: src/post.inc.php:828
 msgid "Faire une autre suggestion de manifestation"
 msgstr "Make another suggestion for an event"
 
-#: src/post.inc.php:858
+#: src/post.inc.php:887
 msgid "Erreur à l'enregistrement"
 msgstr "Registration error"
 
-#: src/post.inc.php:859
+#: src/post.inc.php:888
 msgid "Une erreur s'est produite et votre fiche n'a pas pû être enregistrée."
 msgstr "An error has occurred and your file could not be saved."
 
-#: src/post.inc.php:880
+#: src/post.inc.php:909
 msgid "L'erreur a été envoyée à un administrateur."
 msgstr "The error has been sent to an administrator."
 
-#: src/post.inc.php:882
+#: src/post.inc.php:911
 msgid ""
 "Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact "
 "avec l'Office du Tourisme concernée par votre manifestation"

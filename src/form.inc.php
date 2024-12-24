@@ -328,7 +328,7 @@
     <div class="<?= $class_line ; ?> required rgpd">
         <div class="<?php echo $class_champ; ?>">
             <input type="checkbox" name="rgpd" id="rgpd" value="1" required="required" <?php if (@$post['rgpd'] == 1) echo ' checked="checked" '; ?> />
-            <label for="rgpd"><?php __('J\'accepte les <a href="https://www.apidae-tourisme.com/charte-de-confidentialite/" target="_blank">conditions RGPD du réseau Apidae</a>.') ; ?></label>    
+            <label for="rgpd"><a href="https://www.apidae-tourisme.com/charte-de-confidentialite/" target="_blank"><?php __('J\'accepte les conditions RGPD du réseau Apidae') ; ?></a>.</label>
         </div>
     </div>
 

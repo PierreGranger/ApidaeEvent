@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-26 13:49+0100\n"
+"POT-Creation-Date: 2024-12-24 11:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -313,9 +313,7 @@ msgid "Commentaire privé"
 msgstr ""
 
 #: src/form.inc.php:331
-msgid ""
-"J'accepte les <a href=\"https://www.apidae-tourisme.com/charte-de-"
-"confidentialite/\" target=\"_blank\">conditions RGPD du réseau Apidae</a>."
+msgid "J'accepte les conditions RGPD du réseau Apidae"
 msgstr ""
 
 #: src/form.inc.php:340

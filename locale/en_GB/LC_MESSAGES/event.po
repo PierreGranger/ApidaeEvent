@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-26 13:49+0100\n"
+"POT-Creation-Date: 2024-12-24 11:26+0100\n"
 "PO-Revision-Date: 2024-08-21 13:57+0200\n"
 "Last-Translator: Pierre Granger <pierre.granger@apidae-tourisme.com>\n"
 "Language-Team: English (British) <(nothing)>\n"
@@ -334,14 +334,8 @@ msgid "Commentaire privé"
 msgstr "Private comment"
 
 #: src/form.inc.php:331
-#, fuzzy
-msgid ""
-"J'accepte les <a href=\"https://www.apidae-tourisme.com/charte-de-"
-"confidentialite/\" target=\"_blank\">conditions RGPD du réseau Apidae</a>."
-msgstr ""
-"I accept the <a href=\"https://www.apidae-tourisme.com/charte-de-"
-"confidentialite/\" target=\"_blank\"> GDPR "
-"conditions of the Apidae network</a>."
+msgid "J'accepte les conditions RGPD du réseau Apidae"
+msgstr "I accept the GDPR conditions of the Apidae network"
 
 #: src/form.inc.php:340
 msgid "Enregistrer cet événement"
