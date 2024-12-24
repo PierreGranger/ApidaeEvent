@@ -23,6 +23,11 @@
 
 	$apidaeEvent->debug($_POST,'$_POST') ;
 
+	$enquete_er_id = 5865 ;
+	if ( @$configApidaeEvent['env'] == 'cooking' ) {
+		$enquete_er_id = 3934 ;
+	}
+
 	/**
 	 * $nosave définit s'il faut envoyer en enregistrement sur Apidae ou non.
 	 * Il n'a pas d'impact sur l'envoi des mails
@@ -596,7 +601,7 @@
 		$root['enquete']['enquetes'][] = [
 			'annee' => date('Y'),
 			'retour' => true,
-			'titre' => ['elementReferenceType' =>'EnqueteTitre', 'id' => 5865] // Mise en conformité RGPD
+			'titre' => ['elementReferenceType' =>'EnqueteTitre', 'id' => $enquete_er_id] // Mise en conformité RGPD
 		] ;
 		$fieldlist[] = 'enquete.enquetes' ;
 	}
