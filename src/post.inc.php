@@ -809,7 +809,7 @@
 		
 		if ( isset($infos_proprietaire['url_structure_validatrice']) && $infos_proprietaire['url_structure_validatrice'] != '' )
 		{
-			$texte_offre_enregistree .= '<p>'.__('La validation est en cours auprès de').' : '.$infos_proprietaire['structure_validatrice'] ;
+			$texte_offre_enregistree .= '<p>'.__('La validation est en cours auprès de',false).' : '.$infos_proprietaire['structure_validatrice'] ;
 			$texte_offre_enregistree .= ' (<a href="'.$infos_proprietaire['url_structure_validatrice'].'" target="_blank">'.$infos_proprietaire['url_structure_validatrice'].'</a>)' ;
 			$texte_offre_enregistree .= '</p>'."\n" ;
 		}
