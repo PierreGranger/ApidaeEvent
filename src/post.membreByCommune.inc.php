@@ -1,6 +1,8 @@
 <?php
 
-    use PierreGranger\ApidaeTimer ;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
+use PierreGranger\ApidaeTimer ;
 
     /**
      * Ce fichier doit définir une variable $infos_proprietaire à partir de la commune $commune saisie.
@@ -35,15 +37,23 @@
 	 * Si $ko n'est pas vide, l'enregistrement ne se fera pas.
 	 */
 
-	 /**
+	/**
 	  * @example php post.infos_proprietaire.inc.php debug '30341|73670|Entremont-le-Vieux|73107'
 	  */
+	if ( isset($argv[1]) && $argv[1] == 'debug' )
+	{
+		require_once(realpath(dirname(__FILE__)).'/requires.inc.php') ;
+	}
+
+	$log = new Logger('membres') ;
+	$logPath = realpath(dirname(__FILE__) . '/../ressources/logs/membres.log');
+	$logRotate = new RotatingFileHandler($logPath, 7, Logger::DEBUG);
+	$log->pushHandler($logRotate) ;
 
     if ( ! isset($debug) ) $debug = false ;
 
     if ( isset($argv[1]) && $argv[1] == 'debug' )
     {
-        require_once(realpath(dirname(__FILE__)).'/requires.inc.php') ;
         $debug = true ;
         $timer = new ApidaeTimer() ;
         $commune = explode('|','14707|37260|Villeperdue|37278') ;
@@ -69,24 +79,29 @@
 	$communeInsee = $commune[3] ;
 
     function ip_debug($var,$titre=null) {
-        global $debug ; if ( ! $debug ) return false ;
-        echo PHP_EOL ;
-        if ( $titre != null) echo "********** " . $titre . PHP_EOL ;
-        if ( is_array($var) ) echo json_encode($var) ;
-        else echo $var ;
-        echo PHP_EOL ;
+        global $debug, $log ;
+		if ( ! $debug ) {
+			$logs = [] ;
+			if ( $titre != null ) $logs[] = $titre ;
+			if ( is_array($var) ) $logs[] = json_encode($var) ; else $logs[] = $var ;
+			$log->info(implode(' : ',$logs)) ;
+		} else {
+			echo PHP_EOL ;
+			if ( $titre != null) echo "********** " . $titre . PHP_EOL ;
+			if ( is_array($var) ) echo json_encode($var) ;
+			else echo $var ;
+			echo PHP_EOL ;
+		}
     }
 
     $time = null ;
     function ip_start($var=null) {
-        global $debug ; if ( ! $debug ) return false ;
-        global $time ;
+        global $debug, $time ;
         if ( $var != null ) ip_debug($var) ;
         $time = microtime(true) ;
     }
     function ip_stop($var=null) {
-        global $debug ; if ( ! $debug ) return false ;
-        global $time ;
+        global $debug, $time ;
         $time = microtime(true) - $time ;
         if ( $var != null ) ip_debug($var) ;
         ip_debug(round($time, 3).'s') ;
@@ -116,7 +131,10 @@
 		 */
 		ip_start('Récupération des territoires') ;
 		$territoires = $apidaeEvent->getTerritoires() ;
-		if ( ! $territoires ) $ko[] = 'Récupération des territoires impossible' ;
+		if ( ! $territoires ) {
+			ip_debug(sizeof($territoires),'Récupération des territoires impossible') ;
+			$ko[] = 'Récupération des territoires impossible' ;
+		}
 		ip_debug(sizeof($territoires),'Nombre de territoires') ;
 		ip_stop() ;
 
@@ -188,19 +206,25 @@
 				if ( $m['id_membre'] == 1157 ) continue ;
 				ip_debug('Membre '.$m['id_membre'].' '.$m['nom'].' concerné par la commune [insee='.$communeInsee.']') ;
 				
-				ip_debug('Le membre possède-t-il la commune '.$communeInsee.' dans la config ApidaeEvent ?') ;
+				ip_debug('Le membre '.$m['id_membre'].' possède-t-il la commune [insee='.$communeInsee.'] dans la config ApidaeEvent / insee_communes ?') ;
 				$trouve = false ;
 				if ( 
 					isset($m['insee_communes']) 
 					&& is_array($m['insee_communes']) 
-					&& in_array($communeInsee,$m['insee_communes'])
 				)
 				{
-					ip_debug('trouvé dans les insee_communes !') ;
-					$trouve = true ;
+					if ( in_array($communeInsee,$m['insee_communes']) ) {
+						ip_debug('Oui : '.$communeInsee.' trouvé dans les insee_communes '.implode(', ',$m['insee_communes']).' !') ;
+						$trouve = true ;
+					} else {
+						ip_debug('Non : '.$communeInsee.' absent de insee_communes '.implode(', ',$m['insee_communes'])) ;
+					}
+				} else {
+					ip_debug('Non : pas de conf insee_communes pour '.$m['id_membre']) ;
 				}
 
-				ip_debug('Le membre possède-t-il la commune [insee='.$communeInsee.'] dans le territoire '.$m['id_territoire'].' de la config ApidaeEvent ?') ;
+				ip_debug('Le membre '.$m['id_membre'].' possède-t-il la commune [insee='.$communeInsee.'] dans la config ApidaeEvent /  territoire ?') ;
+				ip_debug('membre[id_territoire]='.$m['id_territoire']) ;
 
 				if ( isset($territoires[$m['id_territoire']]) )
 					ip_debug('Périmètre du territoire '.$m['id_territoire'].' (codes Insee) : '.implode(',',array_keys($territoires[$m['id_territoire']]['perimetre']))) ;
@@ -213,7 +237,7 @@
 					&& isset($territoires[$m['id_territoire']]['perimetre'][$communeInsee])
 				)
 				{
-					ip_debug('trouvé dans le territoire !') ;
+					ip_debug('Oui : [insee='.$communeInsee. '] fait partie du territoire '.$m['id_territoire']) ;
 					$trouve = true ;
 				}
 
