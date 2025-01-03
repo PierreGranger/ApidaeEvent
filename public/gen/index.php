@@ -123,6 +123,14 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 					</div>
 
 					<div class="row mb-3">
+						<label class="col-sm-6 col-form-label" for="toutou">Animaux acceptés & descriptif associé
+						</label>
+						<div class="col-sm-6">
+							<input type="checkbox" id="toutou" name="toutou" value="u2" />
+						</div>
+					</div>
+
+					<div class="row mb-3">
 						<label class="col-sm-6 col-form-label" for="generique">Evenements génériques & championnats
 							<br /><small>Journées du patrimoine...</small>
 						</label>
@@ -183,14 +191,6 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</label>
 						<div class="col-sm-6">
 							<input type="checkbox" id="illustrationObligatoire" name="illustrationObligatoire" value="1" />
-						</div>
-					</div>
-
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="toutou">Animaux acceptés & descriptif associé
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="toutou" name="toutou" value="u2" />
 						</div>
 					</div>
 
