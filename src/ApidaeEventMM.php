@@ -48,7 +48,7 @@ class ApidaeEventMM extends ApidaeEvent {
                     'identifiants' => $terrs,
                     'count' => 200,
                     'responseFields' => ['nom','id','localisation']
-                 ] ;
+                ] ;
 
                 /** @var array|Result $result */
                 $result = $this->client->rechercheListObjetsTouristiques(['query' => $q]);

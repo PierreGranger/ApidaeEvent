@@ -43,12 +43,39 @@ use Exception ;
 
 		protected array $config ;
 
+		protected string $env = 'prod' ;
+
+		private array $language ;
+
+		public const DEFAULT_LANGUAGE = ['lang' => 'fr', 'locale' => 'fr_FR', 'codeLibelle' => 'Fr'] ;
+
+		public const ACCEPTED_LANGUAGES = [
+			'fr' => ['lang' => 'fr', 'locale' => 'fr_FR', 'codeLibelle' => 'Fr'],
+			'en' => ['lang' => 'en', 'locale' => 'en_GB', 'codeLibelle' => 'En', 'deepL' => 'en-GB'],
+			//'de' => ['lang' => 'de', 'locale' => 'de_DE', 'codeLibelle' => 'De'] // Allemand utilisé pour debug seulement (toutes valeurs à ! pour bien voir les oublis)
+		];
+
+		private const ELEMENTS_REFERENCE_URL = [
+			'prod' => 		'https://static.apidae-tourisme.com/filestore/exports-referentiel/elements_reference.json',
+			'dev' => 		'https://static.apidae-tourisme.dev/filestore/exports-referentiel/elements_reference.json',
+			'cooking' => 	'https://static.apidae-tourisme.cooking/filestore/exports-referentiel/elements_reference.json'
+		] ;
+
+		private const URL_API = [
+			'prod' => 'https://api.apidae-tourisme.com',
+			'dev' => 'https://api.apidae-tourisme.dev',
+			'cooking' => 'https://api.apidae-tourisme.cooking',
+		] ;
+	
+		private const TYPE_OBJET = 'FETE_ET_MANIFESTATION' ;
+		
 		public function __construct(array $params=null) {
 			
 			parent::__construct($params) ;
 
 			if ( ! is_array($params) ) throw new Exception('$params is not an array') ;
-			if ( ! isset($params['env']) ) $params['env'] = 'prod' ;
+			if ( ! isset($params['env']) || ! in_array($params['env'],['prod','dev','cooking']) ) $params['env'] = 'prod' ;
+			$this->env = $params['env'] ;
 			
 			if ( isset($params['projet_consultation_apiKey']) ) $this->projet_consultation_apiKey = $params['projet_consultation_apiKey'] ; //else throw new Exception('missing projet_consultation_apiKey') ;
 			if ( isset($params['projet_consultation_projetId']) ) $this->projet_consultation_projetId = $params['projet_consultation_projetId'] ; //else throw new Exception('missing projet_consultation_projetId') ;
@@ -57,15 +84,18 @@ use Exception ;
 			if ( isset($params['ressources_path']) && is_dir($params['ressources_path']) ) $this->ressources_path = $params['ressources_path'] ;
 			else $this->ressources_path = realpath(dirname(__FILE__)).'/../ressources/' ;
 
-			$this->mc = false ;
+			if ( isset($params['lang']) && isset(self::ACCEPTED_LANGUAGES[$params['lang']]) ) {
+				$this->language = self::ACCEPTED_LANGUAGES[$params['lang']] ;
+			} else {
+				$this->language = self::DEFAULT_LANGUAGE ;
+			}
+
 			try {
-				if ( class_exists('Memcached') )
-				{
-					$this->mc = new Memcached() ;
-					$this->mc->addServer("localhost", 11211) ;
-				}
-			} catch ( Exception $e ) {}
-			//if ( ! $this->mc ) throw new Exception('Memcached fail') ;
+				$this->mc = new Memcached() ;
+				$this->mc->addServer("localhost", 11211) ;
+			} catch ( Exception $e ) {
+				die('Unabled to start Memcached') ;
+			}
 
 			$this->client = new Client([
 				'apiKey' => $params['projet_consultation_apiKey'],
@@ -109,14 +139,14 @@ use Exception ;
 					foreach ( $ers as $erp )
 					{
 						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] && $famillePrec != null ) $ret .= "\n\t\t\t\t\t\t\t\t".'</optgroup>' ;
-						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= "\n\t\t\t\t\t\t\t\t".'<optgroup label="'.htmlspecialchars($familles[$erp['familleCritere']]['libelleFr']).'">' ;
+						if ( isset($erp['familleCritere']) && isset($familles[$erp['familleCritere']]) && $famillePrec != $erp['familleCritere'] ) $ret .= "\n\t\t\t\t\t\t\t\t".'<optgroup label="'.htmlspecialchars($this->libelleEr($familles[$erp['familleCritere']])).'">' ;
 						// TODO : on change le fonctionnement de la boucle. On a un tableau avec les parents ($erp) et des enants possibles ($erp['enfants']).
 						
 						$ret .= "\n\t\t\t\t\t\t\t\t\t".'<option value="'.$erp['id'].'"' ;
 						//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
 							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'"' ;
 							if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' selected="selected"' ;
-						$ret .= '>'.$erp['libelleFr'].'</option>' ;
+						$ret .= '>'.$this->libelleEr($erp).'</option>' ;
 						if ( isset($erp['enfants']) )
 						{
 							foreach ( $erp['enfants'] as $e )
@@ -124,7 +154,7 @@ use Exception ;
 								$ret .= "\n\t\t\t\t\t\t\t\t\t\t".'<option value="'.$e['id'].'"' ;
 								if ( isset($e['description']) && $e['description'] != '' ) $ret .= ' title="'.htmlspecialchars($e['description']).'"' ;
 								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
-								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
+								$ret .= '>'.$this->libelleEr($erp).' &raquo; '.$this->libelleEr($e).'</option>' ;
 							}
 						}
 
@@ -146,21 +176,10 @@ use Exception ;
 							$ret .= '<label class="form-check-label" for="'.$type.$erp['id'].'"' ;
 								if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'" ' ;
 							$ret .= '>' ;
-								$ret .= $erp['libelleFr'] ;
+								$ret .= $this->libelleEr($erp) ;
 							$ret .= '</label>' ;
 						$ret .= '</div>' ;
 						
-						/*if ( isset($erp['enfants']) )
-						{
-							foreach ( $erp['enfants'] as $e )
-							{
-								$ret .= '<option value="'.$e['id'].'"' ;
-								if ( isset($e['description']) && $e['description'] != '' ) $ret .= 'title="'.htmlspecialchars($e['description']).'" ' ;
-								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
-								$ret .= '>'.$erp['libelleFr'].' &raquo; '.$e['libelleFr'].'</option>' ;
-							}
-						}*/
-
 						$famillePrec = @$erp['familleCritere'] ;
 					}
 				$ret .= '</div>' ;
@@ -243,6 +262,46 @@ use Exception ;
 			return $ret ;
 		}
 
+		private $ers = null ;
+		private function getElementsReference() {
+
+			if ( $this->ers !== null ) return $this->ers ;
+			$file = $this->ressources_path.'elements_reference.json' ;
+			
+			if ( ! file_exists($file) ) {
+				return false ;
+			}
+			$tmp = file_get_contents($file) ;
+
+			$this->ers = json_decode($tmp,true) ;
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
+				return false ;
+			}
+
+			return $this->ers ;
+		}
+
+		private $interdits = [] ;
+		public function getElementsReferenceInterdictions(array $elementReferenceTypes, $refresh=false) {
+			$ret = [] ;
+			foreach ( $elementReferenceTypes as $elementReferenceType ) {
+				if ( ! isset($this->interdits[$elementReferenceType]) ) {
+					$file = $this->ressources_path.'elements_reference_interdits_'.$elementReferenceType.'.json' ;
+					if ( file_exists($file) ) {
+						$tmp = @file_get_contents($file) ;
+						$tmp = json_decode($tmp,true) ;
+						if ( json_last_error() === JSON_ERROR_NONE ) {
+							$this->interdits[$elementReferenceType] = $tmp ;
+						}
+					}
+				}
+				if ( isset($this->interdits[$elementReferenceType]) ) {
+					$ret = $ret + $this->interdits[$elementReferenceType] ;
+				}
+			}
+			return $ret ;
+		}
+
 		/**
 		*
 		*	Récupère les valeurs possibles d'un type d'éléments de référence
@@ -262,35 +321,37 @@ use Exception ;
 		*	@return 	bool|array 	Liste des élements (Chaque élément étant un array associatif issu de la base de donnée)
 		*
 		**/
-		public function getElementsReferenceByType($type,$params=null)
+		public function getElementsReferenceByType(string $type,array $params=null)
 		{
-			/**
-			 *	@todo trouver un moyen de récupérer par elementReferenceType en API
-			 *	Actuellement on récupère les élements dans le fichier ressources/elements_reference.json, c'est crade et c'est plus à jour.
-			 *
-			**/
-
-			$full = file_get_contents($this->ressources_path.'/elements_reference.json') ;
-			$full_array = json_decode($full,true) ;
-			if ( json_last_error() !== JSON_ERROR_NONE )
-			{
-				$this->debug(__METHOD__.__LINE__.'Impossible de récupérer les élements de référence (ressource)') ;
+			$elementsReference = $this->getElementsReference() ;
+			if ( ! is_array($elementsReference) ) {
 				return false ;
 			}
+			
+			// Pour gérer les interdictions de critères, on doit savoir quel type objet on cherche à écrire
+			$typeObjet = self::TYPE_OBJET ;
+			if ( isset($params['typeObjet']) && is_array($params['typeObjet']) ) {
+				$typeObjet = $params['typeObjet'] ;
+			}
+
+			$interdictions = $this->getElementsReferenceInterdictions([$type]) ;
 
 			$ret = [] ;
-			foreach ( $full_array as $er )
+			foreach ( $elementsReference as $er )
 			{
 				if ( $er['actif'] != true ) continue ;
 				if ( $er['elementReferenceType'] != $type ) continue ;
+				if ( isset($interdictions[$er['id']]['typesInterdits']) && in_array($typeObjet, $interdictions[$er['id']]['typesInterdits']) ) {
+					continue ;
+				}
 				if ( isset($params['include']) && is_array($params['include']) && ! in_array($er['id'],$params['include']) ) continue ;
 				if ( isset($params['exclude']) && is_array($params['exclude']) && in_array($er['id'],$params['exclude']) ) continue ;
 				
-				$newEr = Array(
+				$newEr = [
 					'id' => $er['id'],
-					'libelleFr' => $er['libelleFr'],
+					'libelleFr' => $this->libelleEr($er, 'fr'),
 					'ordre' => $er['ordre']
-				) ;
+				] ;
 				if ( isset($er['description']) ) $newEr['description'] = $er['description'] ;
 				if ( isset($er['familleCritere']['id']) ) $newEr['familleCritere'] = $er['familleCritere']['id'] ;
 				
@@ -381,14 +442,72 @@ use Exception ;
 		}
 
 		protected function get(string $cachekey) {
-			if ( $this->mc ) return $this->mc->get($cachekey) ;
-			else return false ;
+			return $this->mc->get($cachekey) ;
 		}
 
 		protected function set(string $cachekey, $ret, $expiration=null) {
-			if ( $expiration == null ) $expiration = $this->mc_expiration ;
-			if ( $this->mc ) return $this->mc->set($cachekey,$ret,$expiration) ;
-			return false ;
+			return $this->mc->set($cachekey,$ret) ;
+		}
+
+		public function libelleEr($er, $codeLibelle = 'Fr') {
+			if ( isset($codeLibelle) && isset($er['libelle'.$codeLibelle]) ) return $er['libelle'.$codeLibelle] ;
+			elseif ( isset($er['libelle'.$this->language['codeLibelle']]) ) return $er['libelle'.$this->language['codeLibelle']] ;
+			return $er['libelleFr'] ;
+		}
+		
+
+		// https://www.php.net/manual/en/function.file-put-contents.php#84180
+		private function file_force_contents($dir, $contents){
+			$parts = explode('/', $dir);
+			$file = array_pop($parts);
+			$dir = '';
+			foreach($parts as $part)
+				if(!is_dir($dir .= "/$part")) mkdir($dir);
+			file_put_contents("$dir/$file", $contents);
+		}
+
+		public function cacheErs($refresh = false) {
+			$tmp = file_get_contents(self::ELEMENTS_REFERENCE_URL[$this->env]) ;
+			json_decode($tmp) ;
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
+				die('Impossible de récupérer les éléments de référence...') ;
+			}
+			$this->file_force_contents($this->ressources_path.'elements_reference.json', $tmp) ;
+			$this->cacheErsInterdictions($refresh) ;
+		}
+
+		private function cacheErsInterdictions($refresh = false) {
+
+			$elementReference = $this->getElementsReference($refresh) ;
+			// Critères interdits
+			// https://apidae-tourisme.zendesk.com/agent/tickets/34957
+			// 31/07/2024
+			$elementReferenceIds = [] ;
+			foreach ( $elementReference as $er ) {
+				$elementReferenceIds[$er['elementReferenceType']][] = $er['id'] ;
+			}
+
+			foreach ( $elementReferenceIds as $elementReferenceType => $ids ) {
+				$query = [
+					'apiKey' => $this->projet_consultation_apiKey,
+					'projetId' => $this->projet_consultation_projetId,
+					'elementReferenceIds' => $ids
+				] ;
+				$tmp = file_get_contents(self::URL_API[$this->env].'/api/v002/referentiel/criteres-interdits/?query='.json_encode($query)) ;
+				$res = json_decode($tmp,true) ;
+				if ( json_last_error() == JSON_ERROR_NONE ) {
+					$interdictions = [] ;
+					foreach ( $res as $r ) {
+						$interdictions[$r['critereId']] = [] ;
+						foreach ( $r as $k => $v ) {
+							if ( $k != 'critereId' ) {
+								$interdictions[$r['critereId']][$k] = $v ;
+							}
+						}
+					}
+					$this->file_force_contents($this->ressources_path.'elements_reference_interdits_'.$elementReferenceType.'.json', json_encode($interdictions, JSON_PRETTY_PRINT)) ;
+				}
+			}
 		}
 
 	}

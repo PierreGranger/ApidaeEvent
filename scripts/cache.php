@@ -25,4 +25,4 @@
      * Mais ça obligerait à mettre en cache tous les résultats pour toutes les communes, alors qu'un grand nombre n'est jamais utilisé en saisie
      */
 
-    include_once(realpath(dirname(__FILE__)).'/referenciel.php') ;
+    include_once(realpath(dirname(__FILE__)).'/referentiel.php') ;

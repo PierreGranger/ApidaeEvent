@@ -1,9 +1,9 @@
 <fieldset class="contacts<?php if (isset($_GET['contactObligatoire']) && $_GET['contactObligatoire']) echo ' required'; ?>">
 
-        <legend>Contacts organisateurs</legend>
+        <legend><?php __('Contacts organisateurs') ; ?></legend>
 
         <div class="alert alert-warning" role="alert">
-            <strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone</strong> : en cas de questions, nous pourrons prendre contact avec l'organisateur grâce à ces informations.
+        <?php __('<strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone</strong> : en cas de questions, nous pourrons prendre contact avec l\'organisateur grâce à ces informations.') ; ?>
         </div>
 
         <div class="table-responsive">
@@ -11,11 +11,11 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Fonction</th>
-                        <th>Prénom</th>
-                        <th>Nom</th>
-                        <th>Mail</th>
-                        <th>Téléphone</th>
+                        <th><?php __('Fonction') ; ?></th>
+                        <th><?php __('Prénom') ; ?></th>
+                        <th><?php __('Nom') ; ?></th>
+                        <th><?php __('Mail') ; ?></th>
+                        <th><?php __('Téléphone') ; ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,7 +31,7 @@
                             echo '<option value="' . $type['id'] . '"';
                             if (@$post['contact'][$i]['fonction'] == $type['id']) echo ' selected="selected" ';
                             echo '>';
-                            echo $type['libelleFr'];
+                            echo $apidaeEvent->libelleEr($type);
                             echo '</option>';
                         }
                         echo '</select>';
@@ -59,7 +59,7 @@
                         echo '</tr>';
                     }
                     echo '<tr>';
-                    echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', 'Ajouter un contact', $icon_plus) . '</td>';
+                    echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', __('Ajouter un contact',false), $icon_plus) . '</td>';
                     echo '</tr>';
                     ?>
                 </tbody>

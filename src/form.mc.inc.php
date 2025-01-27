@@ -1,9 +1,9 @@
 <fieldset>
 
-        <legend>Moyens de communication</legend>
+        <legend><?php __('Moyens de communication') ; ?></legend>
 
         <div class="alert alert-warning" role="alert">
-            Merci de préciser au moins un moyen de communication (Mail, téléphone...) : ils seront diffusés sur les supports de communications (sites web, brochures...)
+            <?php __('Merci de préciser au moins un moyen de communication (Mail, téléphone...) : ils seront diffusés sur les supports de communications (sites web, brochures...)') ; ?>
         </div>
 
         <div class="table-responsive">
@@ -11,11 +11,12 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th class="required">Type</th>
-                        <th class="required">Coordonnée</th>
-                        <th>Complément</th>
+                        <th class="required"><?php __('Type') ; ?></th>
+                        <th class="required"><?php __('Coordonnée') ; ?></th>
+                        <th><?php __('Complément') ; ?></th>
                     </tr>
                 </thead>
+                <tfoot><tr><td colspan="4"></td></tr></tfoot>
                 <tbody>
                     <?php
 
@@ -30,7 +31,6 @@
                         echo '<td>';
                         echo '<div class="form-group">';
                         echo '<select class="form-control" name="mc[' . $i . '][type]"';
-                        if ($i == 0) echo ' required="required" ';
                         echo '>';
                         echo '<option value="">-</option>';
                         foreach ($types as $type) {
@@ -47,7 +47,7 @@
                                     echo ' selected="selected" ';
                             }
                             echo '>';
-                            echo $type['libelleFr'];
+                            echo $apidaeEvent->libelleEr($type);
                             echo '</option>';
                         }
                         echo '</select>';
@@ -56,7 +56,6 @@
                         echo '<td>';
                         echo '<div class="form-group">';
                         echo '<input class="form-control" type="text" name="mc[' . $i . '][coordonnee]" value="' . htmlentities(@$post['mc'][$i]['coordonnee']) . '" ';
-                        if ($i == 0) echo 'required="required" ';
                         echo '/>';
                         echo '<small style="display:none;" class="help h205">http(s)://...</small>';
                         echo '</div>';
@@ -69,7 +68,7 @@
                         echo '</tr>';
                     }
                     echo '<tr>';
-                    echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', 'Ajouter une ligne', $icon_plus) . '</td>';
+                    echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', __('Ajouter une ligne',false), $icon_plus) . '</td>';
                     echo '</tr>';
                     ?>
                 </tbody>

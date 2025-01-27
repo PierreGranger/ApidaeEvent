@@ -57,14 +57,20 @@ jQuery(document).on('submit','form.form',function(e){
 	var firstError = null ;
 
 	jQuery(this).find('select, input, textarea').each(function(){
-		var okChamp = valideChamp(jQuery(this),jQuery(this).closest('tr').find('select').val()) ;
+		var okChamp = valideChamp(jQuery(this), jQuery(this).closest('tr').find('select').val());
 		jQuery(this).closest('.form-group, div').toggleClass('has-error',!okChamp) ;
 		if ( ! okChamp )
 		{
 			ok = false ;
 			if ( firstError == null ) firstError = jQuery(this) ;
 		}
-	}) ;
+	});
+	
+	var erreurMC = checkMC() ;
+	if ( erreurMC !== true )
+	{
+		ok = false ;
+	}
 
 	var erreurTarif = checkTypeTarifs() ;
 	if ( erreurTarif !== true )
@@ -212,7 +218,12 @@ jQuery(document).on('change','div.tarifs select[name^="tarifs"]',function(){
 
 function valideChamp(champ)
 {
-	var val = champ.val() ;
+	var val = champ.val();
+	
+	if (champ.is(':checkbox') && ! champ.is(':checked')) {
+		val = '';
+	}
+
 	var type = null ;
 	if ( typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/) )
 		type = champ.closest('tr').find('select').val() ;
@@ -299,7 +310,27 @@ function selectChange(select,init)
 	if ( ! init ) valideChamp(coord) ;
 }
 
+function checkMC() {
+	var renseignes = 0;
 
+	var tfoot = jQuery('table.mc').find('tfoot tr td') ;
+	tfoot.closest('tr').removeClass('has-error') ;
+	tfoot.html('') ;
+
+	jQuery('table.mc tbody tr input[name^="mc"]').each(function () {
+		if (jQuery(this).val().trim() != '') {
+			renseignes++;
+		}
+	});
+	if (renseignes == 0) {
+		tfoot.closest('tr').addClass('has-error') ;
+		tfoot.html('Vous devez renseigner au moins un moyen de communication') ;
+		return false;
+	}
+	return true;
+}
+
+jQuery(document).on('change', 'table.mc tbody tr input[name^="mc"]', checkMC);
 
 /**
  * 
@@ -463,7 +494,9 @@ function checkFilesInput(type) {
 	tfoot.closest('tr').removeClass('has-error') ;
 	tfoot.html('') ;
 
-	var nbfiles = 0 ;
+	var nbfiles = 0;
+	var poidstotal = 0;
+
 	inputs.each(function(){
 		nbfiles += jQuery(this).get(0).files.length ;
 		if ( jQuery(this).get(0).files.length == 1 )
@@ -510,6 +543,7 @@ function checkFilesInput(type) {
 					jQuery(this).closest('tr').addClass('has-error') ;
 					errors.push('Les '+type+' doivent faire moins de '+(limit/1000000)+' Mo') ;
 				}
+				poidstotal += file.size;
 			}
 
 			/**
@@ -527,7 +561,12 @@ function checkFilesInput(type) {
 				}
 			}
 		}
+
 	}) ;
+
+	if (poidstotal > 10000000) {
+		errors.push('L\'ensemble des fichiers joints ne doit pas dépasser 10 Mo') ;
+	}
 
 	/**
 	 * Test du paramètre obligatoire (1 illustration mini)
@@ -582,8 +621,53 @@ jQuery(document).on('change', 'input[name*="copyright"]', function () {
 	checkFilesInput('illustrations');
 }) ;
 
+function criteresInterditsByEr(selector) {
+	
+	var values = [];
+	if (typeof jQuery(selector).val() == 'object') values = jQuery(selector).val();
+	else if(typeof jQuery(selector).val() == 'string') values = [jQuery(selector).val()];
 
+	if ( values.length > 0 ) {
+		values.forEach(function (item) {
+			if (
+				typeof interdictions_elements_reference[item] != 'undefined'
+				&& typeof interdictions_elements_reference[item]['interditUtilisationDe'] != 'undefined'
+			) {
+				jQuery('select option').each(function () {
+					if (interdictions_elements_reference[item]['interditUtilisationDe'].includes(parseInt(jQuery(this).val()))) {
+						jQuery(this).prop('disabled', 'disabled').attr('data-interdit', true);
+						if (jQuery(this).is(':selected')) {
+							jQuery(this).prop('selected', false);
+						}
+					}
+				});
+				jQuery('input[type="checkbox"]').each(function () {
+					if (interdictions_elements_reference[item]['interditUtilisationDe'].includes(parseInt(jQuery(this).val()))) {
+						jQuery(this).on('click', function () { return false }).attr('data-interdit', true);
+						jQuery(this).closest('div').find('label').attr('data-interdit', true);
+						if (jQuery(this).is(':checked')) {
+							jQuery(this).prop('checked', false);
+						}
+					}
+				});
+			}
+		});
+	}
+}
 
+export function criteresInterdits() {
+
+	jQuery('select option[disabled][data-interdit]').prop('disabled', false).removeAttr('data-interdit');
+	jQuery('input[type="checkbox"][data-interdit]').off('click').removeAttr('data-interdit');
+	jQuery('label[data-interdit]').removeAttr('data-interdit');
+
+	if (typeof interdictions_elements_reference != 'undefined') {
+		criteresInterditsByEr('select[name^="FeteEtManifestationCategorie"]');
+		criteresInterditsByEr('select[name="FeteEtManifestationType"]');
+	}
+}
+
+jQuery(document).on('change', 'select[name^="FeteEtManifestationCategorie"], select[name="FeteEtManifestationType"]', criteresInterdits);
 
 
 

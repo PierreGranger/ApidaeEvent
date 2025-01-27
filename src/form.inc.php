@@ -2,7 +2,7 @@
 
     $class_line = 'row mb-2' ;
     $class_label = 'col-sm-2';
-    $class_champ = 'col-sm-10';
+    $class_champ = 'col-sm-10'; 
 
 ?>
 
@@ -13,7 +13,7 @@
     <input type="hidden" name="devise" value="<?php echo htmlentities($devise_apidae); ?>" />
 
     <fieldset class="form-group required">
-        <legend>Nom de la manifestation</legend>
+        <legend><?php __('Nom de la manifestation') ; ?></legend>
         <div class="controls">
             <input class="form-control form-control-lg" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']); ?>" id="nom" required="required" />
         </div>
@@ -21,10 +21,10 @@
 
     <fieldset>
 
-        <legend>Importance de votre événement</legend>
+        <legend><?php __('Importance de votre événement') ; ?></legend>
 
-        <div class="<?= $class_line ; ?>">
-            <label for="portee" class="<?= $class_label; ?> col-form-label"> Portée <i class="fas fa-info-circle" title="La portée concerne les spectateurs et la distance qu’ils sont prêt à parcourir pour participer à une manifestation."></i></label>
+        <div class="<?= $class_line ; ?> required">
+            <label for="portee" class="<?= $class_label; ?> col-form-label"> <?php __('Portée') ; ?> <i class="fas fa-info-circle" title="<?php __('La portée concerne les spectateurs et la distance qu’ils sont prêt à parcourir pour participer à une manifestation.') ; ?>"></i></label>
             <div class="<?= $class_champ ; ?>">
                 <select class="form-control" name="portee" id="portee" required="required">
                     <option value="">-</option>
@@ -35,7 +35,7 @@
                         echo '<option value="' . $option['id'] . '"';
                         if (isset($option['description'])) echo ' title="' . htmlspecialchars($option['description']) . '" ';
                         if (isset($post['portee']) && $post['portee'] == $option['id']) echo ' selected="selected"';
-                        echo '>' . $option['libelleFr'] . '</option>';
+                        echo '>' . $apidaeEvent->libelleEr($option) . '</option>';
                     }
 
                     ?>
@@ -45,13 +45,13 @@
 
         <div class="row mb-3">
             <div class="col-sm-6 row">
-                <label for="nbParticipantsAttendu" class="col-sm-4 col-form-label">Participants attendus</label>
+                <label for="nbParticipantsAttendu" class="col-sm-4 col-form-label"><?php __('Participants attendus') ;?></label>
                 <div class="col-sm-8">
                     <input class="form-control" type="number" name="nbParticipantsAttendu" id="nbParticipantsAttendu" value="<?php echo htmlentities(@$post['nbParticipantsAttendu']); ?>" />
                 </div>
             </div>
             <div class="col-sm-6 row">
-                <label for="nbVisiteursAttendu" class="col-sm-4 col-form-label">Visiteurs attendus</label>
+                <label for="nbVisiteursAttendu" class="col-sm-4 col-form-label"><?php echo __('Visiteurs attendus') ; ?></label>
                 <div class="col-sm-8">
                     <input class="form-control" type="number" name="nbVisiteursAttendu" id="nbVisiteursAttendu" value="<?php echo htmlentities(@$post['nbVisiteursAttendu']); ?>" />
                 </div>
@@ -61,26 +61,26 @@
     </fieldset>
 
     <fieldset>
-        <legend>Adresse</legend>
+        <legend><?php __('Adresse') ; ?></legend>
         <div class="<?= $class_line ;?>">
-            <label for="adresse1" class="<?php echo $class_label; ?> col-form-label">Adresse 1
-                <i class="fas fa-info-circle" title="Voie et bâtiment. Exemple : 60 rue des Lilas - Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue."></i>
+            <label for="adresse1" class="<?php echo $class_label; ?> col-form-label"><?php __('Adresse 1') ; ?>
+                <i class="fas fa-info-circle" title="<?php __('Voie et bâtiment. Exemple : 60 rue des Lilas - Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue.') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
                 <input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']); ?>" />
             </div>
         </div>
         <div class="<?= $class_line ;?>">
-            <label for="adresse2" class="<?php echo $class_label; ?> col-form-label">Adresse 2
-                <i data-bs-toggle="tooltip" class="fas fa-info-circle" title="Lieu-dit, zone d’activité, BP (pour boite postale)…"></i>
+            <label for="adresse2" class="<?php echo $class_label; ?> col-form-label"><?php __('Adresse 2') ; ?>
+                <i data-bs-toggle="tooltip" class="fas fa-info-circle" title="<?php __('Lieu-dit, zone d’activité, BP (pour boite postale)…') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
                 <input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']); ?>" />
             </div>
         </div>
         <div class="<?= $class_line ;?>">
-            <label for="adresse3" class="<?php echo $class_label; ?> col-form-label">Adresse 3
-                <i class="fas fa-info-circle" title="Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon village et Morillon 1100."></i>
+            <label for="adresse3" class="<?php echo $class_label; ?> col-form-label"><?php __('Adresse 3') ; ?>
+                <i class="fas fa-info-circle" title="<?php __('Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon village et Morillon 1100.') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
                 <input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']); ?>" />
@@ -102,9 +102,9 @@
         ?>
             <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation"></i>
-                <strong>Impossible de récupérer la liste de communes...</strong>
-                <br />Veuillez nous excuser pour la gène occasionnée.
-                <br />Vous pouvez prendre contact avec l'<a href="https://www.apidae-tourisme.com/apidae-tourisme/carte-du-reseau/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.
+                <strong><?php __('Impossible de récupérer la liste de communes...') ; ?></strong>
+                <br /><?php __('Veuillez nous excuser pour la gène occasionnée.') ; ?>
+                <br /><?php __('Vous pouvez prendre contact avec l\'<a href="https://www.apidae-tourisme.com/apidae-tourisme/carte-du-reseau/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.') ; ?>
             </div>
         <?php
             die();
@@ -123,7 +123,7 @@
 
         ?>
         <div class="<?= $class_line ; ?> required">
-            <label for="commune" class="<?php echo $class_label; ?> col-form-label">Commune</label>
+            <label for="commune" class="<?php echo $class_label; ?> col-form-label"><?php __('Commune') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <select name="commune" class="chosen-select" required="required" data-placeholder="">
                     <?php if (sizeof($communes) > 1) { ?>
@@ -148,12 +148,12 @@
         </div>
 
         <div class="alert alert-info" role="alert">
-            <p>Saisir le lieu précis où se déroule l’événement <strong>seulement si nécessaire</strong> (si l'adresse n'est pas suffisante).<br />
-                Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...</p>
+            <p><?php __('Saisir le lieu précis où se déroule l’événement <strong>seulement si nécessaire</strong> (si l\'adresse n\'est pas suffisante).<br />
+                Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...</p>') ; ?>
         </div>
 
         <div class="<?= $class_line ; ?>">
-            <label for="lieu" class="<?php echo $class_label; ?> col-form-label">Lieu précis</label>
+            <label for="lieu" class="<?php echo $class_label; ?> col-form-label"><?php __('Lieu précis') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <input class="form-control" type="text" name="lieu" value="<?php echo htmlentities(@$post['lieu']); ?>" id="lieu">
             </div>
@@ -172,10 +172,10 @@
 
     <fieldset>
 
-        <legend>Description de votre manifestation</legend>
+        <legend><?php __('Description de votre manifestation') ; ?></legend>
 
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label">Type de manifestation</label>
+            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Type de manifestation') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationType', array('presentation' => 'select', 'type' => 'unique'), @$post['FeteEtManifestationType']); ?>
             </div>
@@ -184,11 +184,13 @@
         <?php $limitCategories = 3 ; ?>
         <?php if ( isset($_GET['limitCategories']) && is_int($limitCategories) ) $limitCategories = (int)$_GET['limitCategories'] ; ?>
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label">Catégorie<?php $limitCategories > 1 ? 's':'' ; ?> de manifestation</label>
+            <label class="<?php echo $class_label; ?> col-form-label"><?php
+                if ( $limitCategories > 1 ) __('Catégories de manifestation') ; else __('Catégorie de manifestation') ?>
+            </label>
             <div class="<?php echo $class_champ; ?>">
                 <?php if ( $limitCategories > 1 ) { ?>
                     <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => $limitCategories, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
-                    <small class="form-text text-muted"><?php echo $limitCategories ; ?> catégories maximum</small>
+                    <small class="form-text text-muted"><?php echo $limitCategories ; ?> <?php __('catégories maximum') ; ?></small>
                 <?php } else  { ?>
                     <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'type' => 'unique', 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
                 <?php } ?>
@@ -196,7 +198,7 @@
         </div>
 
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label">Thèmes de manifestation</label>
+            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Thèmes de manifestation') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationTheme', array('presentation' => 'select', 'exclude' => $theme_exclude), @$post['FeteEtManifestationTheme']); ?>
             </div>
@@ -211,7 +213,7 @@
             ];
             ?>
             <div class="<?= $class_line ; ?>">
-                <label class="<?php echo $class_label; ?> col-form-label">Evénements génériques et championnats</label>
+                <label class="<?php echo $class_label; ?> col-form-label"><?php __('Evénements génériques et championnats') ; ?></label>
                 <div class="<?php echo $class_champ; ?>">
                     <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationGenerique', $params_generique, @$post['FeteEtManifestationGenerique']); ?>
                 </div>
@@ -219,9 +221,9 @@
         <?php } ?>
 
         <div class="<?= $class_line ; ?> required">
-            <label class="<?php echo $class_label; ?> col-form-label" for="descriptifCourt">Descriptif court
-                <i class="fas fa-info-circle" title="Texte d'accroche permettant de comprendre la nature de votre prestation. Ne doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, de lieu... puisque ces informations existent par ailleurs, ce qui constitue une double saisie."></i>
-                <br /><small class="form-text text-muted">255 caractères max.</small>
+            <label class="<?php echo $class_label; ?> col-form-label" for="descriptifCourt"><?php __('Descriptif court') ; ?>
+                <i class="fas fa-info-circle" title="<?php __('Texte d\'accroche permettant de comprendre la nature de votre prestation. Ne doit pas contenir d\'horaire, de tarif, d\'info de réservation, de N° de tél, de lieu... puisque ces informations existent par ailleurs, ce qui constitue une double saisie.') ; ?>"></i>
+                <br /><small class="form-text text-muted"><?php __('255 caractères max.') ; ?></small>
             </label>
             <div class="<?php echo $class_champ; ?>">
                 <textarea class="form-control" name="descriptifCourt" id="descriptifCourt" maxlength="255" required="required"><?php echo htmlspecialchars(@$post['descriptifCourt']); ?></textarea>
@@ -229,13 +231,31 @@
         </div>
 
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label" for="descriptifDetaille">Descriptif détaillé
-                <i class="fas fa-info-circle" title="Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite."></i>
+            <label class="<?php echo $class_label; ?> col-form-label" for="descriptifDetaille"><?php __('Descriptif détaillé') ; ?>
+                <i class="fas fa-info-circle" title="<?php __('Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite.') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
                 <textarea class="form-control" name="descriptifDetaille" id="descriptifDetaille"><?php echo htmlspecialchars(@$post['descriptifDetaille']); ?></textarea>
             </div>
         </div>
+
+        <?php if ( isset($_GET['toutou']) ) { ?>
+        <div class="<?= $class_line ; ?>">
+            <label class="<?php echo $class_label; ?> col-form-label" for="animauxAcceptes"><?php __('Animaux acceptés') ; ?></label>
+            <div class="<?php echo $class_champ; ?>">
+                <input type="checkbox" name="animauxAcceptes" id="animauxAcceptes" value="1" required="required" <?php if (@$post['animauxAcceptes'] == 1) echo ' checked="checked" '; ?> />
+            </div>
+        </div>
+
+        <div class="<?= $class_line ; ?>">
+            <label class="<?php echo $class_label; ?> col-form-label" for="descriptifAnimauxAcceptes"><?php __('Conditions d\'accueil des animaux') ; ?>
+                <i class="fas fa-info-circle" title="<?php __('Animaux acceptés en laisse uniquement, en terrasse uniquement...') ; ?>"></i>
+            </label>
+            <div class="<?php echo $class_champ; ?>">
+                <textarea class="form-control" name="descriptifAnimauxAcceptes" id="descriptifAnimauxAcceptes"><?php echo htmlspecialchars(@$post['descriptifAnimauxAcceptes']); ?></textarea>
+            </div>
+        </div>
+        <?php } ?>
 
         <?php include(realpath(dirname(__FILE__)).'/form.clientele.inc.php') ; ?>
 
@@ -252,14 +272,14 @@
             <legend>Réservation</legend>
 
             <div class="<?= $class_line ; ?>">
-                <label for="reservation_nom" class="<?php echo $class_label; ?> col-form-label">Nom de l'organisme</label>
+                <label for="reservation_nom" class="<?php echo $class_label; ?> col-form-label"><?php __('Nom de l\'organisme') ; ?></label>
                 <div class="<?php echo $class_champ; ?>">
                     <input class="form-control" type="text" name="reservation[nom]" id="reservation_nom" value="<?php echo htmlentities(@$post['reservation']['nom']); ?>">
                 </div>
             </div>
 
             <div class="<?= $class_line ; ?>">
-                <label for="reservation_url" class="<?php echo $class_label; ?> col-form-label">URL de réservation<br /><small>http(s)://...</small></label>
+                <label for="reservation_url" class="<?php echo $class_label; ?> col-form-label"><?php __('URL de réservation') ; ?><br /><small>http(s)://...</small></label>
                 <div class="<?php echo $class_champ; ?>">
                     <input class="form-control url" type="text" name="reservation[url]" id="reservation_url" value="<?php echo htmlentities(@$post['reservation']); ?>" placeholder="https://...">
                     <small class="helper url">http(s)://...</small>
@@ -277,13 +297,13 @@
     <?php include(realpath(dirname(__FILE__)).'/form.multimedias.inc.php') ; ?>
 
     <fieldset>
-        <legend>Organisateur</legend>
+        <legend><?php __('Organisateur') ; ?></legend>
         <div class="alert alert-info" role="alert">
-            Vous pouvez laisser un message ci-dessous : il sera communiqué au propriétaire du formulaire, mais ne sera pas publié.<br />
-            Merci de préciser <strong>l'organisateur de la manifestation</strong> (association ABC...).
+            <?php __('Vous pouvez laisser un message ci-dessous : il sera communiqué au propriétaire du formulaire, mais ne sera pas publié.<br />
+            Merci de préciser <strong>l\'organisateur de la manifestation</strong> (association ABC...).') ; ?>
         </div>
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label" for="commentaire">Commentaire privé</label>
+            <label class="<?php echo $class_label; ?> col-form-label" for="commentaire"><?php __('Commentaire privé') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <textarea class="form-control" name="commentaire" id="commentaire"><?php echo htmlspecialchars(@$post['commentaire']); ?></textarea>
             </div>
@@ -305,18 +325,25 @@
         </div>
     <?php } ?>
 
+    <div class="<?= $class_line ; ?> required rgpd">
+        <div class="<?php echo $class_champ; ?>">
+            <input type="checkbox" name="rgpd" id="rgpd" value="1" required="required" <?php if (@$post['rgpd'] == 1) echo ' checked="checked" '; ?> />
+            <label for="rgpd"><a href="https://www.apidae-tourisme.com/charte-de-confidentialite/" target="_blank"><?php __('J\'accepte les conditions RGPD du réseau Apidae') ; ?></a>.</label>
+        </div>
+    </div>
+
     <input type="hidden" name="script_uri" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'] . @$_SERVER['REQUEST_URI']); ?>" />
 
     <div class="form-group" <?php
                             if (@$configApidaeEvent['recaptcha_secret'] != '' && !$configApidaeEvent['debug']) echo ' style="display:none;"';
                             ?>>
-        <input type="button" class="btn btn-success btn-lg btn-block btn-submit" value="Enregistrer cet événement" />
+        <input type="button" class="btn btn-success btn-lg btn-block btn-submit" value="<?php __('Enregistrer cet événement') ; ?>" />
     </div>
 
     <?php if (@$configApidaeEvent['recaptcha_secret'] != '' && !$configApidaeEvent['debug']) { ?>
         <div class="form-group" id="recaptcha">
             <div class="g-recaptcha" data-sitekey="<?php echo $configApidaeEvent['recaptcha_sitekey']; ?>" data-callback="recaptchaOk" data-expired-callback="recaptchaKo"></div>
-            <p>Vous devez cocher la case "Je ne suis pas un robot" pour pouvoir enregistrer</p>
+            <p><?php __('Vous devez cocher la case "Je ne suis pas un robot" pour pouvoir enregistrer') ; ?></p>
         </div>
     <?php } ?>
 

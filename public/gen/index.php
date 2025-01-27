@@ -123,6 +123,14 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 					</div>
 
 					<div class="row mb-3">
+						<label class="col-sm-6 col-form-label" for="toutou">Animaux acceptés & descriptif associé
+						</label>
+						<div class="col-sm-6">
+							<input type="checkbox" id="toutou" name="toutou" value="u2" />
+						</div>
+					</div>
+
+					<div class="row mb-3">
 						<label class="col-sm-6 col-form-label" for="generique">Evenements génériques & championnats
 							<br /><small>Journées du patrimoine...</small>
 						</label>
@@ -200,45 +208,53 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 							<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
 							<label><input type="radio" id="devise_chf" name="devise" value="CHF" /> Franc suisse (CHF)</label>
 							<label><input type="radio" id="devise_xpf" name="devise" value="XPF" /> Franc pacifique (XPF)</label>
-
 						</div>
 					</div>
 
-				<div class="row mb-3">
-					<label class="col-sm-6 col-form-label" for="mails">Emails à notifier</label>
-					<div class="col-sm-6">
-						<input type="text" class="form-control" name="mails" id="mails" />
-						<small>Séparés par une virgule</small>
+					<div class="row mb-3">
+						<label class="col-sm-6 col-form-label" for="locale">Langue du formulaire
+						</label>
+						<div class="col-sm-6">
+							<label><input type="radio" name="locale" value="" /> Français</label>
+							<label><input type="radio" name="locale" value="en" /> Anglais</label>
+						</div>
 					</div>
-				</div>
 
-				<div class="row mb-3">	
-					<label class="col-sm-6 col-form-label" for="forceMembre"><input type="checkbox" id="forceMembre" value="1" /> Personnalisation du membre valideur dans Apidae
-					</label>
-				</div>
+					<div class="row mb-3">
+						<label class="col-sm-6 col-form-label" for="mails">Emails à notifier</label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" name="mails" id="mails" />
+							<small>Séparés par une virgule</small>
+						</div>
+					</div>
 
-				<div class="alert alert-secondary showForceMembre">
-					<fieldset>
-						<legend>Personnalisation du membre valideur dans Apidae</legend>
-							<p class="alert alert-danger">
-								Champ à renseigner seulement si vous êtes certain(e) d'en avoir bien compris le fonctionnement : 
-								<a href="https://aide.apidae-tourisme.com/hc/fr/articles/6791266766236-Apidae-Event-changer-le-membre-valideur" target="_blank">Voir la documentation</a>
-							</p>
+					<div class="row mb-3">	
+						<label class="col-sm-6 col-form-label" for="forceMembre"><input type="checkbox" id="forceMembre" value="1" /> Personnalisation du membre valideur dans Apidae
+						</label>
+					</div>
 
-							<small><p>La validation des fiches dans Apidae provenant d'Apidae Event est faite, <strong>par défaut</strong> et de manière générale, par l'Office de Tourisme du territoire.
-							<br />Si vous êtes dans ce cas, laissez la <strong>case vide</strong>.</p>
- 
-							<p>En renseignant cette information, toute manifestation saisie sur le formulaire paramétré ci-dessus sera affecté au membre choisi dans l'étape suivante.</p></small>
-							
-							<div class="row mb-3">
-								<label class="col-sm-6 col-form-label" for="membre">Identifiant du membre valideur</label>
-								<div class="col-sm-6">
-									<input type="text" class="form-control" name="membre" id="membre" />
-									<small><?php echo $utilisateurApidae['membre']['nom']; ?> : <?php echo $utilisateurApidae['membre']['id']; ?></small>
+					<div class="alert alert-secondary showForceMembre">
+						<fieldset>
+							<legend>Personnalisation du membre valideur dans Apidae</legend>
+								<p class="alert alert-danger">
+									Champ à renseigner seulement si vous êtes certain(e) d'en avoir bien compris le fonctionnement : 
+									<a href="https://aide.apidae-tourisme.com/hc/fr/articles/6791266766236-Apidae-Event-changer-le-membre-valideur" target="_blank">Voir la documentation</a>
+								</p>
+
+								<small><p>La validation des fiches dans Apidae provenant d'Apidae Event est faite, <strong>par défaut</strong> et de manière générale, par l'Office de Tourisme du territoire.
+								<br />Si vous êtes dans ce cas, laissez la <strong>case vide</strong>.</p>
+	
+								<p>En renseignant cette information, toute manifestation saisie sur le formulaire paramétré ci-dessus sera affecté au membre choisi dans l'étape suivante.</p></small>
+								
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="membre">Identifiant du membre valideur</label>
+									<div class="col-sm-6">
+										<input type="text" class="form-control" name="membre" id="membre" />
+										<small><?php echo $utilisateurApidae['membre']['nom']; ?> : <?php echo $utilisateurApidae['membre']['id']; ?></small>
+									</div>
 								</div>
-							</div>
-					</fieldset>
-				</div>
+						</fieldset>
+					</div>
 
 				</form>
 

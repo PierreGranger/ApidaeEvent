@@ -9,8 +9,8 @@
     ?>
     <div class="<?= $class_line ; ?> TourismeAdapte">
         <label class="<?php echo $class_label; ?> col-form-label">
-            Accessibilité
-            <br /><small class="form-text text-muted">Accueil des personnes en situation de handicap</small>
+            <?php __('Accessibilité') ; ?>
+            <br /><small class="form-text text-muted"><?php __('Accueil des personnes en situation de handicap') ; ?></small>
         </label>
         <div class="<?php echo $class_champ; ?>">
             <?php echo $apidaeEvent->formHtmlCC('TourismeAdapte', $params, @$post['TourismeAdapte']); ?>

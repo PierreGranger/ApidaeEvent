@@ -1,7 +1,8 @@
 
 .required>label:after,
 fieldset.required>legend:after,
-th.required:after {
+th.required:after,
+label[for="rgpd"]:after {
 	content: " *";
 	color:red ;
 }
@@ -25,20 +26,25 @@ input.float {
 }
 
 .has-error .form-control {
-	background:#ffeceb ;
+	background:#ff8a84 ;
 }
 .form-group.has-error .helper {
 	display:block ;
 }
 
-tfoot tr.has-error {
-	background:#ffeceb ;
-	color:#a94442 ;
+tfoot tr.has-error > td,
+div.rgpd>div.has-error {
+	background:#ff8a84 ;
+	color:#c92a27 ;
 	font-weight:bold ;
 }
 
 .has-error .chosen-single,
 .has-error input[type="file"] {
-	background:#ffeceb ;
-	border-color:#a94442 ;
+	background:#ff8a84 ;
+	border-color:#c92a27 ;
+}
+
+input[data-interdit], label[data-interdit] {
+	opacity:.5 ;
 }

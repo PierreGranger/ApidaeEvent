@@ -121,8 +121,6 @@
         <script>
             jQuery(document).on('click','button#reset',function(){
                 var resetval = JSON.parse(jQuery('#startval').val()) ;
-                console.log('reset') ;
-                console.log(resetval) ;
                 editor.setValue(resetval) ;
             }) ;
             jQuery(document).on('click','#enregistrer',function(){
@@ -148,11 +146,8 @@
                     else alert('ajax.fail @see console')
                 }) ;
                 ajax.done(function(e){
-                    console.log('ajax.done')
-                    console.log('e',e)
                     if ( e['erreur'] != '0' )
                     {
-                        console.log(e) ;
                         alert(e['erreur']) ;
                         return false ;
                     }
@@ -203,7 +198,6 @@
                     <script>
                         var element = document.getElementById('editor_holder');
                         var startval = JSON.parse(document.getElementById('startval').innerText) ;
-                        console.log(startval) ;
                         var editor = new JSONEditor(element,{
                             theme: 'jqueryui',
                             disable_collapse : true,
