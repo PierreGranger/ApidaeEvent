@@ -361,10 +361,10 @@
 	/**
 	*	Gestion des tarifs
 	*/
-	if ( isset($_POST['descriptionTarif_complement_'.$codeLibelibelleXylle]) )
+	if ( isset($_POST['descriptionTarif_complement']) )
 	{
 		$fieldlist[] = 'descriptionTarif.complement' ;
-		$root['descriptionTarif']['complement'][$libelleXy] = trim($_POST['descriptionTarif_complement_'.$libelleXy]) ;	
+		$root['descriptionTarif']['complement'][$libelleXy] = trim($_POST['descriptionTarif_complement']) ;	
 	}
 
 	if ( isset($_POST['gratuit']) )

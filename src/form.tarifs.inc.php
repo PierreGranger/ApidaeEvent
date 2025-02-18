@@ -79,9 +79,9 @@
         </div>
 
         <div class="<?= $class_line ; ?> complement_tarif">
-            <label class="<?php echo $class_label; ?> col-form-label" for="descriptionTarif_complement_<?php echo $libelleXy ; ?>"><?php __('Complément sur les tarifs') ; ?></label>
+            <label class="<?php echo $class_label; ?> col-form-label" for="descriptionTarif_complement"><?php __('Complément sur les tarifs') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
-                <textarea class="form-control" name="descriptionTarif_complement_<?php echo $libelleXy ; ?>" id="descriptionTarif_complement_<?php echo $libelleXy ; ?>"><?php echo htmlspecialchars(@$post['descriptionTarif_complement_'.$libelleXy]); ?></textarea>
+                <textarea class="form-control" name="descriptionTarif_complement" id="descriptionTarif_complement"><?php echo htmlspecialchars(@$post['descriptionTarif_complement']); ?></textarea>
             </div>
         </div>
 
