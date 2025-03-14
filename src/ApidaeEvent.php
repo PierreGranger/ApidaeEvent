@@ -231,18 +231,20 @@ use Exception ;
 		{
 			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
 			$cachekey = 'territoire'.$id_territoire ;
-			if ( ( $ret = $this->get($cachekey) ) === false || $refresh === true )
+			$ret = $this->get($cachekey) ;
+			if ( $ret !== false ) $ret = json_decode($ret, true) ;
+			if ( $ret === false || $refresh === true )
 			{
-				$this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
+				$this->debug(__METHOD__.' : mc->get failed [refresh='.($refresh?'true':'false').', cached='.($ret===false?'false':'true').']...') ;
 				$tmp = $this->client->objetTouristiqueGetById(['id' => $id_territoire,'responseFields' => 'localisation.perimetreGeographique']) ;
 				if ( ! is_array($tmp) && preg_match('#^Guzzle.*Result$#',get_class($tmp)) ) $tmp = $tmp->toArray() ;
 				if ( ! isset($tmp['type']) ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
 				if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
-				$ret = Array() ;
+				$ret = [] ;
 				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
 					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>@$c['complement']) ;
 				$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-				$this->set($cachekey,$ret,$this->mc_expiration) ;
+				$this->set($cachekey,json_encode($ret),$this->mc_expiration) ;
 			}
 			return $ret ;
 		}
@@ -508,6 +510,10 @@ use Exception ;
 					$this->file_force_contents($this->ressources_path.'elements_reference_interdits_'.$elementReferenceType.'.json', json_encode($interdictions, JSON_PRETTY_PRINT)) ;
 				}
 			}
+		}
+
+		public function testMemCached() {			
+			return $this->mc->getVersion() !== false ;
 		}
 
 	}

@@ -27,7 +27,7 @@ class ApidaeEventMM extends ApidaeEvent {
      * @param bool $refresh
      * @return array|false
      */
-    public function getTerritoires(bool $refresh=false) {
+    public function getTerritoires(bool $refresh=false) :?array {
 
         $cachekey = 'territoires' ;
 
@@ -60,7 +60,7 @@ class ApidaeEventMM extends ApidaeEvent {
                 if ( ! isset($result['objetsTouristiques']) )
                 {
                     $this->debug(__METHOD__.':'.__LINE__.' : rechercheListObjetsTouristiques failed (no objetsTouristiques key)') ;
-                    return false ;
+                    return null ;
                 }
                 
                 foreach ( $result['objetsTouristiques'] as $obt )
@@ -77,8 +77,7 @@ class ApidaeEventMM extends ApidaeEvent {
             }
 
             $this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-            $territoires = json_encode($territoires) ;
-            $this->set($cachekey,$territoires,$this->mc_expiration) ;
+            $this->set($cachekey,json_encode($territoires),$this->mc_expiration) ;
         }
 
         return $territoires ;
@@ -92,9 +91,11 @@ class ApidaeEventMM extends ApidaeEvent {
 
         $cachekey = 'membresCommune'.$codeInsee ;
 
-        if ( $refresh === true || ( $membres = $this->get($cachekey) ) === false )
+        $membres = $this->get($cachekey) ;
+
+        if ( $refresh === true || $membres === false )
         {
-            $this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
+            $this->debug(__METHOD__.' : mc->get failed [refresh='.($refresh?'true':'false').',cached='.($membres===false?'false':'true').']...') ;
 
             try {
                 $membresCommune = $this->apidaeMembres->getMembres(

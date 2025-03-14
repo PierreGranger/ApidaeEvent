@@ -2,20 +2,8 @@
 
     require_once(realpath(dirname(__FILE__)).'/../src/requires.inc.php') ;
 
-    /**
-     * Fonctions qui utilisent du cache
-     */
-    
-    // getCommunesById pas utilisée ?
-    
-    // getCommunesByInsee Utilisée pour la génération du formulaire, non essentiel ?
-    
-    // getCommunesByTerritoire Utilisée pour la génération du formulaire, non essentiel ?
-    
-    // getOffre Utilisé seulement sur le générateur, aucun intérêt à avoir du cache
-
     // getTerritoires Utilisée au moment de l'enregistrement, 3 sec environ, donc à mettre en cache
-    $apidaeEvent->getTerritoires(true) ;
+    include_once(realpath(dirname(__FILE__)).'/territoires.php') ;
     
     /**
      * getMembresFromCommuneInsee
@@ -24,5 +12,4 @@
      * ça permettrait de gagner 5 secondes à l'enregistrement,
      * Mais ça obligerait à mettre en cache tous les résultats pour toutes les communes, alors qu'un grand nombre n'est jamais utilisé en saisie
      */
-
     include_once(realpath(dirname(__FILE__)).'/referentiel.php') ;

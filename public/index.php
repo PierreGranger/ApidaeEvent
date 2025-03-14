@@ -9,6 +9,11 @@
 	$ok = [] ;
 	$display_form = true;
 
+	if ( isset($_GET['testMemCached']) ) {
+		var_dump($apidaeEvent->testMemCached()) ;
+		return false ;
+	}
+
 ?><!DOCTYPE html>
 <html lang="fr">
 
