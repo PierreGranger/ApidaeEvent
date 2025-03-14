@@ -227,12 +227,12 @@ use Exception ;
 		 * @param int $id_territoire Identifiant d'une offre territoire sur Apidae
 		 * @return array Tableau contenant la liste des communes du territoire $id_territoire
 		 */
-		public function getCommunesByTerritoire(int $id_territoire,bool $refresh=false)
+		public function getCommunesByTerritoire(int $id_territoire,bool $refresh=false): array
 		{
 			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
 			$cachekey = 'territoire'.$id_territoire ;
 			$ret = $this->get($cachekey) ;
-			if ( $ret !== false ) $ret = json_decode($ret, true) ;
+			if ( $ret !== false && is_string($ret) ) $ret = json_decode($ret, true) ;
 			if ( $ret === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.' : mc->get failed [refresh='.($refresh?'true':'false').', cached='.($ret===false?'false':'true').']...') ;
