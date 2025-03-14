@@ -31,9 +31,12 @@ class ApidaeEventMM extends ApidaeEvent {
 
         $cachekey = 'territoires' ;
 
-        if ( $refresh === true || ( $territoires = $this->get($cachekey) ) === false )
+        $territoires = $this->get($cachekey) ;
+        if ( $territoires !== false ) $territoires = json_decode($territoires, true) ;
+
+        if ( $refresh === true || $territoires === false )
         {
-            $this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.']...') ;
+            $this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.', cached='.($territoires?'true':'false').']...') ;
 
             $territoires = [] ;
             foreach ( $this->_config['membres'] as $m ) {
@@ -74,6 +77,7 @@ class ApidaeEventMM extends ApidaeEvent {
             }
 
             $this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
+            $territoires = json_encode($territoires) ;
             $this->set($cachekey,$territoires,$this->mc_expiration) ;
         }
 

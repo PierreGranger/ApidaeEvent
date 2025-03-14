@@ -446,7 +446,7 @@ use Exception ;
 		}
 
 		protected function set(string $cachekey, $ret, $expiration=null) {
-			return $this->mc->set($cachekey,$ret) ;
+			return $this->mc->set($cachekey,$ret, $expiration) ;
 		}
 
 		public function libelleEr($er, $codeLibelle = 'Fr') {
