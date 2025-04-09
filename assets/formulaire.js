@@ -99,7 +99,7 @@ jQuery(document).on('submit','form.form',function(e){
 	if ( ok === true )
 	{
 		jQuery(this).css('opacity',0.5) ;
-		jQuery('input.btn-submit').closest('div').replaceWith('<div class="alert alert-warning loading">Formulaire en cours d\'enregistrement, veuillez patienter...</div>') ;
+		jQuery('input.btn-submit').closest('div').replaceWith('<div class="alert alert-warning loading">Formulaire en cours d\'enregistrement, veuillez patienter...</div>');
 		return true ;
 	}
 	else
@@ -633,7 +633,7 @@ function criteresInterditsByEr(selector) {
 				typeof interdictions_elements_reference[item] != 'undefined'
 				&& typeof interdictions_elements_reference[item]['interditUtilisationDe'] != 'undefined'
 			) {
-				jQuery('select option').each(function () {
+				jQuery('select[name!="commune"] option').each(function () {
 					if (interdictions_elements_reference[item]['interditUtilisationDe'].includes(parseInt(jQuery(this).val()))) {
 						jQuery(this).prop('disabled', 'disabled').attr('data-interdit', true);
 						if (jQuery(this).is(':selected')) {
