@@ -53,50 +53,48 @@ jQuery(document).on('click','form.form .btn-submit',function(){
  */
 jQuery(document).on('submit','form.form',function(e){
 
-	var ok = true ;
-	var firstError = null ;
+	var ko = [];
 
 	jQuery(this).find('select, input, textarea').each(function(){
 		var okChamp = valideChamp(jQuery(this), jQuery(this).closest('tr').find('select').val());
 		jQuery(this).closest('.form-group, div').toggleClass('has-error',!okChamp) ;
 		if ( ! okChamp )
 		{
-			ok = false ;
-			if ( firstError == null ) firstError = jQuery(this) ;
+			ko.push(jQuery(this));
 		}
 	});
 	
 	var erreurMC = checkMC() ;
 	if ( erreurMC !== true )
 	{
-		ok = false ;
+		ko.push('erreurMC');
 	}
 
 	var erreurTarif = checkTypeTarifs() ;
 	if ( erreurTarif !== true )
 	{
-		ok = false ;
+		ko.push('erreurTarif');
 	}
 
 	var erreurContacts = checkContacts() ;
 	if ( erreurContacts !== true )
 	{
-		ok = false ;
+		ko.push('erreurContacts');
 	}
 
 	var erreurIllustrations = checkFilesInput('illustrations') ;
 	if ( erreurIllustrations !== true )
 	{
-		ok = false ;
+		ko.push('erreurIllustrations');
 	}
 
 	var erreurMultimedias = checkFilesInput('multimedias') ;
 	if ( erreurMultimedias !== true )
 	{
-		ok = false ;
+		ko.push('erreurMultimedias');
 	}
 
-	if ( ok === true )
+	if ( ko.length == 0 )
 	{
 		jQuery(this).css('opacity',0.5) ;
 		jQuery('input.btn-submit').closest('div').replaceWith('<div class="alert alert-warning loading">Formulaire en cours d\'enregistrement, veuillez patienter...</div>');
@@ -104,13 +102,10 @@ jQuery(document).on('submit','form.form',function(e){
 	}
 	else
 	{
-		if ( firstError !== null )
-		{
-			var disp = firstError.is(':hidden') ;
-			if ( disp ) firstError.show() ;
-			firstError.focus() ;
-			if ( disp ) firstError.hide() ;
-		}
+		console.log(ko);
+		$([document.documentElement, document.body]).animate({
+			scrollTop: jQuery('.has-error').first().offset().top - 50
+		}, 100);
 		e.preventDefault() ;
 		e.stopImmediatePropagation();
 		alert('Votre formulaire comporte des erreurs : merci de vérifier les champs encadrés en rouge') ;
@@ -306,7 +301,7 @@ function selectChange(select,init)
 	}
 	else coord.attr('type','text').attr('placeholder','') ; // Standard
 
-	// On ne trigger par le changement de coordonnée lors du chargement du formulaire pour éviter d'avoir une erreur sur les champs obligatoires.
+	// On ne trigger pas le changement de coordonnée lors du chargement du formulaire pour éviter d'avoir une erreur sur les champs obligatoires.
 	if ( ! init ) valideChamp(coord) ;
 }
 
