@@ -243,7 +243,7 @@
         <div class="<?= $class_line ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label" for="animauxAcceptes"><?php __('Animaux acceptés') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
-                <input type="checkbox" name="animauxAcceptes" id="animauxAcceptes" value="1" required="required" <?php if (@$post['animauxAcceptes'] == 1) echo ' checked="checked" '; ?> />
+                <input type="checkbox" name="animauxAcceptes" id="animauxAcceptes" value="1" <?php if (@$post['animauxAcceptes'] == 1) echo ' checked="checked" '; ?> />
             </div>
         </div>
 
