@@ -32,11 +32,17 @@ class ApidaeEventMM extends ApidaeEvent {
         $cachekey = 'territoires' ;
 
         $territoires = $this->get($cachekey) ;
-        if ( $territoires !== false ) $territoires = json_decode($territoires, true) ;
+
+        // Si le retour de cache est ko, ou pas un string (pas sensé arriver mais... c'est déjà arrivé)
+        if ( $territoires !== false && is_string($territoires) ) {
+            $territoires = json_decode($territoires, true) ;
+        } else {
+            $territoires = false ;
+        }
 
         if ( $refresh === true || $territoires === false )
         {
-            $this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.', cached='.($territoires?'true':'false').']...') ;
+            $this->debug(__METHOD__.' : mc->get failed [refresh='.$refresh.', cached='.($territoires!==false?'true':'false').']...') ;
 
             $territoires = [] ;
             foreach ( $this->_config['membres'] as $m ) {

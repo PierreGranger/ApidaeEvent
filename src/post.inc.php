@@ -128,8 +128,7 @@
 
 		$db = new DateTime($date['debut']) ;
 		
-		$periode = Array() ;
-		$periode['identifiantTemporaire'] = ( $i + 1 ) ;
+		$periode = [] ;
 		$periode['dateDebut'] = $date['debut'] ;
 		$periode['dateFin'] = $apidaeEvent->verifDate($date['fin']) ? $date['fin'] : $date['debut'] ;
 		if ( $apidaeEvent->verifTime($date['hdebut']) ) $periode['horaireOuverture'] = $date['hdebut'].":00" ;
@@ -138,7 +137,34 @@
 		$periode['type'] = 'OUVERTURE_TOUS_LES_JOURS' ;
 		if ( $date['complementHoraire'] != "" ) $periode['complementHoraire'] = [$libelleXy => trim($date['complementHoraire'])] ;
 
-		if ( isset($date['timePeriods']) ) $periode['timePeriods'] = json_decode($date['timePeriods']) ;
+		/**
+		 * Traitement des horaires
+		 */
+		if ( isset($date['horaires']) && trim($date['horaires']) != '' ) {
+			$horairesObject = json_decode($date['horaires']) ;
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
+				$ko['horaires'] = __('Les horaires ne sont pas conformes au format attendu',false) ;
+			} else {
+				/**
+				 * Check par schema des données horaires
+				 */
+				cleanHoraires($horairesObject) ;
+				$schema = json_decode(file_get_contents(realpath(dirname(__FILE__)).'/../ressources/horaires-schema.json')) ;
+				$validator = new JsonSchema\Validator() ;
+				$validator->validate($horairesObject, $schema, JsonSchema\Constraints\Constraint::CHECK_MODE_APPLY_DEFAULTS) ;
+				if ( $validator->isValid() ) {
+					$periode['horaires'] = $horairesObject ;
+				} else {
+					$ko['horaires'] = __('Les horaires ne sont pas conformes au format attendu',false) ;
+					if ( $debug ) {
+						$ko['horaires'] = '<pre>'.json_encode($horairesObject, JSON_PRETTY_PRINT).'</pre>' ;
+					}
+					foreach ( $validator->getErrors() as $error ) {
+						$ko['horaires'] .= "\n".sprintf("[%s] %s\n", $error['property'], $error['message']) ;
+					}
+				}
+			}
+		}
 
 		$periodesOuvertures[] = $periode ;
 		
@@ -452,7 +478,7 @@
 			$root['prestations']['typesClientele'][] = [
 				'elementReferenceType' => 'TypeClientele',
 				'id' => $id
-			 ] ;
+			] ;
 		}
 	}
 
@@ -777,14 +803,13 @@
 			}
 		}
 
-
 		if ( isset($enr_dataLayer) ) $post_mail['dataLayer'] = json_encode($enr_dataLayer,JSON_PRETTY_PRINT) ;
 
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
 			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
-			if ( ! isset($_POST['nomail']) )
+			if ( $configApidaeEvent['env'] !== 'prod' && ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mail_membre') ;
 				$apidaeEvent->alerte($objet,$post_mail,$to) ;
@@ -863,7 +888,7 @@
 			$objet = 'ApidaeEvent - Votre suggestion de manifestation' ;
 			$message = $texte_offre_enregistree ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
-			if ( ! isset($_POST['nomail']) )
+			if ( $configApidaeEvent['env'] !== 'prod' && ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mail_suggestion') ;
 				$apidaeEvent->alerte($objet,$message,$to) ;
@@ -901,7 +926,7 @@
 				  	}
 			  	echo '</ul>' ;
 		  	}
-			if ( ! isset($_POST['nomail']) )
+			if ( $configApidaeEvent['env'] !== 'prod' && ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mails_erreur') ;
 				$erreur_alerte = $ko ;

@@ -1,0 +1,91 @@
+{
+    "type": "array",
+    "additionalItems": false,
+    "items": {
+        "type": "object",
+        "id": "horaire",
+        "additionalProperties": false,
+        "properties": {
+            "id": {
+                "type": "integer"
+            },
+            "type": {
+                "type": "object",
+                "id": "HoraireType",
+                "additionalProperties": false,
+                "properties": {
+                    "elementReferenceType": {
+                        "type": "string",
+                        "enum": [
+                            "HoraireType"
+                        ]
+                    },
+                    "id": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "timePeriods": {
+                "type": "array",
+                "additionalItems": false,
+                "items": {
+                    "type": "object",
+                    "id": "timePeriod",
+                    "additionalProperties": false,
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "closed": {
+                            "type": "boolean",
+                            "required": true
+                        },
+                        "weekdays": {
+                            "type": "array",
+                            "additionalItems": false,
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "MON",
+                                    "TUE",
+                                    "WED",
+                                    "THU",
+                                    "FRI",
+                                    "SAT",
+                                    "SUN",
+                                    "HOL"
+                                ]
+                            }
+                        },
+                        "timeFrames": {
+                            "type": "array",
+                            "additionalItems": false,
+                            "items": {
+                                "type": "object",
+                                "id": "timeFrame",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "startTime": {
+                                        "type": "string",
+                                        "pattern": "[0-9]{1,2}:[0-9]{2}"
+                                    },
+                                    "endTime": {
+                                        "type": "string",
+                                        "pattern": "[0-9]{1,2}:[0-9]{2}"
+                                    },
+                                    "recurrence": {
+                                        "type": "string",
+                                        "pattern": "[0-9]{1,2}:[0-9]{2}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

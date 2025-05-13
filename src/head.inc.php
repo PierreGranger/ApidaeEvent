@@ -50,6 +50,14 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 <script defer src="<?php echo $manifest['build/runtime.js'] ; ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $manifest['build/app.css'] ; ?>" media="all" />
 
+<?php if ( isset($_GET['apihours']) || isset($_GET['horaires']) ) { ?>
+	<?php if ( isset($configApidaeEvent['horairesJs']) ) { ?>
+		<script src="<?php echo $configApidaeEvent['horairesJs'] ; ?>"></script>
+	<?php } else { ?>
+		<script src="https://gui-packages.apidae-tourisme.com/horaires/latest/horaires.js"></script>
+	<?php } ?>
+<?php } ?>
+
 <script>
 	var icon_plus = '<?php echo $icon_plus; ?>';
 	var icon_moins = '<?php echo $icon_moins; ?>';
@@ -58,10 +66,6 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 
 <script src="https://www.google.com/recaptcha/api.js"></script>
 
-<?php if ( isset($_GET['apihours']) ) { ?>
-	<link href="https://form.apihours.apidae-tourisme.<?php echo isset($config['apihours']['env']) ? $config['apihours']['env'] : 'com' ; ?>/0.6.0/styles.css" rel="stylesheet"/>
-<?php } ?>
-
-	<script>
-		var interdictions_elements_reference = <?php echo json_encode($apidaeEvent->getElementsReferenceInterdictions(['FeteEtManifestationType','FeteEtManifestationCategorie'])) ; ?> ;
-	</script>
+<script>
+	var interdictions_elements_reference = <?php echo json_encode($apidaeEvent->getElementsReferenceInterdictions(['FeteEtManifestationType','FeteEtManifestationCategorie'])) ; ?> ;
+</script>

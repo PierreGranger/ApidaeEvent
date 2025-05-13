@@ -162,8 +162,8 @@
     </fieldset>
 
     <?php
-        if ( isset($_GET['apihours']) ) {
-            include(realpath(dirname(__FILE__)).'/form.apihours.inc.php') ;
+        if ( isset($_GET['horaires']) || isset($_GET['apihours']) ) {
+            include(realpath(dirname(__FILE__)).'/form.horaires.inc.php') ;
         }
         else {
             include(realpath(dirname(__FILE__)).'/form.dates.inc.php') ;
@@ -312,15 +312,17 @@
 
     <?php if ($configApidaeEvent['debug']) { ?>
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label" for="nosave">[Debug] Ne pas enregistrer sur Apidae</label>
             <div class="<?php echo $class_champ; ?>">
                 <input type="checkbox" name="nosave" id="nosave" value="1" <?php if (@$post['nosave'] == 1) echo ' checked="checked" '; ?> />
+                [Debug] Ne pas enregistrer sur Apidae
             </div>
         </div>
         <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label" for="nomail">[Debug] Ne pas envoyer les mails (même pas à admin)</label>
             <div class="<?php echo $class_champ; ?>">
-                <input type="checkbox" name="nomail" id="nomail" value="1" <?php if (@$post['nomail'] == 1) echo ' checked="checked" '; ?> />
+                <input type="checkbox" name="nomail" id="nomail" value="1" <?php 
+                    if (@$post['nomail'] == 1 || @$configApidaeEvent['env'] !== 'prod' ) echo ' checked ';
+                    if ( $configApidaeEvent['env'] !== 'prod' ) echo ' disabled' ;
+                ?> /> [Debug] Ne pas envoyer les mails (même pas à admin)
             </div>
         </div>
     <?php } ?>
@@ -348,11 +350,7 @@
     <?php } ?>
 
     <div style="text-align:center;padding:40px ;">
-        <?php if ( strtotime(date('Y-m-d')) < strtotime('2022-07-05') ) { ?>
-        <a href="https://www.apidae-tourisme.com" target="_blank"><img src="./logo.png" alt="Apidae Event" width="170" /></a>
-        <?php } else { ?>
-            <a href="https://www.apidae-tourisme.com" target="_blank"><img src="./Apidae_Event.png" alt="Apidae Event" width="170" /></a>
-        <?php } ?>
+        <a href="https://www.apidae-tourisme.com" target="_blank"><img src="./Apidae_Event.png" alt="Apidae Event" width="170" /></a>
     </div>
 
 </form>
