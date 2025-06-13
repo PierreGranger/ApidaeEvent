@@ -809,7 +809,7 @@
 		{
 			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
-			if ( $configApidaeEvent['env'] !== 'prod' && ! isset($_POST['nomail']) )
+			if ( ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mail_membre') ;
 				$apidaeEvent->alerte($objet,$post_mail,$to) ;
@@ -888,7 +888,7 @@
 			$objet = 'ApidaeEvent - Votre suggestion de manifestation' ;
 			$message = $texte_offre_enregistree ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
-			if ( $configApidaeEvent['env'] !== 'prod' && ! isset($_POST['nomail']) )
+			if ( ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mail_suggestion') ;
 				$apidaeEvent->alerte($objet,$message,$to) ;
@@ -926,7 +926,7 @@
 				  	}
 			  	echo '</ul>' ;
 		  	}
-			if ( $configApidaeEvent['env'] !== 'prod' && ! isset($_POST['nomail']) )
+			if ( ! isset($_POST['nomail']) )
 			{
 				if ( $debug ) $timer->start('mails_erreur') ;
 				$erreur_alerte = $ko ;
