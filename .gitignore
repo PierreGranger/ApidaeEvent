@@ -15,3 +15,4 @@ package-lock.json
 offices.json
 departements.json
 /ressources/*
+!/ressources/horaires-schema.json

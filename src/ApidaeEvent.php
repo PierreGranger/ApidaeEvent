@@ -349,11 +349,9 @@ use Exception ;
 				if ( isset($params['include']) && is_array($params['include']) && ! in_array($er['id'],$params['include']) ) continue ;
 				if ( isset($params['exclude']) && is_array($params['exclude']) && in_array($er['id'],$params['exclude']) ) continue ;
 				
-				$newEr = [
-					'id' => $er['id'],
-					'libelleFr' => $this->libelleEr($er, 'fr'),
-					'ordre' => $er['ordre']
-				] ;
+				$newEr = $er ;
+				$newEr['libelleFr'] = $this->libelleEr($er, 'fr') ;
+				
 				if ( isset($er['description']) ) $newEr['description'] = $er['description'] ;
 				if ( isset($er['familleCritere']['id']) ) $newEr['familleCritere'] = $er['familleCritere']['id'] ;
 				
@@ -514,6 +512,24 @@ use Exception ;
 
 		public function testMemCached() {			
 			return $this->mc->getVersion() !== false ;
+		}
+
+		/**
+		 * Utile pour le multihoraire où on souhaite récupérer seulement le HoraireType['libelleFr'='Ouverture'] : 
+		 * l'identifiant étant différent entre prod, preprod et cooking, on s'évite d'avoir à gérer ça à la main en conf.
+		 */
+		public function getElementReferenceByTypeAndName(string $type, string $name) : ?array {
+			$elementsReference = $this->getElementsReference() ;
+			if ( ! is_array($elementsReference) ) {
+				return null ;
+			}
+			foreach ( $elementsReference as $er )
+			{
+				if ( $er['actif'] != true ) continue ;
+				if ( $er['elementReferenceType'] != $type ) continue ;
+				if ( $er['libelleFr'] == $name ) return $er ;
+			}
+			return null ;
 		}
 
 	}

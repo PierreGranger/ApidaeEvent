@@ -195,7 +195,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 					</div>
 
 					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="apihours">Multihoraire ApiHours (popup)
+						<label class="col-sm-6 col-form-label" for="apihours">Multihoraire (popup)
 						</label>
 						<div class="col-sm-6">
 							<input type="checkbox" id="apihours" name="apihours" value="1" />

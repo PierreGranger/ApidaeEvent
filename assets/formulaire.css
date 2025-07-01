@@ -48,3 +48,16 @@ div.rgpd>div.has-error {
 input[data-interdit], label[data-interdit] {
 	opacity:.5 ;
 }
+
+#reactGuiContainer .fui-TabList,
+#reactGuiContainer h1,
+#reactGuiContainer div.ah-tab div.ah-block:first-child,
+#reactGuiContainer div.ah-tab div.ah-block:last-child h3,
+#reactGuiContainer div.ah-tab div.ah-block:last-child h4 {
+	display:none !important;
+}
+
+#reactGuiContainer .mh-tab-content {
+	padding:0 !important;
+	border:0 !important;
+}

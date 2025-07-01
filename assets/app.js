@@ -1,4 +1,5 @@
 import 'bootstrap'
+import { Modal } from 'bootstrap';
 
 import { faker, recaptchaKo, recaptchaOk, criteresInterdits } from './formulaire.js'
 global.faker = faker
@@ -9,6 +10,7 @@ global.criteresInterdits = criteresInterdits
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 
+global.bootstrap = require('bootstrap');
 
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
