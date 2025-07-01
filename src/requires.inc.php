@@ -4,9 +4,9 @@
 
 	date_default_timezone_set('Europe/Paris') ;
 
-	require realpath(dirname(__FILE__)).'/../vendor/autoload.php' ;
-	require realpath(dirname(__FILE__)).'/../config.inc.php' ;
-	require realpath(dirname(__FILE__)).'/functions.inc.php' ;
+	require_once(realpath(dirname(__FILE__)).'/../vendor/autoload.php') ;
+	require_once(realpath(dirname(__FILE__)).'/../config.inc.php') ;
+	require_once(realpath(dirname(__FILE__)).'/functions.inc.php') ;
 	
     // https://stackoverflow.com/a/3770616/2846837
     //$lang_detected = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) : 'fr' ;

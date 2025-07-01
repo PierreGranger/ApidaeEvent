@@ -230,21 +230,28 @@ use Exception ;
 		public function getCommunesByTerritoire(int $id_territoire,bool $refresh=false): array
 		{
 			if ( ! preg_match('#^[0-9]+$#',$id_territoire) ) throw new Exception(__METHOD__.__LINE__.'$id_territoire invalide [0-9]+') ;
+
 			$cachekey = 'territoire'.$id_territoire ;
 			$ret = $this->get($cachekey) ;
 			if ( $ret !== false && is_string($ret) ) $ret = json_decode($ret, true) ;
 			if ( $ret === false || $refresh === true )
 			{
 				$this->debug(__METHOD__.' : mc->get failed [refresh='.($refresh?'true':'false').', cached='.($ret===false?'false':'true').']...') ;
-				$tmp = $this->client->objetTouristiqueGetById(['id' => $id_territoire,'responseFields' => 'localisation.perimetreGeographique']) ;
-				if ( ! is_array($tmp) && preg_match('#^Guzzle.*Result$#',get_class($tmp)) ) $tmp = $tmp->toArray() ;
-				if ( ! isset($tmp['type']) ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
-				if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
-				$ret = [] ;
-				foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
-					$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>@$c['complement']) ;
-				$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
-				$this->set($cachekey,json_encode($ret),$this->mc_expiration) ;
+				try {
+					$tmp = $this->client->objetTouristiqueGetById(['id' => $id_territoire,'responseFields' => 'localisation.perimetreGeographique']) ;
+					if ( ! is_array($tmp) && preg_match('#^Guzzle.*Result$#',get_class($tmp)) ) $tmp = $tmp->toArray() ;
+					if ( ! isset($tmp['type']) ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+					if ( ! isset($tmp['localisation']['perimetreGeographique']) || ! is_array($tmp['localisation']['perimetreGeographique']) || sizeof($tmp['localisation']['perimetreGeographique']) == 0 ) throw new Exception(__METHOD__.__LINE__.'Impossible de récupérer les communes') ;
+					$ret = [] ;
+					foreach ( $tmp['localisation']['perimetreGeographique'] as $c )
+						$ret[$c['id']] = Array('id'=>$c['id'],'codePostal'=>$c['codePostal'],'nom'=>$c['nom'],'code'=>$c['code'],'complement'=>@$c['complement']) ;
+					$this->debug(__METHOD__.' : mc->set...[expiration='.$this->mc_expiration.']') ;
+					$this->set($cachekey,json_encode($ret),$this->mc_expiration) ;
+				} catch ( Exception $e ) {
+					$this->debug(__METHOD__.' : Territoire '.$id_territoire.' introuvable : '.$e->getMessage()) ;
+					$ret = [] ;
+					$this->set($cachekey,json_encode($ret),$this->mc_expiration) ;
+				}
 			}
 			return $ret ;
 		}
