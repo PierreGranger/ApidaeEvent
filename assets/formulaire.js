@@ -547,7 +547,7 @@ function checkFilesInput(type) {
 			if (window.FileReader && window.Blob) {
 				let file = jQuery(this).get(0).files[0];
 				if (
-					(type == 'illustrations' && file.type.toString().match(/image\/(png|jpg|jpeg|gif)/gi) == null)
+					(type == 'illustrations' && file.type.toString().match(/image\/(png|jpg|jpeg|gif|webp)/gi) == null)
 					||
 					(type == 'multimedias' && file.type.toString().match(/application\/(pdf)/gi) == null)
 				) {
