@@ -72,7 +72,7 @@
         </div>
         <div class="<?= $class_line ;?>">
             <label for="adresse2" class="<?php echo $class_label; ?> col-form-label"><?php __('Adresse 2') ; ?>
-                <i data-bs-toggle="tooltip" class="fas fa-info-circle" title="<?php __('Lieu-dit, zone d’activité, BP (pour boite postale)…') ; ?>"></i>
+                <i class="fas fa-info-circle" title="<?php __('Lieu-dit, zone d’activité, BP (pour boite postale)…') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
                 <input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']); ?>" />
