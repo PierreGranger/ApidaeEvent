@@ -37,11 +37,12 @@
                         echo "\n\t\t\t\t\t\t" . '<tr>';
                             echo '<td></td>';
                             echo '<td>';
-                                echo '<div class="form-group">' ;
+                                echo '<div class="form-group inputFile">' ;
                                     echo '<input class="form-control" type="file" name="illustrations[' . $i . ']" accept="image/*" ';
                                     if (isset($_GET['illustrationMini']) && (int)$_GET['illustrationMini'] > 0 && (int)$_GET['illustrationMini'] <= 2000)
                                         echo 'minwidth="' . (int)$_GET['illustrationMini'] . '" ';
                                     echo '/>';
+                                    echo '<i class="fa-solid fa-xmark removeFile"></i>' ;
                                 echo '</div>' ;
                             echo '</td>';
                             echo '<td>' ;

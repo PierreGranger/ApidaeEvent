@@ -664,7 +664,17 @@ export function criteresInterdits() {
 
 jQuery(document).on('change', 'select[name^="FeteEtManifestationCategorie"], select[name="FeteEtManifestationType"]', criteresInterdits);
 
+jQuery(document).on('change', 'input[type="file"]', function () {
+	jQuery(this).closest('.inputFile').toggleClass('hasFile', jQuery(this).val() != '');
+});
 
+jQuery(document).on('click', '.removeFile', function () {
+	const input = jQuery(this).closest('.inputFile').find('input[type="file"]');
+	const clone = input.clone(false);
+	clone.val('');
+	input.replaceWith(clone);
+	jQuery(this).closest('.inputFile').removeClass('hasFile');
+});
 
 
 
