@@ -667,6 +667,15 @@ jQuery(document).on('change', 'select[name^="FeteEtManifestationCategorie"], sel
 
 
 
+// https://getbootstrap.com/docs/5.2/components/tooltips/#examples
+jQuery(function() {
+	const bootstrap = window.bootstrap || global.bootstrap;
+	if (bootstrap && bootstrap.Tooltip) {
+		const tooltipTriggerList = document.querySelectorAll('.fa-info-circle');
+		const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+	}
+});
+
 
 
 
