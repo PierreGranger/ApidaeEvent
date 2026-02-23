@@ -12,6 +12,12 @@
 		if (is_array($decoded)) {
 			$show = $decoded;
 		}
+	} else { // rétrocompatibilité : pour ceux qui ont généré leur URL avant l'usage de $show, on ajoute les anciens champs classiques
+		$show[] = 'a2' ;
+		$show[] = 'a3' ;
+		$show[] = 'type' ;
+		$show[] = 'cat' ;
+		$show[] = 'photos' ;
 	}
 	if (empty($show)) {
 		if (!empty($_GET['toutou'])) $show[] = 'animaux';
