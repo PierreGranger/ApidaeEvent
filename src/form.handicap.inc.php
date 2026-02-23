@@ -1,4 +1,4 @@
-<?php if (isset($_GET['TourismeAdapte']) && $_GET['TourismeAdapte'] == 1) { ?>
+<?php if (in_array('ta', $show)) { ?>
 
     <?php
     // https://apidae-tourisme.zendesk.com/agent/tickets/5997

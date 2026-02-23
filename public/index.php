@@ -5,6 +5,23 @@
 
 	require_once(realpath(dirname(__FILE__)) . '/../src/requires.inc.php');
 
+	// Variable $show : priorité au paramètre URL show=JSON, sinon construite à partir des anciens paramètres GET
+	$show = [];
+	if (isset($_GET['show'])) {
+		$decoded = json_decode($_GET['show'], true);
+		if (is_array($decoded)) {
+			$show = $decoded;
+		}
+	}
+	if (empty($show)) {
+		if (!empty($_GET['toutou'])) $show[] = 'animaux';
+		if (!empty($_GET['generique'])) $show[] = 'gen';
+		if (!empty($_GET['mm'])) $show[] = 'mm';
+		if (!empty($_GET['TourismeAdapte'])) $show[] = 'ta';
+		if (!empty($_GET['clientele'])) $show[] = 'cli';
+		if (!empty($_GET['reservation'])) $show[] = 'resa';
+	}
+
 	$ko = [] ;
 	$ok = [] ;
 	$display_form = true;

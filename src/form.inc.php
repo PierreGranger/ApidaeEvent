@@ -43,6 +43,7 @@
             </div>
         </div>
 
+        <?php if ( in_array('part', $show) ) { ?>
         <div class="row mb-3">
             <div class="col-sm-6 row">
                 <label for="nbParticipantsAttendu" class="col-sm-4 col-form-label"><?php __('Participants attendus') ;?></label>
@@ -57,6 +58,7 @@
                 </div>
             </div>
         </div>
+        <?php } ?>
         
     </fieldset>
 
@@ -70,6 +72,7 @@
                 <input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']); ?>" />
             </div>
         </div>
+        <?php if ( in_array('a2', $show) ) { ?>
         <div class="<?= $class_line ;?>">
             <label for="adresse2" class="<?php echo $class_label; ?> col-form-label"><?php __('Adresse 2') ; ?>
                 <i class="fas fa-info-circle" title="<?php __('Lieu-dit, zone d’activité, BP (pour boite postale)…') ; ?>"></i>
@@ -78,6 +81,8 @@
                 <input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']); ?>" />
             </div>
         </div>
+        <?php } ?>
+        <?php if ( in_array('a3', $show) ) { ?>
         <div class="<?= $class_line ;?>">
             <label for="adresse3" class="<?php echo $class_label; ?> col-form-label"><?php __('Adresse 3') ; ?>
                 <i class="fas fa-info-circle" title="<?php __('Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon village et Morillon 1100.') ; ?>"></i>
@@ -86,6 +91,7 @@
                 <input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']); ?>" />
             </div>
         </div>
+        <?php } ?>
         <?php
         
         $communes = null;
@@ -147,6 +153,7 @@
             </div>
         </div>
 
+        <?php if ( in_array('lieu', $show) ) { ?>
         <div class="alert alert-info" role="alert">
             <p><?php __('Saisir le lieu précis où se déroule l’événement <strong>seulement si nécessaire</strong> (si l\'adresse n\'est pas suffisante).<br />
                 Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...</p>') ; ?>
@@ -158,6 +165,7 @@
                 <input class="form-control" type="text" name="lieu" value="<?php echo htmlentities(@$post['lieu']); ?>" id="lieu">
             </div>
         </div>
+        <?php } ?>
 
     </fieldset>
 
@@ -174,13 +182,16 @@
 
         <legend><?php __('Description de votre manifestation') ; ?></legend>
 
+        <?php if ( in_array('type', $show) ) { ?>
         <div class="<?= $class_line ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label"><?php __('Type de manifestation') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationType', array('presentation' => 'select', 'type' => 'unique'), @$post['FeteEtManifestationType']); ?>
             </div>
         </div>
+        <?php } ?>
 
+        <?php if ( in_array('cat', $show) ) { ?>
         <?php $limitCategories = 3 ; ?>
         <?php if ( isset($_GET['limitCategories']) && is_int($limitCategories) ) $limitCategories = (int)$_GET['limitCategories'] ; ?>
         <div class="<?= $class_line ; ?>">
@@ -196,15 +207,18 @@
                 <?php } ?>
             </div>
         </div>
+        <?php } ?>
 
-        <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Thèmes de manifestation') ; ?></label>
+        <?php if (in_array('theme', $show)) { ?>
+        <div class="<?= $class_line; ?>">
+            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Thèmes de manifestation'); ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationTheme', array('presentation' => 'select', 'exclude' => $theme_exclude), @$post['FeteEtManifestationTheme']); ?>
             </div>
         </div>
+        <?php } ?>
 
-        <?php if (isset($_GET['generique'])) { ?>
+        <?php if (in_array('gen', $show)) { ?>
             <?php
             $params_generique = [
                 'presentation' => 'select',
@@ -230,6 +244,7 @@
             </div>
         </div>
 
+        <?php if ( in_array('dd', $show) ) { ?>
         <div class="<?= $class_line ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label" for="descriptifDetaille"><?php __('Descriptif détaillé') ; ?>
                 <i class="fas fa-info-circle" title="<?php __('Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite.') ; ?>"></i>
@@ -238,8 +253,9 @@
                 <textarea class="form-control" name="descriptifDetaille" id="descriptifDetaille"><?php echo htmlspecialchars(@$post['descriptifDetaille']); ?></textarea>
             </div>
         </div>
+        <?php } ?>
 
-        <?php if ( isset($_GET['toutou']) ) { ?>
+        <?php if (in_array('animaux', $show)) { ?>
         <div class="<?= $class_line ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label" for="animauxAcceptes"><?php __('Animaux acceptés') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
@@ -265,7 +281,7 @@
 
     <?php include(realpath(dirname(__FILE__)).'/form.mc.inc.php') ; ?>
 
-    <?php if (isset($_GET['reservation']) && $_GET['reservation']) { ?>
+    <?php if (in_array('resa', $show)) { ?>
 
         <fieldset>
 

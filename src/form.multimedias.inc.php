@@ -3,6 +3,8 @@
     if (isset($_GET['illustrationObligatoire']) && $_GET['illustrationObligatoire']) $classes[] = 'required';
     if (isset($_GET['copyright']) && $_GET['copyright']) $classes[] = 'copyright';
     ?>
+
+    <?php if ( in_array('photos', $show) ) { ?>
     <fieldset class="<?php echo implode(' ', $classes); ?>">
         <legend><?php __('Photos') ; ?></legend>
         <div class="alert alert-warning" role="alert">
@@ -63,8 +65,9 @@
             </table>
         </div>
     </fieldset>
+    <?php } ?>
 
-    <?php if (isset($_GET['mm']) && $_GET['mm'] == 1) { ?>
+    <?php if (in_array('mm', $show)) { ?>
         <fieldset class="multimedias">
             <legend><?php __('Multimédias') ; ?></legend>
             <div class="alert alert-warning" role="alert">

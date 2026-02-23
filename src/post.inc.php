@@ -36,7 +36,8 @@
 
 	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $debug )
 	{
-		$fields = array( 'secret' => $configApidaeEvent['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
+		$grecaptcha = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '' ;
+		$fields = array( 'secret' => $configApidaeEvent['recaptcha_secret'], 'response' => $grecaptcha ) ;
 		$ch = curl_init();
 		curl_setopt($ch,CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
 		curl_setopt($ch,CURLOPT_POST, count($fields));
@@ -73,7 +74,7 @@
 	}
 	$root['nom'][$libelleXy] = $_POST['nom'] ;
 
-	if ( $_POST['lieu'] != '' ) {
+	if ( isset($_POST['lieu']) && $_POST['lieu'] != '' ) {
 		$fieldlist[] = 'informationsFeteEtManifestation.nomLieu' ;
 		$root['informationsFeteEtManifestation']['nomLieu'] = $_POST['lieu'] ;
 		$fieldlist[] = 'localisation.adresse.nomDuLieu' ;
@@ -83,11 +84,15 @@
 	$fieldlist[] = 'localisation.adresse.adresse1' ;
 	$root['localisation']['adresse']['adresse1'] = $_POST['adresse1'] ;
 
-	$fieldlist[] = 'localisation.adresse.adresse2' ;
-	$root['localisation']['adresse']['adresse2'] = $_POST['adresse2'] ;
+	if (isset($_POST['adresse2'])) {
+		$fieldlist[] = 'localisation.adresse.adresse2';
+		$root['localisation']['adresse']['adresse2'] = $_POST['adresse2'];
+	}
 
-	$fieldlist[] = 'localisation.adresse.adresse3' ;
-	$root['localisation']['adresse']['adresse3'] = $_POST['adresse3'] ;
+	if (isset($_POST['adresse3'])) {
+		$fieldlist[] = 'localisation.adresse.adresse3';
+		$root['localisation']['adresse']['adresse3'] = $_POST['adresse3'];
+	}
 
 	$root['localisation']['adresse']['codePostal'] = $commune[1] ;
 	$fieldlist[] = 'localisation.adresse.codePostal' ;
@@ -112,6 +117,7 @@
 	}
 
 	$periodesOuvertures = Array() ;
+	if ( isset($_POST['date']) && is_array($_POST['date']) ) {
 	foreach ( $_POST['date'] as $i => $date )
 	{
 		if (sizeof($date) <= 3) {
@@ -168,6 +174,7 @@
 
 		$periodesOuvertures[] = $periode ;
 		
+	}
 	}
 	if ( sizeof ($periodesOuvertures) > 0  )
 	{
@@ -303,7 +310,7 @@
 			}
 		}
 	}
-	if ( isset($_POST['FeteEtManifestationCategorie']) )
+	if ( isset($_POST['FeteEtManifestationCategorie']) && is_array($_POST['FeteEtManifestationCategorie']) )
 	{
 		$fieldlist[] = 'informationsFeteEtManifestation.categories' ;
 		$root['informationsFeteEtManifestation']['categories'] = Array() ;
@@ -315,7 +322,7 @@
 			) ;
 		}
 	}
-	if ( isset($_POST['FeteEtManifestationTheme']) )
+	if ( isset($_POST['FeteEtManifestationTheme']) && is_array($_POST['FeteEtManifestationTheme']) )
 	{
 		$fieldlist[] = 'informationsFeteEtManifestation.themes' ;
 		$root['informationsFeteEtManifestation']['themes'] = Array() ;
@@ -406,7 +413,7 @@
 		{
 			if ( $tarif['mini'] == '' && $tarif['maxi'] == '' && trim($tarif['precisions']) == '' ) continue ;
 			
-			$t = Array('devise' =>$_POST['devise']) ;
+			$t = Array('devise' => (isset($_POST['devise']) ? $_POST['devise'] : '')) ;
 			/* TODO si on veut permettre le choix de la devise tarif par tarif par l'internaute : décommenter ci dessous */
 			/* ATTENTION ce critère a l'air d'être ignoré par l'API d'écriture, qui semble se servir uniquement de descriptionTarif.devise */
 			// $t = Array('devise' =>$tarif['devise']) ;
@@ -445,8 +452,10 @@
 					'tarifs' => $tarifs,
 					'type' => Array('elementReferenceType' => 'TarifTypePeriode', 'id' => 1304)
 			)) ;
-			$fieldlist[] = 'descriptionTarif.devise' ;
-			$root['descriptionTarif']['devise'] = $_POST['devise'] ;
+			if ( isset($_POST['devise']) ) {
+				$fieldlist[] = 'descriptionTarif.devise' ;
+				$root['descriptionTarif']['devise'] = $_POST['devise'] ;
+			}
 		}
 	}
 
@@ -513,12 +522,13 @@
 	/**
 	 * Réservation
 	 */
-	if ( isset($_POST['reservation']) && $_POST['reservation']['url'] != '' )
+	if ( isset($_POST['reservation']) && is_array($_POST['reservation']) && isset($_POST['reservation']['url']) && $_POST['reservation']['url'] != '' )
 	{
+		$resa_nom = isset($_POST['reservation']['nom']) ? trim($_POST['reservation']['nom']) : '' ;
 		$fieldlist[] = 'reservation.organismes' ;
 		$root['reservation']['organismes'] = [
 			[
-				'nom' => trim($_POST['reservation']['nom']) == '' ? 'Réservation' : trim($_POST['reservation']['nom']),
+				'nom' => $resa_nom == '' ? 'Réservation' : $resa_nom,
 				'type' => [
 					'elementReferenceType' => 'ReservationType',
 					'id' => 475 // Directe

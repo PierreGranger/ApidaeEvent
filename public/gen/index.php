@@ -86,152 +86,263 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 
 				<form method="get">
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="territoire">Territoire</label>
-						<div class="col-sm-6">
-							<select id="territoire" name="territoire" class="select2 js-example-placeholder-single js-states form-control"></select>
-							<br />
-							<small>Le choix du territoire conditionne la liste des communes proposées dans le formulaire</small>
+					<fieldset>
+
+						<legend>Territoire</legend>
+
+						<div class="alert alert-primary">
+							Le choix du territoire conditionne la liste des communes proposées dans le formulaire.
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="contactObligatoire">Contact obligatoire
-							<br /><small>1 Mail ou 1 téléphone minimum dans la zone "Contact"</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="contactObligatoire" name="contactObligatoire" value="1" />
+						<div class="row">
+							<div class="col-12">
+								<select id="territoire" name="territoire" class="select2 js-example-placeholder-single js-states form-control"></select>
+							</div>
 						</div>
-					</div>
+								
+					</fieldset>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="TourismeAdapte">Tourisme Adapté
-							<br /><small>Champs principaux de "Prestations > Accueil des personnes en situation de handicap > Tourisme adapté"</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="TourismeAdapte" name="TourismeAdapte" value="1" />
+					<fieldset>
+
+						<legend>Choix des champs à afficher</legend>
+
+						<div class="row">
+
+							<div class="col-6">
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="a2">Adresse 2
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="a2" name="show[]" value="a2" checked="checked" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="a3">Adresse 3
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="a3" name="show[]" value="a3" checked="checked" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="lieu">Lieu précis
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="lieu" name="show[]" value="lieu" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="part">Participants & visiteurs attendus
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="part" name="show[]" value="part" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="animaux">Animaux acceptés & descriptif associé
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="animaux" name="show[]" value="animaux" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="generique">Evenements génériques & championnats
+										<br /><small>Journées du patrimoine...</small>
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="generique" name="show[]" value="gen" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="photos">Illustrations</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="photos" name="show[]" value="photos" checked="checked" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="mm">Multimédias
+										<br /><small>Permettre l'ajout de multimédias (PDF seulement)</small>
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="mm" name="show[]" value="mm" />
+									</div>
+								</div>
+
+							</div>
+
+							<div class="col-6">
+
+							<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="type">Types de manifestation</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="type" name="show[]" value="type" checked="checked" />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="cat">Catégories de manifestation</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="cat" name="show[]" value="cat" checked="checked" />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="theme">Thèmes de manifestation</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="theme" name="show[]" value="theme" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="dd">Descriptif détaillé</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="dd" name="show[]" value="dd" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="TourismeAdapte">Tourisme Adapté
+										<br /><small>Champs principaux de "Prestations > Accueil des personnes en situation de handicap > Tourisme adapté"</small>
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="TourismeAdapte" name="show[]" value="ta" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="clientele">Types de clientèle
+										<br /><small>Ajout des champs Types de clientèles (Offres adaptées à des clientèles spécifiques + Clientèle pratiquant une activité spécifique)</small>
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="clientele" name="show[]" value="cli" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="modpai">Modes de paiement</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="modpai" name="show[]" value="modpai" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="comptar">Complément tarifaire</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="comptar" name="show[]" value="comptar" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-sm-6 col-form-label" for="reservation">Réservation
+										<br /><small></small>
+									</label>
+									<div class="col-sm-6">
+										<input type="checkbox" id="reservation" name="show[]" value="resa" />
+									</div>
+								</div>
+
+							</div>
+
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="clientele">Types de clientèle
-							<br /><small>Ajout des champs Types de clientèles (Offres adaptées à des clientèles spécifiques + Clientèle pratiquant une activité spécifique)</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="clientele" name="clientele" value="1" />
+					</fieldset>
+
+					<fieldset>
+
+						<legend>Autres réglages</legend>
+
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="contactObligatoire">Contact obligatoire
+								<br /><small>1 Mail ou 1 téléphone minimum dans la zone "Contact"</small>
+							</label>
+							<div class="col-sm-6">
+								<input type="checkbox" id="contactObligatoire" name="contactObligatoire" value="1" />
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="toutou">Animaux acceptés & descriptif associé
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="toutou" name="toutou" value="u2" />
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="limitCategories">Nombre de catégories
+								<br /><small>Défaut : 3</small>
+							</label>
+							<div class="col-sm-6">
+								<input type="number" id="limitCategories" name="limitCategories" value="" placeholder="3" min="1" max="3" step="1" />
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="generique">Evenements génériques & championnats
-							<br /><small>Journées du patrimoine...</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="generique" name="generique" value="1" />
+						
+
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="copyright">Copyright obligatoire
+								<br /><small>Si une illustration est ajoutée elle doit avoir un copyright renseigné</small>
+							</label>
+							<div class="col-sm-6">
+								<input type="checkbox" id="copyright" name="copyright" value="1" />
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="limitCategories">Nombre de catégories
-							<br /><small>Défaut : 3</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="number" id="limitCategories" name="limitCategories" value="" placeholder="3" min="1" max="3" step="1" />
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="illustrationMini">Taille mini illustration
+								<br /><small>Si une illustration est ajoutée, elle doit obligatoirement faire + de X pixels (ex: 1200)</small>
+								<br /><small>Laisser à 0 pour ne pas demander de taille minimale</small>
+							</label>
+							<div class="col-sm-6">
+								<input type="number" id="illustrationMini" name="illustrationMini" value="" min="0" max="2000" step="200" />
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="reservation">Réservation
-							<br /><small></small>
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="reservation" name="reservation" value="1" />
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="illustrationObligatoire">1 illustration obligatoire minimum
+							</label>
+							<div class="col-sm-6">
+								<input type="checkbox" id="illustrationObligatoire" name="illustrationObligatoire" value="1" />
+							</div>
 						</div>
-					</div>
 
-
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="mm">Multimédias
-							<br /><small>Permettre l'ajout de multimédias (PDF seulement)</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="mm" name="mm" value="1" />
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="apihours">Multihoraire (popup)
+							</label>
+							<div class="col-sm-6">
+								<input type="checkbox" id="apihours" name="apihours" value="1" />
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="copyright">Copyright obligatoire
-							<br /><small>Si une illustration est ajoutée elle doit avoir un copyright renseigné</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="copyright" name="copyright" value="1" />
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="devise">Devise</label>
+							<div class="col-sm-6">
+								<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
+								<label><input type="radio" id="devise_chf" name="devise" value="CHF" /> Franc suisse (CHF)</label>
+								<label><input type="radio" id="devise_xpf" name="devise" value="XPF" /> Franc pacifique (XPF)</label>
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="illustrationMini">Taille mini illustration
-							<br /><small>Si une illustration est ajoutée, elle doit obligatoirement faire + de X pixels (ex: 1200)</small>
-							<br /><small>Laisser à 0 pour ne pas demander de taille minimale</small>
-						</label>
-						<div class="col-sm-6">
-							<input type="number" id="illustrationMini" name="illustrationMini" value="" min="0" max="2000" step="200" />
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="locale">Langue du formulaire
+							</label>
+							<div class="col-sm-6">
+								<label><input type="radio" name="locale" value="" /> Français</label>
+								<label><input type="radio" name="locale" value="en" /> Anglais</label>
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="illustrationObligatoire">1 illustration obligatoire minimum
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="illustrationObligatoire" name="illustrationObligatoire" value="1" />
+						<div class="row mb-3">
+							<label class="col-sm-6 col-form-label" for="mails">Emails à notifier</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="mails" id="mails" />
+								<small>Séparés par une virgule</small>
+							</div>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="apihours">Multihoraire (popup)
-						</label>
-						<div class="col-sm-6">
-							<input type="checkbox" id="apihours" name="apihours" value="1" />
+						<div class="row mb-3">	
+							<label class="col-sm-6 col-form-label" for="forceMembre"><input type="checkbox" id="forceMembre" value="1" /> Personnalisation du membre valideur dans Apidae
+							</label>
 						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="devise">Devise</label>
-						<div class="col-sm-6">
-							<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
-							<label><input type="radio" id="devise_chf" name="devise" value="CHF" /> Franc suisse (CHF)</label>
-							<label><input type="radio" id="devise_xpf" name="devise" value="XPF" /> Franc pacifique (XPF)</label>
-						</div>
-					</div>
-
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="locale">Langue du formulaire
-						</label>
-						<div class="col-sm-6">
-							<label><input type="radio" name="locale" value="" /> Français</label>
-							<label><input type="radio" name="locale" value="en" /> Anglais</label>
-						</div>
-					</div>
-
-					<div class="row mb-3">
-						<label class="col-sm-6 col-form-label" for="mails">Emails à notifier</label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" name="mails" id="mails" />
-							<small>Séparés par une virgule</small>
-						</div>
-					</div>
-
-					<div class="row mb-3">	
-						<label class="col-sm-6 col-form-label" for="forceMembre"><input type="checkbox" id="forceMembre" value="1" /> Personnalisation du membre valideur dans Apidae
-						</label>
-					</div>
+					</fieldset>
 
 					<div class="alert alert-secondary showForceMembre">
 						<fieldset>
@@ -281,12 +392,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 			<p>Copiez-collez le code ci-dessous sur votre site web pour intégrer le formulaire</p>
 			<textarea id="html" readonly="readonly"></textarea>
 		</div>
-
-		<div class="alert alert-primary" style="display:none;">
-			<h3>URL de démo</h3>
-			<div id="url" data-base="https://event.apidae-tourisme.<?php echo $ApidaeSso->getEnv() == 'prod' ? 'com' : $ApidaeSso->getEnv() ; ?>/"></div>
-		</div>
-
+		
 		<div class="alert alert-primary">
 			<h3>Démo</h3>
 			<div id="iframe"></div>
@@ -337,14 +443,30 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 		function gen(e) {
 			var form = jQuery('.form form');
 
+			var show = [] ;
 			var champs = form.find('select, input').filter(function(i) {
-				return jQuery(this).val() != "" && jQuery(this).val() != 0 && jQuery(this).attr('id') != 'mails' ;
+				console.log(jQuery(this).attr('name')) ;
+				return jQuery(this).val() != "" && jQuery(this).val() != 0 && jQuery(this).attr('id') != 'mails' && jQuery(this).attr('name') != 'show[]' ;
 			}) ;
+
+			form.find('input[name^=show]').each(function(i) {
+				console.log(jQuery(this).val()) ;
+				if ( jQuery(this).is(':checked') ) {
+					show.push(jQuery(this).val()) ;
+				}
+			}) ;
+
+			console.log("champs",champs) ;
+			console.log("show",show) ;
 
 			var params = champs.serialize();
 			console.log('params',params);
 
-			var url = jQuery('div#url').data('base') + '?' + params;
+			var urlParams = params;
+			if (show.length > 0) {
+				urlParams = 'show=' + encodeURIComponent(JSON.stringify(show)) + (params ? '&' + params : '');
+			}
+			var url = window.location.origin + '?' + urlParams;
 			jQuery('div#url').html('<a href="' + url + '" target="_blank">' + url + '</a>');
 
 			var p = document.createElement("p");
