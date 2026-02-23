@@ -78,13 +78,16 @@
             </div>
         </div>
 
+        <?php if ( in_array('comptar', $show) ) { ?>
         <div class="<?= $class_line ; ?> complement_tarif">
             <label class="<?php echo $class_label; ?> col-form-label" for="descriptionTarif_complement"><?php __('Complément sur les tarifs') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <textarea class="form-control" name="descriptionTarif_complement" id="descriptionTarif_complement"><?php echo htmlspecialchars(@$post['descriptionTarif_complement']); ?></textarea>
             </div>
         </div>
+        <?php } ?>
 
+        <?php if ( in_array('modpai', $show) ) { ?>
         <?php
         $params_paiement = array(
             'presentation' => 'checkbox',
@@ -119,5 +122,6 @@
                 <?php echo $apidaeEvent->formHtmlCC('ModePaiement', $params_paiement, @$post['ModePaiement']); ?>
             </div>
         </div>
+        <?php } ?>
 
     </fieldset>

@@ -69,7 +69,7 @@ use Exception ;
 	
 		private const TYPE_OBJET = 'FETE_ET_MANIFESTATION' ;
 		
-		public function __construct(array $params=null) {
+		public function __construct(?array $params=null) {
 			
 			parent::__construct($params) ;
 
@@ -256,7 +256,7 @@ use Exception ;
 			return $ret ;
 		}
 
-		public function getOffre(int $id_offre,string $responseFields=null,bool $refresh=false) {
+		public function getOffre(int $id_offre,?string $responseFields=null,bool $refresh=false) {
 			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
 			$cachekey = 'offre'.$id_offre ;
 			if ( ( $ret = $this->get($cachekey) ) === false || $refresh === true )
@@ -330,7 +330,7 @@ use Exception ;
 		*	@return 	bool|array 	Liste des élements (Chaque élément étant un array associatif issu de la base de donnée)
 		*
 		**/
-		public function getElementsReferenceByType(string $type,array $params=null)
+		public function getElementsReferenceByType(string $type,?array $params=null)
 		{
 			$elementsReference = $this->getElementsReference() ;
 			if ( ! is_array($elementsReference) ) {
@@ -485,7 +485,7 @@ use Exception ;
 
 		private function cacheErsInterdictions($refresh = false) {
 
-			$elementReference = $this->getElementsReference($refresh) ;
+			$elementReference = $this->getElementsReference() ;
 			// Critères interdits
 			// https://apidae-tourisme.zendesk.com/agent/tickets/34957
 			// 31/07/2024
