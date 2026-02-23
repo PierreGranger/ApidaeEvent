@@ -1,5 +1,5 @@
 <?php
-        if (isset($_GET['clientele'])) {
+        if (in_array('cli', $show)) {
             $labelClientele = __('Types de Clientèle',false);
             $params = array(
                 'presentation' => 'select',
