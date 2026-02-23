@@ -807,7 +807,7 @@
 
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
-			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
+			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement '.@$apidaeEvent->last_id ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
 			if ( ! isset($_POST['nomail']) )
 			{
@@ -885,7 +885,7 @@
 		 */
 		if ( isset($infos_orga['mail']) && $infos_orga['mail'] != '' && filter_var($infos_orga['mail'], FILTER_VALIDATE_EMAIL) )
 		{
-			$objet = 'ApidaeEvent - Votre suggestion de manifestation' ;
+			$objet = 'ApidaeEvent - Votre suggestion de manifestation : '.@$_POST['nom'] ;
 			$message = $texte_offre_enregistree ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
 			if ( ! isset($_POST['nomail']) )
