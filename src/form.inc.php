@@ -1,8 +1,8 @@
 <?php
 
-    $class_line = 'row mb-2' ;
-    $class_label = 'col-sm-2';
-    $class_champ = 'col-sm-10'; 
+    $class_line = 'row' ;
+    $class_label = '';
+    $class_champ = ''; 
 
 ?>
 
@@ -13,21 +13,24 @@
     <input type="hidden" name="devise" value="<?php echo htmlentities($devise_apidae); ?>" />
 
     <fieldset class="form-group required">
-        <legend><?php __('Nom de la manifestation') ; ?></legend>
-        <div class="controls">
-            <input class="form-control form-control-lg" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']); ?>" id="nom" required="required" />
+        
+        <div class="cardHeader shad">
+            <legend><?php __('Informations générales') ; ?></legend>
+            <p class="desc"><?php __('Décrivez votre événement en quelques mots') ; ?></p>
         </div>
-    </fieldset>
-
-    <fieldset>
-
-        <legend><?php __('Importance de votre événement') ; ?></legend>
 
         <div class="<?= $class_line ; ?> required">
-            <label for="portee" class="<?= $class_label; ?> col-form-label"> <?php __('Portée') ; ?> <i class="fas fa-info-circle" title="<?php __('La portée concerne les spectateurs et la distance qu’ils sont prêt à parcourir pour participer à une manifestation.') ; ?>"></i></label>
+            <label for="portee" class="<?= $class_label; ?> col-form-label"> <?php __('Nom de la manifestation') ; ?></label>
+            <div class="controls">
+                <input class="form-control" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']); ?>" placeholder="<?php echo htmlentities(_('Entrez le nom de votre événement')); ?>" id="nom" required="required" />
+            </div>
+        </div>
+
+        <div class="<?= $class_line ; ?> required">
+            <label for="portee" class="<?= $class_label; ?> col-form-label"> <?php __('Importance de votre événement') ; ?> <span class="sub"><?php __('Portée') ; ?></span> <i class="fas fa-info-circle" title="<?php __('La portée concerne les spectateurs et la distance qu’ils sont prêt à parcourir pour participer à une manifestation.') ; ?>"></i></label>
             <div class="<?= $class_champ ; ?>">
-                <select class="form-control" name="portee" id="portee" required="required">
-                    <option value="">-</option>
+                <select class="form-control" name="portee" id="portee" required="required" data-placeholder="<?php echo htmlentities(_('Sélectionnez la portée')) ; ?>">
+                    <option value="" readonly="readonly"></option>
                     <?php
 
                     $FeteEtManifestationPortees = $apidaeEvent->getElementsReferenceByType('FeteEtManifestationPortee');
@@ -43,31 +46,32 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-sm-6 row">
-                <label for="nbParticipantsAttendu" class="col-sm-4 col-form-label"><?php __('Participants attendus') ;?></label>
-                <div class="col-sm-8">
-                    <input class="form-control" type="number" name="nbParticipantsAttendu" id="nbParticipantsAttendu" value="<?php echo htmlentities(@$post['nbParticipantsAttendu']); ?>" />
-                </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="nbParticipantsAttendu" class="col-form-label"><?php __('Participants attendus') ;?></label>
+                <input class="form-control" type="number" name="nbParticipantsAttendu" id="nbParticipantsAttendu" value="<?php echo htmlentities(@$post['nbParticipantsAttendu']); ?>" />
             </div>
-            <div class="col-sm-6 row">
-                <label for="nbVisiteursAttendu" class="col-sm-4 col-form-label"><?php echo __('Visiteurs attendus') ; ?></label>
-                <div class="col-sm-8">
-                    <input class="form-control" type="number" name="nbVisiteursAttendu" id="nbVisiteursAttendu" value="<?php echo htmlentities(@$post['nbVisiteursAttendu']); ?>" />
-                </div>
+            <div class="col-sm-6">
+                <label for="nbVisiteursAttendu" class="col-form-label"><?php echo __('Visiteurs attendus') ; ?></label>
+                <input class="form-control" type="number" name="nbVisiteursAttendu" id="nbVisiteursAttendu" value="<?php echo htmlentities(@$post['nbVisiteursAttendu']); ?>" />
             </div>
         </div>
-        
+
     </fieldset>
 
     <fieldset>
-        <legend><?php __('Adresse') ; ?></legend>
+
+        <div class="cardHeader">
+            <legend><?php __('Adresse') ; ?></legend>
+            <p class="desc"><?php __('Où se déroule votre événement ?') ; ?></p>
+        </div>
+
         <div class="<?= $class_line ;?>">
             <label for="adresse1" class="<?php echo $class_label; ?> col-form-label"><?php __('Adresse 1') ; ?>
                 <i class="fas fa-info-circle" title="<?php __('Voie et bâtiment. Exemple : 60 rue des Lilas - Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue.') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
-                <input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']); ?>" />
+                <input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']); ?>" placeholder="<?php echo htmlentities(_('Numéro et nom de rue')) ; ?>" />
             </div>
         </div>
         <div class="<?= $class_line ;?>">
@@ -75,7 +79,7 @@
                 <i data-bs-toggle="tooltip" class="fas fa-info-circle" title="<?php __('Lieu-dit, zone d’activité, BP (pour boite postale)…') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
-                <input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']); ?>" />
+                <input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']); ?>" placeholder="<?php echo htmlentities(_('Complément d\'adresse')) ; ?>" />
             </div>
         </div>
         <div class="<?= $class_line ;?>">
@@ -83,7 +87,7 @@
                 <i class="fas fa-info-circle" title="<?php __('Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon village et Morillon 1100.') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
-                <input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']); ?>" />
+                <input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']); ?>" placeholder="<?php echo htmlentities(_('Complément d\'adresse')) ; ?>" />
             </div>
         </div>
         <?php
@@ -125,9 +129,9 @@
         <div class="<?= $class_line ; ?> required">
             <label for="commune" class="<?php echo $class_label; ?> col-form-label"><?php __('Commune') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
-                <select name="commune" class="chosen-select" required="required" data-placeholder="">
+                <select name="commune" class="chosen-select" required="required" data-placeholder="<?php echo htmlentities(_('Sélectionnez une commune')) ; ?>">
                     <?php if (sizeof($communes) > 1) { ?>
-                        <option value="">-</option>
+                        <option value=""></option>
                     <?php } ?>
                     <?php
 
@@ -147,9 +151,10 @@
             </div>
         </div>
 
-        <div class="alert alert-info" role="alert">
-            <p><?php __('Saisir le lieu précis où se déroule l’événement <strong>seulement si nécessaire</strong> (si l\'adresse n\'est pas suffisante).<br />
-                Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...</p>') ; ?>
+        <div class="alert alert-info" role="alert" style="margin-top:18px;margin-bottom:0 ;">
+            <div class="float-start" style="padding:5px 5px 5px 0 ;"><i class="fa-solid fa-circle-info"></i></div>
+            <?php __('Saisir le lieu précis où se déroule l’événement seulement si nécessaire (si l\'adresse n\'est pas suffisante).
+                Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...') ; ?>
         </div>
 
         <div class="<?= $class_line ; ?>">

@@ -174,7 +174,7 @@
                     echo '<h1>Config</h1>' ;
                     echo '<p>Pour simplifier la configuration (éviter d\'avoir à remonter les offices au dessus des départements), la config est désormais découpée en 2.</p>' ;
                     foreach ( $types as $t )
-                        echo '<a class="btn btn-primary" href="?type='.$t.'">'.ucfirst($t).'</a> &nbsp; ' ;
+                        echo '<a class="btn btn-light" href="?type='.$t.'">'.ucfirst($t).'</a> &nbsp; ' ;
                     echo '<hr />' ;
                     echo '<a class="btn btn-secondary" href="show.php">Consultation simple</a>' ;
                 echo '</div>' ;

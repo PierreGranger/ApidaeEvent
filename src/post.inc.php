@@ -830,7 +830,7 @@
 					alert(jQuery('div#texte_offre_enregistree').text()) ;
 				</script>
 				<?php if ( isset($_SERVER['HTTP_REFERER']) ) { ?>
-					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> <?php __('Faire une autre suggestion de manifestation') ; ?></a>
+					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-light"><i class="fas fa-plus-circle"></i> <?php __('Faire une autre suggestion de manifestation') ; ?></a>
 				<?php } ?>
 			</div>
 		<?php

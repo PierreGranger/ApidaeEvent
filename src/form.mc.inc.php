@@ -10,13 +10,19 @@
             <table class="table mc">
                 <thead>
                     <tr>
-                        <th></th>
                         <th class="required"><?php __('Type') ; ?></th>
                         <th class="required"><?php __('Coordonnée') ; ?></th>
                         <th><?php __('Complément') ; ?></th>
                     </tr>
                 </thead>
-                <tfoot><tr><td colspan="4"></td></tr></tfoot>
+                <tfoot>
+                    <tr>
+                        <td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/', __('Ajouter une ligne',false), $icon_plus) ; ?></td>
+                    </tr>
+                    <tr class="errors">
+                        <td colspan="99"></td>
+                    </tr>
+                </tfoot>
                 <tbody>
                     <?php
 
@@ -27,7 +33,6 @@
 
                     for ($i = 0; $i < $nb; $i++) {
                         echo "\n\t\t\t\t\t\t" . '<tr>';
-                        echo '<td></td>';
                         echo '<td>';
                         echo '<div class="form-group">';
                         echo '<select class="form-control" name="mc[' . $i . '][type]"';
@@ -67,9 +72,6 @@
                         echo '</td>';
                         echo '</tr>';
                     }
-                    echo '<tr>';
-                    echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', __('Ajouter une ligne',false), $icon_plus) . '</td>';
-                    echo '</tr>';
                     ?>
                 </tbody>
             </table>

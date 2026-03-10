@@ -10,7 +10,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th></th>
                         <th><?php __('Fonction') ; ?></th>
                         <th><?php __('Prénom') ; ?></th>
                         <th><?php __('Nom') ; ?></th>
@@ -18,12 +17,19 @@
                         <th><?php __('Téléphone') ; ?></th>
                     </tr>
                 </thead>
+                <tfoot>
+                    <tr>
+                        <td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/', __('Ajouter un contact',false), $icon_plus)  ; ?></td>
+                    </tr>
+                    <tr class="errors">
+                        <td colspan="99"></td>
+                    </tr>
+                </tfoot>
                 <tbody>
                     <?php
                     $types = $apidaeEvent->getElementsReferenceByType('ContactFonction');
                     for ($i = 0; $i < 1; $i++) {
                         echo "\n\t\t\t\t\t\t" . '<tr>';
-                        echo '<td></td>';
                         echo '<td>';
                         echo '<select class="form-select" name="contact[' . $i . '][fonction]">';
                         echo '<option value="">-</option>';
@@ -58,9 +64,6 @@
                         echo '</td>';
                         echo '</tr>';
                     }
-                    echo '<tr>';
-                    echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', __('Ajouter un contact',false), $icon_plus) . '</td>';
-                    echo '</tr>';
                     ?>
                 </tbody>
             </table>

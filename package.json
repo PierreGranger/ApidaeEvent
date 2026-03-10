@@ -13,7 +13,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
     "@popperjs/core": "^2.11.6",
     "ajax-bootstrap-select": "^1.4.5",
-    "bootstrap": "^5.2.0",
+    "bootstrap": "^5.3.8",
     "bootstrap-chosen": "^1.4.2",
     "jquery": "^3.6.0"
   },

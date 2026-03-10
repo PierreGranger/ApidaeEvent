@@ -86,7 +86,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 
 				<form method="get">
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="territoire">Territoire</label>
 						<div class="col-sm-6">
 							<select id="territoire" name="territoire" class="select2 js-example-placeholder-single js-states form-control"></select>
@@ -95,7 +95,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="contactObligatoire">Contact obligatoire
 							<br /><small>1 Mail ou 1 téléphone minimum dans la zone "Contact"</small>
 						</label>
@@ -104,7 +104,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="TourismeAdapte">Tourisme Adapté
 							<br /><small>Champs principaux de "Prestations > Accueil des personnes en situation de handicap > Tourisme adapté"</small>
 						</label>
@@ -113,7 +113,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="clientele">Types de clientèle
 							<br /><small>Ajout des champs Types de clientèles (Offres adaptées à des clientèles spécifiques + Clientèle pratiquant une activité spécifique)</small>
 						</label>
@@ -122,7 +122,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="toutou">Animaux acceptés & descriptif associé
 						</label>
 						<div class="col-sm-6">
@@ -130,7 +130,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="generique">Evenements génériques & championnats
 							<br /><small>Journées du patrimoine...</small>
 						</label>
@@ -139,7 +139,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="limitCategories">Nombre de catégories
 							<br /><small>Défaut : 3</small>
 						</label>
@@ -148,7 +148,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="reservation">Réservation
 							<br /><small></small>
 						</label>
@@ -158,7 +158,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 					</div>
 
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="mm">Multimédias
 							<br /><small>Permettre l'ajout de multimédias (PDF seulement)</small>
 						</label>
@@ -167,7 +167,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="copyright">Copyright obligatoire
 							<br /><small>Si une illustration est ajoutée elle doit avoir un copyright renseigné</small>
 						</label>
@@ -176,7 +176,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="illustrationMini">Taille mini illustration
 							<br /><small>Si une illustration est ajoutée, elle doit obligatoirement faire + de X pixels (ex: 1200)</small>
 							<br /><small>Laisser à 0 pour ne pas demander de taille minimale</small>
@@ -186,7 +186,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="illustrationObligatoire">1 illustration obligatoire minimum
 						</label>
 						<div class="col-sm-6">
@@ -194,7 +194,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="apihours">Multihoraire ApiHours (popup)
 						</label>
 						<div class="col-sm-6">
@@ -202,7 +202,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="devise">Devise</label>
 						<div class="col-sm-6">
 							<label><input type="radio" id="devise_eur" name="devise" value="" /> €</label>
@@ -211,7 +211,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="locale">Langue du formulaire
 						</label>
 						<div class="col-sm-6">
@@ -220,7 +220,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row">
 						<label class="col-sm-6 col-form-label" for="mails">Emails à notifier</label>
 						<div class="col-sm-6">
 							<input type="text" class="form-control" name="mails" id="mails" />
@@ -228,7 +228,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 						</div>
 					</div>
 
-					<div class="row mb-3">	
+					<div class="row">	
 						<label class="col-sm-6 col-form-label" for="forceMembre"><input type="checkbox" id="forceMembre" value="1" /> Personnalisation du membre valideur dans Apidae
 						</label>
 					</div>
@@ -246,7 +246,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 	
 								<p>En renseignant cette information, toute manifestation saisie sur le formulaire paramétré ci-dessus sera affecté au membre choisi dans l'étape suivante.</p></small>
 								
-								<div class="row mb-3">
+								<div class="row">
 									<label class="col-sm-6 col-form-label" for="membre">Identifiant du membre valideur</label>
 									<div class="col-sm-6">
 										<input type="text" class="form-control" name="membre" id="membre" />

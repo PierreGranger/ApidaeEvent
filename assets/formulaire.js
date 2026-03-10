@@ -119,15 +119,23 @@ jQuery(document).on('submit','form.form',function(e){
 
 }) ;
 
+// Au chargement on ajoute les <td> pour les boutons "moins"
+jQuery(function () {
+	jQuery('table td.plus').closest('table').each(function () {
+		jQuery(this).find('thead tr').append('<th class="moins"></th>');
+		jQuery(this).find('tbody tr').append('<td class="moins"></td>');
+	});
+});
 
 // Clone une ligne d'une table.
-jQuery(document).on('click','table td.plus .btn',function(){
-	var ligne = jQuery(this).closest('tbody').find('tr').first().clone() ;
-	var tr = jQuery(this).closest('tr') ;
+jQuery(document).on('click', 'table td.plus .btn', function () {
 	var table = jQuery(this).closest('table') ;
-	ligne.insertBefore(tr) ;
-	ligne.find('td').first().addClass('moins').html(icon_moins) ;
-	var champs = ligne.find('input, select') ;
+	var tbody = table.find('tbody') ;
+	var ligne = tbody.find('tr').first().clone() ;
+	var tr = jQuery(this).closest('tr') ;
+	tbody.append(ligne) ;
+	ligne.find('td').last().html(icon_moins) ;
+	var champs = ligne.find('input, select');
 	champs.each(function(i,v){
 		jQuery(this).removeAttr('required') ;
 		jQuery(this).val('') ;
@@ -147,36 +155,6 @@ jQuery(document).on('click','table td.moins',function(){
 	setIndent(jQuery(this).closest('table')) ;
 	initForm(jQuery(this).closest('table')) ;
 }) ;
-
-
-// Clone row in multirows.
-jQuery(document).on('click','div.multirows .plus .btn',function(){
-	let plus = jQuery(this) ;
-	let multirows = plus.closest('.multirows') ;
-	let rows = multirows.find('.rows') ;
-	let row = rows.find('.row').first().clone() ;
-	row.find('div').first().addClass('moins').html(icon_moins) ;
-	rows.append(row) ;
-	let champs = row.find('input, select') ;
-	champs.each(function(i,v){
-		jQuery(this).removeAttr('required') ;
-		jQuery(this).val('') ;
-		if ( rows.hasClass('mc') ) jQuery(this).attr('placeholder','') ;
-		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
-	}) ;
-	setIndent(rows,'.row') ;
-	initForm(rows) ;
-	valideTarifUnique() ;
-}) ;
-
-jQuery(document).on('click','div.multirows .moins',function(){
-	jQuery(this).closest('.row').remove() ;
-	setIndent(jQuery(this).closest('.rows'),'.row') ;
-	initForm(jQuery(this).closest('.rows')) ;
-}) ;
-
-
-
 
 
 jQuery(document).on('click','div.date span.input-group-addon',function(){

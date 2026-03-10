@@ -20,7 +20,6 @@
             <table class="table photos">
                 <thead>
                     <tr>
-                        <th></th>
                         <th><?php __('Votre photo') ; ?></th>
                         <th><?php __('Titre') ; ?></th>
                         <th><?php __('Copyright') ; ?></th>
@@ -28,14 +27,16 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <td colspan="4"></td>
+                        <td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/', __('Ajouter une photo',false), $icon_plus); ?></td>
+                    </tr>
+                    <tr class="errors">
+                        <td colspan="99"></td>
                     </tr>
                 </tfoot>
                 <tbody>
                     <?php
                     for ($i = 0; $i < 1; $i++) {
                         echo "\n\t\t\t\t\t\t" . '<tr>';
-                            echo '<td></td>';
                             echo '<td>';
                                 echo '<div class="form-group">' ;
                                     echo '<input class="form-control" type="file" name="illustrations[' . $i . ']" accept="image/*" ';
@@ -56,9 +57,6 @@
                         echo '</tr>';
                     }
                     ?>
-                    <tr>
-                        <td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/', __('Ajouter une photo',false), $icon_plus); ?></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -76,7 +74,6 @@
                 <table class="table photos">
                     <thead>
                         <tr>
-                            <th></th>
                             <th><?php __('Votre fichier') ; ?></th>
                             <th><?php __('Titre') ; ?></th>
                             <th><?php __('Copyright') ; ?></th>
@@ -86,12 +83,17 @@
                         <tr>
                             <td colspan="4"></td>
                         </tr>
+                        <tr>
+                            <td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/', __('Ajouter un fichier',false), $icon_plus); ?></td>
+                        </tr>
+                        <tr class="errors">
+                            <td colspan="99"></td>
+                        </tr>
                     </tfoot>
                     <tbody>
                         <?php
                         for ($i = 0; $i < 1; $i++) {
                             echo "\n\t\t\t\t\t\t" . '<tr>';
-                            echo '<td></td>';
                             echo '<td>';
                                 echo '<div class="form-group">' ;
                                     echo '<input class="form-control" type="file" name="multimedias[' . $i . ']" ' ;
@@ -112,9 +114,6 @@
                             echo '</tr>';
                         }
                         ?>
-                        <tr>
-                            <td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/', __('Ajouter un fichier',false), $icon_plus); ?></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

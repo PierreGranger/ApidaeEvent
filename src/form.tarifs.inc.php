@@ -19,7 +19,6 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th></th>
                                 <th><?php __('Type de tarif') ; ?></th>
                                 <th><?php echo preg_replace('/#DEVISE#/',$devise_lib,__('Mini #DEVISE# (à partir de...)',false)) ; ?></th>
                                 <th><?php echo preg_replace('/#DEVISE#/',$devise_lib,__('Maxi #DEVISE# (jusqu\'à...)',false)) ; ?></th>
@@ -28,7 +27,10 @@
                         </thead>
                         <tfoot>
                             <tr>
-                                <td colspan="5"></td>
+                                <td class="plus" colspan="99"><?php echo preg_replace('/##LIBELLE##/', __('Ajouter un tarif',false), $icon_plus) ; ?></td>
+                            </tr>
+                            <tr class="errors">
+                                <td colspan="99"></td>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -37,7 +39,6 @@
                             for ($i = 0; $i < 1; $i++) {
                                     ?>
                                     <tr>
-                                        <td></td>
                                         <td>
                                             <div class="form-group">
                                                 <select class="form-select" name="tarifs[<?= $i ; ?>][type]">
@@ -68,9 +69,6 @@
                                     </tr>
                                 <?php
                             }
-                            echo '<tr>';
-                            echo '<td class="plus" colspan="99">' . preg_replace('/##LIBELLE##/', __('Ajouter un tarif',false), $icon_plus) . '</td>';
-                            echo '</tr>';
                             ?>
                         </tbody>
                     </table>
