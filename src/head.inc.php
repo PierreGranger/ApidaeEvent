@@ -37,8 +37,8 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php
-	$icon_plus = '<span class="btn btn-primary"><i class="fas fa-plus"></i> <strong>##LIBELLE##</strong></span>';
-	$icon_moins = '<span class="btn btn-warning"><i class="fas fa-minus"></i> </span>';
+	$icon_plus = '<span class="btn btn-light w-100"><i class="fas fa-plus"></i> ##LIBELLE##</span>';
+	$icon_moins = '<span class="btn btn-link"><i class="fa-solid fa-x"></i></span>';
 	?>
 
 <?php
@@ -65,6 +65,10 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
 <script>
 	var interdictions_elements_reference = <?php echo json_encode($apidaeEvent->getElementsReferenceInterdictions(['FeteEtManifestationType','FeteEtManifestationCategorie'])) ; ?> ;

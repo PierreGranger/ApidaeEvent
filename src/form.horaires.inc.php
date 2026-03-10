@@ -1,65 +1,55 @@
-<fieldset>
+<?php
 
-<legend><?php __('Dates de la manifestation') ; ?></legend>
-
-<div class="alert alert-warning" role="alert">
-    <?php __('Merci de préciser au minimum une date.') ; ?>
-</div>
-
-<div class="table-responsive">
-    <table class="table dates">
-        <thead>
-            <tr>
-                <th></th>
-                <th class="required"><?php __('Début') ; ?></th>
-                <th class="required"><?php __('Fin') ; ?></th>
-                <th><?php __('Horaires') ; ?></th>
-                <th><?php __('Complément') ; ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-        $nb = 1;
+$nb = 1;
 
 if (isset($post['date'])) {
     $nb = sizeof($post['date']);
 }
-for ($i = 0; $i < $nb; $i++) { ?>
-            <tr>
-                <td></div>
-                <td>
-                    <div class="form-floating date">
-                        <input class="form-control date debut" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][debut]" value="<?= htmlentities(@$post['date'][$i]['debut']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_debut" />
-                        <label for="date_<?= $i ; ?>_debut"><?php __('Du') ; ?></label>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-floating date">
-                        <input class="form-control date fin" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][fin]" value="<?= htmlentities(@$post['date'][$i]['fin']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_fin" />
-                        <label for="date_<?= $i ; ?>_fin"><?php __('Au') ; ?></label>
-                    </div>
-                </td>
-                <td>
-                    <button type="button" class="horaires btn btn-primary" onclick="btnHoraires(event)"><?php __('Saisie des horaires') ; ?></button>
-                    <input type="hidden" class="horaires" name="date[<?= $i ; ?>][horaires]" value="<?= htmlentities(@$post['date'][$i]['horaires']) ; ?>" />
-                    <div class="col-12 description" style="white-space:pre-wrap; font-size:.8em;"></div>
-                </td>
-                <td>
-                    <div class="form-floating">
-                        <input class="form-control" type="text" name="date[<?= $i ; ?>][complementHoraire]" value="<?= htmlentities(@$post['date'][$i]['complementHoraire']) ; ?>" id="date_complement_<?= $i ; ?>" />
-                        <label for="date_<?= $i ; ?>_complement"><?php __('Autres précisions') ; ?></label>
-                    </div>
-                </td>
-            </tr>
-        <?php } ?>
-        <tr>
-                <td class="plus" colspan="99"><?= preg_replace('/##LIBELLE##/', __('Ajouter une date', false), $icon_plus) ; ?></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 
-</fieldset>
+?>
+    <div class="dates-rows" data-row-selector=".date-row">
+        <?php for ($i = 0; $i < $nb; $i++) { ?>
+            <div class="row date-row">
+                <div class="col-6 col-md">
+                    <div class="form-group">
+                        <label class="col-form-label required th"><?php __('Début') ; ?></label>
+                        <input class="form-control date debut" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][debut]" value="<?= htmlentities(@$post['date'][$i]['debut']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_debut" />
+                    </div>
+                </div>
+                <div class="col-6 col-md">
+                    <div class="form-group">
+                        <label class="col-form-label required th"><?php __('Fin') ; ?></label>
+                        <input class="form-control date fin" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][fin]" value="<?= htmlentities(@$post['date'][$i]['fin']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_fin" />
+                    </div>
+                </div>
+                <div class="col-6 col-md">
+                    <div class="form-group">
+                        <label class="col-form-label th"><?php __('Horaires') ; ?></label>
+                        <button type="button" class="horaires btn btn-light" onclick="btnHoraires(event)"><?php __('Saisie des horaires') ; ?></button>
+                        <input type="hidden" class="horaires" name="date[<?= $i ; ?>][horaires]" value="<?= htmlentities(@$post['date'][$i]['horaires']) ; ?>" />
+                        <div class="col-12 description" style="white-space:pre-wrap; font-size:.8em;"></div>
+                    </div>
+                </div>
+                <div class="col-6 col-md">
+                    <div class="form-group">
+                        <label class="col-form-label th"><?php __('Complément') ; ?></label>
+                        <input class="form-control" type="text" name="date[<?= $i ; ?>][complementHoraire]" value="<?= htmlentities(@$post['date'][$i]['complementHoraire']) ; ?>" id="date_complement_<?= $i ; ?>" />
+                    </div>
+                </div>
+                <div class="moins"><?php if ($i > 0) echo $icon_moins; ?></div>
+            </div>
+        <?php } ?>
+    </div>
+
+    <div class="row">
+        <div class="col-12 dates-plus" data-rows-container=".dates-rows" data-row-selector=".date-row">
+            <?= preg_replace('/##LIBELLE##/', __('Ajouter une date', false), $icon_plus) ; ?>
+        </div>
+    </div>
+
+    <div class="row errors">
+        <div class="col-12 dates-errors"></div>
+    </div>
 
 <div class="modal fade modal-lg" id="horairesModal" tabindex="-1" aria-labelledby="horairesModalLabel" aria-hidden="true">
 <div class="modal-dialog">
@@ -98,8 +88,10 @@ for ($i = 0; $i < $nb; $i++) { ?>
 
 function btnHoraires(event){
     var btn = event.srcElement
-    let ligne = btn.closest('tr')
-    const trIndex = ligne.rowIndex - 1
+    let ligne = btn.closest('.row')
+    console.log(ligne)
+    const trIndex = jQuery(ligne).index()
+    console.log(trIndex)
 
     let start = ligne.querySelector('input.debut').value
     let end = ligne.querySelector('input.fin').value
@@ -178,8 +170,10 @@ document.getElementById('horairesSubmit').addEventListener('click', function () 
     const modalElement = document.getElementById('horairesModal')
     const index = modalElement.querySelector('#trIndex').value
     
-    const tbody = document.querySelector('table.dates tbody');
-    const ligne = tbody.querySelectorAll('tr')[index];
+    const tbody = document.querySelector('.dates-rows');
+    const ligne = tbody.querySelectorAll('.row')[index];
+
+    console.log(index, tbody, ligne) ;
 
     let periodeJson = '' ;
 

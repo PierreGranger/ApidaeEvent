@@ -47,31 +47,12 @@
 
 <body>
 	<div class="container">
-
-		<?php
-
-		if (isset($_GET['testAnalytics'])) {
-			$enr_dataLayer = array(
-				'event' => 'enregistrement',
-				'commune_id' => '1',
-				'commune_nom' => 'test',
-				'commune_cp' => '99999',
-				'membre_id' => 1,
-				'membre_nom' => 'test',
-				'territoire' => 1,
-				'departement' => 99
-			);
-		?><script>
-				dataLayer.push(<?php echo json_encode($enr_dataLayer); ?>);
-			</script>
-		<?php } ?>
-		
 		<?php
 
 			if (isset($_POST['nom'])) {
 				include(realpath(dirname(__FILE__)) . '/../src/post.inc.php');
 			}
-
+			
 			$post = $_POST;
 			if (!is_array($post)) $post = [];
 
