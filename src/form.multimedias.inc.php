@@ -68,16 +68,18 @@
                 <legend><?php __('Multimédias') ; ?></legend>
             </div>
 
-            <div class="alert alert-warning" role="alert">
-                <div class="float-start" style="padding:0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
-                <?php __('Vous pouvez ajouter ci-dessous des fichiers PDF si nécessaire (si vous avez un programme par exemple).
-                <br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d\'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
-                <br />Les documents ajoutés ne doivent pas dépasser les 5 Mo au total.') ; ?>
+            <div class="alert alert-warning d-flex align-items-stretch" role="alert">
+                <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+                <div>
+                    <?php __('Vous pouvez ajouter ci-dessous des fichiers PDF si nécessaire (si vous avez un programme par exemple).
+                    <br />Une fois publiées, elles pourront être diffusées sur différents supports (sites Internet, brochures...) : <strong>assurez-vous d\'avoir tous les droits nécessaires</strong>, et précisez le Copyright si besoin.
+                    <br />Les documents ajoutés ne doivent pas dépasser les 5 Mo au total.') ; ?>
+                </div>
             </div>
 
             <div class="multimedias-rows" data-row-selector=".multimedia-row">
                 <?php for ($i = 0; $i < 1; $i++) { ?>
-                    <div class="row multimedia-row g-2 mb-2">
+                    <div class="row multimedia-row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="col-form-label th"><?php __('Votre fichier') ; ?></label>

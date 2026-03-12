@@ -87,8 +87,8 @@ label[data-interdit] {
 }
 
 .alert-info {
-	--bs-alert-border-color: #A2F4FD;
-	--bs-alert-bg: #ECFEFF;
+	--bs-alert-border-color: #BEDBFF;
+	--bs-alert-bg: #EFF6FF;
 }
 
 .alert.alert-info {
@@ -143,19 +143,19 @@ div[data-row-selector] div.row {
 
 [data-rows-container][data-row-selector] .btn {
 	margin-top: 0;
-	border-style: dashed;
 }
 
 div[data-row-selector]>div.row {
 	border-left: 2px solid #CAD5E2;
 	margin-left: 5px;
-	margin-bottom: 25px !important;
+	margin-bottom: 15px !important;
+	padding-bottom:10px ;
 }
 
 div.row div.moins {
 	position: absolute;
 	background: 0;
-	top: 8px;
+	top: -3px;
 	right: 0;
 	margin: 0;
 	padding: 0;
@@ -270,9 +270,19 @@ textarea.form-control::placeholder {
 	color: #717182;
 }
 
+textarea.form-control {
+	height:80px ;
+}
+
 form.form .col-form-label.th {
 	font-size: 12px;
 	font-weight: normal;
+}
+
+div[data-row-selector] .col-form-label {
+	font-size: 12px;
+	font-weight: normal;
+	padding-bottom:3px ;
 }
 
 .field {

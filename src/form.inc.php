@@ -151,10 +151,12 @@
             </div>
         </div>
 
-        <div class="alert alert-info" role="alert" style="margin-top:18px;margin-bottom:0 ;">
-            <div class="float-start" style="padding:5px 5px 5px ;"><i class="fa-solid fa-circle-info"></i></div>
-            <?php __('Saisir le lieu précis où se déroule l’événement seulement si nécessaire (si l\'adresse n\'est pas suffisante).
-                Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...') ; ?>
+        <div class="alert alert-info d-flex align-items-stretch" role="alert" style="margin-top:18px;margin-bottom:0 ;">
+            <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+            <div>
+                <?php __('Saisir le lieu précis où se déroule l’événement seulement si nécessaire (si l\'adresse n\'est pas suffisante).
+                    Ex : Espace culturel / Place du village / Salle des fêtes / Esplanade du lac...') ; ?>
+            </div>
         </div>
 
         <div class="<?= $class_line ; ?>">
@@ -173,9 +175,11 @@
             <p><?php __('Indiquez les dates de votre événement') ; ?></p>
         </div>
 
-        <div class="alert alert-warning" role="alert">
-            <div class="float-start" style="padding:0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
-            <?php __('Merci de préciser au minimum une date.') ; ?>
+        <div class="alert alert-warning d-flex align-items-stretch" role="alert">
+            <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+            <div>
+                <?php __('Merci de préciser au minimum une date.') ; ?>
+            </div>
         </div>
 
         <?php
@@ -305,10 +309,12 @@
                 <legend><?php __('Réservation') ; ?></legend>
             </div>
 
-            <div class="alert alert-warning" role="alert">
-                <div class="float-start" style="padding:0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="alert alert-warning d-flex align-items-stretch" role="alert">
+            <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+            <div>
                 <?php __('<strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone</strong> : en cas de questions, nous pourrons prendre contact avec l\'organisateur grâce à ces informations.') ; ?>
             </div>
+        </div>
 
             <div class="<?= $class_line ; ?>">
                 <label for="reservation_nom" class="<?php echo $class_label; ?> col-form-label"><?php __('Nom de l\'organisme') ; ?></label>
@@ -341,9 +347,11 @@
             <legend><?php __('Organisateur') ; ?></legend>
         </div>
 
-        <div class="alert alert-info" role="alert">
-            <div class="float-start" style="padding:0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
-            <?php __('Message privé non publié à destination du propriétaire de ce formulaire. Précisez l\'organisateur de la manifestation (association ABC...)..') ; ?>
+        <div class="alert alert-info d-flex align-items-stretch" role="alert">
+            <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+            <div>
+                <?php __('Message privé non publié à destination du propriétaire de ce formulaire. Précisez l\'organisateur de la manifestation (association ABC...).') ; ?>
+            </div>
         </div>
         <div class="<?= $class_line ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label th" for="commentaire"><?php __('Commentaire privé') ; ?></label>

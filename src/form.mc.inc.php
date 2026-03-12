@@ -4,9 +4,11 @@
             <legend><?php __('Moyens de communication') ; ?></legend>
         </div>
         
-        <div class="alert alert-warning" role="alert">
-            <div class="float-start" style="padding:0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
-            <?php __('Merci de préciser au moins un moyen de communication (Mail, téléphone...) : ils seront diffusés sur les supports de communications (sites web, brochures...)') ; ?>
+        <div class="alert alert-warning d-flex align-items-stretch" role="alert">
+            <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+            <div>
+                <?php __('Merci de préciser au moins un moyen de communication (Mail, téléphone...) : ils seront diffusés sur les supports de communications (sites web, brochures...)') ; ?>
+            </div>
         </div>
 
         <?php
@@ -17,7 +19,7 @@
 
         <div class="mc-rows" data-row-selector=".mc-row">
             <?php for ($i = 0; $i < $nb; $i++) { ?>
-                <div class="row mc-row g-2 mb-2">
+                <div class="row mc-row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="col-form-label th required"><?php __('Type') ; ?></label>

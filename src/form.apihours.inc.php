@@ -1,5 +1,5 @@
 
-    <script type="text/javascript" src="https://form.apihours.apidae-tourisme.<?php echo isset($config['apihours']['env']) ? $config['apihours']['env'] : 'com' ; ?>/0.6.0/bundle.js"></script>
+    <script type="text/javascript" src="https://form.apihours.apidae-tourisme.<?php echo ( isset($config['apihours']['env']) && in_array($config['apihours']['env'], ['com','cooking','dev']) ) ? $config['apihours']['env'] : 'com' ; ?>/0.6.0/bundle.js"></script>
 
     <script>
 
@@ -43,25 +43,19 @@
                     <div class="col-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label required th"><?php __('Début') ; ?></label>
-                            <div class="form-floating date">
-                                <input class="form-control date debut" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][debut]" value="<?= htmlentities(@$post['date'][$i]['debut']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_debut" />
-                                <label for="date_<?= $i ; ?>_debut"><?php __('Du') ; ?></label>
-                            </div>
+                            <input class="form-control date debut" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][debut]" value="<?= htmlentities(@$post['date'][$i]['debut']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_debut" />
                         </div>
                     </div>
                     <div class="col-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label required th"><?php __('Fin') ; ?></label>
-                            <div class="form-floating date">
-                                <input class="form-control date fin" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][fin]" value="<?= htmlentities(@$post['date'][$i]['fin']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_fin" />
-                                <label for="date_<?= $i ; ?>_fin"><?php __('Au') ; ?></label>
-                            </div>
+                            <input class="form-control date fin" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][fin]" value="<?= htmlentities(@$post['date'][$i]['fin']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_fin" />
                         </div>
                     </div>
                     <div class="col-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Horaires') ; ?></label>
-                            <button type="button" class="timePeriods btn btn-primary" onclick="btnTimePeriods()"><?php __('Saisie des horaires') ; ?></button>
+                            <button type="button" class="timePeriods btn btn-light" onclick="btnTimePeriods()"><?php __('Saisie des horaires') ; ?></button>
                             <input type="hidden" class="timePeriods" name="date[<?= $i ; ?>][timePeriods]" value="<?= htmlentities(@$post['date'][$i]['timePeriods']) ; ?>" />
                             <div class="col-12 description" style="white-space:pre-wrap; font-size:.8em;"></div>
                         </div>
@@ -69,10 +63,7 @@
                     <div class="col-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Complément') ; ?></label>
-                            <div class="form-floating">
-                                <input class="form-control" type="text" name="date[<?= $i ; ?>][complementHoraire]" value="<?= htmlentities(@$post['date'][$i]['complementHoraire']) ; ?>" id="date_complement_<?= $i ; ?>" />
-                                <label for="date_<?= $i ; ?>_complement"><?php __('Autres précisions') ; ?></label>
-                            </div>
+                            <input class="form-control" type="text" name="date[<?= $i ; ?>][complementHoraire]" value="<?= htmlentities(@$post['date'][$i]['complementHoraire']) ; ?>" id="date_complement_<?= $i ; ?>" />
                         </div>
                     </div>
                     <div class="moins"><?php if ($i > 0) echo $icon_moins; ?></div>

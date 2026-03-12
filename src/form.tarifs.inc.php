@@ -14,15 +14,17 @@
         <div class="champ tarifs">
             <div class="block">
 
-                <div class="alert alert-warning" role="alert">
-                    <div class="float-start" style="padding:0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
-                    <?php __('Chaque type de tarif n\'est utilisable qu\'une fois. Si vous avez plusieurs "pleins tarifs", précisez la plage mini-maxi sur une seule ligne.') ; ?>
+                <div class="alert alert-warning d-flex align-items-stretch" role="alert">
+                    <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+                    <div>
+                        <?php __('Chaque type de tarif n\'est utilisable qu\'une fois. Si vous avez plusieurs "pleins tarifs", précisez la plage mini-maxi.') ; ?>
+                    </div>
                 </div>
 
                 <?php $types = $apidaeEvent->getElementsReferenceByType('TarifType', array('include' => $configApidaeEvent['types_tarifs'])); ?>
                 <div class="tarifs-rows" data-row-selector=".tarif-row">
                     <?php for ($i = 0; $i < 1; $i++) { ?>
-                        <div class="row tarif-row g-2 mb-2">
+                        <div class="row tarif-row">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="col-form-label th"><?php __('Type de tarif') ; ?></label>

@@ -4,9 +4,11 @@
         <legend><?php __('Contacts organisateurs') ; ?></legend>
     </div>
 
-    <div class="alert alert-warning" role="alert">
-        <div class="float-start" style="padding:0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
-        <?php __('Merci de préciser au moins une adresse mail et/ou un numéro de téléphone.') ; ?>
+    <div class="alert alert-warning d-flex align-items-stretch" role="alert">
+        <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
+        <div>
+            <?php __('Merci de préciser au moins une adresse mail et/ou un numéro de téléphone.') ; ?>
+        </div>
     </div>
 
         <?php $types = $apidaeEvent->getElementsReferenceByType('ContactFonction'); ?>
