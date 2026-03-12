@@ -35,7 +35,7 @@ jQuery(function(){
 
 	initForm(jQuery('form.form')) ;
 
-	jQuery('select[name$="[type]"]').each(function(){
+	jQuery('.mc-rows select[name$="[type]"]').each(function(){
 		selectChange(jQuery(this),true) ;
 	}) ;
 
@@ -57,7 +57,9 @@ jQuery(document).on('submit','form.form',function(e){
 	var firstError = null ;
 
 	jQuery(this).find('select, input, textarea').each(function(){
-		var okChamp = valideChamp(jQuery(this), jQuery(this).closest('tr').find('select').val());
+		var row = jQuery(this).closest('tr, .mc-row, .contact-row, .date-row, .tarif-row, .illustration-row, .multimedia-row');
+		var typeSelect = row.find('select').val();
+		var okChamp = valideChamp(jQuery(this), typeSelect);
 		jQuery(this).closest('.form-group, div').toggleClass('has-error',!okChamp) ;
 		if ( ! okChamp )
 		{
@@ -119,41 +121,43 @@ jQuery(document).on('submit','form.form',function(e){
 
 }) ;
 
-// Au chargement on ajoute les <td> pour les boutons "moins"
-jQuery(function () {
-	jQuery('table td.plus').closest('table').each(function () {
-		jQuery(this).find('thead tr').append('<th class="moins"></th>');
-		jQuery(this).find('tbody tr').append('<td class="moins"></td>');
-	});
-});
+// Clone une ligne (sections en div.row avec data-rows-container / data-row-selector)
+jQuery(document).on('click', '[data-rows-container][data-row-selector] .btn', function () {
+	var plus = jQuery(this).closest('[data-rows-container][data-row-selector]') ;
+	var container = plus.closest('fieldset, form').find(plus.data('rows-container')).first() ;
+	var rowSelector = plus.data('row-selector') ;
+	if ( ! container.length || ! rowSelector ) return ;
 
-// Clone une ligne d'une table.
-jQuery(document).on('click', 'table td.plus .btn', function () {
-	var table = jQuery(this).closest('table') ;
-	var tbody = table.find('tbody') ;
-	var ligne = tbody.find('tr').first().clone() ;
-	var tr = jQuery(this).closest('tr') ;
-	tbody.append(ligne) ;
-	ligne.find('td').last().html(icon_moins) ;
-	var champs = ligne.find('input, select');
-	champs.each(function(i,v){
+	var ligne = container.find(rowSelector).first().clone() ;
+	container.append(ligne) ;
+
+	var champs = ligne.find('input, select, textarea') ;
+	champs.each(function(){
 		jQuery(this).removeAttr('required') ;
 		jQuery(this).val('') ;
-		if ( table.hasClass('mc') ) jQuery(this).attr('placeholder','') ;
+		if ( container.hasClass('mc-rows') ) jQuery(this).attr('placeholder','') ;
 		jQuery(this).removeClass('hasDatepicker hasTimepicker').attr('id',null) ;
 	}) ;
 	ligne.find('.description').each(function() {
 		jQuery(this).html('') ;
-	})
-	setIndent(table) ;
-	initForm(table) ;
-	valideTarifUnique() ;
+	}) ;
+	ligne.find('.moins').html(icon_moins) ;
+
+	setIndent(container, rowSelector) ;
+	initForm(container) ;
+	if ( plus.hasClass('tarifs-plus') ) valideTarifUnique() ;
 }) ;
 
-jQuery(document).on('click','table td.moins',function(){
-	jQuery(this).closest('tr').remove() ;
-	setIndent(jQuery(this).closest('table')) ;
-	initForm(jQuery(this).closest('table')) ;
+jQuery(document).on('click', '.moins .btn', function () {
+	var row = jQuery(this).closest('.mc-row, .contact-row, .date-row, .tarif-row, .illustration-row, .multimedia-row') ;
+	var container = row.parent() ;
+	var rowSelector = container.data('row-selector') ;
+	row.remove() ;
+	if ( rowSelector ) {
+		setIndent(container, rowSelector) ;
+		initForm(container) ;
+	}
+	if ( container.hasClass('tarifs-rows') ) valideTarifUnique() ;
 }) ;
 
 
@@ -174,12 +178,12 @@ jQuery(document).on('click','div.time span.input-group-addon',function(){
 
 
 
-jQuery(document).on('change','select[name$="[type]"]',function(){
+jQuery(document).on('change','.mc-rows select[name$="[type]"]',function(){
 	selectChange(jQuery(this)) ;
 }) ;
 
 jQuery(document).on('change','input[type="url"]',function(){
-	selectChange(jQuery(this).closest('tr').find('select[name$="[type]"]',true)) ;
+	selectChange(jQuery(this).closest('tr, .mc-row').find('select[name$="[type]"]'), true) ;
 }) ;
 
 jQuery(document).on('change','form.form input[name="gratuit"]',function(){
@@ -190,7 +194,7 @@ jQuery(document).on('change focusout','form.form select, form.form input, form.f
 	jQuery(this).closest('.form-group, div').toggleClass('has-error',!valideChamp(jQuery(this))) ;
 }) ;
 
-jQuery(document).on('change','div.tarifs select[name^="tarifs"]',function(){
+jQuery(document).on('change','.tarifs-rows select[name^="tarifs"]',function(){
 	valideTarifUnique() ;
 }) ;
 
@@ -204,7 +208,7 @@ function valideChamp(champ)
 
 	var type = null ;
 	if ( typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/) )
-		type = champ.closest('tr').find('select').val() ;
+		type = champ.closest('tr, .mc-row').find('select').val() ;
 
 	if ( val == '' && ! champ.prop('required') ) return true ;
 	if ( val == '' && champ.prop('required') ) return false ;
@@ -272,15 +276,16 @@ function valideChamp(champ)
 
 function selectChange(select,init)
 {
-	var coord = select.closest('tr').find('input[name$="[coordonnee]"]') ;
-	coord.closest('tr').find('small.h205').hide() ;
+	var row = select.closest('tr, .mc-row') ;
+	var coord = row.find('input[name$="[coordonnee]"]') ;
+	row.find('small.h205').hide() ;
 
 	if ( select.val() == 201 ) coord.attr('type','tel').attr('placeholder',phone_placeholder) ; // Tél
 	else if ( select.val() == 204 ) coord.attr('type','email').attr('placeholder','xxx@yyyy.zz') ; // Mél
 	else if ( select.val() == 205 )
 	{
 		coord.attr('type','url').attr('placeholder','http://www.xxx.zzz') ; // Url
-		if ( coord.val() != '' ) coord.closest('tr').find('small.h205').show() ;
+		if ( coord.val() != '' ) row.find('small.h205').show() ;
 	}
 	else coord.attr('type','text').attr('placeholder','') ; // Standard
 
@@ -291,38 +296,37 @@ function selectChange(select,init)
 function checkMC() {
 	var renseignes = 0;
 
-	var tfoot = jQuery('table.mc').find('tfoot tr td') ;
-	tfoot.closest('tr').removeClass('has-error') ;
-	tfoot.html('') ;
+	var errorsContainer = jQuery('.mc-errors') ;
+	errorsContainer.closest('.row').removeClass('has-error') ;
+	errorsContainer.html('') ;
 
-	jQuery('table.mc tbody tr input[name^="mc"]').each(function () {
+	jQuery('.mc-rows .mc-row input[name^="mc"]').each(function () {
 		if (jQuery(this).val().trim() != '') {
 			renseignes++;
 		}
 	});
 	if (renseignes == 0) {
-		tfoot.closest('tr').addClass('has-error') ;
-		tfoot.html('Vous devez renseigner au moins un moyen de communication') ;
+		errorsContainer.closest('.row').addClass('has-error') ;
+		errorsContainer.html('Vous devez renseigner au moins un moyen de communication') ;
 		return false;
 	}
 	return true;
 }
 
-jQuery(document).on('change', 'table.mc tbody tr input[name^="mc"]', checkMC);
+jQuery(document).on('change', '.mc-rows .mc-row input[name^="mc"]', checkMC);
 
 /**
  * 
  */
 
 function checkTypeTarifs() {
-	var trs = jQuery('form.form div.tarifs table tbody tr') ;
-	
-	var tfoot = trs.closest('table').find('tfoot tr td') ;
-	tfoot.closest('tr').removeClass('has-error') ;
-	tfoot.html('') ;
+	var rows = jQuery('form.form .tarifs-rows .tarif-row') ;
+	var errorsContainer = jQuery('form.form .tarifs-errors') ;
+	errorsContainer.closest('.row').removeClass('has-error') ;
+	errorsContainer.html('') ;
 
 	var erreurs = [] ;
-	trs.each(function(){
+	rows.each(function(){
 		var inputs = jQuery(this).find('input') ;
 		var select = jQuery(this).find('select') ;
 		select.closest('.form-group').removeClass('has-error') ;
@@ -338,12 +342,12 @@ function checkTypeTarifs() {
 	}) ;
 	if ( erreurs.length == 0 ) return true ;
 
-	tfoot.closest('tr').addClass('has-error') ;
-	tfoot.html(erreurs.join("<br />")) ;
+	errorsContainer.closest('.row').addClass('has-error') ;
+	errorsContainer.html(erreurs.join("<br />")) ;
 
 	return erreurs ;
 }
-jQuery(document).on('change','form.form div.tarifs table tbody tr',checkTypeTarifs) ;
+jQuery(document).on('change','form.form .tarifs-rows .tarif-row',checkTypeTarifs) ;
 
 
 
@@ -390,7 +394,7 @@ function setIndent(rowsContainer, rowsSelector) {
 
 function valideTarifUnique()
 {
-	var selects = jQuery('form.form div.tarifs table tbody tr select[name^="tarifs"]') ;
+	var selects = jQuery('form.form .tarifs-rows .tarif-row select[name^="tarifs"]') ;
 	
 	var used = [] ;
 	selects.each(function(){
@@ -465,12 +469,13 @@ function checkFilesInput(type) {
 
 	var fieldset = jQuery('fieldset.'+type) ;
 	var inputs = fieldset.find('input[type="file"]') ;
-	var tfoot = fieldset.find('tfoot tr td') ;
+	var rowSelector = type == 'illustrations' ? '.illustration-row' : '.multimedia-row' ;
+	var errorsContainer = fieldset.find(type == 'illustrations' ? '.illustrations-errors' : '.multimedias-errors') ;
 
-	fieldset.find('tbody tr').removeClass('has-error') ;
-	fieldset.find('tbody tr div.form-group').removeClass('has-error') ; // Retrait des erreurs pour les copyright
-	tfoot.closest('tr').removeClass('has-error') ;
-	tfoot.html('') ;
+	fieldset.find(rowSelector).removeClass('has-error') ;
+	fieldset.find(rowSelector + ' div.form-group').removeClass('has-error') ;
+	errorsContainer.closest('.row').removeClass('has-error') ;
+	errorsContainer.html('') ;
 
 	var nbfiles = 0;
 	var poidstotal = 0;
@@ -489,7 +494,7 @@ function checkFilesInput(type) {
 				{
 					if ( jQuery(this).data('width') < minWidth )
 					{
-						jQuery(this).closest('tr').addClass('has-error') ;
+						jQuery(this).closest(rowSelector).addClass('has-error') ;
 						errors.push('Les '+type+' doivent faire '+minWidth+'px au minimum') ;
 					}
 				}
@@ -500,7 +505,7 @@ function checkFilesInput(type) {
 			 */
 			if ( fieldset.hasClass('copyright') )
 			{
-				var input_copyright = jQuery(this).closest('tr').find('input[name*="copyright"]') ;
+				var input_copyright = jQuery(this).closest(rowSelector).find('input[name*="copyright"]') ;
 				if ( input_copyright.val().trim() == "" )
 				{
 					input_copyright.closest('div.form-group').addClass('has-error') ;
@@ -518,7 +523,7 @@ function checkFilesInput(type) {
 				var limit = type == 'illustrations' ? 10000000 : 5000000;
 				if ( file.size > limit )
 				{
-					jQuery(this).closest('tr').addClass('has-error') ;
+					jQuery(this).closest(rowSelector).addClass('has-error') ;
 					errors.push('Les '+type+' doivent faire moins de '+(limit/1000000)+' Mo') ;
 				}
 				poidstotal += file.size;
@@ -534,7 +539,7 @@ function checkFilesInput(type) {
 					||
 					(type == 'multimedias' && file.type.toString().match(/application\/(pdf)/gi) == null)
 				) {
-					jQuery(this).closest('tr').addClass('has-error') ;
+					jQuery(this).closest(rowSelector).addClass('has-error') ;
 					errors.push('Le type d\'illustration '+file.type+' n\'est pas autorisé') ;
 				}
 			}
@@ -551,15 +556,15 @@ function checkFilesInput(type) {
 	 */
 	if ( nbfiles == 0 && fieldset.hasClass('required') )
 	{
-		fieldset.find('tbody tr').first().addClass('has-error') ;
+		fieldset.find(rowSelector).first().addClass('has-error') ;
 		errors.push('1 '+type+' minimum') ;
 	}
 
 
 	if ( errors.length > 0 )
 	{
-		tfoot.closest('tr').addClass('has-error') ;
-		tfoot.html(errors.join("<br />")) ;
+		errorsContainer.closest('.row').addClass('has-error') ;
+		errorsContainer.html(errors.join("<br />")) ;
 	}
 
 	return errors.length == 0 ;

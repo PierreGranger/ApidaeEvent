@@ -37,7 +37,8 @@ input.float {
 }
 
 tfoot tr.has-error>td,
-div.rgpd>div.has-error {
+div.rgpd>div.has-error,
+.row.errors.has-error>.col-12 {
 	background: #ffb7b4;
 	color: #c92a27;
 	font-weight: bold;
@@ -56,6 +57,7 @@ label[data-interdit] {
 
 :root {
 	--bs-border-radius: 14px;
+	--bs-form-check-bg: #f3f3f5;
 }
 
 .alert {
@@ -63,6 +65,12 @@ label[data-interdit] {
 	--bs-alert-padding-x: 10px;
 	--bs-alert-padding-y: 4px;
 	font-size: 12px;
+	color: #717182;
+	--bs-alert-link-color: #717182;
+}
+
+.alert-link {
+	font-weight: normal;
 }
 
 .alert-warning {
@@ -70,11 +78,17 @@ label[data-interdit] {
 	--bs-alert-bg: #FFFBEB;
 }
 
+.alert-warning i {
+	color: var(--bs-warning-text-emphasis);
+}
+
+.alert-info i {
+	color: var(--bs-info-text-emphasis);
+}
+
 .alert-info {
 	--bs-alert-border-color: #A2F4FD;
 	--bs-alert-bg: #ECFEFF;
-	--bs-alert-color: #717182;
-	--bs-alert-color: #717182;
 }
 
 .alert.alert-info {
@@ -85,6 +99,10 @@ label[data-interdit] {
 	--bs-btn-border-radius: 8px;
 	font-weight: normal;
 	font-size: 12px;
+}
+
+.btn-lg {
+	font-size: 14px;
 }
 
 .btn-light {
@@ -119,24 +137,29 @@ tr {
 	border: 0;
 }
 
-table.table thead,
-table.table tbody {
-	border-left: 2px solid #CAD5E2;
-}
-
-table.table thead tr,
-table.table tbody tr {
+div[data-row-selector] div.row {
 	position: relative;
 }
 
-table.table thead th.moins,
-table.table tbody td.moins {
+[data-rows-container][data-row-selector] .btn {
+	margin-top: 0;
+	border-style: dashed;
+}
+
+div[data-row-selector]>div.row {
+	border-left: 2px solid #CAD5E2;
+	margin-left: 5px;
+	margin-bottom: 25px !important;
+}
+
+div.row div.moins {
 	position: absolute;
 	background: 0;
-	top: -15px;
-	right: -5px;
+	top: 8px;
+	right: 0;
 	margin: 0;
 	padding: 0;
+	width: auto;
 }
 
 fieldset {
@@ -150,6 +173,19 @@ fieldset legend {
 	color: #0F172B;
 	font-size: 16px;
 	margin-bottom: 0;
+	float: none;
+}
+
+fieldset div.cardHeader {
+	margin-bottom: 25px;
+}
+
+fieldset div.cardHeader p {
+	color: #717182;
+}
+
+fieldset div.cardHeader.shad * {
+	text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 fieldset p.desc {
@@ -157,25 +193,18 @@ fieldset p.desc {
 	color: #717182;
 }
 
-fieldset .cardHeader {
-	margin-bottom: 10px;
-}
-
-fieldset .cardHeader.shad {
-	text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
 form .col-form-label {
 	color: #314158;
 	font-size: 14px;
 	display: block;
 	width: 100%;
-	margin-top: 9px;
 }
 
-form .col-form-label span.sub {
+form .col-form-label .sub {
 	color: #90A1B9;
 	font-size: 12px;
+	display: inline-block;
+	margin-left: 10px;
 }
 
 form .form-control,
@@ -185,10 +214,42 @@ form .form-control,
 .form-select {
 	border: 1px solid #CAD5E2;
 	border-radius: 8px;
-	background: #F3F3F5;
+	background-color: #F3F3F5;
 	box-sizing: border-box;
 	font-size: 14px;
 	padding: 6px 12px;
+}
+
+.chosen-container-multi .chosen-choices .search-choice {
+	margin: 4px 10px;
+	border: 0;
+	box-shadow: none;
+	background: 0;
+}
+
+form.form .form-check {
+	margin-bottom: 0;
+}
+
+form.form .form-check-label {
+	font-size: 12px;
+	color: #314158;
+}
+
+form.form .form-check-input {
+
+	background: #F3F3F5;
+}
+
+form.form .input-group input {
+	border-right: 0;
+}
+
+form.form .input-group-text {
+	background: #F3F3F5;
+	color: #62748e;
+	border-left: 0;
+	padding: 5px;
 }
 
 .chosen-container-single .chosen-single,
@@ -201,11 +262,19 @@ form .form-control,
 	height: 18px;
 }
 
-input::placeholder {
+select.form-select:invalid,
+input.form-control::placeholder,
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit,
+textarea.form-control::placeholder {
 	color: #717182;
 }
 
-table thead tr th {
+form.form .col-form-label.th {
 	font-size: 12px;
 	font-weight: normal;
+}
+
+.field {
+	margin-top: 10px;
 }
