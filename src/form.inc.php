@@ -220,37 +220,44 @@
         </div>
         <?php } ?>
 
+        <?php
+            $colsCatTh = in_array('cat', $show) && in_array('theme', $show) ;
+            $classCatTh = $colsCatTh ? 'field col-sm-6' : $class_line ;
+        ?>
+
+        <?php if ( $colsCatTh ) { ?><div class="row"><?php } ?>
+
         <?php if ( in_array('cat', $show) ) { ?>
-        <div class="row">
-            <?php $limitCategories = 3 ; ?>
-            <?php if ( isset($_GET['limitCategories']) && is_int($limitCategories) ) $limitCategories = (int)$_GET['limitCategories'] ; ?>
-            <div class="field col-sm-6">
-                <label class="<?php echo $class_label; ?> col-form-label"><?php
-                if ( $limitCategories > 1 ) {
-                    __('Catégories de manifestation') ;
-                    echo '<small class="sub">'.$limitCategories.' '._('catégories maximum.').'</small>' ;
-                } else {
-                    __('Catégorie de manifestation') ;
-                } ?></label>
-                <div class="<?php echo $class_champ; ?>">
-                    <?php if ( $limitCategories > 1 ) { ?>
-                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => $limitCategories, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
-                    <?php } else  { ?>
-                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'type' => 'unique', 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
-                    <?php } ?>
-                </div>
+        <?php $limitCategories = 3 ; ?>
+        <?php if ( isset($_GET['limitCategories']) && is_int($limitCategories) ) $limitCategories = (int)$_GET['limitCategories'] ; ?>
+        <div class="<?php echo $classCatTh ; ?>">
+            <label class="<?php echo $class_label; ?> col-form-label"><?php
+            if ( $limitCategories > 1 ) {
+                __('Catégories de manifestation') ;
+                echo '<small class="sub">'.$limitCategories.' '._('catégories maximum.').'</small>' ;
+            } else {
+                __('Catégorie de manifestation') ;
+            } ?></label>
+            <div class="<?php echo $class_champ; ?>">
+                <?php if ( $limitCategories > 1 ) { ?>
+                    <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => $limitCategories, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
+                <?php } else  { ?>
+                    <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'type' => 'unique', 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
+                <?php } ?>
             </div>
         </div>
         <?php } ?>
 
         <?php if (in_array('theme', $show)) { ?>
-        <div class="<?= $class_line; ?>">
+        <div class="<?php echo $classCatTh ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label"><?php __('Thèmes de manifestation'); ?></label>
             <div class="<?php echo $class_champ; ?>">
                 <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationTheme', array('presentation' => 'select', 'exclude' => $theme_exclude), @$post['FeteEtManifestationTheme']); ?>
             </div>
         </div>
         <?php } ?>
+
+        <?php if ( $colsCatTh ) { ?></div><?php } ?>
 
         <div class="<?=  $class_line ; ?>">
             <?php if (in_array('gen', $show)) { ?>
