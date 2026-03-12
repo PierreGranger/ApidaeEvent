@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-24 11:26+0100\n"
+"POT-Creation-Date: 2026-03-12 17:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,94 +17,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/form.apihours.inc.php:13
-msgid "Merci de préciser les dates avant de saisir les horaires associés"
-msgstr ""
-
-#: src/form.apihours.inc.php:37 src/form.dates.inc.php:3
-msgid "Dates de la manifestation"
-msgstr ""
-
-#: src/form.apihours.inc.php:40 src/form.dates.inc.php:6
-msgid "Merci de préciser au minimum une date."
-msgstr ""
-
-#: src/form.apihours.inc.php:48 src/form.dates.inc.php:14
-msgid "Début"
-msgstr ""
-
-#: src/form.apihours.inc.php:49 src/form.dates.inc.php:15
-msgid "Fin"
-msgstr ""
-
-#: src/form.apihours.inc.php:50
-msgid "Horaires"
-msgstr ""
-
-#: src/form.apihours.inc.php:51 src/form.dates.inc.php:18
-#: src/form.mc.inc.php:16
-msgid "Complément"
-msgstr ""
-
-#: src/form.apihours.inc.php:63 src/form.apihours.inc.php:69
-#: src/form.apihours.inc.php:116 src/form.apihours.inc.php:122
-#: src/form.dates.inc.php:30 src/form.dates.inc.php:35
-msgid "jj/mm/aaaa"
-msgstr ""
-
-#: src/form.apihours.inc.php:64 src/form.apihours.inc.php:117
-msgid "Du"
-msgstr ""
-
-#: src/form.apihours.inc.php:70 src/form.apihours.inc.php:123
-msgid "Au"
-msgstr ""
-
-#: src/form.apihours.inc.php:74
-msgid "Saisie des horaires"
-msgstr ""
-
-#: src/form.apihours.inc.php:81 src/form.apihours.inc.php:129
-msgid "Autres précisions"
-msgstr ""
-
-#: src/form.apihours.inc.php:87 src/form.apihours.inc.php:140
-#: src/form.dates.inc.php:54
-msgid "Ajouter une date"
-msgstr ""
-
 #: src/form.clientele.inc.php:3
 msgid "Types de Clientèle"
 msgstr ""
 
-#: src/form.contacts.inc.php:3
+#: src/form.contacts.inc.php:4
 msgid "Contacts organisateurs"
 msgstr ""
 
-#: src/form.contacts.inc.php:6
+#: src/form.contacts.inc.php:10
 msgid ""
-"<strong>Merci de préciser au moins une adresse mail (de préférence) et/ou un "
-"numéro de téléphone</strong> : en cas de questions, nous pourrons prendre "
-"contact avec l'organisateur grâce à ces informations."
+"Merci de préciser au moins une adresse mail et/ou un numéro de téléphone."
 msgstr ""
 
-#: src/form.contacts.inc.php:14
+#: src/form.contacts.inc.php:21
 msgid "Fonction"
 msgstr ""
 
-#: src/form.contacts.inc.php:15
+#: src/form.contacts.inc.php:32
 msgid "Prénom"
 msgstr ""
 
-#: src/form.contacts.inc.php:16
+#: src/form.contacts.inc.php:38
 msgid "Nom"
 msgstr ""
 
-#: src/form.contacts.inc.php:17
+#: src/form.contacts.inc.php:44
 msgid "Mail"
 msgstr ""
 
-#: src/form.contacts.inc.php:18
+#: src/form.contacts.inc.php:50
 msgid "Téléphone"
 msgstr ""
 
@@ -112,149 +54,234 @@ msgstr ""
 msgid "Ajouter un contact"
 msgstr ""
 
-#: src/form.dates.inc.php:16
-msgid "Heure de début"
+#: src/form.dates.inc.php:12 src/form.horaires.inc.php:15
+msgid "Début"
 msgstr ""
 
-#: src/form.dates.inc.php:17
-msgid "Heure de fin"
+#: src/form.dates.inc.php:29 src/form.horaires.inc.php:21
+msgid "Fin"
 msgstr ""
 
-#: src/form.dates.inc.php:40 src/form.dates.inc.php:45
-msgid "hh:mm"
+#: src/form.dates.inc.php:46
+msgid "Heure début"
+msgstr ""
+
+#: src/form.dates.inc.php:60
+msgid "Heure fin"
+msgstr ""
+
+#: src/form.dates.inc.php:74 src/form.horaires.inc.php:35
+#: src/form.mc.inc.php:55
+msgid "Complément"
+msgstr ""
+
+#: src/form.dates.inc.php:80
+msgid "Précisions"
+msgstr ""
+
+#: src/form.dates.inc.php:93 src/form.horaires.inc.php:46
+msgid "Ajouter une date"
 msgstr ""
 
 #: src/form.handicap.inc.php:12
 msgid "Accessibilité"
 msgstr ""
 
-#: src/form.handicap.inc.php:13
+#: src/form.handicap.inc.php:12
 msgid "Accueil des personnes en situation de handicap"
 msgstr ""
 
-#: src/form.inc.php:16
+#: src/form.horaires.inc.php:16 src/form.horaires.inc.php:22
+msgid "jj/mm/aaaa"
+msgstr ""
+
+#: src/form.horaires.inc.php:27 src/form.horaires.inc.php:58
+msgid "Horaires"
+msgstr ""
+
+#: src/form.horaires.inc.php:28
+msgid "Saisie des horaires"
+msgstr ""
+
+#: src/form.horaires.inc.php:59 src/form.horaires.inc.php:79
+msgid "Fermer"
+msgstr ""
+
+#: src/form.horaires.inc.php:80
+msgid "Valider"
+msgstr ""
+
+#: src/form.horaires.inc.php:99
+msgid "Merci de préciser les dates avant de saisir les horaires associés"
+msgstr ""
+
+#: src/form.inc.php:18
+msgid "Informations générales"
+msgstr ""
+
+#: src/form.inc.php:19
+msgid "Décrivez votre événement en quelques mots"
+msgstr ""
+
+#: src/form.inc.php:23
 msgid "Nom de la manifestation"
 msgstr ""
 
-#: src/form.inc.php:24
+#: src/form.inc.php:25
+msgid "Entrez le nom de votre événement"
+msgstr ""
+
+#: src/form.inc.php:30
 msgid "Importance de votre événement"
 msgstr ""
 
-#: src/form.inc.php:27
+#: src/form.inc.php:30
 msgid "Portée"
 msgstr ""
 
-#: src/form.inc.php:27
+#: src/form.inc.php:30
 msgid ""
 "La portée concerne les spectateurs et la distance qu’ils sont prêt à "
 "parcourir pour participer à une manifestation."
 msgstr ""
 
-#: src/form.inc.php:48
+#: src/form.inc.php:32 src/form.inc.php:33
+msgid "Sélectionnez la portée"
+msgstr ""
+
+#: src/form.inc.php:52
 msgid "Participants attendus"
 msgstr ""
 
-#: src/form.inc.php:54
+#: src/form.inc.php:56
 msgid "Visiteurs attendus"
 msgstr ""
 
-#: src/form.inc.php:64
+#: src/form.inc.php:67
 msgid "Adresse"
 msgstr ""
 
-#: src/form.inc.php:66
+#: src/form.inc.php:68
+msgid "Où se déroule votre événement ?"
+msgstr ""
+
+#: src/form.inc.php:72
 msgid "Adresse 1"
 msgstr ""
 
-#: src/form.inc.php:67
+#: src/form.inc.php:73
 msgid ""
 "Voie et bâtiment. Exemple : 60 rue des Lilas - Bâtiment A. Pas de virgule "
 "mais un espace entre le numéro et le nom de la rue."
 msgstr ""
 
-#: src/form.inc.php:74
+#: src/form.inc.php:76
+msgid "Numéro et nom de rue"
+msgstr ""
+
+#: src/form.inc.php:81
 msgid "Adresse 2"
 msgstr ""
 
-#: src/form.inc.php:75
+#: src/form.inc.php:82
 msgid "Lieu-dit, zone d’activité, BP (pour boite postale)…"
 msgstr ""
 
-#: src/form.inc.php:82
+#: src/form.inc.php:85 src/form.inc.php:95
+msgid "Complément d'adresse"
+msgstr ""
+
+#: src/form.inc.php:91
 msgid "Adresse 3"
 msgstr ""
 
-#: src/form.inc.php:83
+#: src/form.inc.php:92
 msgid ""
 "Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon "
 "village et Morillon 1100."
 msgstr ""
 
 #. $apidaeEvent->alerte('Liste communes introuvable',$_GET) ;
-#: src/form.inc.php:105
+#: src/form.inc.php:115
 msgid "Impossible de récupérer la liste de communes..."
 msgstr ""
 
-#: src/form.inc.php:106 src/post.inc.php:910
+#: src/form.inc.php:116 src/post.inc.php:950
 msgid "Veuillez nous excuser pour la gène occasionnée."
 msgstr ""
 
-#: src/form.inc.php:107
+#: src/form.inc.php:117
 msgid ""
 "Vous pouvez prendre contact avec l'<a href=\"https://www.apidae-tourisme.com/"
 "apidae-tourisme/carte-du-reseau/\" target=\"_blank\">Office du Tourisme "
 "concernée par votre manifestation</a>."
 msgstr ""
 
-#: src/form.inc.php:126
+#: src/form.inc.php:136
 msgid "Commune"
 msgstr ""
 
-#: src/form.inc.php:151
-msgid ""
-"Saisir le lieu précis où se déroule l’événement <strong>seulement si "
-"nécessaire</strong> (si l'adresse n'est pas suffisante).<br />\n"
-"                Ex : Espace culturel / Place du village / Salle des fêtes / "
-"Esplanade du lac...</p>"
+#: src/form.inc.php:138
+msgid "Sélectionnez une commune"
 msgstr ""
 
-#: src/form.inc.php:156
+#: src/form.inc.php:164
+msgid ""
+"Saisir le lieu précis où se déroule l’événement seulement si nécessaire (si "
+"l'adresse n'est pas suffisante).\n"
+"                    Ex : Espace culturel / Place du village / Salle des "
+"fêtes / Esplanade du lac..."
+msgstr ""
+
+#: src/form.inc.php:170
 msgid "Lieu précis"
 msgstr ""
 
-#: src/form.inc.php:175
+#: src/form.inc.php:182
+msgid "Dates de la manifestation"
+msgstr ""
+
+#: src/form.inc.php:183
+msgid "Indiquez les dates de votre événement"
+msgstr ""
+
+#: src/form.inc.php:189
+msgid "Merci de préciser au minimum une date."
+msgstr ""
+
+#: src/form.inc.php:207
 msgid "Description de votre manifestation"
 msgstr ""
 
-#: src/form.inc.php:178
+#: src/form.inc.php:212
 msgid "Type de manifestation"
 msgstr ""
 
-#: src/form.inc.php:188
+#: src/form.inc.php:230
 msgid "Catégories de manifestation"
 msgstr ""
 
-#: src/form.inc.php:188
+#: src/form.inc.php:231
+msgid "catégories maximum."
+msgstr ""
+
+#: src/form.inc.php:233
 msgid "Catégorie de manifestation"
 msgstr ""
 
-#: src/form.inc.php:193
-msgid "catégories maximum"
-msgstr ""
-
-#: src/form.inc.php:201
+#: src/form.inc.php:248
 msgid "Thèmes de manifestation"
 msgstr ""
 
-#: src/form.inc.php:216
+#: src/form.inc.php:264
 msgid "Evénements génériques et championnats"
 msgstr ""
 
-#: src/form.inc.php:224
+#: src/form.inc.php:271
 msgid "Descriptif court"
 msgstr ""
 
-#: src/form.inc.php:225
+#: src/form.inc.php:272
 msgid ""
 "Texte d'accroche permettant de comprendre la nature de votre prestation. Ne "
 "doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, "
@@ -262,197 +289,216 @@ msgid ""
 "une double saisie."
 msgstr ""
 
-#: src/form.inc.php:226
+#: src/form.inc.php:273
 msgid "255 caractères max."
 msgstr ""
 
-#: src/form.inc.php:234
+#: src/form.inc.php:280
 msgid "Descriptif détaillé"
 msgstr ""
 
-#: src/form.inc.php:235
+#: src/form.inc.php:281
 msgid ""
 "Le descriptif détaillé est complémentaire du descriptif court et non "
 "redondant. En effet certains sites web affichent ces deux champs à la suite."
 msgstr ""
 
-#: src/form.inc.php:244
+#: src/form.inc.php:291
 msgid "Animaux acceptés"
 msgstr ""
 
-#: src/form.inc.php:251
+#: src/form.inc.php:296
 msgid "Conditions d'accueil des animaux"
 msgstr ""
 
-#: src/form.inc.php:252
+#: src/form.inc.php:297
 msgid "Animaux acceptés en laisse uniquement, en terrasse uniquement..."
 msgstr ""
 
-#: src/form.inc.php:275
+#: src/form.inc.php:318
+msgid "Réservation"
+msgstr ""
+
+#: src/form.inc.php:324
+msgid ""
+"Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro "
+"de téléphone : en cas de questions, nous pourrons prendre contact avec "
+"l'organisateur grâce à ces informations."
+msgstr ""
+
+#: src/form.inc.php:329
 msgid "Nom de l'organisme"
 msgstr ""
 
-#: src/form.inc.php:282
+#: src/form.inc.php:336
 msgid "URL de réservation"
 msgstr ""
 
-#: src/form.inc.php:300
+#: src/form.inc.php:355
 msgid "Organisateur"
 msgstr ""
 
-#: src/form.inc.php:302
+#: src/form.inc.php:361
 msgid ""
-"Vous pouvez laisser un message ci-dessous : il sera communiqué au "
-"propriétaire du formulaire, mais ne sera pas publié.<br />\n"
-"            Merci de préciser <strong>l'organisateur de la manifestation</"
-"strong> (association ABC...)."
+"Message privé non publié à destination du propriétaire de ce formulaire. "
+"Précisez l'organisateur de la manifestation (association ABC...)."
 msgstr ""
 
-#: src/form.inc.php:306
+#: src/form.inc.php:365
 msgid "Commentaire privé"
 msgstr ""
 
-#: src/form.inc.php:331
+#: src/form.inc.php:367
+msgid "Votre message pour l'organisateur..."
+msgstr ""
+
+#: src/form.inc.php:392
 msgid "J'accepte les conditions RGPD du réseau Apidae"
 msgstr ""
 
-#: src/form.inc.php:340
+#: src/form.inc.php:401
 msgid "Enregistrer cet événement"
 msgstr ""
 
-#: src/form.inc.php:346
+#: src/form.inc.php:407
 msgid ""
 "Vous devez cocher la case \"Je ne suis pas un robot\" pour pouvoir "
 "enregistrer"
 msgstr ""
 
-#: src/form.mc.inc.php:3
+#: src/form.mc.inc.php:4
 msgid "Moyens de communication"
 msgstr ""
 
-#: src/form.mc.inc.php:6
+#: src/form.mc.inc.php:10
 msgid ""
 "Merci de préciser au moins un moyen de communication (Mail, téléphone...) : "
 "ils seront diffusés sur les supports de communications (sites web, "
 "brochures...)"
 msgstr ""
 
-#: src/form.mc.inc.php:14
+#: src/form.mc.inc.php:25
 msgid "Type"
 msgstr ""
 
-#: src/form.mc.inc.php:15
+#: src/form.mc.inc.php:48
 msgid "Coordonnée"
 msgstr ""
 
-#: src/form.mc.inc.php:71
+#: src/form.mc.inc.php:56
+msgid "Informations supplémentaires"
+msgstr ""
+
+#: src/form.mc.inc.php:68
 msgid "Ajouter une ligne"
 msgstr ""
 
-#: src/form.multimedias.inc.php:7
+#: src/form.multimedias.inc.php:11
 msgid "Photos"
 msgstr ""
 
-#: src/form.multimedias.inc.php:9
+#: src/form.multimedias.inc.php:17
 msgid "Vos photos doivent être libres de droit et de bonne qualité"
 msgstr ""
 
-#: src/form.multimedias.inc.php:11
+#: src/form.multimedias.inc.php:19
 msgid "px de largeur minimum"
 msgstr ""
 
-#: src/form.multimedias.inc.php:13
-msgid "<strong>si possible, 1920px de largeur minimum</strong>"
+#: src/form.multimedias.inc.php:21
+msgid "si possible, 1920px de largeur minimum"
 msgstr ""
 
-#: src/form.multimedias.inc.php:14
-msgid "et <strong>10 Mo maximum</strong>), aux formats png ou jpg/jpeg."
+#: src/form.multimedias.inc.php:22
+msgid "et 10 Mo maximum), aux formats png ou jpg/jpeg."
 msgstr ""
 
-#: src/form.multimedias.inc.php:15
+#: src/form.multimedias.inc.php:23
 msgid ""
 "Une fois publiées, elles pourront être diffusées sur différents supports "
-"(sites Internet, brochures...) : <strong>assurez-vous d'avoir tous les "
-"droits nécessaires</strong>, et précisez le Copyright si besoin."
+"(sites Internet, brochures...) : assurez-vous d'avoir tous les droits "
+"nécessaires, et précisez le Copyright si besoin."
 msgstr ""
 
 #. $texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
-#: src/form.multimedias.inc.php:17 src/post.inc.php:823
+#: src/form.multimedias.inc.php:25 src/post.inc.php:863
 msgid "Plus d'informations ici"
 msgstr ""
 
-#: src/form.multimedias.inc.php:24
+#: src/form.multimedias.inc.php:34
 msgid "Votre photo"
 msgstr ""
 
-#: src/form.multimedias.inc.php:25 src/form.multimedias.inc.php:81
+#: src/form.multimedias.inc.php:41 src/form.multimedias.inc.php:96
 msgid "Titre"
 msgstr ""
 
-#: src/form.multimedias.inc.php:26 src/form.multimedias.inc.php:82
+#: src/form.multimedias.inc.php:47 src/form.multimedias.inc.php:102
 msgid "Copyright"
 msgstr ""
 
-#: src/form.multimedias.inc.php:60
+#: src/form.multimedias.inc.php:58
 msgid "Ajouter une photo"
 msgstr ""
 
-#: src/form.multimedias.inc.php:69
+#: src/form.multimedias.inc.php:72
 msgid "Multimédias"
 msgstr ""
 
-#: src/form.multimedias.inc.php:71
+#: src/form.multimedias.inc.php:78
 msgid ""
 "Vous pouvez ajouter ci-dessous des fichiers PDF si nécessaire (si vous avez "
 "un programme par exemple).\n"
-"                <br />Une fois publiées, elles pourront être diffusées sur "
-"différents supports (sites Internet, brochures...) : <strong>assurez-vous "
-"d'avoir tous les droits nécessaires</strong>, et précisez le Copyright si "
-"besoin.\n"
-"                <br />Les documents ajoutés ne doivent pas dépasser les 5 Mo "
-"au total."
+"                    <br />Une fois publiées, elles pourront être diffusées "
+"sur différents supports (sites Internet, brochures...) : assurez-vous "
+"d'avoir tous les droits nécessaires, et précisez le Copyright si besoin.\n"
+"                    <br />Les documents ajoutés ne doivent pas dépasser les "
+"5 Mo au total."
 msgstr ""
 
-#: src/form.multimedias.inc.php:80
+#: src/form.multimedias.inc.php:89
 msgid "Votre fichier"
 msgstr ""
 
-#: src/form.multimedias.inc.php:116
+#: src/form.multimedias.inc.php:113
 msgid "Ajouter un fichier"
 msgstr ""
 
-#: src/form.tarifs.inc.php:2
+#: src/form.tarifs.inc.php:4
 msgid "Tarifs"
 msgstr ""
 
-#: src/form.tarifs.inc.php:5
+#: src/form.tarifs.inc.php:11
 msgid "Gratuit pour les visiteurs"
 msgstr ""
 
-#: src/form.tarifs.inc.php:15
+#: src/form.tarifs.inc.php:20
 msgid ""
-"<strong>Attention</strong> : chaque type de tarif n'est utilisable qu'une "
-"fois. Si vous avez plusieurs \"pleins tarifs\", précisez la plage mini-maxi "
-"sur une seule ligne."
+"Chaque type de tarif n'est utilisable qu'une fois. Si vous avez plusieurs "
+"\"pleins tarifs\", précisez la plage mini-maxi."
 msgstr ""
 
-#: src/form.tarifs.inc.php:23
+#: src/form.tarifs.inc.php:30
 msgid "Type de tarif"
 msgstr ""
 
-#: src/form.tarifs.inc.php:24
+#: src/form.tarifs.inc.php:41
 msgid "Mini #DEVISE# (à partir de...)"
 msgstr ""
 
-#: src/form.tarifs.inc.php:25
+#: src/form.tarifs.inc.php:50
 msgid "Maxi #DEVISE# (jusqu'à...)"
 msgstr ""
 
-#: src/form.tarifs.inc.php:26
+#: src/form.tarifs.inc.php:59
 msgid "Précisions tarifs"
 msgstr ""
 
-#: src/form.tarifs.inc.php:72
+#: src/form.tarifs.inc.php:60
+msgid "Détails complémentaires"
+msgstr ""
+
+#: src/form.tarifs.inc.php:70
 msgid "Ajouter un tarif"
 msgstr ""
 
@@ -460,79 +506,87 @@ msgstr ""
 msgid "Complément sur les tarifs"
 msgstr ""
 
-#: src/form.tarifs.inc.php:117
+#: src/form.tarifs.inc.php:84
+msgid "Informations complémentaires sur les tarifs..."
+msgstr ""
+
+#: src/form.tarifs.inc.php:119
 msgid "Modes de paiement"
 msgstr ""
 
-#: src/post.inc.php:45
+#: src/post.inc.php:51
 msgid "Vérification du captcha impossible"
 msgstr ""
 
-#: src/post.inc.php:50
+#: src/post.inc.php:56
 msgid "L'utilisateur n'a pas coché la case \"Je ne suis pas un robot\""
 msgstr ""
 
-#: src/post.inc.php:193
+#: src/post.inc.php:152 src/post.inc.php:164
+msgid "Les horaires ne sont pas conformes au format attendu"
+msgstr ""
+
+#: src/post.inc.php:231
 msgid ""
 "merci de préciser au moins 1 mail ou 1 numéro de téléphone dans la ligne "
 "\"contact\"."
 msgstr ""
 
-#: src/post.inc.php:198
+#: src/post.inc.php:236
 msgid "merci de préciser au moins 1 contact"
 msgstr ""
 
-#: src/post.inc.php:660
+#: src/post.inc.php:701
 msgid "Vous devez spécifier un type de tarif"
 msgstr ""
 
-#: src/post.inc.php:673
+#: src/post.inc.php:714
 msgid "L'offre n'a pas été enregistrée sur Apidae..."
 msgstr ""
 
-#: src/post.inc.php:678
+#: src/post.inc.php:719
 msgid ""
 "L'offre n'a pas été créée sur Apidae pour une raison inconnue (last_id is "
 "null)..."
 msgstr ""
 
-#: src/post.inc.php:802
+#: src/post.inc.php:842
 msgid ""
 "<strong>Votre suggestion d'événement a bien été enregistrée</strong>, nous "
 "vous remercions pour votre contribution."
 msgstr ""
 
-#: src/post.inc.php:803
+#: src/post.inc.php:843
 msgid ""
 "<strong>Attention :</strong> Il ne sera visible sur les différents supports "
 "de communication alimentés par Apidae qu'<strong>après validation</strong>."
 msgstr ""
 
-#: src/post.inc.php:807
+#: src/post.inc.php:847
 msgid "La validation est en cours auprès de"
 msgstr ""
 
-#: src/post.inc.php:813
+#: src/post.inc.php:853
 msgid "Votre commentaire a également été transmis"
 msgstr ""
 
-#: src/post.inc.php:828
+#: src/post.inc.php:868
 msgid "Faire une autre suggestion de manifestation"
 msgstr ""
 
-#: src/post.inc.php:887
+#: src/post.inc.php:927
 msgid "Erreur à l'enregistrement"
 msgstr ""
 
-#: src/post.inc.php:888
+#: src/post.inc.php:928
 msgid "Une erreur s'est produite et votre fiche n'a pas pû être enregistrée."
 msgstr ""
 
-#: src/post.inc.php:909
+#: src/post.inc.php:949
 msgid "L'erreur a été envoyée à un administrateur."
 msgstr ""
 
-#: src/post.inc.php:911
+#: src/post.inc.php:951
 msgid ""
 "Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact "
 "avec l'Office du Tourisme concernée par votre manifestation"
