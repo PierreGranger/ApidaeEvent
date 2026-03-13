@@ -14,8 +14,10 @@ label[for="rgpd"]:after {
 	display: none;
 }
 
-.has-error .form-control {
-	background: #ffb7b4;
+.has-error .form-control,
+.has-error .chosen-container .chosen-single,
+.has-error select {
+	background: #ffb7b4 !important;
 }
 
 .form-group.has-error .helper {
@@ -24,10 +26,11 @@ label[for="rgpd"]:after {
 
 tfoot tr.has-error>td,
 div.rgpd>div.has-error,
-.row.errors.has-error>.col-12 {
+.row.errors.has-error>.col-12,
+.row.errors.has-error>.col {
 	background: #ffb7b4;
 	color: #c92a27;
-	font-weight: bold;
+	margin:20px 10px ;
 }
 
 .has-error .chosen-single,

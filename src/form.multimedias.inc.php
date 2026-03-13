@@ -60,7 +60,7 @@
         </div>
 
         <div class="row errors">
-            <div class="col-12 illustrations-errors"></div>
+            <div class="col-12 illustrations-errors alert alert-error"></div>
         </div>
     </fieldset>
     <?php } ?>
@@ -115,7 +115,7 @@
             </div>
 
             <div class="row errors">
-                <div class="col-12 multimedias-errors"></div>
+                <div class="col-12 multimedias-errors alert alert-error"></div>
             </div>
         </fieldset>
     <?php } ?>

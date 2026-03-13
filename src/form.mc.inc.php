@@ -70,6 +70,6 @@
         </div>
 
         <div class="row errors">
-            <div class="col-12 mc-errors"></div>
+            <div class="col-12 mc-errors alert alert-error"></div>
         </div>
     </fieldset>

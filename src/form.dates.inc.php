@@ -93,7 +93,3 @@
                 <?= preg_replace('/##LIBELLE##/', __('Ajouter une date',false), $icon_plus) ; ?>
             </div>
         </div>
-
-        <div class="row errors">
-            <div class="col-12 dates-errors"></div>
-        </div>

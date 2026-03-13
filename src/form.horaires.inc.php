@@ -47,10 +47,6 @@ if (isset($post['date'])) {
         </div>
     </div>
 
-    <div class="row errors">
-        <div class="col-12 dates-errors"></div>
-    </div>
-
 <div class="modal fade modal-lg" id="horairesModal" tabindex="-1" aria-labelledby="horairesModalLabel" aria-hidden="true">
 <div class="modal-dialog">
     <div class="modal-content">

@@ -778,30 +778,7 @@
 			}
 			if ( $debug ) $timer->stop('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
 			
-			if ( $membre )
-			{
-				$enr_dataLayer = Array(
-					'event' => 'enregistrement',
-					'commune_id' => $root['localisation']['adresse']['commune']['id'],
-					'commune_nom' => $commune[2],
-					'commune_cp' => $root['localisation']['adresse']['codePostal'],
-					'membre_id' => $infos_proprietaire['proprietaireId'],
-					'membre_nom' => $infos_proprietaire['structure_validatrice']
-				) ;
-				if ( isset($_GET['territoire']) )
-				{
-					$enr_dataLayer['territoire'] = $_GET['territoire'] ;
-				}
-				if ( preg_match('#^([0-9]{1,2})[0-9]{3}$#',$root['localisation']['adresse']['codePostal'],$match) )
-				{
-					$enr_dataLayer['departement'] = $match[1] ;
-				}
-
-				?><script>
-					dataLayer.push(<?php echo json_encode($enr_dataLayer) ; ?>) ;
-				</script><?php
-			}
-			elseif ( $debug )
+			if ( $debug )
 			{
 				echo '<pre>'.print_r($membre,true).'</pre>' ;
 			}
@@ -813,8 +790,6 @@
 			}
 		}
 
-		if ( isset($enr_dataLayer) ) $post_mail['dataLayer'] = json_encode($enr_dataLayer,JSON_PRETTY_PRINT) ;
-
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
 			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement '.@$apidaeEvent->last_id ;
@@ -825,9 +800,13 @@
 				$apidaeEvent->alerte($objet,$post_mail,$to) ;
 				if ( $debug ) $timer->stop('mail_membre') ;
 			}
-			else
+			
+			if ( isset($_POST['nomail']) || $debug )
 			{
 				echo '<div class="alert alert-info">' ;
+					if ( isset($_POST['nomail']) ) {
+						echo '<h2>nomail : ce mail n\'a pas été envoyé.</p>' ;
+					}
 					echo '<h2>Objet</h2>' . $objet ;
 					echo '<h2>To</h2>' . json_encode($to) ;
 					echo '<h2>Message</h2>' ;
@@ -861,9 +840,6 @@
 				<div id="texte_offre_enregistree"><?php echo $texte_offre_enregistree ; ?></div>
 				
 				<p><?php __('Plus d\'informations ici') ; ?> : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
-				<script>
-					alert(jQuery('div#texte_offre_enregistree').text()) ;
-				</script>
 				<?php if ( isset($_SERVER['HTTP_REFERER']) ) { ?>
 					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-light"><i class="fas fa-plus-circle"></i> <?php __('Faire une autre suggestion de manifestation') ; ?></a>
 				<?php } ?>
@@ -904,7 +880,8 @@
 				$apidaeEvent->alerte($objet,$message,$to) ;
 				if ( $debug ) $timer->stop('mail_suggestion') ;
 			}
-			if ( $debug )
+
+			if ( $debug || isset($_POST['nomail']) )
 			{
 				?>
 				<div class="alert alert-success" role="alert">

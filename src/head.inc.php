@@ -73,3 +73,5 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 <script>
 	var interdictions_elements_reference = <?php echo json_encode($apidaeEvent->getElementsReferenceInterdictions(['FeteEtManifestationType','FeteEtManifestationCategorie'])) ; ?> ;
 </script>
+
+<link rel="icon" href="https://static.apidae-tourisme.com/filestore/logos/favicon.ico" />

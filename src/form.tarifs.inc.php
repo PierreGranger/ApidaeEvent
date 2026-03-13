@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="row errors">
-                    <div class="col-12 tarifs-errors"></div>
+                    <div class="col-12 tarifs-errors alert alert-error"></div>
                 </div>
             </div>
         </div>

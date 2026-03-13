@@ -59,6 +59,10 @@ jQuery(document).on('submit','form.form',function(e){
 		var row = jQuery(this).closest('tr, .mc-row, .contact-row, .date-row, .tarif-row, .illustration-row, .multimedia-row');
 		var typeSelect = row.find('select').val();
 		var okChamp = valideChamp(jQuery(this), typeSelect);
+
+		if (jQuery(this).attr('id') == 'portee')
+			console.log('doTest', jQuery(this), typeSelect, okChamp);
+
 		jQuery(this).closest('.form-group, div').toggleClass('has-error',!okChamp) ;
 		if ( ! okChamp )
 		{
@@ -201,9 +205,14 @@ function valideChamp(champ)
 		val = '';
 	}
 
+	if (val === null) val = '';
+
 	var type = null ;
 	if ( typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/) )
 		type = champ.closest('tr, .mc-row').find('select').val() ;
+
+	if ( champ.attr('id') == 'portee' )
+		console.log('valideChamp', type, val, champ.prop('required'));
 
 	if ( val == '' && ! champ.prop('required') ) return true ;
 	if ( val == '' && champ.prop('required') ) return false ;

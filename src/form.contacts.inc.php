@@ -64,7 +64,7 @@
         </div>
 
         <div class="row errors">
-            <div class="col-12 contacts-errors"></div>
+            <div class="col-12 contacts alert alert-error"></div>
         </div>
 
     </fieldset>
