@@ -190,10 +190,6 @@ fieldset div.cardHeader p {
 	color: #717182;
 }
 
-fieldset div.cardHeader.shad * {
-	text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-}
-
 fieldset p.desc {
 	font-size: 16px;
 	color: #717182;

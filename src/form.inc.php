@@ -14,7 +14,7 @@
 
     <fieldset class="form-group required">
         
-        <div class="cardHeader shad">
+        <div class="cardHeader">
             <legend><?php __('Informations générales') ; ?></legend>
             <p><?php __('Décrivez votre événement en quelques mots') ; ?></p>
         </div>
