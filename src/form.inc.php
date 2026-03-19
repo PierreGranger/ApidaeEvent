@@ -249,7 +249,7 @@
                 } ?></label>
                 <div class="<?php echo $class_champ; ?>">
                     <?php if ( $limitCategories > 1 ) { ?>
-                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'maximum_selection_length' => $limitCategories, 'exclude' => $categorie_exclude, 'placeholder' => 'Test'), @$post['FeteEtManifestationCategorie']); ?>
+                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'maximum_selection_length' => $limitCategories, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
                     <?php } else  { ?>
                         <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'type' => 'unique', 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
                     <?php } ?>

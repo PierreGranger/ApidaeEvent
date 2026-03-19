@@ -624,7 +624,7 @@ function criteresInterditsByEr(selector) {
 			) {
 				jQuery('select[name!="commune"] option').each(function () {
 					if (interdictions_elements_reference[item]['interditUtilisationDe'].includes(parseInt(jQuery(this).val()))) {
-						jQuery(this).prop('disabled', 'disabled').attr('data-interdit', true);
+						jQuery(this).prop('disabled', 'disabled').attr('data-interdit', true).hide();
 						if (jQuery(this).is(':selected')) {
 							jQuery(this).prop('selected', false);
 						}
@@ -633,9 +633,9 @@ function criteresInterditsByEr(selector) {
 				jQuery('input[type="checkbox"]').each(function () {
 					if (interdictions_elements_reference[item]['interditUtilisationDe'].includes(parseInt(jQuery(this).val()))) {
 						jQuery(this).on('click', function () { return false }).attr('data-interdit', true);
-						jQuery(this).closest('div').find('label').attr('data-interdit', true);
+						jQuery(this).parent('.form-check').parent().attr('data-interdit', true);
 						if (jQuery(this).is(':checked')) {
-							jQuery(this).prop('checked', false);
+							jQuery(this).prop('checked', false).hide();
 						}
 					}
 				});
@@ -646,9 +646,9 @@ function criteresInterditsByEr(selector) {
 
 export function criteresInterdits() {
 
-	jQuery('select option[disabled][data-interdit]').prop('disabled', false).removeAttr('data-interdit');
-	jQuery('input[type="checkbox"][data-interdit]').off('click').removeAttr('data-interdit');
-	jQuery('label[data-interdit]').removeAttr('data-interdit');
+	jQuery('select option[disabled][data-interdit]').prop('disabled', false).removeAttr('data-interdit').show();
+	jQuery('input[type="checkbox"][data-interdit]').off('click').removeAttr('data-interdit').show();
+	jQuery('div[data-interdit]').removeAttr('data-interdit');
 
 	if (typeof interdictions_elements_reference != 'undefined') {
 		criteresInterditsByEr('select[name^="FeteEtManifestationCategorie"]');

@@ -44,6 +44,10 @@ label[data-interdit] {
 	opacity: .5;
 }
 
+div[data-interdit] {
+	display: none;
+}
+
 #reactGuiContainer .fui-TabList,
 #reactGuiContainer h1,
 #reactGuiContainer div.ah-tab div.ah-block:first-child,
