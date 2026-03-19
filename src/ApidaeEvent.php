@@ -128,17 +128,17 @@ use Exception ;
 
 			if ( $params['presentation'] == 'select' )
 			{
-				$ret .= ' <select class="form-select chosen-select" ' ;
+				$ret .= ' <select class="form-select select2" ' ;
 				if ( isset($params['placeholder']) ) {
 					$ret .= ' data-placeholder="'.htmlentities($params['placeholder']).'" ' ;
 					$ret .= ' placeholder="'.htmlentities($params['placeholder']).'" ' ;
 				} else {
-					$ret .= ' data-placeholder=" " ' ;
-					$ret .= ' placeholder=" " ' ;
+					$ret .= ' data-placeholder="" ' ;
+					$ret .= ' placeholder="" ' ;
 				}
 				if ( @$params['type'] == 'unique' ) $ret .= ' name="'.$type.'" ' ;
 				else $ret .= ' name="'.$type.'[]" multiple="multiple" ' ;
-				if ( isset($params['max_selected_options']) ) $ret .= ' data-max_selected_options="'.$params['max_selected_options'].'" ' ;
+				if ( isset($params['maximum_selection_length']) ) $ret .= ' data-maximum-selection-length="'.$params['maximum_selection_length'].'" ' ;
 				$ret .= '>' ;
 					if ( @$params['type'] == 'unique' ) {
 						$ret .= "\n\t\t\t\t\t\t\t\t".'<option value="" disabled="disabled"' ;

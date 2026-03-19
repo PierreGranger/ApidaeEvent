@@ -34,7 +34,6 @@ if ($devise_apidae == 'XPF') {
 $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 
 ?><meta charset="UTF-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php
 	$icon_plus = '<span class="btn btn-light w-100"><i class="fas fa-plus"></i> ##LIBELLE##</span>';

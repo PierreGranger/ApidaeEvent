@@ -12,6 +12,9 @@ global.bootstrap = bootstrap;
 window.bootstrap = bootstrap;
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'select2/dist/css/select2.min.css'
+import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css'
+import 'select2'
 
 import { faker, recaptchaKo, recaptchaOk, criteresInterdits } from './formulaire.js'
 global.faker = faker
@@ -19,8 +22,6 @@ global.recaptchaKo = recaptchaKo
 global.recaptchaOk = recaptchaOk
 global.criteresInterdits = criteresInterdits
 
-import 'bootstrap-chosen/dist/chosen.jquery-1.4.2/chosen.jquery.min.js'
-import 'bootstrap-chosen/bootstrap-chosen.css'
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 

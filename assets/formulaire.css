@@ -210,9 +210,8 @@ form .col-form-label .sub {
 }
 
 form .form-control,
-.chosen-container-single .chosen-default,
-.chosen-container-single .chosen-single,
-.chosen-container-multi .chosen-choices,
+.select2-container--bootstrap-5 .select2-selection--single,
+.select2-container--bootstrap-5 .select2-selection--multiple,
 .form-select {
 	border: 1px solid #CAD5E2;
 	border-radius: 8px;
@@ -222,11 +221,35 @@ form .form-control,
 	padding: 6px 12px;
 }
 
-.chosen-container-multi .chosen-choices .search-choice {
-	margin: 4px 10px;
-	border: 0;
-	box-shadow: none;
-	background: 0;
+.select2-container--bootstrap-5 .select2-selection--single,
+.select2-container--bootstrap-5 .select2-selection--multiple {
+	padding-bottom: 3px;
+}
+
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[role=group] .select2-results__options--nested .select2-results__option {
+	line-height: 16px;
+	font-size: 14px;
+	padding-left: 1.5em;
+}
+
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[role=group] .select2-results__group {
+	font-weight: bold;
+	font-style: italic;
+	padding: 5px;
+	display: block;
+	font-size: 14px;
+}
+
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option.select2-results__option--selected, .select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
+	background-color:#314158 ;
+	color: #F3F3F5;
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
+	margin: 0 2px 2px 0 ;
+	padding:3px ;
+	font-size:inherit ;
+	border:0 ;
 }
 
 form.form .form-check {

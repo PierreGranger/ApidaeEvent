@@ -135,7 +135,7 @@
         <div class="<?= $class_line ; ?> required">
             <label for="commune" class="<?php echo $class_label; ?> col-form-label"><?php __('Commune') ; ?></label>
             <div class="<?php echo $class_champ; ?>">
-                <select name="commune" class="chosen-select" required="required" data-placeholder="<?php echo htmlentities(_('Sélectionnez une commune')) ; ?>">
+                <select name="commune" class="select2" required="required" data-placeholder="<?php echo htmlentities(_('Sélectionnez une commune')) ; ?>">
                     <?php if (sizeof($communes) > 1) { ?>
                         <option value=""></option>
                     <?php } ?>
@@ -207,72 +207,82 @@
             <legend><?php __('Description de votre manifestation') ; ?></legend>
         </div>
 
-        <?php if ( in_array('type', $show) ) { ?>
-        <div class="<?= $class_line ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Type de manifestation') ; ?></label>
-            <div class="<?php echo $class_champ; ?>">
-                <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationType', [
-                    'presentation' => 'select',
-                    'type' => 'unique',
-                    'placeholder' => 'Sélectionnez un type'
-                ], @$post['FeteEtManifestationType']); ?>
-            </div>
-        </div>
-        <?php } ?>
+        <div class="row">
 
-        <?php
-            $colsCatTh = in_array('cat', $show) && in_array('theme', $show) ;
-            $classCatTh = $colsCatTh ? 'field col-sm-6' : $class_line ;
-        ?>
-
-        <?php if ( $colsCatTh ) { ?><div class="row"><?php } ?>
-
-        <?php if ( in_array('cat', $show) ) { ?>
-        <?php $limitCategories = 3 ; ?>
-        <?php if ( isset($_GET['limitCategories']) && is_int($limitCategories) ) $limitCategories = (int)$_GET['limitCategories'] ; ?>
-        <div class="<?php echo $classCatTh ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label"><?php
-            if ( $limitCategories > 1 ) {
-                __('Catégories de manifestation') ;
-                echo '<small class="sub">'.$limitCategories.' '._('catégories maximum.').'</small>' ;
-            } else {
-                __('Catégorie de manifestation') ;
-            } ?></label>
-            <div class="<?php echo $class_champ; ?>">
-                <?php if ( $limitCategories > 1 ) { ?>
-                    <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'max_selected_options' => $limitCategories, 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
-                <?php } else  { ?>
-                    <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'type' => 'unique', 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
-                <?php } ?>
-            </div>
-        </div>
-        <?php } ?>
-
-        <?php if (in_array('theme', $show)) { ?>
-        <div class="<?php echo $classCatTh ; ?>">
-            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Thèmes de manifestation'); ?></label>
-            <div class="<?php echo $class_champ; ?>">
-                <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationTheme', array('presentation' => 'select', 'exclude' => $theme_exclude), @$post['FeteEtManifestationTheme']); ?>
-            </div>
-        </div>
-        <?php } ?>
-
-        <?php if ( $colsCatTh ) { ?></div><?php } ?>
-
-        <div class="<?=  $class_line ; ?>">
-            <?php if (in_array('gen', $show)) { ?>
             <?php
-            $params_generique = [
-                'presentation' => 'select',
-                'type' => 'unique',
-                'include' => [5948, 2392, 5134, 6501, 3726, 2396, 2412, 4963, 4967, 4964, 4965, 4966, 4565, 2421, 6329, 3911, 2384, 3721, 2386, 5627, 2399, 4145, 2397, 6497, 2429, 2383, 4655, 3756, 5490, 5885, 4052, 2385, 2405, 2395, 6500, 2428, 2425, 4997, 4856, 2427, 4998, 5046, 2406, 2387, 2422, 5945, 2403, 2388, 4047, 2423, 4051, 4913, 4146, 4525, 5860, 6457, 2414, 2398, 5321, 6280, 5380, 2401, 2402, 4070, 4574, 2408, 5745, 2503, 4636, 4656, 2426, 2404, 2424, 2411, 2415, 2400, 4572, 2394, 2391, 2389, 2390, 4654, 2407, 7114, 7224, 7249, 7559]
-            ];
+                $nbCol = 0 ;
+                if ( in_array('type', $show) ) $nbCol++ ;
+                if ( in_array('cat', $show) ) $nbCol++ ;
+                if ( in_array('theme', $show) ) $nbCol++ ;
+                if ( in_array('gen', $show) ) $nbCol++ ;
+
+                $classCol = 'col-sm-6';
+                if ($nbCol == 3)
+                    $classCol = 'col-sm-4';
+                if ($nbCol == 1)
+                    $classCol = '';
             ?>
-            <label class="<?php echo $class_label; ?> col-form-label"><?php __('Evénements génériques et championnats') ; ?></label>
-            <div class="<?php echo $class_champ; ?>">
-                <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationGenerique', $params_generique, @$post['FeteEtManifestationGenerique']); ?>
+
+            <?php if ( in_array('type', $show) ) { ?>
+            <div class="field <?php echo $classCol ; ?>">
+                <label class="<?php echo $class_label; ?> col-form-label"><?php __('Type de manifestation') ; ?></label>
+                <div class="<?php echo $class_champ; ?>">
+                    <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationType', [
+                        'presentation' => 'select',
+                        'type' => 'unique',
+                        'placeholder' => 'Sélectionnez un type'
+                    ], @$post['FeteEtManifestationType']); ?>
+                </div>
             </div>
-        <?php } ?>
+            <?php } ?>
+
+            <?php if ( in_array('cat', $show) ) { ?>
+            <?php $limitCategories = 3 ; ?>
+            <?php if ( isset($_GET['limitCategories']) && is_int($limitCategories) ) $limitCategories = (int)$_GET['limitCategories'] ; ?>
+            <div class="field <?php echo $classCol ; ?>">
+                <label class="<?php echo $class_label; ?> col-form-label"><?php
+                if ( $limitCategories > 1 ) {
+                    __('Catégories de manifestation') ;
+                    echo '<small class="sub">'.$limitCategories.' '._(' maximum').'</small>' ;
+                } else {
+                    __('Catégorie de manifestation') ;
+                } ?></label>
+                <div class="<?php echo $class_champ; ?>">
+                    <?php if ( $limitCategories > 1 ) { ?>
+                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'maximum_selection_length' => $limitCategories, 'exclude' => $categorie_exclude, 'placeholder' => 'Test'), @$post['FeteEtManifestationCategorie']); ?>
+                    <?php } else  { ?>
+                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationCategorie', array('presentation' => 'select', 'type' => 'unique', 'exclude' => $categorie_exclude), @$post['FeteEtManifestationCategorie']); ?>
+                    <?php } ?>
+                </div>
+            </div>
+            <?php } ?>
+
+            <?php if (in_array('theme', $show)) { ?>
+                <div class="field <?php echo $classCol ; ?>">
+                    <label class="<?php echo $class_label; ?> col-form-label"><?php __('Thèmes de manifestation'); ?></label>
+                    <div class="<?php echo $class_champ; ?>">
+                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationTheme', array('presentation' => 'select', 'exclude' => $theme_exclude), @$post['FeteEtManifestationTheme']); ?>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <?php if (in_array('gen', $show)) { ?>
+                <div class="field <?php echo $classCol ; ?>">
+                    <?php
+                    $params_generique = [
+                        'presentation' => 'select',
+                        'type' => 'unique',
+                        'include' => [5948, 2392, 5134, 6501, 3726, 2396, 2412, 4963, 4967, 4964, 4965, 4966, 4565, 2421, 6329, 3911, 2384, 3721, 2386, 5627, 2399, 4145, 2397, 6497, 2429, 2383, 4655, 3756, 5490, 5885, 4052, 2385, 2405, 2395, 6500, 2428, 2425, 4997, 4856, 2427, 4998, 5046, 2406, 2387, 2422, 5945, 2403, 2388, 4047, 2423, 4051, 4913, 4146, 4525, 5860, 6457, 2414, 2398, 5321, 6280, 5380, 2401, 2402, 4070, 4574, 2408, 5745, 2503, 4636, 4656, 2426, 2404, 2424, 2411, 2415, 2400, 4572, 2394, 2391, 2389, 2390, 4654, 2407, 7114, 7224, 7249, 7559]
+                    ];
+                    ?>
+                    <label class="<?php echo $class_label; ?> col-form-label"><?php __('Evénements génériques et championnats') ; ?></label>
+                    <div class="<?php echo $class_champ; ?>">
+                        <?php echo $apidaeEvent->formHtmlCC('FeteEtManifestationGenerique', $params_generique, @$post['FeteEtManifestationGenerique']); ?>
+                    </div>
+                </div>
+            <?php } ?>
+
+        </div>
 
         <div class="field required">
             <label class="<?php echo $class_label; ?> col-form-label th" for="descriptifCourt"><?php __('Descriptif court') ; ?>
@@ -283,7 +293,7 @@
         </div>
 
         <?php if ( in_array('dd', $show) ) { ?>
-        <div class="field">
+        <div class="<?= $class_line ; ?>">
             <label class="<?php echo $class_label; ?> col-form-label th" for="descriptifDetaille"><?php __('Descriptif détaillé') ; ?>
                 <i class="fas fa-info-circle" title="<?php __('Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite.') ; ?>"></i>
             </label>
@@ -328,7 +338,7 @@
         <div class="alert alert-warning d-flex align-items-stretch" role="alert">
             <div class="d-flex align-items-center" style="padding:0 15px 0 5px ;"><i class="fa-solid fa-circle-info"></i></div>
             <div>
-                <?php __('Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone : en cas de questions, nous pourrons prendre contact avec l\'organisateur grâce à ces informations.') ; ?>
+                <?php __('Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro de téléphone</strong> : en cas de questions, nous pourrons prendre contact avec l\'organisateur grâce à ces informations.') ; ?>
             </div>
         </div>
 

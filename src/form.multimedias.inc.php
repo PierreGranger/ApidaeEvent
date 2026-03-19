@@ -29,20 +29,20 @@
         <div class="illustrations-rows" data-row-selector=".illustration-row">
             <?php for ($i = 0; $i < 1; $i++) { ?>
                 <div class="row illustration-row">
-                    <div class="col">
+                    <div class="col-md-4">
                         <div class="form-group inputFile">
                             <label class="col-form-label th"><?php __('Votre photo') ; ?></label>
                             <input class="form-control" type="file" name="illustrations[<?= $i ; ?>]" accept="image/*" <?php if (isset($_GET['illustrationMini']) && (int)$_GET['illustrationMini'] > 0 && (int)$_GET['illustrationMini'] <= 2000) echo 'minwidth="' . (int)$_GET['illustrationMini'] . '" '; ?>/>
                             <i class="fa-solid fa-xmark removeFile"></i>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Titre') ; ?></label>
                             <input class="form-control" type="text" name="illustrations[<?= $i ; ?>][legende]" value="<?= htmlspecialchars(@$post['illustrations'][$i]['legende']) ; ?>" />
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Copyright') ; ?></label>
                             <input class="form-control" type="text" name="illustrations[<?= $i ; ?>][copyright]" value="<?= htmlspecialchars(@$post['illustrations'][$i]['copyright']) ; ?>" />

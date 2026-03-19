@@ -1,37 +1,33 @@
 
 jQuery(function() {
-	jQuery('.chosen-select').chosen({
-		disable_search_threshold: 10
+	jQuery('.select2').each(function() {
+		var $select = jQuery(this);
+		var maxSelectionLength = $select.data('maximum-selection-length');
+
+		$select.select2({
+			theme: 'bootstrap-5',
+			width: '100%',
+			minimumResultsForSearch: 10,
+			language: {
+				noResults: () => "Aucun résultat trouvé",
+				maximumSelected: (args) => {
+					var max = args && args.maximum ? Number(args.maximum) : 0;
+					return max > 1
+						? "Vous pouvez sélectionner jusqu'à " + max + " elements"
+						: "Vous pouvez sélectionner " + max + " element";
+				}
+			},
+			placeholder: $select.data('placeholder'),
+			maximumSelectionLength: Number(maxSelectionLength) || 0,
+		}).on('select2:selecting', function () {
+			setTimeout(function () {
+				$select.select2('open');
+			}, 0);
+		});
 	});
 });
 
-var optsDate = {
-	'dateFormat' : 'dd/mm/yy',
-	'minDate' : '+1d',
-	firstDay:1,
-} ;
-var optsTime = {
-	'scrollDefault': '09:00',
-	'timeFormat': 'H:i'
-} ;
-
-var today = new Date() ;
-
 jQuery(function(){
-
-	//jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "fr" ] );
-
-	jQuery('form.form select.chosen').each(function(){
-		var params = {
-			include_group_label_in_selected : true,
-			search_contains:true,
-			width:'100%',
-			no_results_text:'Aucun résultat trouvé'
-		} ;
-		if ( typeof jQuery(this).data('max_selected_options') == 'number' )
-			params['max_selected_options'] = jQuery(this).data('max_selected_options') ;
-		jQuery(this).chosen(params) ;
-	}) ;
 
 	initForm(jQuery('form.form')) ;
 
@@ -610,9 +606,15 @@ jQuery(document).on('change', 'input[name*="copyright"]', function () {
 
 function criteresInterditsByEr(selector) {
 	
+	console.log(selector, typeof jQuery(selector).val());
+
 	var values = [];
-	if (typeof jQuery(selector).val() == 'object') values = jQuery(selector).val();
-	else if(typeof jQuery(selector).val() == 'string') values = [jQuery(selector).val()];
+	if (jQuery(selector).val() !== null) {
+		if (typeof jQuery(selector).val() == 'object') values = jQuery(selector).val();
+		else if (typeof jQuery(selector).val() == 'string') values = [jQuery(selector).val()];
+	}
+
+	console.log(values);
 
 	if ( values.length > 0 ) {
 		values.forEach(function (item) {
@@ -700,7 +702,7 @@ export function faker() {
 	jQuery('select[name="portee"]').val('2354') ;
 	//jQuery('select[name="commune"]').val('1408|03510|Molinet|03173') ;
 	jQuery('select[name="commune"]').val('14707|37260|Villeperdue|37278') ;
-	jQuery("form.form select.chosen").trigger("chosen:updated");
+	jQuery("form.form select.select2").trigger("change");
 
 	var d5 = new Date(new Date().getTime()+(5*24*60*60*1000));
 	var d = d5.toISOString().match('([0-9]{4}-[0-9]{2}-[0-9]{2})');
