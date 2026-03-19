@@ -30,7 +30,7 @@ div.rgpd>div.has-error,
 .row.errors.has-error>.col {
 	background: #ffb7b4;
 	color: #c92a27;
-	margin:20px 10px ;
+	margin: 20px 10px;
 }
 
 .has-error .chosen-single,
@@ -244,16 +244,17 @@ form .form-control,
 	font-size: 14px;
 }
 
-.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option.select2-results__option--selected, .select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
-	background-color:#314158 ;
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option.select2-results__option--selected,
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
+	background-color: #314158;
 	color: #F3F3F5;
 }
 
 .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
-	margin: 0 2px 2px 0 ;
-	padding:3px ;
-	font-size:inherit ;
-	border:0 ;
+	margin: 0 2px 2px 0;
+	padding: 3px;
+	font-size: inherit;
+	border: 0;
 }
 
 form.form .form-check {

@@ -30,25 +30,25 @@
                     <div class="col-12 col-sm-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Prénom') ; ?></label>
-                            <input class="form-control" type="text" name="contact[<?= $i ; ?>][prenom]" value="<?= htmlspecialchars(@$post['contact'][$i]['prenom']) ; ?>" />
+                            <input class="form-control" type="text" name="contact[<?= $i ; ?>][prenom]" value="<?= htmlspecialchars(@$post['contact'][$i]['prenom']) ; ?>">
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Nom') ; ?></label>
-                            <input class="form-control" type="text" name="contact[<?= $i ; ?>][nom]" value="<?= htmlspecialchars(@$post['contact'][$i]['nom']) ; ?>" />
+                            <input class="form-control" type="text" name="contact[<?= $i ; ?>][nom]" value="<?= htmlspecialchars(@$post['contact'][$i]['nom']) ; ?>">
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Mail') ; ?></label>
-                            <input class="form-control mail" type="text" name="contact[<?= $i ; ?>][mail]" value="<?= htmlspecialchars(@$post['contact'][$i]['mail']) ; ?>" placeholder="xxx@yyyy.zz" />
+                            <input class="form-control mail" type="text" name="contact[<?= $i ; ?>][mail]" value="<?= htmlspecialchars(@$post['contact'][$i]['mail']) ; ?>" placeholder="xxx@yyyy.zz">
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-md">
                         <div class="form-group">
                             <label class="col-form-label th"><?php __('Téléphone') ; ?></label>
-                            <input class="form-control telephone" type="text" name="contact[<?= $i ; ?>][telephone]" value="<?= htmlspecialchars(@$post['contact'][$i]['telephone']) ; ?>" placeholder="<?= $phone_placeholder ; ?>" />
+                            <input class="form-control telephone" type="text" name="contact[<?= $i ; ?>][telephone]" value="<?= htmlspecialchars(@$post['contact'][$i]['telephone']) ; ?>" placeholder="<?= $phone_placeholder ; ?>">
                         </div>
                     </div>
                     <div class="moins">

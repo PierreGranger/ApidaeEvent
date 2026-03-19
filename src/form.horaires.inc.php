@@ -13,27 +13,27 @@ if (isset($post['date'])) {
                 <div class="col-6 col-md">
                     <div class="form-group">
                         <label class="col-form-label required th"><?php __('Début') ; ?></label>
-                        <input class="form-control date debut" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][debut]" value="<?= htmlentities(@$post['date'][$i]['debut']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_debut" />
+                        <input class="form-control date debut" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][debut]" value="<?= htmlentities(@$post['date'][$i]['debut']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_debut">
                     </div>
                 </div>
                 <div class="col-6 col-md">
                     <div class="form-group">
                         <label class="col-form-label required th"><?php __('Fin') ; ?></label>
-                        <input class="form-control date fin" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][fin]" value="<?= htmlentities(@$post['date'][$i]['fin']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_fin" />
+                        <input class="form-control date fin" type="date" min="<?= date('Y-m-d') ; ?>" name="date[<?= $i ; ?>][fin]" value="<?= htmlentities(@$post['date'][$i]['fin']) ; ?>" placeholder="<?php __('jj/mm/aaaa') ; ?>" required="required" autocomplete="chrome-off" id="date_<?= $i ; ?>_fin">
                     </div>
                 </div>
                 <div class="col-6 col-md">
                     <div class="form-group">
                         <label class="col-form-label th"><?php __('Horaires') ; ?></label>
                         <button type="button" class="horaires btn btn-light" onclick="btnHoraires(event)"><?php __('Saisie des horaires') ; ?></button>
-                        <input type="hidden" class="horaires" name="date[<?= $i ; ?>][horaires]" value="<?= htmlentities(@$post['date'][$i]['horaires']) ; ?>" />
+                        <input type="hidden" class="horaires" name="date[<?= $i ; ?>][horaires]" value="<?= htmlentities(@$post['date'][$i]['horaires']) ; ?>">
                         <div class="col-12 description" style="white-space:pre-wrap; font-size:.8em;"></div>
                     </div>
                 </div>
                 <div class="col-6 col-md">
                     <div class="form-group">
                         <label class="col-form-label th"><?php __('Complément') ; ?></label>
-                        <input class="form-control" type="text" name="date[<?= $i ; ?>][complementHoraire]" value="<?= htmlentities(@$post['date'][$i]['complementHoraire']) ; ?>" id="date_complement_<?= $i ; ?>" />
+                        <input class="form-control" type="text" name="date[<?= $i ; ?>][complementHoraire]" value="<?= htmlentities(@$post['date'][$i]['complementHoraire']) ; ?>" id="date_complement_<?= $i ; ?>">
                     </div>
                 </div>
                 <div class="moins"><?php if ($i > 0) echo $icon_moins; ?></div>
@@ -58,16 +58,16 @@ if (isset($post['date'])) {
         <div id="reactGuiContainer"></div>
         <div style="display:none;">
             <ul>
-                <li><input id="trIndex" type="text" value="" /> trIndex</li>
-                <li><input id="horairesField" type="text" value="[]" /> horairesField</li>
-                <li><input id="availableHoraireTypesField" type="text" value="<?php echo htmlspecialchars(json_encode([$apidaeEvent->getElementReferenceByTypeAndName('HoraireType','Ouverture')])) ?>" /> availableHoraireTypesField</li>
-                <li><input id="reusablePeriodesField" type="text" value="[]" /> reusablePeriodesField</li>
-                <li><input id="isMultihoraireTabSelectedField" type="checkbox" checked="checked" /> isMultihoraireTabSelectedField</li>
-                <li><input id="periodesReusingCurrentHorairesField" type="text" value="[]" /> periodesReusingCurrentHorairesField</li>
-                <li><input id="daysOfTheWeekInPeriodeField" type="text" value="" /> daysOfTheWeekInPeriodeField</li>
-                <li><input id="allPeriodesField" type="text" value="[]" /> allPeriodesField</li>
-                <li><input id="errorsField" type="text" value="[]" /> errorsField</li>
-                <li><input id="localeField" type="text" value="fr" /> localeField</li>
+                <li><input id="trIndex" type="text" value=""> trIndex</li>
+                <li><input id="horairesField" type="text" value="[]"> horairesField</li>
+                <li><input id="availableHoraireTypesField" type="text" value="<?php echo htmlspecialchars(json_encode([$apidaeEvent->getElementReferenceByTypeAndName('HoraireType','Ouverture')])) ?>"> availableHoraireTypesField</li>
+                <li><input id="reusablePeriodesField" type="text" value="[]"> reusablePeriodesField</li>
+                <li><input id="isMultihoraireTabSelectedField" type="checkbox" checked="checked"> isMultihoraireTabSelectedField</li>
+                <li><input id="periodesReusingCurrentHorairesField" type="text" value="[]"> periodesReusingCurrentHorairesField</li>
+                <li><input id="daysOfTheWeekInPeriodeField" type="text" value=""> daysOfTheWeekInPeriodeField</li>
+                <li><input id="allPeriodesField" type="text" value="[]"> allPeriodesField</li>
+                <li><input id="errorsField" type="text" value="[]"> errorsField</li>
+                <li><input id="localeField" type="text" value="fr"> localeField</li>
             </ul>
         </div>
     </div>

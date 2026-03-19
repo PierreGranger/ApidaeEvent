@@ -47,7 +47,7 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 
 <script src="<?php echo $manifest['build/app.js'] ; ?>"></script>
 <script defer src="<?php echo $manifest['build/runtime.js'] ; ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $manifest['build/app.css'] ; ?>" media="all" />
+<link rel="stylesheet" type="text/css" href="<?php echo $manifest['build/app.css'] ; ?>" media="all">
 
 <?php if ( isset($_GET['apihours']) || isset($_GET['horaires']) ) { ?>
 	<?php if ( isset($configApidaeEvent['horairesJs']) ) { ?>
@@ -73,4 +73,6 @@ $multiHoraire = isset($_GET['mh']) && $_GET['mh'] == 1 ;
 	var interdictions_elements_reference = <?php echo json_encode($apidaeEvent->getElementsReferenceInterdictions(['FeteEtManifestationType','FeteEtManifestationCategorie'])) ; ?> ;
 </script>
 
-<link rel="icon" href="https://static.apidae-tourisme.com/filestore/logos/favicon.ico" />
+<link rel="icon" href="https://static.apidae-tourisme.com/filestore/logos/favicon.ico">
+
+<title>ApidaeEvent</title>

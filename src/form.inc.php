@@ -9,8 +9,8 @@
 <form class="form" method="post" enctype="multipart/form-data" novalidate>
 
     <?php $referer = (isset($_POST['referer'])) ? $_POST['referer'] : @$_SERVER['HTTP_REFERER']; ?>
-    <input type="hidden" name="referer" value="<?php echo htmlentities($referer); ?>" />
-    <input type="hidden" name="devise" value="<?php echo htmlentities($devise_apidae); ?>" />
+    <input type="hidden" name="referer" value="<?php echo htmlentities($referer); ?>">
+    <input type="hidden" name="devise" value="<?php echo htmlentities($devise_apidae); ?>">
 
     <fieldset class="form-group required">
         
@@ -22,7 +22,7 @@
         <div class="<?= $class_line ; ?> required">
             <label for="portee" class="<?= $class_label; ?> col-form-label"> <?php __('Nom de la manifestation') ; ?></label>
             <div class="controls">
-                <input class="form-control" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']); ?>" placeholder="<?php echo htmlentities(_('Entrez le nom de votre événement')); ?>" id="nom" required="required" />
+                <input class="form-control" name="nom" type="text" value="<?php echo htmlentities(@$post['nom']); ?>" placeholder="<?php echo htmlentities(_('Entrez le nom de votre événement')); ?>" id="nom" required="required">
             </div>
         </div>
 
@@ -50,11 +50,11 @@
         <div class="row">
             <div class="field col-sm-6">
                 <label for="nbParticipantsAttendu" class="col-form-label"><?php __('Participants attendus') ;?></label>
-                <input class="form-control" type="number" name="nbParticipantsAttendu" id="nbParticipantsAttendu" value="<?php echo htmlentities(@$post['nbParticipantsAttendu']); ?>" />
+                <input class="form-control" type="number" name="nbParticipantsAttendu" id="nbParticipantsAttendu" value="<?php echo htmlentities(@$post['nbParticipantsAttendu']); ?>">
             </div>
             <div class="field col-sm-6">
                 <label for="nbVisiteursAttendu" class="col-form-label"><?php echo __('Visiteurs attendus') ; ?></label>
-                <input class="form-control" type="number" name="nbVisiteursAttendu" id="nbVisiteursAttendu" value="<?php echo htmlentities(@$post['nbVisiteursAttendu']); ?>" />
+                <input class="form-control" type="number" name="nbVisiteursAttendu" id="nbVisiteursAttendu" value="<?php echo htmlentities(@$post['nbVisiteursAttendu']); ?>">
             </div>
         </div>
         <?php } ?>
@@ -73,7 +73,7 @@
                 <i class="fas fa-info-circle" title="<?php __('Voie et bâtiment. Exemple : 60 rue des Lilas - Bâtiment A. Pas de virgule mais un espace entre le numéro et le nom de la rue.') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
-                <input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']); ?>" placeholder="<?php echo htmlentities(_('Numéro et nom de rue')) ; ?>" />
+                <input class="form-control" type="text" name="adresse1" value="<?php echo htmlentities(@$post['adresse1']); ?>" placeholder="<?php echo htmlentities(_('Numéro et nom de rue')) ; ?>">
             </div>
         </div>
         <?php if ( in_array('a2', $show) ) { ?>
@@ -82,7 +82,7 @@
                 <i class="fas fa-info-circle" title="<?php __('Lieu-dit, zone d’activité, BP (pour boite postale)…') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
-                <input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']); ?>" placeholder="<?php echo htmlentities(_('Complément d\'adresse')) ; ?>" />
+                <input class="form-control" type="text" name="adresse2" value="<?php echo htmlentities(@$post['adresse2']); ?>" placeholder="<?php echo htmlentities(_('Complément d\'adresse')) ; ?>">
             </div>
         </div>
         <?php } ?>
@@ -92,7 +92,7 @@
                 <i class="fas fa-info-circle" title="<?php __('Niveau de la station et/ou le quartier si nécessaire. Exemple : Morillon village et Morillon 1100.') ; ?>"></i>
             </label>
             <div class="<?php echo $class_champ; ?>">
-                <input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']); ?>" placeholder="<?php echo htmlentities(_('Complément d\'adresse')) ; ?>" />
+                <input class="form-control" type="text" name="adresse3" value="<?php echo htmlentities(@$post['adresse3']); ?>" placeholder="<?php echo htmlentities(_('Complément d\'adresse')) ; ?>">
             </div>
         </div>
         <?php } ?>
@@ -113,8 +113,8 @@
             <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation"></i>
                 <strong><?php __('Impossible de récupérer la liste de communes...') ; ?></strong>
-                <br /><?php __('Veuillez nous excuser pour la gène occasionnée.') ; ?>
-                <br /><?php __('Vous pouvez prendre contact avec l\'<a href="https://www.apidae-tourisme.com/apidae-tourisme/carte-du-reseau/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.') ; ?>
+                <br><?php __('Veuillez nous excuser pour la gène occasionnée.') ; ?>
+                <br><?php __('Vous pouvez prendre contact avec l\'<a href="https://www.apidae-tourisme.com/apidae-tourisme/carte-du-reseau/" target="_blank">Office du Tourisme concernée par votre manifestation</a>.') ; ?>
             </div>
         <?php
             die();
@@ -287,7 +287,7 @@
         <div class="field required">
             <label class="<?php echo $class_label; ?> col-form-label th" for="descriptifCourt"><?php __('Descriptif court') ; ?>
                 <i class="fas fa-info-circle" title="<?php __('Texte d\'accroche permettant de comprendre la nature de votre prestation. Ne doit pas contenir d\'horaire, de tarif, d\'info de réservation, de N° de tél, de lieu... puisque ces informations existent par ailleurs, ce qui constitue une double saisie.') ; ?>"></i>
-                <br /><small class="form-text text-muted"><?php __('255 caractères max.') ; ?></small>
+                <br><small class="form-text text-muted"><?php __('255 caractères max.') ; ?></small>
             </label>
             <textarea class="form-control" name="descriptifCourt" id="descriptifCourt" maxlength="255" required="required"><?php echo htmlspecialchars(@$post['descriptifCourt']); ?></textarea>
         </div>
@@ -304,7 +304,7 @@
         <?php if (in_array('animaux', $show)) { ?>
         <div class="field">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="animauxAcceptes" id="animauxAcceptes" value="1" <?php if (@$post['animauxAcceptes'] == 1) echo ' checked="checked" '; ?> />
+                <input class="form-check-input" type="checkbox" name="animauxAcceptes" id="animauxAcceptes" value="1" <?php if (@$post['animauxAcceptes'] == 1) echo ' checked="checked" '; ?> >
                 <label class="<?php echo $class_label; ?> col-form-label form-check-label" for="animauxAcceptes"><?php __('Animaux acceptés') ; ?></label>
             </div>
         </div>
@@ -389,7 +389,7 @@
     <?php if ($configApidaeEvent['debug']) { ?>
         <div class="<?= $class_line ; ?>">
             <div class="<?php echo $class_champ; ?>">
-                <input type="checkbox" name="nosave" id="nosave" value="1" <?php if (@$post['nosave'] == 1) echo ' checked="checked" '; ?> />
+                <input type="checkbox" name="nosave" id="nosave" value="1" <?php if (@$post['nosave'] == 1) echo ' checked="checked" '; ?> >
                 [Debug] Ne pas enregistrer sur Apidae
             </div>
         </div>
@@ -398,24 +398,24 @@
                 <input type="checkbox" name="nomail" id="nomail" value="1" <?php 
                     if (@$post['nomail'] == 1 || @$configApidaeEvent['env'] !== 'prod' ) echo ' checked ';
                     if ( $configApidaeEvent['env'] !== 'prod' ) echo ' disabled' ;
-                ?> /> [Debug] Ne pas envoyer les mails (même pas à admin)
+                ?> > [Debug] Ne pas envoyer les mails (même pas à admin)
             </div>
         </div>
     <?php } ?>
 
     <div class="<?= $class_line ; ?> form-check required rgpd">
         <div class="<?php echo $class_champ; ?>">
-            <input type="checkbox" class="form-check-input" name="rgpd" id="rgpd" value="1" required="required" <?php if (@$post['rgpd'] == 1) echo ' checked="checked" '; ?> />
+                <input type="checkbox" class="form-check-input" name="rgpd" id="rgpd" value="1" required="required" <?php if (@$post['rgpd'] == 1) echo ' checked="checked" '; ?> >
             <label for="rgpd" class="form-check-label"><a class="link-secondary" href="https://www.apidae-tourisme.com/charte-de-confidentialite/" target="_blank"><?php __('J\'accepte les conditions RGPD du réseau Apidae') ; ?></a>.</label>
         </div>
     </div>
 
-    <input type="hidden" name="script_uri" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'] . @$_SERVER['REQUEST_URI']); ?>" />
+    <input type="hidden" name="script_uri" value="<?php echo htmlentities(@$_SERVER['HTTP_HOST'] . @$_SERVER['REQUEST_URI']); ?>">
 
     <div class="text-center" <?php
                             if (@$configApidaeEvent['recaptcha_secret'] != '' && !$configApidaeEvent['debug']) echo ' style="display:none;"';
                             ?>>
-        <input type="button" class="btn btn-dark btn-lg btn-block btn-submit" value="<?php __('Enregistrer cet événement') ; ?>" />
+        <input type="button" class="btn btn-dark btn-lg btn-block btn-submit" value="<?php __('Enregistrer cet événement') ; ?>">
     </div>
 
     <?php if (@$configApidaeEvent['recaptcha_secret'] != '' && !$configApidaeEvent['debug']) { ?>
