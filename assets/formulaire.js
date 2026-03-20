@@ -13,8 +13,8 @@ jQuery(function () {
 				maximumSelected: (args) => {
 					var max = args && args.maximum ? Number(args.maximum) : 0;
 					return max > 1
-						? "Vous pouvez sélectionner jusqu'à " + max + " elements"
-						: "Vous pouvez sélectionner " + max + " element";
+						? "Vous pouvez sélectionner jusqu'à " + max + " éléments"
+						: "Vous pouvez sélectionner " + max + " élément";
 				}
 			},
 			placeholder: $select.data('placeholder'),
