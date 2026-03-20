@@ -406,7 +406,7 @@
     <div class="<?= $class_line ; ?> form-check required rgpd">
         <div class="<?php echo $class_champ; ?>">
                 <input type="checkbox" class="form-check-input" name="rgpd" id="rgpd" value="1" required="required" <?php if (@$post['rgpd'] == 1) echo ' checked="checked" '; ?> >
-            <label for="rgpd" class="form-check-label"><a class="link-secondary" href="https://www.apidae-tourisme.com/charte-de-confidentialite/" target="_blank"><?php __('J\'accepte les conditions RGPD du réseau Apidae') ; ?></a>.</label>
+            <label for="rgpd" class="form-check-label"><a class="link-secondary" href="https://www.apidae-tourisme.com/charte-de-confidentialite-pour-les-profils-references" target="_blank"><?php __('J\'accepte les conditions RGPD du réseau Apidae') ; ?></a>.</label>
         </div>
     </div>
 
