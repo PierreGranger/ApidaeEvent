@@ -293,7 +293,7 @@
         </div>
 
         <?php if ( in_array('dd', $show) ) { ?>
-        <div class="<?= $class_line ; ?>">
+        <div class="field">
             <label class="<?php echo $class_label; ?> col-form-label th" for="descriptifDetaille"><?php __('Descriptif détaillé') ; ?>
                 <i class="fas fa-info-circle" title="<?php __('Le descriptif détaillé est complémentaire du descriptif court et non redondant. En effet certains sites web affichent ces deux champs à la suite.') ; ?>"></i>
             </label>
@@ -302,21 +302,23 @@
         <?php } ?>
 
         <?php if (in_array('animaux', $show)) { ?>
+
+        <h2 class="col-form-label"><?php __('Conditions d\'accueil des animaux') ; ?></h2>
+        
         <div class="field">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="animauxAcceptes" id="animauxAcceptes" value="1" <?php if (@$post['animauxAcceptes'] == 1) echo ' checked="checked" '; ?> >
-                <label class="<?php echo $class_label; ?> col-form-label form-check-label" for="animauxAcceptes"><?php __('Animaux acceptés') ; ?></label>
+                <label class="<?php echo $class_label; ?> form-check-label" for="animauxAcceptes"><?php __('Animaux acceptés') ; ?></label>
             </div>
         </div>
-
+        
         <div class="field">
-            <label class="<?php echo $class_label; ?> col-form-label" for="descriptifAnimauxAcceptes"><?php __('Conditions d\'accueil des animaux') ; ?>
-                <i class="fas fa-info-circle" title="<?php __('Animaux acceptés en laisse uniquement, en terrasse uniquement...') ; ?>"></i>
-            </label>
             <div class="<?php echo $class_champ; ?>">
-                <textarea class="form-control" name="descriptifAnimauxAcceptes" id="descriptifAnimauxAcceptes"><?php echo htmlspecialchars(@$post['descriptifAnimauxAcceptes']); ?></textarea>
+                <label class="<?php echo $class_label; ?> col-form-label th pt-0" for="descriptifDetaille"><?php __('Précisions') ; ?></label>
+                <textarea class="form-control" name="descriptifAnimauxAcceptes" id="descriptifAnimauxAcceptes" placeholder="<?php echo htmlentities(_('Animaux acceptés en laisse uniquement, en terrasse uniquement...')) ; ?>"><?php echo htmlspecialchars(@$post['descriptifAnimauxAcceptes']); ?></textarea>
             </div>
         </div>
+        
         <?php } ?>
 
         <?php include(realpath(dirname(__FILE__)).'/form.clientele.inc.php') ; ?>

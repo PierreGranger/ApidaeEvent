@@ -204,11 +204,22 @@ form .col-form-label {
 	width: 100%;
 }
 
+form h2.col-form-label {
+	font-weight: normal;
+	margin-top: 12px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
 form .col-form-label .sub {
 	color: #90A1B9;
 	font-size: 12px;
 	display: inline-block;
 	margin-left: 10px;
+}
+
+h2.col-form-label + div.field {
+	margin-top: 5px;
 }
 
 form .form-control,
