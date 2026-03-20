@@ -15,7 +15,8 @@ label[for="rgpd"]:after {
 }
 
 .has-error .form-control,
-.has-error .chosen-container .chosen-single,
+.has-error .select2-container--bootstrap-5 .select2-selection--single,
+.has-error .select2-container--bootstrap-5 .select2-selection--multiple,
 .has-error select {
 	background: #ffb7b4 !important;
 }
@@ -33,7 +34,6 @@ div.rgpd>div.has-error,
 	margin: 20px 10px;
 }
 
-.has-error .chosen-single,
 .has-error input[type="file"] {
 	background: #ffb7b4;
 	border-color: #c92a27;
@@ -44,7 +44,9 @@ label[data-interdit] {
 	opacity: .5;
 }
 
-div[data-interdit] {
+div[data-interdit],
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option.select2-results__option--disabled,
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[aria-disabled=true] {
 	display: none;
 }
 
