@@ -187,7 +187,7 @@ use Exception ;
 					$famillePrec = null ;
 					foreach ( $ers as $erp )
 					{
-						$ret .= '<div class="col-3">' ;
+						$ret .= '<div class="col-6 col-md-4 col-lg-3">' ;
 							$ret .= '<div class="form-check">' ;
 								$ret .= '<input class="form-check-input" type="checkbox" name="'.$type.'[]" id="'.$type.$erp['id'].'" value="'.$erp['id'].'" ' ;
 									if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' checked="checked"' ;
