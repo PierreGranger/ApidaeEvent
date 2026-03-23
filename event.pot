@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-12 17:02+0100\n"
+"POT-Creation-Date: 2026-03-23 14:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr ""
 msgid "Complément"
 msgstr ""
 
-#: src/form.dates.inc.php:80
+#: src/form.dates.inc.php:80 src/form.inc.php:317
 msgid "Précisions"
 msgstr ""
 
@@ -95,7 +95,7 @@ msgstr ""
 msgid "jj/mm/aaaa"
 msgstr ""
 
-#: src/form.horaires.inc.php:27 src/form.horaires.inc.php:58
+#: src/form.horaires.inc.php:27 src/form.horaires.inc.php:54
 msgid "Horaires"
 msgstr ""
 
@@ -103,15 +103,15 @@ msgstr ""
 msgid "Saisie des horaires"
 msgstr ""
 
-#: src/form.horaires.inc.php:59 src/form.horaires.inc.php:79
+#: src/form.horaires.inc.php:55 src/form.horaires.inc.php:75
 msgid "Fermer"
 msgstr ""
 
-#: src/form.horaires.inc.php:80
+#: src/form.horaires.inc.php:76
 msgid "Valider"
 msgstr ""
 
-#: src/form.horaires.inc.php:99
+#: src/form.horaires.inc.php:95
 msgid "Merci de préciser les dates avant de saisir les horaires associés"
 msgstr ""
 
@@ -206,7 +206,7 @@ msgstr ""
 msgid "Impossible de récupérer la liste de communes..."
 msgstr ""
 
-#: src/form.inc.php:116 src/post.inc.php:950
+#: src/form.inc.php:116 src/post.inc.php:927
 msgid "Veuillez nous excuser pour la gène occasionnée."
 msgstr ""
 
@@ -253,35 +253,35 @@ msgstr ""
 msgid "Description de votre manifestation"
 msgstr ""
 
-#: src/form.inc.php:212
+#: src/form.inc.php:228
 msgid "Type de manifestation"
 msgstr ""
 
-#: src/form.inc.php:230
+#: src/form.inc.php:245
 msgid "Catégories de manifestation"
 msgstr ""
 
-#: src/form.inc.php:231
-msgid "catégories maximum."
-msgstr ""
-
-#: src/form.inc.php:233
-msgid "Catégorie de manifestation"
+#: src/form.inc.php:246
+msgid " maximum"
 msgstr ""
 
 #: src/form.inc.php:248
+msgid "Catégorie de manifestation"
+msgstr ""
+
+#: src/form.inc.php:262
 msgid "Thèmes de manifestation"
 msgstr ""
 
-#: src/form.inc.php:264
+#: src/form.inc.php:278
 msgid "Evénements génériques et championnats"
 msgstr ""
 
-#: src/form.inc.php:271
+#: src/form.inc.php:288
 msgid "Descriptif court"
 msgstr ""
 
-#: src/form.inc.php:272
+#: src/form.inc.php:289
 msgid ""
 "Texte d'accroche permettant de comprendre la nature de votre prestation. Ne "
 "doit pas contenir d'horaire, de tarif, d'info de réservation, de N° de tél, "
@@ -289,78 +289,78 @@ msgid ""
 "une double saisie."
 msgstr ""
 
-#: src/form.inc.php:273
+#: src/form.inc.php:290
 msgid "255 caractères max."
 msgstr ""
 
-#: src/form.inc.php:280
+#: src/form.inc.php:297
 msgid "Descriptif détaillé"
 msgstr ""
 
-#: src/form.inc.php:281
+#: src/form.inc.php:298
 msgid ""
 "Le descriptif détaillé est complémentaire du descriptif court et non "
 "redondant. En effet certains sites web affichent ces deux champs à la suite."
 msgstr ""
 
-#: src/form.inc.php:291
-msgid "Animaux acceptés"
-msgstr ""
-
-#: src/form.inc.php:296
+#: src/form.inc.php:306
 msgid "Conditions d'accueil des animaux"
 msgstr ""
 
-#: src/form.inc.php:297
-msgid "Animaux acceptés en laisse uniquement, en terrasse uniquement..."
+#: src/form.inc.php:311
+msgid "Animaux acceptés"
 msgstr ""
 
 #: src/form.inc.php:318
+msgid "Animaux acceptés en laisse uniquement, en terrasse uniquement..."
+msgstr ""
+
+#: src/form.inc.php:337
 msgid "Réservation"
 msgstr ""
 
-#: src/form.inc.php:324
+#: src/form.inc.php:343
 msgid ""
 "Merci de préciser au moins une adresse mail (de préférence) et/ou un numéro "
-"de téléphone : en cas de questions, nous pourrons prendre contact avec "
-"l'organisateur grâce à ces informations."
+"de téléphone</strong> : en cas de questions, nous pourrons prendre contact "
+"avec l'organisateur grâce à ces informations."
 msgstr ""
 
-#: src/form.inc.php:329
+#: src/form.inc.php:348
 msgid "Nom de l'organisme"
 msgstr ""
 
-#: src/form.inc.php:336
+#: src/form.inc.php:355
 msgid "URL de réservation"
 msgstr ""
 
-#: src/form.inc.php:355
+#: src/form.inc.php:374
 msgid "Organisateur"
 msgstr ""
 
-#: src/form.inc.php:361
+#: src/form.inc.php:380
 msgid ""
 "Message privé non publié à destination du propriétaire de ce formulaire. "
 "Précisez l'organisateur de la manifestation (association ABC...)."
 msgstr ""
 
-#: src/form.inc.php:365
+#: src/form.inc.php:384
 msgid "Commentaire privé"
 msgstr ""
 
-#: src/form.inc.php:367
+#: src/form.inc.php:386
 msgid "Votre message pour l'organisateur..."
 msgstr ""
 
-#: src/form.inc.php:392
+#: src/form.inc.php:411
 msgid "J'accepte les conditions RGPD du réseau Apidae"
 msgstr ""
 
-#: src/form.inc.php:401
+#: src/form.inc.php:420
 msgid "Enregistrer cet événement"
 msgstr ""
 
-#: src/form.inc.php:407
+#: src/form.inc.php:426
 msgid ""
 "Vous devez cocher la case \"Je ne suis pas un robot\" pour pouvoir "
 "enregistrer"
@@ -421,7 +421,7 @@ msgid ""
 msgstr ""
 
 #. $texte_offre_enregistree .= '<p>Une fois validée, votre manifestation sera consultable sur <a onclick="window.open(this.href);return false;" href="'.$url_consulter.'">'.$url_consulter.'</a></p>' ;
-#: src/form.multimedias.inc.php:25 src/post.inc.php:863
+#: src/form.multimedias.inc.php:25 src/post.inc.php:842
 msgid "Plus d'informations ici"
 msgstr ""
 
@@ -550,43 +550,43 @@ msgid ""
 "null)..."
 msgstr ""
 
-#: src/post.inc.php:842
+#: src/post.inc.php:821
 msgid ""
 "<strong>Votre suggestion d'événement a bien été enregistrée</strong>, nous "
 "vous remercions pour votre contribution."
 msgstr ""
 
-#: src/post.inc.php:843
+#: src/post.inc.php:822
 msgid ""
 "<strong>Attention :</strong> Il ne sera visible sur les différents supports "
 "de communication alimentés par Apidae qu'<strong>après validation</strong>."
 msgstr ""
 
-#: src/post.inc.php:847
+#: src/post.inc.php:826
 msgid "La validation est en cours auprès de"
 msgstr ""
 
-#: src/post.inc.php:853
+#: src/post.inc.php:832
 msgid "Votre commentaire a également été transmis"
 msgstr ""
 
-#: src/post.inc.php:868
+#: src/post.inc.php:844
 msgid "Faire une autre suggestion de manifestation"
 msgstr ""
 
-#: src/post.inc.php:927
+#: src/post.inc.php:904
 msgid "Erreur à l'enregistrement"
 msgstr ""
 
-#: src/post.inc.php:928
+#: src/post.inc.php:905
 msgid "Une erreur s'est produite et votre fiche n'a pas pû être enregistrée."
 msgstr ""
 
-#: src/post.inc.php:949
+#: src/post.inc.php:926
 msgid "L'erreur a été envoyée à un administrateur."
 msgstr ""
 
-#: src/post.inc.php:951
+#: src/post.inc.php:928
 msgid ""
 "Vous pouvez essayer de nouveau d'enregistrer ci-dessous, ou prendre contact "
 "avec l'Office du Tourisme concernée par votre manifestation"
