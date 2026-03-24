@@ -432,8 +432,8 @@ msgid ""
 "                    <br />Les documents ajoutés ne doivent pas dépasser les 5 Mo au total."
 msgstr ""
 "You can add PDF files below if necessary (if you have a programme, for example).\n"
-"                    <Once published, they can be distributed on various media (websites, brochures, etc.): make sure you have all the necessary rights, and specify the Copyright if necessary.\n"
-"                    <Documents added must not exceed 5 MB in total."
+"                    <br />Once published, they can be distributed on various media (websites, brochures, etc.): make sure you have all the necessary rights, and specify the Copyright if necessary.\n"
+"                    <br />Documents added must not exceed 5 MB in total."
 
 #: src/form.multimedias.inc.php:89
 msgid "Votre fichier"
