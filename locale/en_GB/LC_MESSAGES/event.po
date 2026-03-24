@@ -457,7 +457,7 @@ msgstr "Each fare type can only be used once. If you have several \"full fares\"
 
 #: src/form.tarifs.inc.php:30
 msgid "Type de tarif"
-msgstr "Type of tariff"
+msgstr "Rate category"
 
 #: src/form.tarifs.inc.php:41
 msgid "Mini #DEVISE# (à partir de...)"
