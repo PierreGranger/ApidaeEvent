@@ -11,7 +11,18 @@
         </div>
     </div>
 
-        <?php $types = $apidaeEvent->getElementsReferenceByType('ContactFonction'); ?>
+        <?php $types = $apidaeEvent->getElementsReferenceByType('ContactFonction', [
+            'exclude' => [
+                469, // Maire
+                460, // Présidence
+                466, // Presse
+                464, // Propriétaire des murs
+                465, // Propriétaire du fonds
+                3645, // Référent handicap
+                6865, // Référent Taxe de séjour
+                4121, // Remise des clés
+            ]
+        ]); ?>
 
         <div class="contacts-rows" data-row-selector=".contact-row">
             <?php for ($i = 0; $i < 1; $i++) { ?>
