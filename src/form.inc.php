@@ -16,7 +16,6 @@
         
         <div class="cardHeader">
             <legend><?php __('Informations générales') ; ?></legend>
-            <p><?php __('Décrivez votre événement en quelques mots') ; ?></p>
         </div>
         
         <div class="<?= $class_line ; ?> required">
@@ -205,6 +204,7 @@
 
         <div class="cardHeader">
             <legend><?php __('Description de votre manifestation') ; ?></legend>
+            <p><?php __('Décrivez votre événement en quelques mots') ; ?></p>
         </div>
 
         <div class="row">
