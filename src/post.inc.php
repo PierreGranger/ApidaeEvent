@@ -526,26 +526,57 @@
 	{
 		$resa_nom = isset($_POST['reservation']['nom']) ? trim($_POST['reservation']['nom']) : '' ;
 		$fieldlist[] = 'reservation.organismes' ;
+
 		$root['reservation']['organismes'] = [
 			[
 				'nom' => $resa_nom == '' ? 'Réservation' : $resa_nom,
 				'type' => [
 					'elementReferenceType' => 'ReservationType',
 					'id' => 475 // Directe
-				],
-				'moyensCommunication' => [
-					[
-						'type' => [
-							'elementReferenceType' => 'MoyenCommunicationType',
-							'id' => 205 // Site web (URL)
-						],
-						'coordonnees' => [
-							'fr' => $_POST['reservation']['url']
-						]
-					]
 				]
 			]
 		] ;
+
+		$resa_com = [] ;
+		if ( isset($_POST['reservation']['url']) && $_POST['reservation']['url'] != '' ) {
+		$resa_com[] = [
+				'type' => [
+					'elementReferenceType' => 'MoyenCommunicationType',
+					'id' => 205 // Site web (URL)
+				],
+				'coordonnees' => [
+					'fr' => $_POST['reservation']['url']
+				]
+			] ;
+		}
+
+		if ( isset($_POST['reservation']['tel']) && $_POST['reservation']['tel'] != '' ) {
+		$resa_com[] = [
+				'type' => [
+					'elementReferenceType' => 'MoyenCommunicationType',
+					'id' => 201 // Téléphone
+				],
+				'coordonnees' => [
+					'fr' => $_POST['reservation']['tel']
+				]
+			] ;
+		}
+
+		if ( isset($_POST['reservation']['mail']) && $_POST['reservation']['mail'] != '' ) {
+		$resa_com[] = [
+				'type' => [
+					'elementReferenceType' => 'MoyenCommunicationType',
+					'id' => 204 // Mél
+				],
+				'coordonnees' => [
+					'fr' => $_POST['reservation']['mail']
+				]
+			] ;
+		}
+
+		if ( sizeof($resa_com) > 0 ) {
+			$root['reservation']['organismes'][0]['moyensCommunication'] = $resa_com ;
+		}
 	}
 
 	/**

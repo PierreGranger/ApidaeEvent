@@ -354,7 +354,21 @@
             <div class="<?= $class_line ; ?>">
                 <label for="reservation_url" class="<?php echo $class_label; ?> col-form-label"><?php __('URL de réservation') ; ?></label>
                 <div class="<?php echo $class_champ; ?>">
-                    <input class="form-control url" type="text" name="reservation[url]" id="reservation_url" value="<?php echo htmlentities(@$post['reservation']); ?>" placeholder="https://...">
+                    <input class="form-control url" type="text" name="reservation[url]" id="reservation_url" value="<?php echo htmlentities(@$post['reservation']['url']); ?>" placeholder="https://...">
+                </div>
+            </div>
+
+            <div class="<?= $class_line ; ?>">
+                <label for="reservation_tel" class="<?php echo $class_label; ?> col-form-label"><?php __('Téléphone de réservation') ; ?></label>
+                <div class="<?php echo $class_champ; ?>">
+                    <input class="form-control tel" type="text" name="reservation[tel]" id="reservation_tel" value="<?php echo htmlentities(@$post['reservation']['tel']); ?>" placeholder="<?php echo htmlentities($phone_placeholder) ; ?>">
+                </div>
+            </div>
+
+            <div class="<?= $class_line ; ?>">
+                <label for="reservation_mail" class="<?php echo $class_label; ?> col-form-label"><?php __('E-mail de réservation') ; ?></label>
+                <div class="<?php echo $class_champ; ?>">
+                    <input class="form-control mail" type="text" name="reservation[mail]" id="reservation_mail" value="<?php echo htmlentities(@$post['reservation']['mail']); ?>" placeholder="xxx@yyyy.zz">
                 </div>
             </div>
 
