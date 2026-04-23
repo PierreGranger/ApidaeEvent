@@ -13,9 +13,10 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
     "@popperjs/core": "^2.11.6",
     "ajax-bootstrap-select": "^1.4.5",
-    "bootstrap": "^5.2.0",
-    "bootstrap-chosen": "^1.4.2",
-    "jquery": "^3.6.0"
+    "bootstrap": "^5.3.8",
+    "jquery": "^3.6.0",
+    "select2": "^4.1.0-rc.0",
+    "select2-bootstrap-5-theme": "^1.3.0"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^3.0.0",

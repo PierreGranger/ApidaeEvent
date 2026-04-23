@@ -58,8 +58,7 @@
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -174,8 +173,8 @@
                     echo '<h1>Config</h1>' ;
                     echo '<p>Pour simplifier la configuration (éviter d\'avoir à remonter les offices au dessus des départements), la config est désormais découpée en 2.</p>' ;
                     foreach ( $types as $t )
-                        echo '<a class="btn btn-primary" href="?type='.$t.'">'.ucfirst($t).'</a> &nbsp; ' ;
-                    echo '<hr />' ;
+                        echo '<a class="btn btn-light" href="?type='.$t.'">'.ucfirst($t).'</a> &nbsp; ' ;
+                    echo '<hr>' ;
                     echo '<a class="btn btn-secondary" href="show.php">Consultation simple</a>' ;
                 echo '</div>' ;
             }
@@ -186,12 +185,12 @@
 
                 ?>
 
-                    <input type="hidden" name="type" value="<?php echo $_GET['type'] ; ?>" />
+                    <input type="hidden" name="type" value="<?php echo $_GET['type'] ; ?>">
                     <div id="editor_holder"></div>
                     <button id="enregistrer">Enregistrer</button>
 
                     <code style="display:none;">
-                        <hr />
+                        <hr>
                         <textarea id="startval" style="width:100%; height:500px;"><?php echo $startval ; ?></textarea>
                     </code>
 

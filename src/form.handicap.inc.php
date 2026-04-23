@@ -1,4 +1,4 @@
-<?php if (isset($_GET['TourismeAdapte']) && $_GET['TourismeAdapte'] == 1) { ?>
+<?php if (in_array('ta', $show)) { ?>
 
     <?php
     // https://apidae-tourisme.zendesk.com/agent/tickets/5997
@@ -9,8 +9,7 @@
     ?>
     <div class="<?= $class_line ; ?> TourismeAdapte">
         <label class="<?php echo $class_label; ?> col-form-label">
-            <?php __('Accessibilité') ; ?>
-            <br /><small class="form-text text-muted"><?php __('Accueil des personnes en situation de handicap') ; ?></small>
+            <?php __('Accessibilité') ; ?><small class="sub"><?php __('Accueil des personnes en situation de handicap') ; ?></small>
         </label>
         <div class="<?php echo $class_champ; ?>">
             <?php echo $apidaeEvent->formHtmlCC('TourismeAdapte', $params, @$post['TourismeAdapte']); ?>

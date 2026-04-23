@@ -1,5 +1,5 @@
 <?php
-        if (isset($_GET['clientele'])) {
+        if (in_array('cli', $show)) {
             $labelClientele = __('Types de Clientèle',false);
             $params = array(
                 'presentation' => 'select',
@@ -32,7 +32,7 @@
                 ]
             );
             ?>
-            <div class="<?= $class_line ; ?> prestations-typesClientele">
+            <div class="field prestations-typesClientele">
                 <label class="<?php echo $class_label; ?> col-form-label"><?php echo $labelClientele; ?></label>
                 <div class="<?php echo $class_champ; ?>">
                     <?php echo $apidaeEvent->formHtmlCC('TypeClientele', $params, @$post['TypeClientele']); ?>

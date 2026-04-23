@@ -36,7 +36,8 @@
 
 	if ( $configApidaeEvent['recaptcha_secret'] != '' && ! $debug )
 	{
-		$fields = array( 'secret' => $configApidaeEvent['recaptcha_secret'], 'response' => $_POST['g-recaptcha-response'] ) ;
+		$grecaptcha = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '' ;
+		$fields = array( 'secret' => $configApidaeEvent['recaptcha_secret'], 'response' => $grecaptcha ) ;
 		$ch = curl_init();
 		curl_setopt($ch,CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
 		curl_setopt($ch,CURLOPT_POST, count($fields));
@@ -73,7 +74,7 @@
 	}
 	$root['nom'][$libelleXy] = $_POST['nom'] ;
 
-	if ( $_POST['lieu'] != '' ) {
+	if ( isset($_POST['lieu']) && $_POST['lieu'] != '' ) {
 		$fieldlist[] = 'informationsFeteEtManifestation.nomLieu' ;
 		$root['informationsFeteEtManifestation']['nomLieu'] = $_POST['lieu'] ;
 		$fieldlist[] = 'localisation.adresse.nomDuLieu' ;
@@ -83,11 +84,15 @@
 	$fieldlist[] = 'localisation.adresse.adresse1' ;
 	$root['localisation']['adresse']['adresse1'] = $_POST['adresse1'] ;
 
-	$fieldlist[] = 'localisation.adresse.adresse2' ;
-	$root['localisation']['adresse']['adresse2'] = $_POST['adresse2'] ;
+	if (isset($_POST['adresse2'])) {
+		$fieldlist[] = 'localisation.adresse.adresse2';
+		$root['localisation']['adresse']['adresse2'] = $_POST['adresse2'];
+	}
 
-	$fieldlist[] = 'localisation.adresse.adresse3' ;
-	$root['localisation']['adresse']['adresse3'] = $_POST['adresse3'] ;
+	if (isset($_POST['adresse3'])) {
+		$fieldlist[] = 'localisation.adresse.adresse3';
+		$root['localisation']['adresse']['adresse3'] = $_POST['adresse3'];
+	}
 
 	$root['localisation']['adresse']['codePostal'] = $commune[1] ;
 	$fieldlist[] = 'localisation.adresse.codePostal' ;
@@ -112,6 +117,7 @@
 	}
 
 	$periodesOuvertures = Array() ;
+	if ( isset($_POST['date']) && is_array($_POST['date']) ) {
 	foreach ( $_POST['date'] as $i => $date )
 	{
 		if (sizeof($date) <= 3) {
@@ -168,6 +174,7 @@
 
 		$periodesOuvertures[] = $periode ;
 		
+	}
 	}
 	if ( sizeof ($periodesOuvertures) > 0  )
 	{
@@ -303,7 +310,7 @@
 			}
 		}
 	}
-	if ( isset($_POST['FeteEtManifestationCategorie']) )
+	if ( isset($_POST['FeteEtManifestationCategorie']) && is_array($_POST['FeteEtManifestationCategorie']) )
 	{
 		$fieldlist[] = 'informationsFeteEtManifestation.categories' ;
 		$root['informationsFeteEtManifestation']['categories'] = Array() ;
@@ -315,7 +322,7 @@
 			) ;
 		}
 	}
-	if ( isset($_POST['FeteEtManifestationTheme']) )
+	if ( isset($_POST['FeteEtManifestationTheme']) && is_array($_POST['FeteEtManifestationTheme']) )
 	{
 		$fieldlist[] = 'informationsFeteEtManifestation.themes' ;
 		$root['informationsFeteEtManifestation']['themes'] = Array() ;
@@ -406,7 +413,7 @@
 		{
 			if ( $tarif['mini'] == '' && $tarif['maxi'] == '' && trim($tarif['precisions']) == '' ) continue ;
 			
-			$t = Array('devise' =>$_POST['devise']) ;
+			$t = Array('devise' => (isset($_POST['devise']) ? $_POST['devise'] : '')) ;
 			/* TODO si on veut permettre le choix de la devise tarif par tarif par l'internaute : décommenter ci dessous */
 			/* ATTENTION ce critère a l'air d'être ignoré par l'API d'écriture, qui semble se servir uniquement de descriptionTarif.devise */
 			// $t = Array('devise' =>$tarif['devise']) ;
@@ -445,8 +452,10 @@
 					'tarifs' => $tarifs,
 					'type' => Array('elementReferenceType' => 'TarifTypePeriode', 'id' => 1304)
 			)) ;
-			$fieldlist[] = 'descriptionTarif.devise' ;
-			$root['descriptionTarif']['devise'] = $_POST['devise'] ;
+			if ( isset($_POST['devise']) ) {
+				$fieldlist[] = 'descriptionTarif.devise' ;
+				$root['descriptionTarif']['devise'] = $_POST['devise'] ;
+			}
 		}
 	}
 
@@ -513,29 +522,61 @@
 	/**
 	 * Réservation
 	 */
-	if ( isset($_POST['reservation']) && $_POST['reservation']['url'] != '' )
+	if ( isset($_POST['reservation']) && is_array($_POST['reservation']) && isset($_POST['reservation']['url']) && $_POST['reservation']['url'] != '' )
 	{
+		$resa_nom = isset($_POST['reservation']['nom']) ? trim($_POST['reservation']['nom']) : '' ;
 		$fieldlist[] = 'reservation.organismes' ;
+
 		$root['reservation']['organismes'] = [
 			[
-				'nom' => trim($_POST['reservation']['nom']) == '' ? 'Réservation' : trim($_POST['reservation']['nom']),
+				'nom' => $resa_nom == '' ? 'Réservation' : $resa_nom,
 				'type' => [
 					'elementReferenceType' => 'ReservationType',
 					'id' => 475 // Directe
-				],
-				'moyensCommunication' => [
-					[
-						'type' => [
-							'elementReferenceType' => 'MoyenCommunicationType',
-							'id' => 205 // Site web (URL)
-						],
-						'coordonnees' => [
-							'fr' => $_POST['reservation']['url']
-						]
-					]
 				]
 			]
 		] ;
+
+		$resa_com = [] ;
+		if ( isset($_POST['reservation']['url']) && $_POST['reservation']['url'] != '' ) {
+		$resa_com[] = [
+				'type' => [
+					'elementReferenceType' => 'MoyenCommunicationType',
+					'id' => 205 // Site web (URL)
+				],
+				'coordonnees' => [
+					'fr' => $_POST['reservation']['url']
+				]
+			] ;
+		}
+
+		if ( isset($_POST['reservation']['tel']) && $_POST['reservation']['tel'] != '' ) {
+		$resa_com[] = [
+				'type' => [
+					'elementReferenceType' => 'MoyenCommunicationType',
+					'id' => 201 // Téléphone
+				],
+				'coordonnees' => [
+					'fr' => $_POST['reservation']['tel']
+				]
+			] ;
+		}
+
+		if ( isset($_POST['reservation']['mail']) && $_POST['reservation']['mail'] != '' ) {
+		$resa_com[] = [
+				'type' => [
+					'elementReferenceType' => 'MoyenCommunicationType',
+					'id' => 204 // Mél
+				],
+				'coordonnees' => [
+					'fr' => $_POST['reservation']['mail']
+				]
+			] ;
+		}
+
+		if ( sizeof($resa_com) > 0 ) {
+			$root['reservation']['organismes'][0]['moyensCommunication'] = $resa_com ;
+		}
 	}
 
 	/**
@@ -768,30 +809,7 @@
 			}
 			if ( $debug ) $timer->stop('getMembreById('.$infos_proprietaire['proprietaireId'].')') ;
 			
-			if ( $membre )
-			{
-				$enr_dataLayer = Array(
-					'event' => 'enregistrement',
-					'commune_id' => $root['localisation']['adresse']['commune']['id'],
-					'commune_nom' => $commune[2],
-					'commune_cp' => $root['localisation']['adresse']['codePostal'],
-					'membre_id' => $infos_proprietaire['proprietaireId'],
-					'membre_nom' => $infos_proprietaire['structure_validatrice']
-				) ;
-				if ( isset($_GET['territoire']) )
-				{
-					$enr_dataLayer['territoire'] = $_GET['territoire'] ;
-				}
-				if ( preg_match('#^([0-9]{1,2})[0-9]{3}$#',$root['localisation']['adresse']['codePostal'],$match) )
-				{
-					$enr_dataLayer['departement'] = $match[1] ;
-				}
-
-				?><script>
-					dataLayer.push(<?php echo json_encode($enr_dataLayer) ; ?>) ;
-				</script><?php
-			}
-			elseif ( $debug )
+			if ( $debug )
 			{
 				echo '<pre>'.print_r($membre,true).'</pre>' ;
 			}
@@ -803,11 +821,9 @@
 			}
 		}
 
-		if ( isset($enr_dataLayer) ) $post_mail['dataLayer'] = json_encode($enr_dataLayer,JSON_PRETTY_PRINT) ;
-
 		if ( $infos_proprietaire['mail_membre'] != null )
 		{
-			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement' ;
+			$objet = 'ApidaeEvent - ' . ( $debug ? '[debug] ' : '' ) . 'Nouvel enregistrement '.@$apidaeEvent->last_id ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_proprietaire['mail_membre'] ;
 			if ( ! isset($_POST['nomail']) )
 			{
@@ -815,9 +831,13 @@
 				$apidaeEvent->alerte($objet,$post_mail,$to) ;
 				if ( $debug ) $timer->stop('mail_membre') ;
 			}
-			else
+			
+			if ( isset($_POST['nomail']) || $debug )
 			{
 				echo '<div class="alert alert-info">' ;
+					if ( isset($_POST['nomail']) ) {
+						echo '<h2>nomail : ce mail n\'a pas été envoyé.</p>' ;
+					}
 					echo '<h2>Objet</h2>' . $objet ;
 					echo '<h2>To</h2>' . json_encode($to) ;
 					echo '<h2>Message</h2>' ;
@@ -851,11 +871,8 @@
 				<div id="texte_offre_enregistree"><?php echo $texte_offre_enregistree ; ?></div>
 				
 				<p><?php __('Plus d\'informations ici') ; ?> : <a href="https://www.apidae-tourisme.com" target="_blank">https://www.apidae-tourisme.com</a></p>
-				<script>
-					alert(jQuery('div#texte_offre_enregistree').text()) ;
-				</script>
 				<?php if ( isset($_SERVER['HTTP_REFERER']) ) { ?>
-					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> <?php __('Faire une autre suggestion de manifestation') ; ?></a>
+					<a href="<?php echo $_SERVER['HTTP_REFERER'] ; ?>" class="btn btn-light"><i class="fas fa-plus-circle"></i> <?php __('Faire une autre suggestion de manifestation') ; ?></a>
 				<?php } ?>
 			</div>
 		<?php
@@ -885,7 +902,7 @@
 		 */
 		if ( isset($infos_orga['mail']) && $infos_orga['mail'] != '' && filter_var($infos_orga['mail'], FILTER_VALIDATE_EMAIL) )
 		{
-			$objet = 'ApidaeEvent - Votre suggestion de manifestation' ;
+			$objet = 'ApidaeEvent - Votre suggestion de manifestation : '.@$_POST['nom'] ;
 			$message = $texte_offre_enregistree ;
 			$to = $debug ? $configApidaeEvent['mail_admin'] : $infos_orga['mail'] ;
 			if ( ! isset($_POST['nomail']) )
@@ -894,7 +911,8 @@
 				$apidaeEvent->alerte($objet,$message,$to) ;
 				if ( $debug ) $timer->stop('mail_suggestion') ;
 			}
-			if ( $debug )
+
+			if ( $debug || isset($_POST['nomail']) )
 			{
 				?>
 				<div class="alert alert-success" role="alert">

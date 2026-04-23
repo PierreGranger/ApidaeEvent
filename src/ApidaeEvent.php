@@ -69,7 +69,7 @@ use Exception ;
 	
 		private const TYPE_OBJET = 'FETE_ET_MANIFESTATION' ;
 		
-		public function __construct(array $params=null) {
+		public function __construct(?array $params=null) {
 			
 			parent::__construct($params) ;
 
@@ -128,13 +128,23 @@ use Exception ;
 
 			if ( $params['presentation'] == 'select' )
 			{
-				$ret .= ' <select class="form-control chosen-select" ' ;
-				$ret .= ' data-placeholder=" " ' ;
+				$ret .= ' <select class="form-select select2" ' ;
+				if ( isset($params['placeholder']) ) {
+					$ret .= ' data-placeholder="'.htmlentities($params['placeholder']).'" ' ;
+					$ret .= ' placeholder="'.htmlentities($params['placeholder']).'" ' ;
+				} else {
+					$ret .= ' data-placeholder="" ' ;
+					$ret .= ' placeholder="" ' ;
+				}
 				if ( @$params['type'] == 'unique' ) $ret .= ' name="'.$type.'" ' ;
 				else $ret .= ' name="'.$type.'[]" multiple="multiple" ' ;
-				if ( isset($params['max_selected_options']) ) $ret .= ' data-max_selected_options="'.$params['max_selected_options'].'" ' ;
+				if ( isset($params['maximum_selection_length']) ) $ret .= ' data-maximum-selection-length="'.$params['maximum_selection_length'].'" ' ;
 				$ret .= '>' ;
-					if ( @$params['type'] == 'unique' ) $ret .= "\n\t\t\t\t\t\t\t\t".'<option value="">-</option>' ;
+					if ( @$params['type'] == 'unique' ) {
+						$ret .= "\n\t\t\t\t\t\t\t\t".'<option value="" disabled="disabled"' ;
+							if ( ! isset($post) || $post == null ) $ret .= ' selected="selected"' ;
+						$ret .= '>'.htmlentities($params['placeholder']).'</option>' ;
+					}
 					$famillePrec = null ;
 					foreach ( $ers as $erp )
 					{
@@ -145,7 +155,11 @@ use Exception ;
 						$ret .= "\n\t\t\t\t\t\t\t\t\t".'<option value="'.$erp['id'].'"' ;
 						//if ( isset($enfants[$p['id']]) ) $ret .= ' style="font-weight:strong;" ' ;
 							if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'"' ;
-							if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' selected="selected"' ;
+							if ( 
+								isset($post) &&
+								( is_array($post) && in_array($erp['id'],$post) )
+								|| ( ! is_array($post) && $post == $erp['id'] )
+							) $ret .= ' selected="selected"' ;
 						$ret .= '>'.$this->libelleEr($erp).'</option>' ;
 						if ( isset($erp['enfants']) )
 						{
@@ -153,7 +167,11 @@ use Exception ;
 							{
 								$ret .= "\n\t\t\t\t\t\t\t\t\t\t".'<option value="'.$e['id'].'"' ;
 								if ( isset($e['description']) && $e['description'] != '' ) $ret .= ' title="'.htmlspecialchars($e['description']).'"' ;
-								if ( isset($post) && is_array($post) && in_array($e['id'],$post) ) $ret .= ' selected="selected"' ;
+								if ( 
+									isset($post) && 
+									( is_array($post) && in_array($e['id'],$post) )
+									|| ( ! is_array($post) && $post == $e['id'] )
+								) $ret .= ' selected="selected"' ;
 								$ret .= '>'.$this->libelleEr($erp).' &raquo; '.$this->libelleEr($e).'</option>' ;
 							}
 						}
@@ -164,20 +182,22 @@ use Exception ;
 			}
 			elseif ( $params['presentation'] == 'checkbox' )
 			{
-				$ret .= ' <div class="form-group">' ;
+				$ret .= ' <div class="form-group row">' ;
 					if ( @$params['type'] == 'unique' ) $ret .= '<option value="">-</option>' ;
 					$famillePrec = null ;
 					foreach ( $ers as $erp )
 					{
-						$ret .= '<div class="form-check form-check-inline">' ;
-							$ret .= '<input class="form-check-input" type="checkbox" name="'.$type.'[]" id="'.$type.$erp['id'].'" value="'.$erp['id'].'" ' ;
-								if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' checked="checked"' ;
-							$ret .= ' />' ;
-							$ret .= '<label class="form-check-label" for="'.$type.$erp['id'].'"' ;
-								if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'" ' ;
-							$ret .= '>' ;
-								$ret .= $this->libelleEr($erp) ;
-							$ret .= '</label>' ;
+						$ret .= '<div class="col-6 col-md-4 col-lg-3">' ;
+							$ret .= '<div class="form-check">' ;
+								$ret .= '<input class="form-check-input" type="checkbox" name="'.$type.'[]" id="'.$type.$erp['id'].'" value="'.$erp['id'].'" ' ;
+									if ( isset($post) && is_array($post) && in_array($erp['id'],$post) ) $ret .= ' checked="checked"' ;
+								$ret .= ' />' ;
+								$ret .= '<label class="form-check-label" for="'.$type.$erp['id'].'"' ;
+									if ( isset($erp['description']) && $erp['description'] != '' ) $ret .= ' title="'.htmlspecialchars($erp['description']).'" ' ;
+								$ret .= '>' ;
+									$ret .= $this->libelleEr($erp) ;
+								$ret .= '</label>' ;
+							$ret .= '</div>' ;
 						$ret .= '</div>' ;
 						
 						$famillePrec = @$erp['familleCritere'] ;
@@ -256,7 +276,7 @@ use Exception ;
 			return $ret ;
 		}
 
-		public function getOffre(int $id_offre,string $responseFields=null,bool $refresh=false) {
+		public function getOffre(int $id_offre,?string $responseFields=null,bool $refresh=false) {
 			if ( ! preg_match('#^[0-9]+$#',$id_offre) ) throw new Exception(__METHOD__.__LINE__.'$id_offre invalide [0-9]+') ;
 			$cachekey = 'offre'.$id_offre ;
 			if ( ( $ret = $this->get($cachekey) ) === false || $refresh === true )
@@ -330,7 +350,7 @@ use Exception ;
 		*	@return 	bool|array 	Liste des élements (Chaque élément étant un array associatif issu de la base de donnée)
 		*
 		**/
-		public function getElementsReferenceByType(string $type,array $params=null)
+		public function getElementsReferenceByType(string $type,?array $params=null)
 		{
 			$elementsReference = $this->getElementsReference() ;
 			if ( ! is_array($elementsReference) ) {
@@ -485,7 +505,7 @@ use Exception ;
 
 		private function cacheErsInterdictions($refresh = false) {
 
-			$elementReference = $this->getElementsReference($refresh) ;
+			$elementReference = $this->getElementsReference() ;
 			// Critères interdits
 			// https://apidae-tourisme.zendesk.com/agent/tickets/34957
 			// 31/07/2024

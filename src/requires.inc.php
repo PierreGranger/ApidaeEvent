@@ -20,11 +20,7 @@
 		$lang = $_GET['locale'] ;
 		$codeLibelle = ApidaeEvent::ACCEPTED_LANGUAGES[$_GET['locale']]['codeLibelle'] ;
 	}
-	// elseif ( isset(ApidaeEvent::ACCEPTED_LANGUAGES[$lang_detected]) ) {
-	// 	$locale = ApidaeEvent::ACCEPTED_LANGUAGES[$lang_detected]['locale'] ; 
-	// 	$lang = $lang_detected ;
-	// 	$codeLibelle = ApidaeEvent::ACCEPTED_LANGUAGES[$lang_detected]['codeLibelle'] ;
-	// }
+
 	$libelleXy = 'libelle'.$codeLibelle ;
 	
     // https://www.php.net/manual/fr/function.gettext.php
