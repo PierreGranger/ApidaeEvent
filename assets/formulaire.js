@@ -56,9 +56,6 @@ jQuery(document).on('submit', 'form.form', function (e) {
 		var typeSelect = row.find('select').val();
 		var okChamp = valideChamp(jQuery(this), typeSelect);
 
-		if (jQuery(this).attr('id') == 'portee')
-			console.log('doTest', jQuery(this), typeSelect, okChamp);
-
 		jQuery(this).closest('.form-group, div').toggleClass('has-error', !okChamp);
 		if (!okChamp) {
 			ko.push(jQuery(this));
@@ -197,9 +194,6 @@ function valideChamp(champ) {
 	var type = null;
 	if (typeof champ.attr('name') !== 'undefined' && champ.attr('name').match(/\[coordonnee\]$/))
 		type = champ.closest('tr, .mc-row').find('select').val();
-
-	if (champ.attr('id') == 'portee')
-		console.log('valideChamp', type, val, champ.prop('required'));
 
 	if (val == '' && !champ.prop('required')) return true;
 	if (val == '' && champ.prop('required')) return false;
@@ -572,16 +566,12 @@ jQuery(document).on('change', 'input[name*="copyright"]', function () {
 
 function criteresInterditsByEr(selector) {
 
-	console.log(selector, typeof jQuery(selector).val());
-
 	var values = [];
 	if (jQuery(selector).val() !== null) {
 		if (typeof jQuery(selector).val() == 'object') values = jQuery(selector).val();
 		else if (typeof jQuery(selector).val() == 'string') values = [jQuery(selector).val()];
 	}
-
-	console.log(values);
-
+	
 	if (values.length > 0) {
 		values.forEach(function (item) {
 			if (
@@ -650,12 +640,12 @@ jQuery(function () {
 
 
 export function recaptchaKo() {
-	jQuery('form.form input.btn-submit').closest('div.form-group').hide();
+	jQuery('form.form input.btn-submit').closest('div').hide();
 	jQuery('form.form div#recaptcha p').show();
 }
 
 export function recaptchaOk() {
-	jQuery('form.form input.btn-submit').closest('div.form-group').show();
+	jQuery('form.form input.btn-submit').closest('div').show();
 	jQuery('form.form div#recaptcha p').hide();
 }
 
