@@ -200,7 +200,7 @@ require(realpath(dirname(__FILE__)).'/auth.inc.php') ;
 								<div class="row mb-3">
 									<label class="col-sm-6 col-form-label" for="dd">Descriptif détaillé</label>
 									<div class="col-sm-6">
-										<input type="checkbox" id="dd" name="show[]" value="dd" />
+										<input type="checkbox" id="dd" name="show[]" value="dd" checked="checked" />
 									</div>
 								</div>
 

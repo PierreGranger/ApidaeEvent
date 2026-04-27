@@ -18,15 +18,16 @@
 		$show[] = 'type' ;
 		$show[] = 'cat' ;
 		$show[] = 'photos' ;
+		$show[] = 'dd' ;
 	}
-	if (empty($show)) {
-		if (!empty($_GET['toutou'])) $show[] = 'animaux';
-		if (!empty($_GET['generique'])) $show[] = 'gen';
-		if (!empty($_GET['mm'])) $show[] = 'mm';
-		if (!empty($_GET['TourismeAdapte'])) $show[] = 'ta';
-		if (!empty($_GET['clientele'])) $show[] = 'cli';
-		if (!empty($_GET['reservation'])) $show[] = 'resa';
-	}
+	
+	// rétrocompatibilité
+	if (!empty($_GET['toutou'])) $show[] = 'animaux';
+	if (!empty($_GET['generique'])) $show[] = 'gen';
+	if (!empty($_GET['mm'])) $show[] = 'mm';
+	if (!empty($_GET['TourismeAdapte'])) $show[] = 'ta';
+	if (!empty($_GET['clientele'])) $show[] = 'cli';
+	if (!empty($_GET['reservation'])) $show[] = 'resa';
 
 	$ko = [] ;
 	$ok = [] ;
