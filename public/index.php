@@ -19,6 +19,7 @@
 		$show[] = 'cat' ;
 		$show[] = 'photos' ;
 		$show[] = 'dd' ;
+		$show[] = 'lieu' ;
 	}
 	
 	// rétrocompatibilité
